@@ -1,0 +1,20 @@
+/* bootstrapを利用 */
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/bootflat/2.0.4/css/bootflat.min.css');
+
+/* メニューの背景をデザイン */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1b2538;
+    margin-bottom: 20px;
+    /* メニューバーの下部に少し間隔を空ける */
+  }
+  
+  li {
+    float:left;
+    border-right: 1px solid #bbbbbb;
+    font-family: cursive;
+  }
