@@ -2,19 +2,122 @@
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/bootflat/2.0.4/css/bootflat.min.css');
 
+.title h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
 /* メニューの背景をデザイン */
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+
+.menubar ul {
+    height: 50px;
+    margin:  0;                 /* デフォルトCSS打ち消し */
+    position:  relative;        /* 位置調整 */
+    font-weight:  normal;       /* 文字の太さ調整 */
+    font-size: 16px;            /* 文字サイズ指定 */
+    background-color: #1b2538;  /* 背景色指定 */
+    color:  #fff;               /* 文字色指定 */
+    padding-left: 30px;         /* 余白指定 */
+    margin-bottom:  20px;       /* 周りの余白指定 */
     overflow: hidden;
-    background-color: #1b2538;
-    margin-bottom: 20px;
-    /* メニューバーの下部に少し間隔を空ける */
-  }
-  
-  li {
-    float:left;
+}
+
+.menubar ul:before {
+    content: '';                /* 空の要素を作る */
+    height: 110%;               /* 高さ指定 */
+    width: 3px;                 /* 幅指定 */
+    display:  block;            /* ブロック要素にする */
+    position:  absolute;        /* 位置調整 */
+    left: 14px;                 /* 位置調整 */
+    top: -3px;                  /* 位置調整 */
+    margin:  auto;              /* 位置調整 */
+    background-color:  #fff;    /* 背景色指定 */
+    transform: rotate(3deg);    /* 回転 */
+}
+.menubar ul:after {
+    content: '';                /* 空の要素を作る */
+    height: 116%;               /* 高さ指定 */
+    width: 3px;                 /* 幅指定 */
+    display:  block;            /* ブロック要素にする */
+    position:  absolute;        /* 位置調整 */
+    left: 14px;                 /* 位置調整 */
+    top: -6px;                  /* 位置調整 */
+    margin:  auto;              /* 位置調整 */
+    background-color:  #fff;    /* 背景色指定 */
+    transform: rotate(-15deg);  /* 回転 */
+}
+
+/* ※文字を中央寄せにするための設定 */
+li {
+  display: -webkit-box;             /* safari, Chromeの文字位置調整 */
+  display: -moz-box;                /* Firefox */
+}
+
+a {
+  display: block;
+}
+
+.menubar ul li {
+    height: 100%;                     /* メニューバーを上下揃えるため */
+    float:left;                       /* メニューを横並びにする */
+    text-align: center;
+    padding: 0 5px 0 5px;         /* メニューの間隔を調整 */
     border-right: 1px solid #bbbbbb;
+    font-size: 25px;
     font-family: cursive;
+    list-style-type: none;            /* ●を削除 */
   }
+
+/* ※メニューバーの文字列を中央に設定 */
+.menubar ul li {
+    -webkit-box-align: center; /* safari, Chrome */
+    -moz-box-align: center;    /* Firefox */
+  }
+
+
+/* サイトタイトルのデザイン */
+.title h1 {
+    font-family: cursive;
+    text-shadow: 2px 2px 1px black;
+  }
+
+/* メニューバーのデザイン */
+/* ※リンクを指すため"a"は必須 */
+.menubar a {
+   color: #faefef;
+  }
+
+/* メニュータイトルデザイン */
+.menu_title {
+    margin:  0;             /* デフォルトCSS打ち消し */
+    font-size:  24px;       /* 文字サイズ指定 */
+    position:  relative;    /* 位置調整 */
+    font-weight:  normal;   /* 文字の太さ調整 */
+    margin-bottom: 15px;    /* 周りの余白指定 */
+    border-bottom: solid 4px #1b2538;        /* 線指定 */
+    border-radius: 0px 0px 160px 180px/0px 0px 20px 4px;    /* 角丸指定 */
+}
+
+/* TOPページの説明文デザイン */
+.top_text p {
+  font-family: "游ゴシック", cursive;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* メニューの項目デザイン */
+.menu_title p {
+    font-size: 25px;
+    font-weight: bold;
+    color: rgb(2, 46, 61);
+}
+
+/* 記事テーブルのデザイン */
+.list_theme {
+  font-size: 20px;
+}
+
+.list_background {
+  background-color: rgb(245, 242, 239);
+  font-size: 20px;
+}
