@@ -19,9 +19,12 @@
               都道府県
             </label>
             <div class="col-md-6">
-              <select id="prefecture" class="form-control">
+              <!-- name属性を設定しないと、Requestクラスオブジェクトで選択値を受け取ることが出来ない -->
+              <select id="prefecture" class="form-control" name="prefecture">
                 <option selected >都道府県を選択してください</option>
-                <option value="{{ old('prefecture') }}">{{ old('prefecture') }}</option>
+                @foreach ($prefectures as $prefecture)
+                <option value="{{ $prefecture->name }}">{{ $prefecture->name }}</option>
+                @endforeach
               </select>
             </div>
           </div>

@@ -54,7 +54,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             // ニックネームはusersテーブルで一意な必要がある
             'nickname' => ['required', 'string', 'max:20', 'unique:users'],
-            'birthday' => ['required', 'dateTime'],
+            'birthday' => ['required', 'date'],
             'gender' => ['required', 'integer'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -78,6 +78,9 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'nickname' => $data['nickname'],
+            'birthday' => $data['birthday'],
+            'gender' => $data['gender'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

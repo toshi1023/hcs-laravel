@@ -13,12 +13,13 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * 一括割り当て可能な属性
+     * モデルに登録したい項目を追加
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'nickname', 'birthday', 'gender', 'email', 'password',
     ];
 
     /**

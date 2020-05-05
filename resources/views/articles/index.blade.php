@@ -22,11 +22,13 @@
                     </thead>
                     <tbody>
                         <tr class="list_background">
-                            <th scope="row">2020年5月1日</th>
-                            <td>大阪府</td>
+                          @foreach ($articles as $article)
+                            <th scope="row">{{ $article->updated_at }}</th>
+                            <td>{{ $article->prefecture }}</td>
                             <td>aaa</td>
-                            <td>初めての投稿</td>
+                            <td>{{ $article->title }}</td>
                             <td><a href="#">詳細</a></td>
+                          @endforeach
                         </tr>
                         <tr class="list_background">
                             <th scope="row">2020年5月1日</th>

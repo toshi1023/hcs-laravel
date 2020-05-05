@@ -46,6 +46,9 @@
 
         <br>
         {{-- 生年月日登録フォームデザイン --}}
+        @php
+            $today = \Carbon\Carbon::now();
+        @endphp
         <div class="form-group-lg row">
             <label for="birthday" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('生年月日') }}</label>
 

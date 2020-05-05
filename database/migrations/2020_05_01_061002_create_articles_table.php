@@ -15,10 +15,11 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('prefecture');
             $table->string('title', 40);
             $table->text('content');
             $table->boolean('women_only')->default(false);
-            $table->integer('likes_count');
+            // $table->integer('likes_count');
             $table->timestamps();
         });
     }
