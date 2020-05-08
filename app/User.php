@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'nickname', 'birthday', 'gender', 'email', 'password',
+        'name', 'nickname','prefecture', 'birthday', 'gender', 'email', 'password',
     ];
 
     /**
@@ -40,7 +40,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Articleテーブルと1対多のリレーション構築
+    // Articleテーブルと1対多のリレーション構築(1側の設定)
     public function articles()
     {
         return $this->hasMany('App\Article');

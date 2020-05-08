@@ -23,12 +23,15 @@
             <ul>
                 <li><a href="/">TOP</a></li>
                 <li><a href="{{ route('articles.index') }}">記事一覧</a></li>
-                <li><a href="#">友達検索</a></li>
-                <li><a href="#">マイページ</a></li>
+                <li><a href="{{ route('users.index') }}">友達検索</a></li>
+                <li><a href="{{ route('users.show', [ 'user' => Auth::user()->id]) }}">マイページ</a></li>
                 <li><a href="#" id="logout">ログアウト</a></li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
                 </form>
+                <div class="right">
+                  <p>Welcome {{ Auth::user()->name }} さん!</p>
+                </div>
             </ul>
         </nav>
       @else
@@ -36,10 +39,25 @@
             <ul>
                 <li><a href="/">TOP</a></li>
                 <li><a href="{{ route('articles.index') }}">記事一覧</a></li>
-                <li><a href="#">友達検索</a></li>
+                <li><a href="{{ route('users.index') }}">友達検索</a></li>
                 <li><a href="{{ route('login') }}">ログイン</a></li>
             </ul>
         </nav>
+      @endif
+    </div>
+    <div class="container">
+      <!-- フラッシュメッセージ -->
+      @if (session('message'))
+          <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
+      @endif
+    </div>
+    <div class="container">
+      @if($errors->any())
+        <div class="alert alert-danger">
+          @foreach($errors->all() as $message)
+            <p style="font-size: large">{{ $message }}</p>
+          @endforeach
+        </div>
       @endif
     </div>
   </header>

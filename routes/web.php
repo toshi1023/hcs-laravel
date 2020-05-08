@@ -16,12 +16,11 @@ use Illuminate\Support\Facades\Route;
 // ルートページ
 Route::get('/', 'HomeController@index')->name('home');
 
-// 記事一覧ページ
-Route::get('/articles', 'ArticleController@index')->name('articles.index');
-// 記事作成ページ
-Route::get('/articles/create', 'ArticleController@showCreateForm')->name('articles.create');
-// 記事作成処理を実行する
- Route::post('/articles/create', 'ArticleController@create');
+// 記事関連のルート
+Route::resource('articles', 'ArticleController');
+
+// ユーザ関連のルート
+Route::resource('users', 'UserController');
 
 // 認証機能のルーティング(laravel7.5.2では"php artisan ui vue --auth"のコマンドが事前に必要)
 Auth::routes();

@@ -74,6 +74,19 @@ a {
     -moz-box-align: center;    /* Firefox */
   }
 
+.menubar ul p {
+    height: 100%;                     /* メニューバーを上下揃えるため */
+    float:left;                       /* メニューを横並びにする */
+    padding: 7px 5px 0 5px;           /* 表示のバランスを調整 */
+    font-size: 25px;
+    font-family: serif;
+    list-style-type: none;            /* ●を削除 */
+  }
+
+.right {
+  text-align: right;                /* 右寄せで表示*/
+}
+
 
 /* サイトタイトルのデザイン */
 .title h1 {

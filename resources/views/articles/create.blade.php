@@ -11,8 +11,10 @@
     <br>
   </div>
   <div class="container">
-      <form method="POST" action="{{ route('articles.create') }}">
+      <form method="POST" action="{{ route('articles.store') }}">
           @csrf
+          {{-- 作成者登録フォームデザイン（隠しフォーム） --}}
+          <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
           {{-- 都道府県登録フォームデザイン --}}
           <div class="form-group-lg row">
             <label for="prefecture" class="col-md-4 col-form-label text-md-right" style="font-size: large">
@@ -44,6 +46,17 @@
               <label for="content" class="col-md-4 col-form-label text-md-right" style="font-size: large">内容</label>
               <div class="col-md-6">
                 <textarea class="form-control" rows="10" cols="60" name="content" id="content" value="{{ old('content') }}"></textarea>
+              </div>
+          </div>
+          <br>
+          <!-- 女性限定公開オプションのデザイン -->
+          <div class="form-group-lg row">
+              <label for="women_only" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('女性に限定して公開') }}</label>
+              <div class="col-md-6">
+                <button type="button" class="btn btn-outline-danger" name="women_only" id="women_only" data-toggle="button" aria-pressed="false" style="font-size: large">
+                  設定する
+                </button>
+                <input type="hidden" name="women_only" id="women_only" value="1">
               </div>
           </div>
           <br>

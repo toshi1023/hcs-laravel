@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Prefecture;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -40,6 +41,17 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+    }
+
+    public function showRegistrationForm()
+    {
+      // 都道府県データを会員登録フォームに渡す
+      $prefectures = Prefecture::all();
+
+      return view('auth.register', [
+          'prefectures' => $prefectures,
+      ]);
     }
 
     /**
@@ -54,6 +66,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             // ニックネームはusersテーブルで一意な必要がある
             'nickname' => ['required', 'string', 'max:20', 'unique:users'],
+            'prefecture' => ['required', 'string'],
             'birthday' => ['required', 'date'],
             'gender' => ['required', 'integer'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -61,6 +74,7 @@ class RegisterController extends Controller
         ],[],[
           'name' => '氏名',
           'nickname' => 'ニックネーム',
+          'prefecture' => '都道府県',
           'birthday' => '生年月日',
           'gender' => '性別',
           'email' => 'メールアドレス',
@@ -79,6 +93,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'nickname' => $data['nickname'],
+            'prefecture' => $data['prefecture'],
             'birthday' => $data['birthday'],
             'gender' => $data['gender'],
             'email' => $data['email'],
