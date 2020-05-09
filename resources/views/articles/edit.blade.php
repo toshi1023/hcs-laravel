@@ -1,20 +1,23 @@
 @extends('layout')
 
 @section('content')
-  <div class="container">
-    <div class="menu_title">
-        <p>記事の作成</p>
-    </div>
-    <!-- ログインへリダイレクト -->
-    <a href="{{ route('articles.index') }}" class="btn btn-primary" style="font-size: large">戻る</a>
-    <br>
-    <br>
+<div class="container">
+  <div class="menu_title">
+      <p>{{ $user->nickname }}さんの記事を編集</p>
   </div>
+  <a href="{{ route('articles.show', ['article' => $article->id]) }}" class="btn btn-primary" style="font-size: large">戻る</a>
+  <br>
+  <br>
   <div class="container">
-      <form method="POST" action="{{ route('articles.store') }}">
+      <!-- 編集(update)の時はform actionの値の変更を忘れないように！ -->
+      <!-- form methodのところを直接PUTにしても値の変更が反映されない事象が起きるため、 -->
+      <!-- @method('PUT')を徹底する -->
+      <form method="POST" action="{{ route('articles.update', ['article' => $article->id]) }}">
           @csrf
+          <!-- これも編集(update)のときは忘れないように！ -->
+          @method('PUT')
           {{-- 作成者登録フォームデザイン（隠しフォーム） --}}
-          <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+          <input type="hidden" name="user_id" value="{{ old('user_id') ?? Auth::user()->id }}">
           {{-- 都道府県登録フォームデザイン --}}
           <div class="form-group-lg row">
             <label for="prefecture" class="col-md-4 col-form-label text-md-right" style="font-size: large">
@@ -23,9 +26,12 @@
             <div class="col-md-6">
               <!-- name属性を設定しないと、Requestクラスオブジェクトで選択値を受け取ることが出来ない -->
               <select id="prefecture" class="form-control" name="prefecture">
-                <option selected >都道府県を選択してください</option>
+                <option value="{{ old('prefecture') ?? $article->prefecture }}" selected>
+                  {{ old('prefecture') ?? $article->prefecture }}
+                </option>
+                <option>都道府県を選択してください</option>
                 @foreach ($prefectures as $prefecture)
-                <option value="{{ $prefecture->name }}">{{ $prefecture->name }}</option>
+                  <option value="{{ $prefecture->name }}">{{ $prefecture->name }}</option>
                 @endforeach
               </select>
             </div>
@@ -36,7 +42,7 @@
           <div class="form-group-lg row">
               <label for="title" class="col-md-4 col-form-label text-md-right" style="font-size: large">タイトル</label>
               <div class="col-md-6">
-                <input type="text" class="form-control" name="title" id="title" value="{{ old('title') }}" />
+                <input type="text" class="form-control" name="title" id="title" value="{{ old('title') ?? $article->title }}" />
               </div>
           </div>
 
@@ -45,7 +51,8 @@
           <div class="form-group-lg row">
               <label for="content" class="col-md-4 col-form-label text-md-right" style="font-size: large">内容</label>
               <div class="col-md-6">
-                <textarea class="form-control" rows="10" cols="60" name="content" id="content">{{ old('content') }}</textarea>
+                <!-- テキストエリアのvalue値は設定できない -->
+                <textarea class="form-control" rows="10" cols="60" name="content" id="content">{{ old('content') ?? $article->content }}</textarea>
               </div>
           </div>
           <br>
@@ -56,7 +63,7 @@
                 <button type="button" class="btn btn-outline-danger" name="women_only" id="women_only" data-toggle="button" aria-pressed="false" style="font-size: large">
                   設定する
                 </button>
-                <input type="hidden" name="women_only" id="women_only" value="1">
+                <input type="hidden" name="women_only" id="women_only" value="{{ old('women_only') ?? $article->women_only }}">
               </div>
           </div>
           <br>
@@ -68,4 +75,5 @@
           <br>
       </form>
   </div>
+</div>
 @endsection

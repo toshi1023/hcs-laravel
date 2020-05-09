@@ -5,7 +5,12 @@
     <div class="menu_title">
         <p>{{ $user->nickname }}さんの記事</p>
     </div>
-    <a href="{{ route('articles.index') }}" class="btn btn-primary" style="font-size: large">戻る</a>
+    <a href="{{ route('articles.index') }}" class="btn btn-success" style="font-size: large">戻る</a>　
+    @if($article->user_id === Auth::user()->id)
+      <a href="{{ route('articles.edit', ['article' => $article->id]) }}" class="btn btn-primary" style="font-size: large">
+        記事の編集
+      </a>
+    @endif
     <br>
     <br>
     <div class="row">
@@ -30,13 +35,27 @@
               <thead class="thead-dark list_theme">
                       <th scope="col">リンク</th>
                       <td class="list_background">
-                        <a href="{{ route('users.show', [ 'user' => $user->id]) }}">
+                        @if(Auth::check())
+                          <a href="{{ route('users.show', [ 'user' => $user->id]) }}">
+                            {{ $user->nickname }}さんのページへ行く
+                          </a>
+                        @else
                           {{ $user->nickname }}さんのページへ行く
-                        </a>
+                        @endif
                       </td>
               </thead>
             </table>
         </div>
       </div>
+      <br>
+      @if($article->user_id === Auth::user()->id)
+        <form method="post" action="{{ route('articles.destroy', ['article' => $article->id]) }}">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-danger" style="font-size: large">
+            記事の削除
+          </button>
+        </form>
+      @endif
   </div>
 @endsection

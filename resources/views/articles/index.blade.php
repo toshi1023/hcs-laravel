@@ -31,7 +31,12 @@
                           <tr class="list_background">
                               <th scope="row">{{ $article->updated_at }}</th>
                               <td>{{ $article->prefecture }}</td>
-                              <td>{{ $article->user->name }}</td>
+                              <!-- 性別によって名前の色表示を切り替え -->
+                              @if($article->user->gender === 0)
+                                <td style="color: rgb(3, 32, 173);">{{ $article->user->name }}</td>
+                              @else
+                                <td style="color: red;">{{ $article->user->name }}</td>
+                              @endif
                               <td>{{ $article->title }}</td>
                               <td><a href="{{ route('articles.show', [ 'article' => $article->id]) }}">詳細</a></td>
                           </tr>
