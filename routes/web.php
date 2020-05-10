@@ -24,3 +24,7 @@ Route::resource('users', 'UserController');
 
 // 認証機能のルーティング(laravel7.5.2では"php artisan ui vue --auth"のコマンドが事前に必要)
 Auth::routes();
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

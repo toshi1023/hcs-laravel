@@ -6,10 +6,13 @@
         <p>{{ $user->nickname }}さんの記事</p>
     </div>
     <a href="{{ route('articles.index') }}" class="btn btn-success" style="font-size: large">戻る</a>　
-    @if($article->user_id === Auth::user()->id)
-      <a href="{{ route('articles.edit', ['article' => $article->id]) }}" class="btn btn-primary" style="font-size: large">
-        記事の編集
-      </a>
+    <!-- 非会員もしくは記事作成者以外には表示しない -->
+    @if(Auth::check())
+      @if($article->user_id === Auth::user()->id)
+        <a href="{{ route('articles.edit', ['article' => $article->id]) }}" class="btn btn-primary" style="font-size: large">
+          記事の編集
+        </a>
+      @endif
     @endif
     <br>
     <br>
@@ -48,14 +51,17 @@
         </div>
       </div>
       <br>
-      @if($article->user_id === Auth::user()->id)
-        <form method="post" action="{{ route('articles.destroy', ['article' => $article->id]) }}">
-          @csrf
-          @method('DELETE')
-          <button type="submit" class="btn btn-danger" style="font-size: large">
-            記事の削除
-          </button>
-        </form>
+      <!-- 非会員もしくは記事作成者以外には表示しない -->
+      @if(Auth::check())
+        @if($article->user_id === Auth::user()->id)
+          <form method="post" action="{{ route('articles.destroy', ['article' => $article->id]) }}">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger" style="font-size: large">
+              記事の削除
+            </button>
+          </form>
+        @endif
       @endif
   </div>
 @endsection

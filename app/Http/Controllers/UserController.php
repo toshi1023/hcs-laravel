@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use App\User;
-
 use App\Prefecture;
 
 class UserController extends Controller
@@ -49,7 +49,7 @@ class UserController extends Controller
       $user->birthday = $request->birthday;
       $user->gender = $request->gender;
       $user->email = $request->email;
-      $user->password = $request->password;
+      $user->password = Hash::make($request->password);
 
       $user->save();
 

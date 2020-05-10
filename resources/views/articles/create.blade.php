@@ -50,15 +50,17 @@
           </div>
           <br>
           <!-- 女性限定公開オプションのデザイン -->
-          <div class="form-group-lg row">
-              <label for="women_only" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('女性に限定して公開') }}</label>
-              <div class="col-md-6">
-                <button type="button" class="btn btn-outline-danger" name="women_only" id="women_only" data-toggle="button" aria-pressed="false" style="font-size: large">
-                  設定する
-                </button>
-                <input type="hidden" name="women_only" id="women_only" value="1">
-              </div>
-          </div>
+          @if(Auth::user()->gender === 1)
+            <div class="form-group-lg row">
+                <label for="women_only" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('女性に限定して公開') }}</label>
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-outline-danger" name="women_only" id="women_only" data-toggle="button" aria-pressed="false" style="font-size: large">
+                    設定する
+                  </button>
+                  <input type="hidden" name="women_only" id="women_only" value="0">
+                </div>
+            </div>
+          @endif
           <br>
           <div class="form-group row mb-0">
               <div class="col-md-8 offset-md-4">
@@ -69,3 +71,9 @@
       </form>
   </div>
 @endsection
+<script>
+  $('#women_only').on('click', function(){
+    // $('input:hidden[name="women_only"]').val(1);
+    console.log('クリックしました！')
+  });
+</script>

@@ -8,6 +8,10 @@
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
     {{-- bootstrapの呼び出し --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- jsの呼び出し -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- <script src={{asset('/js/jquery.min.js')}}></script> -->
+    <script type="text/javascript" src="js/hcs.js"></script>
 </head>
 <body>
   <header>
