@@ -5,7 +5,7 @@
     <div class="menu_title">
         <p>{{ $user->nickname }}さんの記事</p>
     </div>
-    <a href="{{ route('articles.index') }}" class="btn btn-success" style="font-size: large">戻る</a>　
+    <a href="{{ route('articles.index') }}" class="btn color btn-success" style="font-size: large">戻る</a>　
     <!-- 非会員もしくは記事作成者以外には表示しない -->
     @if(Auth::check())
       @if($article->user_id === Auth::user()->id)

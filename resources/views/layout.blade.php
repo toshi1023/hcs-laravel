@@ -8,10 +8,6 @@
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
     {{-- bootstrapの呼び出し --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- jsの呼び出し -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <!-- <script src={{asset('/js/jquery.min.js')}}></script> -->
-    <script type="text/javascript" src="js/hcs.js"></script>
 </head>
 <body>
   <header>
@@ -73,6 +69,7 @@
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
   <!-- ログアウト処理 -->
   @if(Auth::check())
     <script>
@@ -82,5 +79,28 @@
       });
     </script>
   @endif
+
+  <script type="text/javascript">
+    // 女性限定公開を設定
+    $(function(){
+
+      var num = 0;
+
+      $('#women_only').click(function(){
+        $(this).data("click", ++num);
+        var click = $(this).data("click");
+
+        // クリックごとにvalue値を変更
+        if(click % 2 != 0){
+          $('input:hidden[name="women_only"]').val(1);
+          $('#women_only').text('設定する');
+        } else {
+          $('input:hidden[name="women_only"]').val(0);
+          $('#women_only').text('設定しない');
+        }
+
+      });
+    });
+  </script>
 </body>
 </html>

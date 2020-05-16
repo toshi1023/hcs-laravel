@@ -5,7 +5,7 @@
   <div class="menu_title">
       <p>{{ $user->nickname }}さんの記事を編集</p>
   </div>
-  <a href="{{ route('articles.show', ['article' => $article->id]) }}" class="btn btn-primary" style="font-size: large">戻る</a>
+  <a href="{{ route('articles.show', ['article' => $article->id]) }}" class="btn btn-success" style="font-size: large">戻る</a>
   <br>
   <br>
   <div class="container">
@@ -61,7 +61,7 @@
               <label for="women_only" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('女性に限定して公開') }}</label>
               <div class="col-md-6">
                 <button type="button" class="btn btn-outline-danger" name="women_only" id="women_only" data-toggle="button" aria-pressed="false" style="font-size: large">
-                  設定する
+                  設定しない
                 </button>
                 <input type="hidden" name="women_only" id="women_only" value="{{ old('women_only') ?? $article->women_only }}">
               </div>

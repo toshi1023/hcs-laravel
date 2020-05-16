@@ -17,8 +17,14 @@ class ArticleController extends Controller
         // 記事を全て取得(Userモデルのテーブルも結合して取得！)
         $articles = Article::with('user')->latest('updated_at')->get();
 
+        // 女性限定公開をされていない記事のみ取得
+        $women_only_articles = Article::with('user')->where('women_only', 0)->latest('updated_at')->get();
+
+        $test = Article::where('women_only', 0)->get();
+
         return view('articles/index', [
             'articles' => $articles,
+            'women_only_articles' => $women_only_articles,
         ]);
     }
 

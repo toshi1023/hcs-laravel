@@ -5,7 +5,7 @@
   <div class="menu_title">
       <p>会員情報を編集</p>
   </div>
-  <br>
+  <a href="{{ route('users.index') }}" class="btn color btn-success" style="font-size: large">戻る</a>
   <br>
   <div class="container">
       <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}">
