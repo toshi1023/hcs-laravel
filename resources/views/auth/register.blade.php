@@ -11,8 +11,27 @@
   <br>
 </div>
 <div class="container">
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
+        {{-- 画像アップロード --}}
+        <div class="form-group-lg row">
+            <label for="" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('プロフィール画像') }}</label>
+            <div class="col-md-6">
+              <div class="input-group">
+                <!-- 画像の参照ボタン -->
+                <div class="custom-file">
+                  <input id="prof_photo" type="file" class="custom-file-input @error('prof_photo') is-invalid @enderror" name="prof_photo" value="{{ old('prof_photo') }}" required autocomplete="prof_photo" autofocus>
+                  <label for="prof_photo" class="custom-file-label" data-browse="参照" style="font-size: large">{{ __('画像をアップロード') }}</label>
+                </div>
+                <!-- 画像の取り消しボタン -->
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-outline-secondary input-group-text" id="inputFileReset">取消</button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <br>  
         {{-- 氏名登録フォームデザイン --}}
         <div class="form-group-lg row">
             <label for="name" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('氏名') }}</label>
@@ -108,6 +127,8 @@
                 </button>
             </div>
         </div>
+
+
     </form>
     <br>
 </div>

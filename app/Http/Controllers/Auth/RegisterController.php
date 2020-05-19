@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use App\Prefecture;
+use App\Http\Controllers\Auth\File;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -49,6 +50,8 @@ class RegisterController extends Controller
       // 都道府県データを会員登録フォームに渡す
       $prefectures = Prefecture::all();
 
+
+
       return view('auth.register', [
           'prefectures' => $prefectures,
       ]);
@@ -63,6 +66,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'prof_photo' => ['file', 'image','max:2048'],
             'name' => ['required', 'string', 'max:255'],
             // ニックネームはusersテーブルで一意な必要がある
             'nickname' => ['required', 'string', 'max:20', 'unique:users'],
@@ -72,6 +76,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ],[],[
+          'prof_photo' => 'プロフィール画像',
           'name' => '氏名',
           'nickname' => 'ニックネーム',
           'prefecture' => '都道府県',
@@ -90,7 +95,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // ファイルの拡張子を取得
+        $file_dot = File::extension('app/'. $data->file('prof_photo'));
+
+        // 画像をprofile_imagesフォルダに保存する処理
+        $path = "app/". $data->prof_photo->storeAs('public/profile_images', Auth::id() . $file_dot);
+
         return User::create([
+             // データベース保存用の名前を抽出
+            'prof_photo' => basename($path),
             'name' => $data['name'],
             'nickname' => $data['nickname'],
             'prefecture' => $data['prefecture'],
