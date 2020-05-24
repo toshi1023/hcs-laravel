@@ -95,22 +95,59 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // ファイルの拡張子を取得
-        $file_dot = File::extension('app/'. $data->file('prof_photo'));
 
-        // 画像をprofile_imagesフォルダに保存する処理
-        $path = "app/". $data->prof_photo->storeAs('public/profile_images', Auth::id() . $file_dot);
+      // 画像がアップロードされていたら以下の処理を実行
+       if($_FILES['prof_photo']['name'] != null){
 
-        return User::create([
-             // データベース保存用の名前を抽出
-            'prof_photo' => basename($path),
-            'name' => $data['name'],
-            'nickname' => $data['nickname'],
-            'prefecture' => $data['prefecture'],
-            'birthday' => $data['birthday'],
-            'gender' => $data['gender'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+         // 画像名をランダムに作成
+         $filename = md5(uniqid(rand(), true));
+
+         // 作成したファイル名にアップロードした画像の拡張子を連結
+         $filename .= "." . substr(strrchr($_FILES['prof_photo']['name'], '.'), 1);
+
+         return User::create([
+              // データベース保存用の名前を抽出
+             'prof_photo' => $filename,
+             'name' => $data['name'],
+             'nickname' => $data['nickname'],
+             'prefecture' => $data['prefecture'],
+             'birthday' => $data['birthday'],
+             'gender' => $data['gender'],
+             'email' => $data['email'],
+             'password' => Hash::make($data['password']),
+         ]);
+
+         // 画像を保存するユーザごとのフォルダを作成し、変数に代入
+         $folder = $data->id;
+
+         // 画像を保存するフォルダを設定
+         $path = "profile_images/". $foler;
+
+         // 画像がアップロードに成功していたら画像を指定フォルダに保存
+         if($data->file('prof_photo')->isValid([])){
+
+            $data->file('prof_photo')->storeAs($path, $filename, 'public');
+
+            return redirect()->to('/')->with('message', 'プロフィール画像付きのユーザを登録しました。');
+            
+         } else {
+
+           return redirect()->to('/')->with('error', 'イメージ画像の登録に失敗しました。');
+         }
+       } else {
+         // 画像がアップロードされていなかったら、画像以外を保存する処理
+         return User::create([
+             'name' => $data['name'],
+             'nickname' => $data['nickname'],
+             'prefecture' => $data['prefecture'],
+             'birthday' => $data['birthday'],
+             'gender' => $data['gender'],
+             'email' => $data['email'],
+             'password' => Hash::make($data['password']),
+         ]);
+
+         return redirect()->to('/')->with('message', 'ユーザを登録しました。');
+       }
+
     }
 }

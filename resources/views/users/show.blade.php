@@ -15,6 +15,10 @@
         <div class="col-sm-12">
             <table class="table">
               <thead class="thead-dark list_theme">
+                <th scope="col">プロフィール画像</th>
+                <td class="list_background"><img src="{{ asset('storage/profile_images/'. $user->id .'/'. $user->prof_photo) }}" width="200" height="120"></td>
+              </thead>
+              <thead class="thead-dark list_theme">
                     <th scope="col">ニックネーム</th>
                     <td class="list_background">{{ $user->nickname }}</td>
               </thead>

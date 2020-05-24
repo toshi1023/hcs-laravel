@@ -87,7 +87,7 @@
     </script>
   @endif
 
-  <script src="js/hcs.js">
+  <script src="{{ asset('js/hcs.js') }}">
 
   </script>
   @yield('scripts')

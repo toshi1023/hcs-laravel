@@ -20,7 +20,7 @@
               <div class="input-group">
                 <!-- 画像の参照ボタン -->
                 <div class="custom-file">
-                  <input id="prof_photo" type="file" class="custom-file-input @error('prof_photo') is-invalid @enderror" name="prof_photo" value="{{ old('prof_photo') }}" required autocomplete="prof_photo" autofocus>
+                  <input id="prof_photo" type="file" class="custom-file-input @error('prof_photo') is-invalid @enderror" name="prof_photo" value="{{ old('prof_photo') }}" autocomplete="prof_photo" autofocus>
                   <label for="prof_photo" class="custom-file-label" data-browse="参照" style="font-size: large">{{ __('画像をアップロード') }}</label>
                 </div>
                 <!-- 画像の取り消しボタン -->
@@ -30,8 +30,8 @@
               </div>
             </div>
           </div>
-  
-          <br>  
+
+          <br>
         {{-- 氏名登録フォームデザイン --}}
         <div class="form-group-lg row">
             <label for="name" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('氏名') }}</label>

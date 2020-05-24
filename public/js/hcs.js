@@ -1,7 +1,5 @@
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script type="text/javascript">
-  // 女性限定公開を設定
-  $(function(){
+// @1 女性限定公開を設定
+$(function(){
 
   var num = 0;
 
@@ -17,7 +15,7 @@
       $('input:hidden[name="women_only"]').val(0);
       $('#women_only').text('設定しない');
     }
+  });
 
-  });
-  });
-</script>
+});
+// @1
