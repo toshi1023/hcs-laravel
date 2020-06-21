@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\User;
-use App\Prefecture;
+use App\Model\User;
+use App\Service\UserService;
+use App\Model\Prefecture;
 use App\Http\Controllers\Auth\File;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Storage;
 
 class RegisterController extends Controller
 {
@@ -34,6 +37,8 @@ class RegisterController extends Controller
      // 登録完了後はTOPページにリダイレクト
     protected $redirectTo = '/';
 
+    protected $UserService;
+
     /**
      * Create a new controller instance.
      *
@@ -42,6 +47,8 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+        $this->UserService = new UserService();
 
     }
 
@@ -95,59 +102,44 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        /*
+        (ローカルに保存する場合)
+        画像名をランダムに作成
+        $filename = md5(uniqid(rand(), true));
 
-      // 画像がアップロードされていたら以下の処理を実行
-       if($_FILES['prof_photo']['name'] != null){
+        作成したファイル名にアップロードした画像の拡張子を連結
+        $filename .= "." . substr(strrchr($_FILES['prof_photo']['name'], '.'), 1);
 
-         // 画像名をランダムに作成
-         $filename = md5(uniqid(rand(), true));
+        画像を保存するユーザごとのフォルダを作成し、変数に代入
+        $folder = $data->id;
 
-         // 作成したファイル名にアップロードした画像の拡張子を連結
-         $filename .= "." . substr(strrchr($_FILES['prof_photo']['name'], '.'), 1);
+        画像を保存するフォルダを設定
+        $path = "profile_images/". $foler;
 
-         return User::create([
-              // データベース保存用の名前を抽出
-             'prof_photo' => $filename,
-             'name' => $data['name'],
-             'nickname' => $data['nickname'],
-             'prefecture' => $data['prefecture'],
-             'birthday' => $data['birthday'],
-             'gender' => $data['gender'],
-             'email' => $data['email'],
-             'password' => Hash::make($data['password']),
-         ]);
+        画像がアップロードに成功していたら画像を指定フォルダに保存
+        if($data->file('prof_photo')->isValid([])){
 
-         // 画像を保存するユーザごとのフォルダを作成し、変数に代入
-         $folder = $data->id;
+           // $data->file('prof_photo')->storeAs($path, $filename, 'public');
 
-         // 画像を保存するフォルダを設定
-         $path = "profile_images/". $foler;
+           return redirect()->to('/')->with('message', 'プロフィール画像付きのユーザを登録しました。');
 
-         // 画像がアップロードに成功していたら画像を指定フォルダに保存
-         if($data->file('prof_photo')->isValid([])){
+        } else {
 
-            $data->file('prof_photo')->storeAs($path, $filename, 'public');
+          return redirect()->to('/')->with('error', 'イメージ画像の登録に失敗しました。');
+        }
+        */
 
-            return redirect()->to('/')->with('message', 'プロフィール画像付きのユーザを登録しました。');
-            
-         } else {
+        // ファイル名を変数に代入
+        $filename = $_FILES['prof_photo']['name'];
 
-           return redirect()->to('/')->with('error', 'イメージ画像の登録に失敗しました。');
-         }
-       } else {
-         // 画像がアップロードされていなかったら、画像以外を保存する処理
-         return User::create([
-             'name' => $data['name'],
-             'nickname' => $data['nickname'],
-             'prefecture' => $data['prefecture'],
-             'birthday' => $data['birthday'],
-             'gender' => $data['gender'],
-             'email' => $data['email'],
-             'password' => Hash::make($data['password']),
-         ]);
-
-         return redirect()->to('/')->with('message', 'ユーザを登録しました。');
-       }
-
+        DB::beginTransaction();
+        // 画像をアップロードしDBにセット
+        if ($this->UserService->save($data, $filename)){
+          DB::commit();
+          return redirect()->to('/')->with('message', 'ユーザを登録しました。');
+        } else {
+          DB::rollBack();
+          return redirect()->to('/')->with('message', 'ユーザの作成に失敗しました。');
+        }
     }
 }

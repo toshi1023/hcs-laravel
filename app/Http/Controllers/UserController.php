@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-use App\User;
-use App\Prefecture;
+use App\Model\User;
+use App\Model\Prefecture;
 
 class UserController extends Controller
 {

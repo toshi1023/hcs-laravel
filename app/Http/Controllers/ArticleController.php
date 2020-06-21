@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Article;
+use App\Model\Article;
 
-use App\Prefecture;
+use App\Model\Prefecture;
 
-use App\User;
+use App\Model\User;
 
 class ArticleController extends Controller
 {
@@ -47,10 +47,10 @@ class ArticleController extends Controller
 
      // 記事の内容を登録
      $article->prefecture = $request->prefecture;
-     $article->title = $request->title;
-     $article->content = $request->content;
+     $article->title      = $request->title;
+     $article->content    = $request->content;
      $article->women_only = $request->women_only;
-     $article->user_id = $request->user_id;
+     $article->user_id    = $request->user_id;
 
      $article->save();
 
