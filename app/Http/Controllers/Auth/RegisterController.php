@@ -9,10 +9,8 @@ use App\Service\UserService;
 use App\Model\Prefecture;
 use App\Http\Controllers\Auth\File;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Storage;
 
 class RegisterController extends Controller
 {
@@ -129,17 +127,29 @@ class RegisterController extends Controller
         }
         */
 
-        // ファイル名を変数に代入
-        $filename = $_FILES['prof_photo']['name'];
+        $image = null;
+        $filename = null;
 
+        if ($_FILES['prof_photo']['name']){
+          // ファイル名を変数に代入
+          $filename = $_FILES['prof_photo']['name'];
+          // 画像データを変数に代入
+          $image = $data['prof_photo'];
+        }
+        
         DB::beginTransaction();
-        // 画像をアップロードしDBにセット
-        if ($this->UserService->save($data, $filename)){
+        if ($this->UserService->userSave($data, $filename, $image)){
+
           DB::commit();
-          return redirect()->to('/')->with('message', 'ユーザを登録しました。');
+        
         } else {
+
           DB::rollBack();
-          return redirect()->to('/')->with('message', 'ユーザの作成に失敗しました。');
         }
     }
+
+    public function redirectPatch() 
+    {
+        return redirect()->to('/')->with('message', 'ユーザを登録しました。');
+    } 
 }

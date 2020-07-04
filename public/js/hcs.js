@@ -1,4 +1,17 @@
-// @1 女性限定公開を設定
+/*
+  UserController & RegisterController
+*/
+// $(function(){
+//   var prof_photo = $('#prof_photo').val();
+//   if (prof_photo == null){
+//     $('#prof_photo').val("NoImage");
+//   }
+// });
+
+/*
+  ArticleController
+*/
+// @2 女性限定公開を設定
 $(function(){
 
   var num = 0;
@@ -18,4 +31,4 @@ $(function(){
   });
 
 });
-// @1
+// @2
