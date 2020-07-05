@@ -10,6 +10,15 @@ use App\Model\Prefecture;
 
 class UserController extends Controller
 {
+
+    protected $database;
+
+    public function __construct()
+    {
+      // サービスの解決
+      $this->database = $this->serviceBind();
+    }
+
     public function index()
     {
       // 全ユーザデータを更新日時順にソートして取得

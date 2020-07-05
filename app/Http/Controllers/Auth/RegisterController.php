@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Model\User;
-use App\Service\UserService;
 use App\Model\Prefecture;
 use App\Http\Controllers\Auth\File;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -37,6 +36,8 @@ class RegisterController extends Controller
 
     protected $UserService;
 
+    protected $database;
+
     /**
      * Create a new controller instance.
      *
@@ -46,8 +47,8 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
 
-        $this->UserService = new UserService();
-
+        // サービスの解決
+        $this->database = $this->serviceBind();
     }
 
     public function showRegistrationForm()
@@ -138,7 +139,7 @@ class RegisterController extends Controller
         }
         
         DB::beginTransaction();
-        if ($this->UserService->userSave($data, $filename, $image)){
+        if ($this->database->save($data, $filename, $image)){
 
           DB::commit();
         

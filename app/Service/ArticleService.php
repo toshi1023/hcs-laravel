@@ -3,15 +3,14 @@
 namespace App\Service;
 
 use App\Model\User;
-use App\Service\DatabaseInterface;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class UserService implements DatabaseInterface
+class ArticleService implements DatabaseInterface
 {
   /*
-  ユーザ保存用メソッド
+  記事保存用メソッド
   第一引数:登録データ, 第二引数:ファイル名 ,第三引数:ファイルデータ
   */
   public function save($data, $filename, $file)
