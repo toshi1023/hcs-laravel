@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
       // 全ユーザデータを更新日時順にソートして取得
-      $users = User::latest('updated_at')->get();
+      $users = $this->database->getIndex()->get();
 
       return view('users.index',[ 'users' => $users ]);
 

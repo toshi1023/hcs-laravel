@@ -4,6 +4,9 @@ namespace App\Service;
 
 /* DBに関する処理を設定 */
 interface DatabaseInterface {
+
+    // データを取得するメソッド
+    public function getIndex();
     
     // DBに保存する処理を記述
     public function save($data, $filename, $file);

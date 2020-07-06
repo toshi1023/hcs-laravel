@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Model\User;
+use App\Model\Prefecture;
 use App\Service\DatabaseInterface;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,25 @@ use Storage;
 
 class UserService implements DatabaseInterface
 {
+
+  protected $user;
+  protected $prefecture;
+
+  /* モデルのインスタンス化 */
+  public function __construct(User $user, Prefecture $prefecture)
+  {
+    $this->user = $user;
+    $this->prefecture = $prefecture;
+  }
+
+  /* indexページ用データ取得メソッド */
+  public function getIndex()
+  {
+    $this->user->latest('updated_at');
+    
+    return $this->user;
+  }
+
   /*
   ユーザ保存用メソッド
   第一引数:登録データ, 第二引数:ファイル名 ,第三引数:ファイルデータ
