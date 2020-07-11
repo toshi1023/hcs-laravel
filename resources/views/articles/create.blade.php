@@ -57,11 +57,11 @@
                   <button type="button" class="btn btn-outline-danger" name="women_only" id="women_only" data-toggle="button" aria-pressed="false" style="font-size: large">
                     設定しない
                   </button>
-                  <input type="hidden" name="women_only" id="women_only" value="0">
                 </div>
             </div>
           @endif
           <br>
+          <input type="hidden" name="women_only" id="women_only" value="0">
           <div class="form-group row mb-0">
               <div class="col-md-8 offset-md-4">
                 <button type="submit" class="btn btn-primary" style="font-size: large">内容登録</button>

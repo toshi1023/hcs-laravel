@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Service\DatabaseInterface;
 use App\Model\User;
 use App\Model\Article;
 use App\Model\Prefecture;
@@ -13,16 +14,18 @@ class ArticleService implements DatabaseInterface
 {
 
   protected $article;
+  protected $user;
   protected $prefecture;
 
   /* モデルのインスタンス化 */
-  public function __construct(Article $article, Prefecture $prefecture)
+  public function __construct(Article $article, User $user, Prefecture $prefecture)
   {
     $this->article = $article;
+    $this->user = $user;
     $this->prefecture = $prefecture;
   }
 
-  /* データ取得メソッド */
+  /* Index用データ取得メソッド */
   public function getIndex()
   {
     
@@ -34,6 +37,34 @@ class ArticleService implements DatabaseInterface
     return $this->article;
   }
 
+  /* *
+   * Showページ用データを取得するメソッド
+   * 引数: ユーザID
+   * */
+  public function getShow($request)
+  {
+    // 記事と紐づくユーザ情報の値を取得
+    $this->user->where('id', '=',$request)->first();
+
+    return $this->user;
+  }
+
+  /* *
+   * editページ用データを取得するメソッド
+   * 引数: 自身のID
+   * */
+  public function getEdit($request)
+  {
+    //  自身の記事テーブルの値を取得
+    $data['article'] = $this->article->where('user_id', '=',$request);
+
+    // 都道府県データをすべて取得
+    $data['prefecture'] = $this->prefecture::all();
+
+    return $data;
+
+  }
+
   /* データを条件つきで取得するメソッド */
   public function getWhereQuery($conditions=[])
   {
@@ -42,9 +73,11 @@ class ArticleService implements DatabaseInterface
       $conditions[$value] = $value;
     }
     
-    $this->article->where($conditions[$key], '=', $conditions[$value])
+    // $this->article->where($conditions[$key], '=', $conditions[$value])
+    $this->article->where('women_only', '=', 0)
                   ->latest('updated_at');
 
+    // dd($this->article);
     return $this->article;
 
   }
@@ -69,16 +102,17 @@ class ArticleService implements DatabaseInterface
     // if ($file_upload[0]){
 
       try {
-        Article::create([
-          // 'prof_photo' => $filename,
-          // 'photo_path' => $file_upload[1],
-          'prefecture'        => $data['prefecture'],
-          'title'    => $data['title'],
-          'content'  => $data['content'],
-          'women_only'    => $data['women_only'],
-          'user_id'      => $data['user_id'],
-          
-        ]);
+        
+        // 'prof_photo' => $filename,
+        // 'photo_path' => $file_upload[1],
+        $this->article->prefecture = $data['prefecture'];
+        $this->article->title      = $data['title'];
+        $this->article->content    = $data['content'];
+        $this->article->women_only = $data['women_only'];
+        $this->article->user_id    = $data['user_id'];
+        
+        $this->article->save();
+
         return true;
 
       } catch (\Exception $e) {

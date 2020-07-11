@@ -43,6 +43,6 @@ class User extends Authenticatable
     // Articleテーブルと1対多のリレーション構築(1側の設定)
     public function articles()
     {
-        return $this->hasMany('App\Article');
+        return $this->hasMany('App\Model\Article');
     }
 }

@@ -8,6 +8,7 @@ use App\Model\Article;
 use App\Model\Prefecture;
 use App\Model\User;
 use App\Service\DatabaseInterface;
+use App\Service\UserService;
 use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
@@ -17,7 +18,10 @@ class ArticleController extends Controller
 
   public function __construct()
   {
-    // サービスの解決
+
+    Parent::__construct();
+
+    // DB操作のクラスをインスタンス化
     $this->database = $this->serviceBind();
   }
 
@@ -27,14 +31,13 @@ class ArticleController extends Controller
       $articles = $this->database->getIndex()->get();
 
       // 女性限定公開をされていない記事のみ取得
-      $women_only_articles = $this->database->getWhereQuery(['women_only' => 1])->get();
+      $women_only_articles = $this->database->getWhereQuery(['women_only' => 0])->get();
 
       return view('articles/index', [
           'articles' => $articles,
           'women_only_articles' => $women_only_articles,
       ]);
   }
-
 
   //    記事登録処理
   public function create()
@@ -58,7 +61,8 @@ class ArticleController extends Controller
       return redirect()->route('articles.index')->with('message', '記事を作成しました');
     } else {
       DB::rollBack();
-      return redirect()->route('articles.index')->with('errors', '記事の作成に失敗しました');
+      $this->messages->add('', '記事の作成に失敗しました。管理者に問い合わせてください');
+      return redirect()->route('articles.index')->withErrors($this->messages);
     }
     
   }
@@ -66,8 +70,8 @@ class ArticleController extends Controller
   // 記事の詳細ページを設定
   public function show(Article $article)
   {
-    // 記事テーブルとユーザテーブルを結合してユーザテーブルの値も取得
-    $user = Article::find($article->id)->user;
+    // ユーザテーブルの値を取得
+    $user = $this->database->getShow($article->user_id)->first();
 
     return view('articles.show', [
       'article' => $article,
@@ -78,11 +82,14 @@ class ArticleController extends Controller
   // 記事の編集機能を設定
   public function edit(Article $article)
   {
-    $article = Article::find($article->id);
+    $article = $this->database->getEdit($article->id)['article'];
+
+    dd($article);
+    exit;
 
     $user = Article::find($article->id)->user;
 
-    $prefectures = Prefecture::all();
+    $prefectures = $this->database->getEdit($article->id)['prefecture'];
 
     return view('articles.edit', [
       'article' => $article,

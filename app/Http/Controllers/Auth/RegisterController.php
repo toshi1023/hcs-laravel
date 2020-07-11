@@ -47,7 +47,7 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
 
-        // サービスの解決
+        // DB操作のクラスをインスタンス化
         $this->database = $this->serviceBind();
     }
 

@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-      // サービスの解決
+      // DB操作のクラスをインスタンス化
       $this->database = $this->serviceBind();
     }
 

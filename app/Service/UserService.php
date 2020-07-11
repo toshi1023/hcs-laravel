@@ -2,9 +2,9 @@
 
 namespace App\Service;
 
+use App\Service\DatabaseInterface;
 use App\Model\User;
 use App\Model\Prefecture;
-use App\Service\DatabaseInterface;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
@@ -28,6 +28,35 @@ class UserService implements DatabaseInterface
     $this->user->latest('updated_at');
     
     return $this->user;
+  }
+
+  /* Showページ用データを取得するメソッド */
+  public function getShow($request)
+  {
+    $this->user->where('id', $request);
+
+    return $this->user;
+  }
+
+  /* Editページ用データを取得するメソッド */
+  public function getEdit($request)
+  {
+
+  }
+
+  /* データを条件つきで取得するメソッド */
+  public function getWhereQuery($conditions=[])
+  {
+    foreach ($conditions as $key => $value) {
+      $conditions[$key] = $key;
+      $conditions[$value] = $value;
+    }
+    
+    $this->user->where($conditions[$key], '=', $conditions[$value])
+                  ->latest('updated_at');
+
+    return $this->user;
+
   }
 
   /*
