@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Knp\Snappy\Pdf;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // PDF作成クラスのインスタンス生成
+        $this->app->bind(Pdf::class, function () {
+            return new Pdf('/usr/local/bin/wkhtmltopdf');
+        });
     }
 
     /**

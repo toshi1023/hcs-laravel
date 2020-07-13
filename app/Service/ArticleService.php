@@ -2,39 +2,34 @@
 
 namespace App\Service;
 
-use App\Service\DatabaseInterface;
-use App\Model\User;
-use App\Model\Article;
-use App\Model\Prefecture;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class ArticleService implements DatabaseInterface
+class ArticleService
 {
 
-  protected $article;
-  protected $user;
-  protected $prefecture;
+  protected $ArticleService;
+  // protected $user;
+  // protected $prefecture;
 
-  /* モデルのインスタンス化 */
-  public function __construct(Article $article, User $user, Prefecture $prefecture)
+  /* DBリポジトリのインスタンス化 */
+  public function __construct()
   {
-    $this->article = $article;
-    $this->user = $user;
-    $this->prefecture = $prefecture;
+    $this->ArticleService = app()->make(DatabaseInterface::class);
   }
 
   /* Index用データ取得メソッド */
   public function getIndex()
   {
     
-    // usersテーブルの値も結合して取得
-    $this->article->leftjoin('users', 'users.id', '=', 'articles.user_id')
-          ->select('users.*', 'articles.*')
-          ->latest('articles.updated_at');
+    // 記事を全て取得(Userモデルのテーブルも結合して取得！)
+    $articles = $this->ArticleService->getIndex()->get();
 
-    return $this->article;
+    // 女性限定公開をされていない記事のみ取得
+    $women_only_articles = $this->ArticleService->getWhereQuery(['women_only' => 0])->get();
+
+    return [$articles, $women_only_articles];
   }
 
   /* *

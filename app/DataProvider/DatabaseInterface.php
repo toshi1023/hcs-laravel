@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Service;
+namespace App\DataProvider;
 
 /* DBに関する処理を設定 */
 interface DatabaseInterface {

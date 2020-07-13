@@ -21,6 +21,8 @@ Route::resource('articles', 'ArticleController');
 
 // ユーザ関連のルート
 Route::resource('users', 'UserController');
+// ユーザデータのPDF出力ルート
+Route::get('users/pdf', 'UserController@pdf')->name('pdf');
 
 // 認証機能のルーティング(laravel7.5.2では"php artisan ui vue --auth"のコマンドが事前に必要)
 Auth::routes();

@@ -177,6 +177,12 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        // Dataロジック用クラス
+        App\Providers\RepositoryServiceProvider::class,
+        App\Providers\ArticleServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
+        // PDF作成用クラス
+        Barryvdh\Snappy\ServiceProvider::class,
 
     ],
 
@@ -234,6 +240,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'DatabaseInterface' => App\Service\DatabaseInterface::class,
+        // 以下2つ：PDF作成クラス
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
 
     ],
 

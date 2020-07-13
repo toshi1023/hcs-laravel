@@ -7,6 +7,7 @@
     </div>
     <!-- 非会員には会員一覧を表示しないように制限 -->
     @if(Auth::check())
+      <a href="users/pdf" class="btn btn-success" style="font-size: large">PDF出力</a>
       <br>
       <br>
       <div class="row">

@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Model\User;
 use App\Model\Prefecture;
+use App\Service\UserService;
 
 class UserController extends Controller
 {
 
     protected $database;
 
-    public function __construct()
+    public function __construct(UserService $database)
     {
       // DB操作のクラスをインスタンス化
-      $this->database = $this->serviceBind();
+      $this->database = $database;
     }
 
     public function index()
@@ -26,6 +27,20 @@ class UserController extends Controller
 
       return view('users.index',[ 'users' => $users ]);
 
+    }
+
+    public function pdf()
+    {
+      echo "test";
+      // 全ユーザデータを更新日時順にソートして取得
+      $users = $this->database->getIndex()->get();
+      $pdf = \PDF::loadView('/layouts/pdf_template');
+
+      // ブラウザ上で開く
+      return $pdf->inline('thisis.pdf');
+
+      // ダウンロードする場合
+      // return $pdf->download('download.pdf');
     }
 
     public function show(User $user)

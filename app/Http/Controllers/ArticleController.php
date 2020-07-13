@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Model\Article;
 use App\Model\Prefecture;
 use App\Model\User;
-use App\Service\DatabaseInterface;
+
+use App\Service\ArticleService;
 use App\Service\UserService;
 use Illuminate\Support\Facades\DB;
 
@@ -16,26 +17,22 @@ class ArticleController extends Controller
 
   protected $database;
 
-  public function __construct()
+  public function __construct(ArticleService $database)
   {
 
     Parent::__construct();
 
     // DB操作のクラスをインスタンス化
-    $this->database = $this->serviceBind();
+    $this->database = $database;
   }
 
   public function index()
   {
-      // 記事を全て取得(Userモデルのテーブルも結合して取得！)
-      $articles = $this->database->getIndex()->get();
-
-      // 女性限定公開をされていない記事のみ取得
-      $women_only_articles = $this->database->getWhereQuery(['women_only' => 0])->get();
+      $articles = $this->database->getIndex();
 
       return view('articles/index', [
-          'articles' => $articles,
-          'women_only_articles' => $women_only_articles,
+          'articles' => $articles[0],
+          'women_only_articles' => $articles[1],
       ]);
   }
 
