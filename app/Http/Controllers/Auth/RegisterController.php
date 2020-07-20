@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Model\User;
 use App\Model\Prefecture;
+use App\Service\UserService;
+
 use App\Http\Controllers\Auth\File;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -43,12 +46,12 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserService $database)
     {
-        $this->middleware('guest');
+      $this->middleware('guest');
 
-        // DB操作のクラスをインスタンス化
-        $this->database = $this->serviceBind();
+      // DB操作のクラスをインスタンス化
+      $this->database = $database;
     }
 
     public function showRegistrationForm()

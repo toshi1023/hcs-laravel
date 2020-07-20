@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
+use App\DataProvider\DatabaseInterface;
 use Storage;
 
 class UserService
@@ -11,11 +12,11 @@ class UserService
 
   protected $UserService;
   
-
   /* DBリポジトリのインスタンス化 */
-  public function __construct()
+  public function __construct(DatabaseInterface $service)
   {
-    $this->UserService = app()->make(DatabaseInterface::class);
+    // $this->UserService = app()->make(DatabaseInterface::class);
+    $this->UserService = $service;
     
   }
 

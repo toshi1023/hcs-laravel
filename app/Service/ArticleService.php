@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
+use App\DataProvider\DatabaseInterface;
 use Storage;
 
 class ArticleService
@@ -14,15 +15,15 @@ class ArticleService
   // protected $prefecture;
 
   /* DBリポジトリのインスタンス化 */
-  public function __construct()
+  public function __construct(DatabaseInterface $service)
   {
-    $this->ArticleService = app()->make(DatabaseInterface::class);
+    // $this->ArticleService = app()->make(DatabaseInterface::class);
+    $this->ArticleService = $service;
   }
 
   /* Index用データ取得メソッド */
   public function getIndex()
   {
-    
     // 記事を全て取得(Userモデルのテーブルも結合して取得！)
     $articles = $this->ArticleService->getIndex()->get();
 

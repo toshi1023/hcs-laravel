@@ -13,6 +13,7 @@ class UserController extends Controller
 {
 
     protected $database;
+    protected $service;
 
     public function __construct(UserService $database)
     {
