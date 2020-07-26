@@ -34,7 +34,7 @@ class UserService
    * */
   public function getShow($request)
   {
-
+    return $this->UserService->getShow($request);
   }
 
   /* *
@@ -43,7 +43,7 @@ class UserService
    * */
   public function getEdit($request)
   {
-
+    return $this->UserService->getEdit($request);
   }
   
   /* *
@@ -52,7 +52,7 @@ class UserService
    * */
   public function save($data, $filename, $file)
   {
-
+    return $this->UserService->save($request, $filename, $file);
   }
 
   /*
@@ -61,7 +61,7 @@ class UserService
   */
   public function filestore($file, $foldername)
   {
-
+    return $this->UserService->filestore($file, $foldername);
   }
 
   /*
@@ -70,9 +70,7 @@ class UserService
   */
   public function fileDelete($request)
   {
-
+    return $this->UserService->fileDelete($request);
   }
-
-  
 
 }

@@ -7,7 +7,7 @@ use App\Model\Prefecture;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class UserRepository implements DatabaseInterface
+class UserRepository extends BaseRepository implements DatabaseInterface
 {
     private $user;
     private $prefecture;
@@ -21,12 +21,16 @@ class UserRepository implements DatabaseInterface
         $this->prefecture = $prefecture;
     }
 
+    /* BaseRepositoryの機能を利用するため、代入 */
+    public function model()
+    {
+        $this->model = $this->user;
+    }
+
     /* indexページ用データ取得メソッド */
     public function getIndex()
-    {
-        $this->user->latest('updated_at');
-        
-        return $this->user;
+    {   
+        return $this->all();
     }
 
     /* Showページ用データを取得するメソッド */

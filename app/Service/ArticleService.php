@@ -84,39 +84,7 @@ class ArticleService
   */
   public function save($data, $filename = null, $file = null)
   {
-
-    // ファイル名が設定されていなければ統一名を代入
-    if (!$filename) {
-      // ファイル名を変数に代入
-      $filename = 'NoImage';
-    }
-
-    // 画像をアップロード
-    // $file_upload = $this->fileStore($file, $data['nickname']);
-
-    // 画像をアップロードしDBにセット
-    // if ($file_upload[0]){
-
-      try {
-        
-        // 'prof_photo' => $filename,
-        // 'photo_path' => $file_upload[1],
-        $this->article->prefecture = $data['prefecture'];
-        $this->article->title      = $data['title'];
-        $this->article->content    = $data['content'];
-        $this->article->women_only = $data['women_only'];
-        $this->article->user_id    = $data['user_id'];
-        
-        $this->article->save();
-
-        return true;
-
-      } catch (\Exception $e) {
-        \Log::error('article save error:'.$e->getmessage());
-        return false;
-      }
-      
-    // }
+    return $this->ArticleService->save($data, $filename, $file);
   } 
 
   /*
@@ -125,23 +93,7 @@ class ArticleService
   */
   public function fileStore($file, $foldername)
   {
-
-    if ($file){
-      try {
-        //s3アップロード開始
-        // バケットの`my-rails-app-hcs-first-bucket/{ニックネーム名}`フォルダへアップロード
-        $path = Storage::disk('s3')->putFile('my-rails-app-hcs-first-bucket/'.$foldername, $file, 'public');
-        // アップロードしたファイルのURLを取得し、DBにセット
-        $photo_path = Storage::disk('s3')->url($path);
-
-      } catch (\Exception $e) {
-        return [false, null];
-      }
-      return [true, $photo_path];
-    } else {
-      // アップロードファイルがなければデフォルトの画像を設定
-      return [true, Consts::NO_IMAGE];
-    }
+    return $this->ArticleService->filestore($file, $foldername);
   }
 
   /*
@@ -150,18 +102,7 @@ class ArticleService
   */
   public function fileDelete($request)
   {
-    try {
-      // ファイルの削除を実行
-      $file = Storage::disk('s3');
-      $file->delete($request);
-      return true;
-
-    } catch (\Exception $e) {
-      
-      return false;
-      
-    }
-    
+    return $this->ArticleService->fileDelete($request);
   }
 
 }

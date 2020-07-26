@@ -9,7 +9,7 @@ use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class ArticleRepository implements DatabaseInterface
+class ArticleRepository extends BaseRepository implements DatabaseInterface
 {
     protected $article;
     protected $user;
@@ -21,6 +21,12 @@ class ArticleRepository implements DatabaseInterface
         $this->article = $article;
         $this->user = $user;
         $this->prefecture = $prefecture;
+    }
+
+    /* BaseRepositoryの機能を利用するため、代入 */
+    public function model()
+    {
+        $this->model = $this->article;
     }
 
     /* Index用データ取得メソッド */
