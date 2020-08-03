@@ -8,7 +8,7 @@ use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class UserRepository implements UserDatabaseInterface
+class UserRepository extends BaseRepository implements UserDatabaseInterface
 {
     private $user;
     private $prefecture;
@@ -120,26 +120,5 @@ class UserRepository implements UserDatabaseInterface
             return false;
         
         }
-    }
-
-    /* 指定したデータをすべて取得するメソッド */
-    public function getAllQuery($request)
-    {
-        return \DB::table($request);
-    }
-
-    /* データを条件つきで取得するメソッド */
-    public function getWhereQuery($conditions=[])
-    {
-        foreach ($conditions as $key => $value) {
-            $conditions[$key] = $key;
-            $conditions[$value] = $value;
-        }
-        
-        $this->user->where($conditions[$key], '=', $conditions[$value])
-                    ->latest('updated_at');
-
-        return $this->user;
-
     }
 }

@@ -9,7 +9,7 @@ use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class ArticleRepository implements ArticleDatabaseInterface
+class ArticleRepository extends BaseRepository implements ArticleDatabaseInterface
 {
     protected $article;
     protected $user;
