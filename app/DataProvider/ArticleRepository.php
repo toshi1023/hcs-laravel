@@ -9,7 +9,7 @@ use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class ArticleRepository extends BaseRepository implements DatabaseInterface
+class ArticleRepository implements ArticleDatabaseInterface
 {
     protected $article;
     protected $user;
@@ -21,12 +21,6 @@ class ArticleRepository extends BaseRepository implements DatabaseInterface
         $this->article = $article;
         $this->user = $user;
         $this->prefecture = $prefecture;
-    }
-
-    /* BaseRepositoryの機能を利用するため、代入 */
-    public function model()
-    {
-        $this->model = $this->article;
     }
 
     /* Index用データ取得メソッド */
@@ -73,8 +67,8 @@ class ArticleRepository extends BaseRepository implements DatabaseInterface
     public function getWhereQuery($conditions=[])
     {
         foreach ($conditions as $key => $value) {
-        $conditions[$key] = $key;
-        $conditions[$value] = $value;
+            $conditions[$key] = $key;
+            $conditions[$value] = $value;
         }
         
         // $this->article->where($conditions[$key], '=', $conditions[$value])
@@ -152,21 +146,37 @@ class ArticleRepository extends BaseRepository implements DatabaseInterface
         }
     }
 
-    /*
-    ファイル削除用メソッド
-    引数:ファイルパス
-    */
+    /**
+    * 記事削除用メソッド
+    * 引数:記事ID
+    * */
+    public function destroy($request)
+    {
+        try {
+            //  対象の記事を削除
+            $this->article->where('id', '=',$request)->delete();
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('article destroy error:'.$e->getmessage());
+            return false; 
+        }
+    }
+
+    /**
+    * ファイル削除用メソッド
+    * 引数:ファイルパス
+    * */
     public function fileDelete($request)
     {
             try {
-            // ファイルの削除を実行
-            $file = Storage::disk('s3');
-            $file->delete($request);
-            return true;
+                // ファイルの削除を実行
+                $file = Storage::disk('s3');
+                $file->delete($request);
+                return true;
 
             } catch (\Exception $e) {
             
-            return false;
+                return false;
             
             }
         }

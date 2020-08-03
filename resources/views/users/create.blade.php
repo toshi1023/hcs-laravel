@@ -11,7 +11,7 @@
   <br>
 </div>
 <div class="container">
-    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
         @csrf
         {{-- 画像アップロード --}}
         <div class="form-group-lg row">

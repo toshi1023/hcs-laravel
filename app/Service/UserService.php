@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
-use App\DataProvider\DatabaseInterface;
+use App\DataProvider\UserDatabaseInterface;
 use Storage;
 
 class UserService
@@ -13,18 +13,21 @@ class UserService
   protected $UserService;
   
   /* DBリポジトリのインスタンス化 */
-  public function __construct(DatabaseInterface $service)
+  public function __construct(UserDatabaseInterface $service)
   {
     // $this->UserService = app()->make(DatabaseInterface::class);
     $this->UserService = $service;
     
   }
 
-  /* Index用データ取得メソッド */
-  public function getIndex()
+  /**
+   * Indexページ用データを取得するメソッド
+   * 引数：検索用テーブル
+   */
+  public function getIndex($request)
   {
     // 全ユーザデータを更新日時順にソートして取得
-    return $this->UserService->getIndex();
+    return $this->UserService->getAllQuery($request);
 
   }
 
@@ -35,6 +38,15 @@ class UserService
   public function getShow($request)
   {
     return $this->UserService->getShow($request);
+  }
+
+  /* *
+   * createページ用データを取得するメソッド
+   * 引数: 検索用テーブル
+   * */
+  public function getCreate($request)
+  {
+    return $this->UserService->getAllQuery($request);
   }
 
   /* *
@@ -52,7 +64,7 @@ class UserService
    * */
   public function save($data, $filename, $file)
   {
-    return $this->UserService->save($request, $filename, $file);
+    return $this->UserService->save($data, $filename, $file);
   }
 
   /*

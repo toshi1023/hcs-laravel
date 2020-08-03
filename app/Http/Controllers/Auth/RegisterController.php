@@ -10,6 +10,8 @@ use App\Service\UserService;
 
 use App\Http\Controllers\Auth\File;
 use Illuminate\Support\Facades\Auth;
+// バリデーションの拡張機能を追加
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -57,9 +59,7 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
       // 都道府県データを会員登録フォームに渡す
-      $prefectures = Prefecture::all();
-
-
+      $prefectures = $this->database->getCreate('prefectures')->get();
 
       return view('auth.register', [
           'prefectures' => $prefectures,
@@ -96,60 +96,28 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
+    /* ユーザ保存メソッド */
+    public function store(PostUserRequest $request)
     {
-        /*
-        (ローカルに保存する場合)
-        画像名をランダムに作成
-        $filename = md5(uniqid(rand(), true));
+      $image = null;
+      $filename = null;
 
-        作成したファイル名にアップロードした画像の拡張子を連結
-        $filename .= "." . substr(strrchr($_FILES['prof_photo']['name'], '.'), 1);
+      if ($_FILES['prof_photo']['name']){
+        // ファイル名を変数に代入
+        $filename = $_FILES['prof_photo']['name'];
+        // 画像データを変数に代入
+        $image = $request['prof_photo'];
+      }
+      
+      DB::beginTransaction();
+      if ($this->database->save($request, $filename, $image)){
 
-        画像を保存するユーザごとのフォルダを作成し、変数に代入
-        $folder = $data->id;
+        DB::commit();
+      
+      } else {
 
-        画像を保存するフォルダを設定
-        $path = "profile_images/". $foler;
-
-        画像がアップロードに成功していたら画像を指定フォルダに保存
-        if($data->file('prof_photo')->isValid([])){
-
-           // $data->file('prof_photo')->storeAs($path, $filename, 'public');
-
-           return redirect()->to('/')->with('message', 'プロフィール画像付きのユーザを登録しました。');
-
-        } else {
-
-          return redirect()->to('/')->with('error', 'イメージ画像の登録に失敗しました。');
-        }
-        */
-
-        $image = null;
-        $filename = null;
-
-        if ($_FILES['prof_photo']['name']){
-          // ファイル名を変数に代入
-          $filename = $_FILES['prof_photo']['name'];
-          // 画像データを変数に代入
-          $image = $data['prof_photo'];
-        }
-        
-        DB::beginTransaction();
-        if ($this->database->save($data, $filename, $image)){
-
-          DB::commit();
-        
-        } else {
-
-          DB::rollBack();
-        }
+        DB::rollBack();
+      }
     }
 
     public function redirectPatch() 

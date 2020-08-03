@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 use App\Model\User;
 use App\Model\Prefecture;
@@ -24,10 +25,44 @@ class UserController extends Controller
     public function index()
     {
       // 全ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex()->get();
+      $users = $this->database->getIndex('users')->get();
 
       return view('users.index',[ 'users' => $users ]);
 
+    }
+
+    public function create()
+    {
+      // 都道府県データを会員登録フォームに渡す
+      $prefectures = $this->database->getCreate('prefectures')->get();
+
+      return view('users.create', [
+          'prefectures' => $prefectures,
+      ]);
+    }
+
+    /* ユーザ保存メソッド */
+    public function store(Request $request)
+    {
+      $image = null;
+      $filename = null;
+
+      if ($_FILES['prof_photo']['name']){
+        // ファイル名を変数に代入
+        $filename = $_FILES['prof_photo']['name'];
+        // 画像データを変数に代入
+        $image = $request['prof_photo'];
+      }
+      
+      DB::beginTransaction();
+      if ($this->database->save($request, $filename, $image)){
+
+        DB::commit();
+      
+      } else {
+
+        DB::rollBack();
+      }
     }
 
     public function pdf()
@@ -63,7 +98,7 @@ class UserController extends Controller
       ]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(PostUserRequest $request, User $user)
     {
       $user = User::find($user->id);
 

@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// ログイン機能のルーティング
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('/login', 'Auth\LoginController@login')->name('postlogin');
+
 // ルートページ
 Route::get('/', 'HomeController@index')->name('home');
 
@@ -24,7 +28,5 @@ Route::resource('users', 'UserController');
 // ユーザデータのPDF出力ルート
 Route::get('users/pdf', 'UserController@pdf')->name('pdf');
 
-// 認証機能のルーティング(laravel7.5.2では"php artisan ui vue --auth"のコマンドが事前に必要)
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+// ログアウト機能のルーティング
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');

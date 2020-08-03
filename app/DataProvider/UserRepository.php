@@ -4,10 +4,11 @@ namespace App\DataProvider;
 
 use App\Model\User;
 use App\Model\Prefecture;
+use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
 
-class UserRepository extends BaseRepository implements DatabaseInterface
+class UserRepository implements UserDatabaseInterface
 {
     private $user;
     private $prefecture;
@@ -21,16 +22,13 @@ class UserRepository extends BaseRepository implements DatabaseInterface
         $this->prefecture = $prefecture;
     }
 
-    /* BaseRepositoryの機能を利用するため、代入 */
-    public function model()
-    {
-        $this->model = $this->user;
-    }
-
-    /* indexページ用データ取得メソッド */
-    public function getIndex()
+    /**
+     * indexページ用データ取得メソッド
+     * 引数：
+     *  */ 
+    public function getIndex($request)
     {   
-        return $this->all();
+        return $this->getAllQuery();
     }
 
     /* Showページ用データを取得するメソッド */
@@ -47,21 +45,6 @@ class UserRepository extends BaseRepository implements DatabaseInterface
 
     }
 
-    /* データを条件つきで取得するメソッド */
-    public function getWhereQuery($conditions=[])
-    {
-        foreach ($conditions as $key => $value) {
-        $conditions[$key] = $key;
-        $conditions[$value] = $value;
-        }
-        
-        $this->user->where($conditions[$key], '=', $conditions[$value])
-                    ->latest('updated_at');
-
-        return $this->user;
-
-    }
-
     /*
     ユーザ保存用メソッド
     第一引数:登録データ, 第二引数:ファイル名 ,第三引数:ファイルデータ
@@ -72,7 +55,7 @@ class UserRepository extends BaseRepository implements DatabaseInterface
         // ファイル名が設定されていなければ統一名を代入
         if (!$filename) {
         // ファイル名を変数に代入
-        $filename = 'NoImage';
+            $filename = 'NoImage';
         }
 
         // 画像をアップロード
@@ -115,8 +98,8 @@ class UserRepository extends BaseRepository implements DatabaseInterface
         }
         return [true, $photo_path];
         } else {
-        // アップロードファイルがなければデフォルトの画像を設定
-        return [true, Consts::NO_IMAGE];
+            // アップロードファイルがなければデフォルトの画像を設定
+            return [true, Consts::NO_IMAGE];
         }
     }
 
@@ -127,16 +110,36 @@ class UserRepository extends BaseRepository implements DatabaseInterface
     public function fileDelete($request)
     {
         try {
-        // ファイルの削除を実行
-        $file = Storage::disk('s3');
-        $file->delete($request);
-        return true;
+            // ファイルの削除を実行
+            $file = Storage::disk('s3');
+            $file->delete($request);
+            return true;
 
         } catch (\Exception $e) {
         
-        return false;
+            return false;
         
         }
+    }
+
+    /* 指定したデータをすべて取得するメソッド */
+    public function getAllQuery($request)
+    {
+        return \DB::table($request);
+    }
+
+    /* データを条件つきで取得するメソッド */
+    public function getWhereQuery($conditions=[])
+    {
+        foreach ($conditions as $key => $value) {
+            $conditions[$key] = $key;
+            $conditions[$value] = $value;
+        }
         
+        $this->user->where($conditions[$key], '=', $conditions[$value])
+                    ->latest('updated_at');
+
+        return $this->user;
+
     }
 }

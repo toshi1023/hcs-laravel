@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
-use App\DataProvider\DatabaseInterface;
+use App\DataProvider\ArticleDatabaseInterface;
 use Storage;
 
 class ArticleService
@@ -15,7 +15,7 @@ class ArticleService
   // protected $prefecture;
 
   /* DBリポジトリのインスタンス化 */
-  public function __construct(DatabaseInterface $service)
+  public function __construct(ArticleDatabaseInterface $service)
   {
     // $this->ArticleService = app()->make(DatabaseInterface::class);
     $this->ArticleService = $service;
@@ -95,6 +95,15 @@ class ArticleService
   {
     return $this->ArticleService->filestore($file, $foldername);
   }
+
+  /**
+    * 記事削除用メソッド
+    * 引数:記事ID
+    * */
+    public function destroy($request)
+    {
+      return $this->ArticleService->destroy($request);
+    }
 
   /*
   ファイル削除用メソッド

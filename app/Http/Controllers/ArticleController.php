@@ -36,16 +36,14 @@ class ArticleController extends Controller
       ]);
   }
 
-  //    記事登録処理
+  /* 記事作成メソッド */
   public function create()
   {
-
     $prefectures = Prefecture::all();
 
     return view('articles/create', [
         'prefectures' => $prefectures,
     ]);
-
   }
 
   /* 記事保存メソッド */
@@ -65,7 +63,7 @@ class ArticleController extends Controller
   }
 
   // 記事の詳細ページを設定
-  public function show(Article $article)
+  public function show($article)
   {
     // ユーザテーブルの値を取得
     $user = $this->database->getShow($article->user_id)->first();
@@ -77,14 +75,14 @@ class ArticleController extends Controller
   }
 
   // 記事の編集機能を設定
-  public function edit(Article $article)
+  public function edit($article)
   {
-    $article = $this->database->getEdit($article->id)['article'];
+    $article = $this->database->getEdit($article)['article'];
 
     dd($article);
     exit;
 
-    $user = Article::find($article->id)->user;
+    $user = Article::find($article)->user;
 
     $prefectures = $this->database->getEdit($article->id)['prefecture'];
 
@@ -96,9 +94,9 @@ class ArticleController extends Controller
   }
 
   // 記事の変更を反映
-  public function update(Request $request, Article $article)
+  public function update(Request $request, $article)
   {
-    $article = Article::find($article->id);
+    $article = Article::find($article);
 
     // 修正内容の代入
     $article->prefecture = $request->prefecture;
@@ -115,7 +113,15 @@ class ArticleController extends Controller
   // 記事を削除
   public function destroy(Article $article)
   {
-    $article->delete();
-    return redirect('articles');
+    DB::beginTransaction();
+
+    if ($this->database->destroy($request)) {
+      DB::commit();
+      return redirect()->route('articles.index')->with('message', '記事を削除しました');
+    } else {
+      DB::rollBack();
+      $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
+      return redirect()->route('articles.index')->withErrors($this->messages);
+    }
   }
 }

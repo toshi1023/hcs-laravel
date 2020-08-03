@@ -3,7 +3,7 @@
 namespace App\DataProvider;
 
 /* DBに関する処理を設定 */
-interface DatabaseInterface {
+interface ArticleDatabaseInterface {
 
     // Index用データを取得するメソッド
     public function getIndex();

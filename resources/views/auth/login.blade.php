@@ -6,7 +6,7 @@
       <p>ログイン</p>
   </div>
   <!-- 新規会員登録ボタンのフォーム -->
-  <a href="{{ route('register') }}" class="btn btn-primary" style="font-size: large">新規会員登録</a>
+  <a href="{{ route('users.create') }}" class="btn btn-primary" style="font-size: large">新規会員登録</a>
   <br>
   <br>
 </div>
