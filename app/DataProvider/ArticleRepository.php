@@ -60,24 +60,6 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         $data['prefecture'] = $this->prefecture::all();
 
         return $data;
-
-    }
-
-    /* データを条件つきで取得するメソッド */
-    public function getWhereQuery($conditions=[])
-    {
-        foreach ($conditions as $key => $value) {
-            $conditions[$key] = $key;
-            $conditions[$value] = $value;
-        }
-        
-        // $this->article->where($conditions[$key], '=', $conditions[$value])
-        $this->article->where('women_only', '=', 0)
-                    ->latest('updated_at');
-
-        // dd($this->article);
-        return $this->article;
-
     }
 
     /*

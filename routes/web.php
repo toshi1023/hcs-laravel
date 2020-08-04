@@ -20,13 +20,15 @@ Route::post('/login', 'Auth\LoginController@login')->name('postlogin');
 // ルートページ
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/welcome', 'HomeController@welcome')->name('welcome');
+
 // 記事関連のルート
 Route::resource('articles', 'ArticleController');
 
 // ユーザ関連のルート
 Route::resource('users', 'UserController');
 // ユーザデータのPDF出力ルート
-Route::get('users/pdf', 'UserController@pdf')->name('pdf');
+Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
 
 // ログアウト機能のルーティング
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');

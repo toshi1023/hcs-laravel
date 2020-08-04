@@ -28,7 +28,7 @@ class ArticleService
     $articles = $this->ArticleService->getIndex()->get();
 
     // 女性限定公開をされていない記事のみ取得
-    $women_only_articles = $this->ArticleService->getWhereQuery(['women_only' => 0])->get();
+    $women_only_articles = $this->ArticleService->getWhereQuery('articles', ['women_only' => 0])->get();
 
     return [$articles, $women_only_articles];
   }
