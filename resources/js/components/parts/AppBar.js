@@ -14,8 +14,12 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import styled from "styled-components";
 
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    backgroundColor: '#1b2538',
+  },
   grow: {
     flexGrow: 1,
   },
@@ -78,6 +82,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const Title = styled.h1`
+  font-family: 'Cabin Sketch', cursive;
+`;
 
 export default function HcsAppBar() {
   const classes = useStyles();
@@ -163,7 +171,7 @@ export default function HcsAppBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -173,8 +181,10 @@ export default function HcsAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+          <Typography className={classes.title}>
+            
+            <Title>HitcHike Community Space</Title>
+            
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

@@ -61,23 +61,6 @@ class ArticleService
 
   }
 
-  /* データを条件つきで取得するメソッド */
-  public function getWhereQuery($conditions=[])
-  {
-    foreach ($conditions as $key => $value) {
-      $conditions[$key] = $key;
-      $conditions[$value] = $value;
-    }
-    
-    // $this->article->where($conditions[$key], '=', $conditions[$value])
-    $this->article->where('women_only', '=', 0)
-                  ->latest('updated_at');
-
-    // dd($this->article);
-    return $this->article;
-
-  }
-
   /*
   記事保存用メソッド
   第一引数:登録データ, 第二引数:ファイル名 ,第三引数:ファイルデータ

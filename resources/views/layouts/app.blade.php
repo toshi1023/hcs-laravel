@@ -8,14 +8,12 @@
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
     {{-- bootstrapの呼び出し --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
+    <!-- Title -->
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch&display=swap" rel="stylesheet">
+  </head>
 <body>
   <header>
-    <div class="container">
-      <div class="title">
-          <h1>HitcHike Community Space</h1>
-      </div>
-    </div>
+    <div id="app"></div>
     <div class="container">
       <!-- ログインしているかをチェック -->
       @if(Auth::check())
@@ -44,7 +42,7 @@
             </ul>
         </nav>
       @endif
-    </div>
+    </>
     <div class="container">
       <!-- フラッシュメッセージ -->
       @if (session('message'))
@@ -87,9 +85,11 @@
     </script>
   @endif
 
+  <!-- Scripts -->
   <script src="{{ asset('js/hcs.js') }}">
 
   </script>
+  <script src="{{ asset('js/app.js') }}" defer></script>
   @yield('scripts')
 </body>
 </html>

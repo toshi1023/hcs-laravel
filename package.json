@@ -27,7 +27,9 @@
     "dependencies": {
         "@material-ui/core": "^4.11.0",
         "@material-ui/icons": "^4.9.1",
+        "@material-ui/system": "^4.9.14",
         "react-redux": "^7.2.1",
-        "redux": "^4.0.5"
+        "redux": "^4.0.5",
+        "styled-components": "^5.1.1"
     }
 }
