@@ -40,7 +40,7 @@ class ArticleService
   public function getShow($request)
   {
     // 記事と紐づくユーザ情報の値を取得
-    return $this->ArticleService->getShow($request);
+    return $this->ArticleService->getShow($request)->first();
   }
 
   /* *

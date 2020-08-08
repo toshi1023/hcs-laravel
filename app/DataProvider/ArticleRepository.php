@@ -48,7 +48,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     public function getShow($request)
     {
         // 記事の対象データを一件リターン
-        return $this->getArticle()->where('articles.id', '=' , $request)->first();
+        return $this->getArticle()->where('articles.id', '=' , $request);
     }
 
     /* *
