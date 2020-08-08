@@ -65,12 +65,11 @@ class ArticleController extends Controller
   // 記事の詳細ページを設定
   public function show($article)
   {
-    // ユーザテーブルの値を取得
-    $user = $this->database->getShow($article->user_id)->first();
+    // 詳細ページに表示する値を取得
+    $article = $this->database->getShow($article)->first();
 
     return view('articles.show', [
       'article' => $article,
-      'user' => $user,
     ]);
   }
 
@@ -78,17 +77,10 @@ class ArticleController extends Controller
   public function edit($article)
   {
     $article = $this->database->getEdit($article)['article'];
-
-    dd($article);
-    exit;
-
-    $user = Article::find($article)->user;
-
     $prefectures = $this->database->getEdit($article->id)['prefecture'];
 
     return view('articles.edit', [
       'article' => $article,
-      'user' => $user,
       'prefectures' => $prefectures,
     ]);
   }

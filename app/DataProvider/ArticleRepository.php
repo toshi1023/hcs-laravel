@@ -23,16 +23,22 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         $this->prefecture = $prefecture;
     }
 
+    /**
+     * articlesページに関わるデータの取得
+     */
+    public function getArticle()
+    {
+        // usersテーブルの値も結合して取得
+        return $this->article->leftjoin('users', 'articles.user_id', '=', 'users.id')
+                      ->select('articles.*', 'users.*')
+                      ->latest('articles.updated_at');
+    }
+
     /* Index用データ取得メソッド */
     public function getIndex()
     {
-        
-        // usersテーブルの値も結合して取得
-        $this->article->leftjoin('users', 'articles.user_id', '=', 'users.id')
-            ->select('articles.*', 'users.*')
-            ->latest('articles.updated_at');
-
-        return $this->article;
+        // 記事の全データをリターン
+        return $this->getArticle();
     }
 
     /* *
@@ -41,23 +47,21 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     * */
     public function getShow($request)
     {
-        // 記事と紐づくユーザ情報の値を取得
-        $this->user->where('id', '=',$request)->first();
-
-        return $this->user;
+        // 記事の対象データを一件リターン
+        return $this->getArticle()->where('articles.id', '=' , $request)->first();
     }
 
     /* *
     * editページ用データを取得するメソッド
-    * 引数: 自身のID
+    * 引数: 自身のID(管理者の場合は選択した記事のID)
     * */
     public function getEdit($request)
     {
         //  自身の記事テーブルの値を取得
-        $data['article'] = $this->article->where('user_id', '=',$request);
+        $data['article'] = $this->getArticle()->where('articles.id', '=' , $request)->first();
 
         // 都道府県データをすべて取得
-        $data['prefecture'] = $this->prefecture::all();
+        $data['prefecture'] = $this->getAllQuery('prefectures')->get();
 
         return $data;
     }

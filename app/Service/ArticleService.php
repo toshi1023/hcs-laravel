@@ -28,7 +28,7 @@ class ArticleService
     $articles = $this->ArticleService->getIndex()->get();
 
     // 女性限定公開をされていない記事のみ取得
-    $women_only_articles = $this->ArticleService->getWhereQuery('articles', ['women_only' => 0])->get();
+    $women_only_articles = $this->ArticleService->getIndex()->where('women_only', '=', 0)->get();
 
     return [$articles, $women_only_articles];
   }
@@ -40,9 +40,7 @@ class ArticleService
   public function getShow($request)
   {
     // 記事と紐づくユーザ情報の値を取得
-    $this->user->where('id', '=',$request)->first();
-
-    return $this->user;
+    return $this->ArticleService->getShow($request);
   }
 
   /* *
@@ -51,14 +49,7 @@ class ArticleService
    * */
   public function getEdit($request)
   {
-    //  自身の記事テーブルの値を取得
-    $data['article'] = $this->article->where('user_id', '=',$request);
-
-    // 都道府県データをすべて取得
-    $data['prefecture'] = $this->prefecture::all();
-
-    return $data;
-
+    return $this->ArticleService->getEdit($request);
   }
 
   /*

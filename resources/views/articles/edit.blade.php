@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
   <div class="menu_title">
-      <p>{{ $user->nickname }}さんの記事を編集</p>
+      <p>{{ $article->user->nickname }}さんの記事を編集</p>
   </div>
   <a href="{{ route('articles.show', ['article' => $article->id]) }}" class="btn btn-success" style="font-size: large">戻る</a>
   <br>
