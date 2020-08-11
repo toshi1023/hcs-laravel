@@ -15,9 +15,7 @@ class UserService
   /* DBリポジトリのインスタンス化 */
   public function __construct(UserDatabaseInterface $service)
   {
-    // $this->UserService = app()->make(DatabaseInterface::class);
-    $this->UserService = $service;
-    
+    $this->UserService = $service; 
   }
 
   /**

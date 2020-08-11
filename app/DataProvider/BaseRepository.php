@@ -124,7 +124,7 @@ class BaseRepository
     {
         try {
             //  対象の記事を削除
-            DB::table($table)->where('id', '=', $id)->delete();
+            $this->getModel($table)->where('id', '=', $id)->delete();
             return true;
         } catch (\Exception $e) {
             \Log::error($table.' destroy error:'.$e->getmessage());

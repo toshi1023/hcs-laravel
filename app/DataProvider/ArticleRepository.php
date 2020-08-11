@@ -116,22 +116,6 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     }
 
     /**
-    * 記事削除用メソッド
-    * 引数:記事ID
-    * */
-    // public function destroy($id)
-    // {
-    //     try {
-    //         //  対象の記事を削除
-    //         $this->article->where('id', '=',$id)->delete();
-    //         return true;
-    //     } catch (\Exception $e) {
-    //         \Log::error('article destroy error:'.$e->getmessage());
-    //         return false; 
-    //     }
-    // }
-
-    /**
     * ファイル削除用メソッド
     * 引数:ファイルパス
     * */

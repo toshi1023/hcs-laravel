@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
-use App\Model\User;
-use App\Model\Prefecture;
 use App\Service\UserService;
 
 class UserController extends Controller
