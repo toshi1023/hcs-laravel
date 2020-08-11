@@ -39,7 +39,7 @@ class BaseRepository
     * */
     public function getAllQuery($table)
     {
-        return $this->getModel($table);
+        return $this->getModel($table)->select($table.'.*');
     }
 
     /**
@@ -50,7 +50,7 @@ class BaseRepository
 
         foreach($conditions as $key => $value) {
             // 指定したモデルを変数に代入
-            $query = $this->getModel($table);
+            $query = $this->getModel($table)->select($table.'.*');
             // dd($this->getModel($table));
             if (preg_match('/@like/', $key)) {
                 // LIKE検索
