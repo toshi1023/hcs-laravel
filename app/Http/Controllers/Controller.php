@@ -25,14 +25,4 @@ class Controller extends BaseController
         $this->messages = new MessageBag();
 
     }
-
-    /* DBへの保存をサービスコンテナにて解決 */
-    public function serviceBind () 
-    {
-        
-
-        // $database = app()->make('DatabaseInterface');
-        
-        return;
-    }
 }

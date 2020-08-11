@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="menu_title">
-        <p>{{ $user->name }}さんのページ</p>
+        <p>{{ $user->nickname }}さんのページ</p>
     </div>
     <a href="{{ route('users.index') }}" class="btn btn-success" style="font-size: large">戻る</a>　
     @if($user->id === Auth::user()->id)

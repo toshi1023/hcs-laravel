@@ -18,6 +18,8 @@ class UserController extends Controller
 
     public function __construct(UserService $database)
     {
+      Parent::__construct();
+      
       // DB操作のクラスをインスタンス化
       $this->database = $database;
     }
@@ -44,24 +46,21 @@ class UserController extends Controller
     /* ユーザ保存メソッド */
     public function store(Request $request)
     {
-      $image = null;
       $filename = null;
 
       if ($_FILES['prof_photo']['name']){
         // ファイル名を変数に代入
         $filename = $_FILES['prof_photo']['name'];
-        // 画像データを変数に代入
-        $image = $request['prof_photo'];
       }
       
       DB::beginTransaction();
-      if ($this->database->save($request, $filename, $image)){
-
+      if ($this->database->userSave($request, $filename)){
         DB::commit();
-      
+        return redirect()->route('home')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
       } else {
-
         DB::rollBack();
+        $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
+        return redirect()->route('home')->withErrors($this->messages);
       }
     }
 
@@ -79,40 +78,39 @@ class UserController extends Controller
       // return $pdf->download('download.pdf');
     }
 
-    public function show(User $user)
+    public function show($user)
     {
+      $user = $this->database->getShow($user);
+
       return view('users.show', [
         'user' => $user,
       ]);
     }
 
-    public function edit(User $user)
+    public function edit($user)
     {
-      $user = User::find($user->id);
-
-      $prefectures = Prefecture::all();
+      $data = $this->database->getEdit($user);
 
       return view('users.edit', [
-        'user' => $user,
-        'prefectures' => $prefectures,
+        'user' => $data['user'],
+        'prefectures' => $data['prefectures'],
       ]);
     }
 
-    public function update(PostUserRequest $request, User $user)
+    public function update(Request $request, $user)
     {
-      $user = User::find($user->id);
+      $user = $this->database->getEdit($user)['user'];
 
-      // 修正内容の代入
-      $user->name = $request->name;
-      $user->nickname = $request->nickname;
-      $user->prefecture = $request->prefecture;
-      $user->birthday = $request->birthday;
-      $user->gender = $request->gender;
-      $user->email = $request->email;
-      $user->password = Hash::make($request->password);
+      DB::beginTransaction();
 
-      $user->save();
-
-      return redirect('users/'.$user->id);
+      if ($this->database->userSave($request, null, $user)) {
+        DB::commit();
+        return redirect()->route('users.show', ['user' => $user])->with('message', 'プロフィールの変更を保存しました');
+      } else {
+        DB::rollBack();
+        $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');
+        
+        return redirect()->route('users.edit', ['user' => $user])->withErrors($this->messages);
+      }
     }
 }

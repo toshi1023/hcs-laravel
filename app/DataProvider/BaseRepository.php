@@ -2,17 +2,44 @@
 
 namespace App\DataProvider;
 
-use Illuminate\Support\Facades\DB;
+use App\Model\Article;
+use App\Model\User;
+use App\Model\Prefecture;
 
-class BaseRepository 
+class BaseRepository
 {
+
+    protected $article;
+    protected $user;
+    protected $prefecture;
+
+    protected function __construct(Article $article, User $user, Prefecture $prefecture)
+    {
+        $this->article = $article;
+        $this->user = $user;
+        $this->prefecture = $prefecture;
+    }
+
+    protected function getModel($table)
+    {
+        if ($table === 'articles') {
+            return $this->article;
+        }
+        if ($table === 'users') {
+            return $this->user;
+        }
+        if ($table === 'prefectures') {
+            return $this->prefecture;
+        }
+    }
+
     /* *
     * 指定したデータをすべて取得するメソッド
     * 引数: 検索用テーブル
     * */
-    public function getAllQuery($request)
+    public function getAllQuery($table)
     {
-        return DB::table($request);
+        return $this->getModel($table);
     }
 
     /**
@@ -22,7 +49,9 @@ class BaseRepository
     public function getWhereQuery($table, $conditions=[]) {
 
         foreach($conditions as $key => $value) {
-            $query = DB::table($table);
+            // 指定したモデルを変数に代入
+            $query = $this->getModel($table);
+            // dd($this->getModel($table));
             if (preg_match('/@like/', $key)) {
                 // LIKE検索
                 $query->where(str_replace("@like", "", $key), 'like', '%'.$value.'%');
@@ -85,5 +114,21 @@ class BaseRepository
             }
         }
         return $query;
+    }
+
+    /**
+    * 削除用メソッド
+    * 引数1:テーブル名, 引数2:削除データのID
+    * */
+    public function destroy($table, $id)
+    {
+        try {
+            //  対象の記事を削除
+            DB::table($table)->where('id', '=', $id)->delete();
+            return true;
+        } catch (\Exception $e) {
+            \Log::error($table.' destroy error:'.$e->getmessage());
+            return false; 
+        }
     }
 }

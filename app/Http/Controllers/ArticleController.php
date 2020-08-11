@@ -31,15 +31,15 @@ class ArticleController extends Controller
       $articles = $this->database->getIndex();
 
       return view('articles/index', [
-          'articles' => $articles[0],
-          'women_only_articles' => $articles[1],
+          'articles' => $articles['articles'],
+          'women_only_articles' => $articles['women_only_articles'],
       ]);
   }
 
   /* 記事作成メソッド */
   public function create()
   {
-    $prefectures = Prefecture::all();
+    $prefectures = $this->database->getCreate('prefectures');
 
     return view('articles/create', [
         'prefectures' => $prefectures,
@@ -51,7 +51,7 @@ class ArticleController extends Controller
   {
     DB::beginTransaction();
 
-    if ($this->database->save($request)) {
+    if ($this->database->articleSave($request)) {
       DB::commit();
       return redirect()->route('articles.index')->with('message', '記事を作成しました');
     } else {
@@ -66,7 +66,7 @@ class ArticleController extends Controller
   public function show($article)
   {
     // 詳細ページに表示する値を取得
-    $article = $this->database->getShow($article)->first();
+    $article = $this->database->getShow($article);
 
     return view('articles.show', [
       'article' => $article,
@@ -76,38 +76,37 @@ class ArticleController extends Controller
   // 記事の編集機能を設定
   public function edit($article)
   {
-    $article = $this->database->getEdit($article)['article'];
-    $prefectures = $this->database->getEdit($article->id)['prefecture'];
+    $data = $this->database->getEdit($article);
 
     return view('articles.edit', [
-      'article' => $article,
-      'prefectures' => $prefectures,
+      'article' => $data['article'],
+      'prefectures' => $data['prefectures'],
     ]);
   }
 
   // 記事の変更を反映
   public function update(Request $request, $article)
   {
-    $article = Article::find($article);
+    $article = $this->database->getEdit($article)['article'];
 
-    // 修正内容の代入
-    $article->prefecture = $request->prefecture;
-    $article->title = $request->title;
-    $article->content = $request->content;
-    $article->women_only = $request->women_only;
-    $article->user_id = $request->user_id;
+    DB::beginTransaction();
 
-    $article->save();
-
-    return redirect('articles/'.$article->id);
+    if ($this->database->articleSave($request, null, $article)) {
+      DB::commit();
+      return redirect()->route('articles.index')->with('message', '記事を保存しました');
+    } else {
+      DB::rollBack();
+      $this->messages->add('', '記事の保存に失敗しました。管理者に問い合わせてください');
+      return redirect()->route('articles.index')->withErrors($this->messages);
+    }
   }
 
   // 記事を削除
-  public function destroy(Article $article)
+  public function destroy($article)
   {
     DB::beginTransaction();
 
-    if ($this->database->destroy($request)) {
+    if ($this->database->articleDestroy($article)) {
       DB::commit();
       return redirect()->route('articles.index')->with('message', '記事を削除しました');
     } else {

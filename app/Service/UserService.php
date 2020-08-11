@@ -24,10 +24,10 @@ class UserService
    * Indexページ用データを取得するメソッド
    * 引数：検索用テーブル
    */
-  public function getIndex($request)
+  public function getIndex($table)
   {
     // 全ユーザデータを更新日時順にソートして取得
-    return $this->UserService->getAllQuery($request);
+    return $this->UserService->getAllQuery($table)->latest('users.updated_at');;
 
   }
 
@@ -35,36 +35,39 @@ class UserService
    * Showページ用データを取得するメソッド
    * 引数: ユーザID
    * */
-  public function getShow($request)
+  public function getShow($id)
   {
-    return $this->UserService->getShow($request);
+    return $this->UserService->getWhereQuery('users', ['id' => $id])->first();
   }
 
   /* *
    * createページ用データを取得するメソッド
    * 引数: 検索用テーブル
    * */
-  public function getCreate($request)
+  public function getCreate($table)
   {
-    return $this->UserService->getAllQuery($request);
+    return $this->UserService->getAllQuery($table);
   }
 
   /* *
    * editページ用データを取得するメソッド
    * 引数: 自身のID
    * */
-  public function getEdit($request)
+  public function getEdit($id)
   {
-    return $this->UserService->getEdit($request);
+    $data['user'] = $this->UserService->getWhereQuery('users', ['id' => $id])->first();
+    $data['prefectures'] = $this->UserService->getAllQuery('prefectures')->get();
+
+    return $data;
   }
   
   /* *
-   * ユーザ保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名 ,第三引数:ファイルデータ
+   * 新規ユーザ保存用メソッド
+   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
    * */
-  public function save($data, $filename, $file)
+  public function userSave($data, $filename, $updateData = null)
   {
-    return $this->UserService->save($data, $filename, $file);
+    return $this->UserService->save($data, $filename, $updateData);
   }
 
   /*
