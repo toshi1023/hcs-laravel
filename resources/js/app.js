@@ -18,11 +18,20 @@ require('./components/Home');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Home from './components/Home';
+import Article from './components/Article';
+import User from './components/User';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 function App() {
     return (
         <>
-            <Home />
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
+              <Route exact path="/articles" render={props => <Article {...props} />} />
+              <Route exact path="/users" render={props => <User {...props} />} />
+            </Switch>
+          </BrowserRouter> 
         </>
     )
 }

@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import HomeIcon from '@material-ui/icons/Home';
 import CommentIcon from '@material-ui/icons/Comment';
 import GroupIcon from '@material-ui/icons/Group';
@@ -16,6 +15,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const useStyles = makeStyles({
   list: {
@@ -26,11 +26,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MenuDrawer() {
+const MenuDrawer = (props) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
   });
+
+  // URL遷移のために設定
+  const { history } = props
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -40,6 +43,36 @@ export default function MenuDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
+  // リスト一覧
+  const itemList = [
+    {
+      text: 'Home',
+      icon: <HomeIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Map',
+      icon: <MapIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: '記事',
+      icon: <CommentIcon />,
+      onClick: () => history.push('/articles')
+    },
+    {
+      text: 'フレンド',
+      icon: <GroupIcon />,
+      onClick: () => history.push('/users')
+    },
+    {
+      text: 'メッセージ',
+      icon: <MailIcon />,
+      onClick: () => history.push('/')
+    }, 
+  ]
+
+  // リストを実装
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -50,24 +83,21 @@ export default function MenuDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Home', 'Map', '記事', 'フレンド', 'メッセージ'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index === 0 ? <HomeIcon /> : null}
-              {index === 1 ? <MapIcon /> : null}
-              {index === 2 ? <CommentIcon /> : null}
-              {index === 3 ? <GroupIcon /> : null}
-              {index === 4 ? <MailIcon /> : null}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        {itemList.map((item, index) => {
+          const { text, icon, onClick } = item
+          return (
+            <ListItem button key={text} onClick={onClick}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          )
+        })}
       </List>
       <Divider />
       <List>
         {['ログアウト'].map((text, index) => (
           <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemIcon><InboxIcon /></ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -75,6 +105,7 @@ export default function MenuDrawer() {
     </div>
   );
 
+  // Drawerを実装
   return (
     <div>
       {['left'].map((anchor) => (
@@ -100,3 +131,5 @@ export default function MenuDrawer() {
     </div>
   );
 }
+
+export default withRouter(MenuDrawer)
