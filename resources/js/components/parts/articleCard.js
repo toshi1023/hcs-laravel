@@ -69,8 +69,13 @@ export default function ArticleCard(props) {
         title="Sample Image"
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {props.article.title}
+        <Typography variant="body2" color="textSecondary">
+          {/* 文字列の省略設定(一定数を表示した後、...で省略) */}
+          <div style={{ width: '100%', whiteSpace: 'nowrap' }}>
+            <h2 className="overflow-ellipsis">
+              {props.article.content}
+            </h2>
+          </div>
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -98,9 +103,9 @@ export default function ArticleCard(props) {
       {/* 拡張のデザイン */}
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>内容:</Typography>
+          <Typography paragraph><h2>内容:</h2></Typography>
           <Typography paragraph>
-            {props.article.content}
+            <h3>{props.article.content}</h3>
           </Typography>
         </CardContent>
       </Collapse>
