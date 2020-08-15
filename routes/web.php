@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // ログイン機能のルーティング
-Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('/login', 'Auth\LoginController@login')->name('postlogin');
+// Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+// Route::post('/login', 'Auth\LoginController@login')->name('postlogin');
+Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
 // ルートページ
 Route::get('/', 'HomeController@index')->name('home');
@@ -24,6 +25,7 @@ Route::get('/welcome', 'HomeController@welcome')->name('welcome');
 
 // 記事関連のルート
 Route::resource('articles', 'ArticleController');
+// Route::resource('articles' , 'Api\ArticleController');
 
 // ユーザ関連のルート
 Route::resource('users', 'UserController');
