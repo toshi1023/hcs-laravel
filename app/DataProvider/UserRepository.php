@@ -41,7 +41,6 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                 $updateData->gender     = $data['gender'];
                 $updateData->email      = $data['email'];
                 $updateData->password   = Hash::make($data['password']);
-                dd($updateData);
                 $updateData->save();
 
                 return true;
@@ -86,8 +85,8 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
         if ($file){
         try {
             //s3アップロード開始
-            // バケットの`my-rails-app-hcs-first-bucket/{ニックネーム名}`フォルダへアップロード
-            $path = Storage::disk('s3')->putFile('my-rails-app-hcs-first-bucket/'.$foldername, $file, 'public');
+            // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
+            $path = Storage::disk('s3')->putFile(env('AWS_USER_BUCKET').$foldername, $file, 'public');
             // アップロードしたファイルのURLを取得し、DBにセット
             $photo_path = Storage::disk('s3')->url($path);
 

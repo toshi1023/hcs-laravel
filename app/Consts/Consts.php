@@ -12,5 +12,5 @@ class Consts
     const LOGIN_URL = 'login';
 
     // 登録無しのプロフィール画像URL
-    const NO_IMAGE = 'https://my-rails-app-hcs-first-bucket.s3-ap-northeast-1.amazonaws.com/my-rails-app-hcs-first-bucket/no_image.png';
+    const NO_IMAGE = 'https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/User/no_image.png';
 }
