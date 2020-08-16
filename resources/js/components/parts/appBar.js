@@ -12,7 +12,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import styled from "styled-components";
-import MenuDrawer from './Drawer';
+import MenuDrawer from './drawer';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {

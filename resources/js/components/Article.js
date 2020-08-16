@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import HcsAppBar from './parts/AppBar';
+import HcsAppBar from './parts/appBar';
 import ArticleCard from './parts/articleCard';
+import PrefectureSelects from './parts/articleSearch';
 import axios from 'axios';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
@@ -12,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: '20px',
       paddingBottom: '20px'
     },
+    
   }));
 
 function Article() {
@@ -25,7 +27,8 @@ function Article() {
           setArticles({
             ...articles, 
             articles: data.articles,
-            women_only: data.women_only_articles
+            women_only: data.women_only_articles,
+            prefectures: data.prefectures
           })
         })
         .catch(() => {
@@ -50,6 +53,7 @@ function Article() {
         <>
             <HcsAppBar />
             <h1>記事一覧</h1>
+            <PrefectureSelects values={articles.prefectures} />
             <Grid container spacing={3} className={classes.gridContainer}>
                 {renderArticles()}
             </Grid>

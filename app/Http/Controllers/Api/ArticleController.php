@@ -27,7 +27,8 @@ class ArticleController extends Controller
 
       return response()->json([
         'articles' => $articles['articles'], 
-        'women_only_articles' => $articles['women_only_articles']
+        'women_only_articles' => $articles['women_only_articles'],
+        'prefectures' => $articles['prefectures']
       ],200, [], JSON_UNESCAPED_UNICODE);
   }
 

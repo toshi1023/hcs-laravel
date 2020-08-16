@@ -21,19 +21,29 @@ import Home from './components/Home';
 import Article from './components/Article';
 import User from './components/User';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  background: {
+    backgroundColor: '#ecf7f7'
+  }
+}));
 
 function App() {
-    return (
-        <>
-          <BrowserRouter>
-            <Switch>
-              <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
-              <Route exact path="/articles" render={props => <Article {...props} />} />
-              <Route exact path="/users" render={props => <User {...props} />} />
-            </Switch>
-          </BrowserRouter> 
-        </>
-    )
+  const classes = useStyles();
+  return (
+    <>
+      <div className={classes.background}>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
+            <Route exact path="/articles" render={props => <Article {...props} />} />
+            <Route exact path="/users" render={props => <User {...props} />} />
+          </Switch>
+        </BrowserRouter> 
+      </div>
+    </>
+  )
 }
 
 if (document.getElementById('app')) {

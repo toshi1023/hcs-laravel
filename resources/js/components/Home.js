@@ -1,5 +1,5 @@
 import React from 'react';
-import HcsAppBar from './parts/AppBar';
+import HcsAppBar from './parts/appBar';
 
 function Home() {
     return (

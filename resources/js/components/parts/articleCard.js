@@ -10,10 +10,12 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ReplyIcon from '@material-ui/icons/Reply';
 import DateFormat from './dateFormat';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,8 +23,29 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 200,
     backgroundColor: '#e5ecf8',
   },
+  headerTitleName: {
+    fontSize: 20,
+    color: 'blue'
+  },
+  headerTitleNameWoman: {
+    fontSize: 20,
+    color: 'red'
+  },
+  bottomFont: {
+    paddingLeft: 10,
+    fontSize: 15
+  },
+  subHeader: {
+    fontSize: 15,
+    color: '#808080'
+  },
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
   media: {
-    height: 0,
+    height: 200,
+    width: '100%',
     paddingTop: '56.25%', // 16:9
   },
   expand: {
@@ -46,27 +69,37 @@ export default function ArticleCard(props) {
     setExpanded(!expanded);
   };
 
+  const nickNameDesign = () => {
+    if(props.article.gender === 1) {
+      return <Typography className={classes.headerTitleNameWoman}>{props.article.nickName}</Typography>
+    }
+    return <Typography className={classes.headerTitleName}>{props.article.nickName}</Typography>
+  }
+
   return (
     <Card className={classes.root}>
       <CardHeader
         avatar={
         //   プロフィール画像の予定
-          <Avatar aria-label="article">
-            Root
-          </Avatar>
+          <Avatar 
+            aria-label="article" 
+            className={classes.large} 
+            style={{ fontSize: 15 }}
+            src={props.article.photo_path}
+          />
         }
         action={
           <IconButton aria-label="settings">
-            <MoreVertIcon />
+            <MoreVertIcon style={{ fontSize: 20 }} />
           </IconButton>
         }
-        title={props.article.prefecture}
-        subheader={DateFormat(props.article.updated_at)}
+        title={nickNameDesign()}
+        subheader={<Typography className={classes.subHeader}>{DateFormat(props.article.updated_at)}</Typography>}
       />
       <CardMedia
         className={classes.media}
-        // image="/static/images/cards/paella.jpg"
-        title="Sample Image"
+        image={props.article.photo_path}
+        title={props.article.title}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary">
@@ -81,12 +114,13 @@ export default function ArticleCard(props) {
       <CardActions disableSpacing>
         {/* 'いいね'ボタンのデザイン */}
         <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+          <FavoriteIcon style={{ fontSize: 20 }} />
         </IconButton>
         {/* 'シェア'ボタンのデザイン */}
         <IconButton aria-label="share">
-          <ShareIcon />
+          <ShareIcon style={{ fontSize: 20 }} />
         </IconButton>
+        <Typography className={classes.bottomFont}>{props.article.prefecture}</Typography>
         {/* 拡張ボタンの設定 */}
         <IconButton
           className={clsx(classes.expand, {
@@ -96,18 +130,24 @@ export default function ArticleCard(props) {
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+          <ExpandMoreIcon style={{ fontSize: 20 }} />
         </IconButton>
-
       </CardActions>
       {/* 拡張のデザイン */}
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph><h2>内容:</h2></Typography>
-          <Typography paragraph>
-            <h3>{props.article.content}</h3>
-          </Typography>
-        </CardContent>
+        <Box component="div" m={1} style={{ backgroundColor: 'white' }}>
+          <CardContent>
+            <Typography paragraph><h2>内容:</h2></Typography>
+            <Typography paragraph>
+              <h3>{props.article.content}</h3>
+            </Typography>
+          </CardContent>
+        </Box>
+        <Typography className={classes.bottomFont}>コメント： 3 件
+          <IconButton aria-label="reply">
+            <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+          </IconButton>
+        </Typography>
       </Collapse>
       {/* // 拡張のデザイン */}
     </Card>

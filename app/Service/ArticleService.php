@@ -27,9 +27,13 @@ class ArticleService
     // 女性限定公開をされていない記事のみ取得
     $women_only_articles = $this->ArticleService->getArticle()->where('women_only', '=', 0)->get();
 
+    // 都道府県取得
+    $prefectures = $this->ArticleService->getAllQuery('prefectures')->get();
+
     return [
       'articles' => $articles, 
-      'women_only_articles' => $women_only_articles
+      'women_only_articles' => $women_only_articles,
+      'prefectures' => $prefectures
     ];
   }
 

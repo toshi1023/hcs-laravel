@@ -30,7 +30,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     {
         // usersテーブルの値も結合して取得
         return $this->article->leftjoin('users', 'articles.user_id', '=', 'users.id')
-                      ->select('articles.*', 'users.nickName')
+                      ->select('articles.*', 'users.nickName', 'users.gender', 'users.photo_path')
                       ->latest('articles.updated_at');
     }
 
