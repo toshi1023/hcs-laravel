@@ -10,7 +10,4 @@ class Consts
     const USER_URL     = 'users';
     const REGISTER_URL = 'register';
     const LOGIN_URL = 'login';
-
-    // 登録無しのプロフィール画像URL
-    const NO_IMAGE = env('AWS_NOIMAGE');
 }
