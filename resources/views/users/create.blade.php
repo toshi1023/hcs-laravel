@@ -23,10 +23,6 @@
                   <input id="prof_photo" type="file" class="custom-file-input @error('prof_photo') is-invalid @enderror" name="prof_photo" value="{{ old('prof_photo') }}" autocomplete="prof_photo" autofocus>
                   <label for="prof_photo" class="custom-file-label" data-browse="参照" style="font-size: large">{{ __('画像をアップロード') }}</label>
                 </div>
-                <!-- 画像の取り消しボタン -->
-                <div class="input-group-append">
-                  <button type="button" class="btn btn-outline-secondary input-group-text" id="inputFileReset">取消</button>
-                </div>
               </div>
             </div>
           </div>
