@@ -11,4 +11,10 @@ class Article extends Model
     {
       return $this->belongsTo('App\Model\User');
     }
+
+    // article_imagesテーブルと1対多のリレーション構築(1側の設定)
+    public function articleImage()
+    {
+      return $this->hasMany('App\Model\ArticleImage');
+    }
 }

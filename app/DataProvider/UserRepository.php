@@ -99,7 +99,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
 
         } else {
             // アップロードファイルがなければデフォルトの画像を設定
-            return [true, Consts::NO_IMAGE];
+            return [true, env('AWS_NOIMAGE')];
         }
     }
 

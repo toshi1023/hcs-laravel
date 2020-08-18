@@ -5,6 +5,7 @@ namespace App\DataProvider;
 use App\Model\Article;
 use App\Model\User;
 use App\Model\Prefecture;
+use App\Model\ArticleImage;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
@@ -12,13 +13,15 @@ use Storage;
 class ArticleRepository extends BaseRepository implements ArticleDatabaseInterface
 {
     protected $article;
+    protected $articleImage;
     protected $user;
     protected $prefecture;
 
     /* モデルのインスタンス化 */
-    public function __construct(Article $article, User $user, Prefecture $prefecture)
+    public function __construct(Article $article, ArticleImage $articleImage,User $user, Prefecture $prefecture)
     {
         $this->article = $article;
+        $this->articleImage = $articleImage;
         $this->user = $user;
         $this->prefecture = $prefecture;
     }
@@ -30,8 +33,16 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     {
         // usersテーブルの値も結合して取得
         return $this->article->leftjoin('users', 'articles.user_id', '=', 'users.id')
-                      ->select('articles.*', 'users.nickName', 'users.gender', 'users.photo_path')
-                      ->latest('articles.updated_at');
+                             ->leftjoin('article_images', 'article_images.article_id', '=', 'articles.id')
+                             ->select(
+                                 'articles.*', 
+                                 'users.nickName', 
+                                 'users.gender', 
+                                 'users.photo_path', 
+                                 'article_images.article_photo',
+                                 'article_images.photo_path',
+                             )
+                             ->latest('articles.updated_at');
     }
 
     /**
@@ -43,9 +54,9 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         try {
             // 更新対象データが空でない場合は、アップデート処理を実行
             if (!empty($updateData)) {
-                // if (!$filename) {
-                //     $updateData->profile_image = $filename;
-                // }
+                if (!$filename) {
+                    $updateData->article_photo = $filename;
+                }
                 $updateData->prefecture = $data['prefecture'];
                 $updateData->title      = $data['title'];
                 $updateData->content    = $data['content'];
@@ -56,28 +67,34 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
                 return true;
             }
-
+            
             // ファイル名が設定されていなければ統一名を代入
             if (!$filename) {
-            // ファイル名を変数に代入
-            $filename = 'NoImage';
+                // ファイル名を変数に代入
+                $filename = 'NoImage';
             }
 
-            // 画像をアップロード
-            // $file_upload = $this->fileStore($file, $data['nickname']);
-
-            // 画像をアップロードしDBにセット
-            // if ($file_upload[0]){
-            
-            // 'prof_photo' => $filename,
-            // 'photo_path' => $file_upload[1],
-            $this->article->prefecture = $data['prefecture'];
-            $this->article->title      = $data['title'];
-            $this->article->content    = $data['content'];
-            $this->article->women_only = $data['women_only'];
-            $this->article->user_id    = $data['user_id'];
+            $this->article->prefecture      = $data['prefecture'];
+            $this->article->title           = $data['title'];
+            $this->article->content         = $data['content'];
+            $this->article->women_only      = $data['women_only'];
+            $this->article->user_id         = $data['user_id'];
             
             $this->article->save();
+
+            // 画像をアップロード
+            $file_upload = $this->fileStore($data['article_photo'], \Auth::user()->nickname);
+
+            // 画像をアップロードしDBにセット
+            if ($file_upload[0]){
+                $this->articleImage->article_photo = $filename;
+                $this->articleImage->photo_path    = $file_upload[1];
+                $this->articleImage->article_id    = $this->article->id;
+                $this->articleImage->user_id       = $this->article->user_id;
+
+                $this->articleImage->save();
+            }
+
 
             return true;
 
@@ -95,7 +112,6 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
      */
     public function fileStore($file, $foldername)
     {
-
         if ($file){
         try {
             //s3アップロード開始
@@ -111,7 +127,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             return [true, $photo_path];
         } else {
             // アップロードファイルがなければデフォルトの画像を設定
-            return [true, Consts::NO_IMAGE];
+            return [true, env('AWS_NOIMAGE')];
         }
     }
 

@@ -11,16 +11,30 @@
       <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}">
           @csrf
           @method('PUT')
-          {{-- 氏名登録フォームデザイン --}}
-          <div class="form-group-lg row">
-              <label for="name" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('氏名') }}</label>
+            {{-- 画像アップロード --}}
+            <div class="form-group-lg row">
+                <label for="" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('プロフィール画像') }}</label>
+                <div class="col-md-6">
+                <div class="input-group">
+                    <!-- 画像の参照ボタン -->
+                    <div class="custom-file">
+                    <input id="prof_photo" type="file" class="custom-file-input @error('prof_photo') is-invalid @enderror" name="prof_photo" value="{{ old('prof_photo') }}" autocomplete="prof_photo" autofocus>
+                    <label for="prof_photo" class="custom-file-label" data-browse="参照" style="font-size: large">{{ __('画像をアップロード') }}</label>
+                    </div>
+                </div>
+                </div>
+            </div>
 
-              <div class="col-md-6">
-                  <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?? $user->name }} " required autocomplete="name" autofocus>
+            <br>
+              {{-- 氏名登録フォームデザイン --}}
+            <div class="form-group-lg row">
+                <label for="name" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('氏名') }}</label>
+              <div class="col-md-6">   
+                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?? $user->name }} " required autocomplete="name" autofocus>
               </div>
-          </div>
+            </div>
 
-          <br>
+            <br>
           {{-- ニックネーム登録フォームデザイン --}}
           <div class="form-group-lg row">
               <label for="nickname" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('ニックネーム') }}</label>

@@ -46,7 +46,14 @@ class ArticleController extends Controller
   {
     DB::beginTransaction();
 
-    if ($this->database->articleSave($request)) {
+    $filename = null;
+
+    if ($_FILES['article_photo']['name']){
+      // ファイル名を変数に代入
+      $filename = $_FILES['article_photo']['name'];
+    }
+
+    if ($this->database->articleSave($request, $filename)) {
       DB::commit();
       return redirect()->route('articles.index')->with('message', '記事を作成しました');
     } else {
