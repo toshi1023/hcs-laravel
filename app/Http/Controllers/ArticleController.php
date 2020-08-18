@@ -24,7 +24,7 @@ class ArticleController extends Controller
   public function index()
   {
       $articles = $this->database->getIndex();
-
+      
       return view('articles/index', [
           'articles' => $articles['articles'],
           'women_only_articles' => $articles['women_only_articles'],

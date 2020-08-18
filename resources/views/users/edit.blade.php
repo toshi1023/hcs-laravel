@@ -8,7 +8,7 @@
   <a href="{{ route('users.index') }}" class="btn color btn-success" style="font-size: large">戻る</a>
   <br>
   <div class="container">
-      <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}">
+      <form method="POST" action="{{ route('users.update', ['user' => $user->id]) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
             {{-- 画像アップロード --}}
@@ -18,7 +18,7 @@
                 <div class="input-group">
                     <!-- 画像の参照ボタン -->
                     <div class="custom-file">
-                    <input id="prof_photo" type="file" class="custom-file-input @error('prof_photo') is-invalid @enderror" name="prof_photo" value="{{ old('prof_photo') }}" autocomplete="prof_photo" autofocus>
+                    <input id="prof_photo" type="file" class="custom-file-input" name="prof_photo" value="{{ old('prof_photo') }}" autocomplete="prof_photo" autofocus>
                     <label for="prof_photo" class="custom-file-label" data-browse="参照" style="font-size: large">{{ __('画像をアップロード') }}</label>
                     </div>
                 </div>

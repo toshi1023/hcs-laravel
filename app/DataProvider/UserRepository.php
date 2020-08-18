@@ -31,8 +31,11 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
         try{
             // 更新対象データが空でない場合は、アップデート処理を実行
             if (!empty($updateData)) {
-                if (!$filename) {
-                    $updateData->profile_image = $filename;
+                if (!empty($filename)) {
+                    // 画像をアップロード
+                    $file_upload = $this->fileStore($data['prof_photo'], $data['nickname']);
+                    $updateData->prof_photo_name = $filename;
+                    $updateData->prof_photo_path = $file_upload[1];
                 }
                 $updateData->name       = $data['name'];
                 $updateData->nickname   = $data['nickname'];
@@ -45,7 +48,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
 
                 return true;
             }
-
+            
             // ファイル名が設定されていなければ統一名を代入
             if (!$filename) {
             // ファイル名を変数に代入
@@ -57,8 +60,8 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             
             // 画像をアップロードしDBにセット
             if ($file_upload[0]){
-                $this->user->prof_photo  = $filename;
-                $this->user->photo_path  = $file_upload[1];
+                $this->user->prof_photo_name  = $filename;
+                $this->user->prof_photo_path  = $file_upload[1];
                 $this->user->name        = $data['name'];
                 $this->user->nickname    = $data['nickname'];
                 $this->user->prefecture  = $data['prefecture'];
@@ -83,19 +86,19 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     public function fileStore($file, $foldername)
     {
         if ($file){
-        try {
-            //s3アップロード開始
-            // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
-            $path = Storage::disk('s3')->putFile(env('AWS_USER_BUCKET').$foldername, $file, 'public');
-            // アップロードしたファイルのURLを取得し、DBにセット
-            $photo_path = Storage::disk('s3')->url($path);
+            try {
+                //s3アップロード開始
+                // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
+                $path = Storage::disk('s3')->putFile(env('AWS_USER_BUCKET').$foldername, $file, 'public');
+                // アップロードしたファイルのURLを取得し、DBにセット
+                $photo_path = Storage::disk('s3')->url($path);
 
-        } catch (\Exception $e) {
-            \Log::error('user image file save error:'.$e->getmessage());
-            return [false, null];
-        }
-        // 画像のパスと一緒にリターン
-        return [true, $photo_path];
+            } catch (\Exception $e) {
+                \Log::error('user image file save error:'.$e->getmessage());
+                return [false, null];
+            }
+            // 画像のパスと一緒にリターン
+            return [true, $photo_path];
 
         } else {
             // アップロードファイルがなければデフォルトの画像を設定

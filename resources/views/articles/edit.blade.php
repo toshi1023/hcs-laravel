@@ -25,8 +25,8 @@
             <div class="input-group">
                 <!-- 画像の参照ボタン -->
                 <div class="custom-file">
-                <input id="prof_photo" type="file" class="custom-file-input @error('article_photo') is-invalid @enderror" name="article_photo" value="{{ old('article_photo') }}" autocomplete="article_photo" autofocus>
-                <label for="prof_photo" class="custom-file-label" data-browse="参照" style="font-size: large">{{ __('画像をアップロード') }}</label>
+                <input id="article_photo" type="file" class="custom-file-input @error('article_photo') is-invalid @enderror" name="article_photo" value="{{ old('article_photo') }}" autocomplete="article_photo" autofocus>
+                <label for="article_photo" class="custom-file-label" data-browse="参照" style="font-size: large">{{ __('画像をアップロード') }}</label>
                 </div>
             </div>
             </div>

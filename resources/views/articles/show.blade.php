@@ -20,6 +20,10 @@
         <div class="col-sm-12">
             <table class="table">
               <thead class="thead-dark list_theme">
+                      <th scope="col">画像</th>
+                      <td class="list_background"><img src="{{ $article->article_photo_path }}" width="350" height="250"></td>
+              </thead>
+              <thead class="thead-dark list_theme">
                       <th scope="col">都道府県</th>
                       <td class="list_background">{{ $article->prefecture }}</td>
               </thead>

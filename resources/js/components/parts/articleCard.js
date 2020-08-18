@@ -85,7 +85,7 @@ export default function ArticleCard(props) {
             aria-label="article" 
             className={classes.large} 
             style={{ fontSize: 15 }}
-            src={props.article.photo_path}
+            src={props.article.prof_photo_path}
           />
         }
         action={
@@ -98,7 +98,7 @@ export default function ArticleCard(props) {
       />
       <CardMedia
         className={classes.media}
-        image={props.article.photo_path}
+        image={props.article.article_photo_path}
         title={props.article.title}
       />
       <CardContent>
@@ -135,7 +135,7 @@ export default function ArticleCard(props) {
       </CardActions>
       {/* 拡張のデザイン */}
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Box component="div" m={1} style={{ backgroundColor: 'white' }}>
+        <Box component="div" m={1} style={{ backgroundColor: '#1b2538', color: 'white' }}>
           <CardContent>
             <Typography paragraph><h2>内容:</h2></Typography>
             <Typography paragraph>

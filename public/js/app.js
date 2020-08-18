@@ -99739,6 +99739,12 @@ function App() {
     }
   }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
     exact: true,
+    path: "/articles",
+    render: function render(props) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Article__WEBPACK_IMPORTED_MODULE_3__["default"], props);
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+    exact: true,
     path: "/users",
     render: function render(props) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_User__WEBPACK_IMPORTED_MODULE_4__["default"], props);
@@ -100363,7 +100369,7 @@ function ArticleCard(props) {
       style: {
         fontSize: 15
       },
-      src: props.article.photo_path
+      src: props.article.prof_photo_path
     }),
     action: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_10__["default"], {
       "aria-label": "settings"
@@ -100378,7 +100384,7 @@ function ArticleCard(props) {
     }, Object(_dateFormat__WEBPACK_IMPORTED_MODULE_18__["default"])(props.article.updated_at))
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_CardMedia__WEBPACK_IMPORTED_MODULE_5__["default"], {
     className: classes.media,
-    image: props.article.photo_path,
+    image: props.article.article_photo_path,
     title: props.article.title
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_CardContent__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_11__["default"], {
     variant: "body2",
@@ -100423,7 +100429,8 @@ function ArticleCard(props) {
     component: "div",
     m: 1,
     style: {
-      backgroundColor: 'white'
+      backgroundColor: '#1b2538',
+      color: 'white'
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_CardContent__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_11__["default"], {
     paragraph: true

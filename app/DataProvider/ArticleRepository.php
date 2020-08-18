@@ -38,9 +38,9 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                                  'articles.*', 
                                  'users.nickName', 
                                  'users.gender', 
-                                 'users.photo_path', 
-                                 'article_images.article_photo',
-                                 'article_images.photo_path',
+                                 'users.prof_photo_path', 
+                                 'article_images.article_photo_name',
+                                 'article_images.article_photo_path',
                              )
                              ->latest('articles.updated_at');
     }
@@ -55,7 +55,8 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             // 更新対象データが空でない場合は、アップデート処理を実行
             if (!empty($updateData)) {
                 if (!$filename) {
-                    $updateData->article_photo = $filename;
+                    // $updateData->article_photo_name = $filename;
+                    // $updateData->article_photo_path = ;
                 }
                 $updateData->prefecture = $data['prefecture'];
                 $updateData->title      = $data['title'];
@@ -87,8 +88,8 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
             // 画像をアップロードしDBにセット
             if ($file_upload[0]){
-                $this->articleImage->article_photo = $filename;
-                $this->articleImage->photo_path    = $file_upload[1];
+                $this->articleImage->article_photo_name = $filename;
+                $this->articleImage->article_photo_path = $file_upload[1];
                 $this->articleImage->article_id    = $this->article->id;
                 $this->articleImage->user_id       = $this->article->user_id;
 
