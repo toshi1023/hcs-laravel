@@ -135,7 +135,7 @@ export default function ArticleCard(props) {
       </CardActions>
       {/* 拡張のデザイン */}
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Box component="div" m={1} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+        <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
           <CardContent>
             <Typography paragraph><h2>内容:</h2></Typography>
             <Typography paragraph>

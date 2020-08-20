@@ -55,8 +55,14 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             // 更新対象データが空でない場合は、アップデート処理を実行
             if (!empty($updateData)) {
                 if (!$filename) {
-                    // $updateData->article_photo_name = $filename;
-                    // $updateData->article_photo_path = ;
+                    $updateArticleImage = $this->articleImage->where('article_id', '=', $data['id']);
+
+                    // 画像をアップロード
+                    $file_upload = $this->fileStore($data['article_photo'], \Auth::user()->nickname);
+                    $updateArticleImage->article_photo_name = $filename;
+                    $updateArticleImage->article_photo_path = $file_upload[1];
+
+                    $updateArticleImage->save();
                 }
                 $updateData->prefecture = $data['prefecture'];
                 $updateData->title      = $data['title'];

@@ -17,6 +17,7 @@ require('./components/Home');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Login from './components/Login';
 import Home from './components/Home';
 import Article from './components/Article';
 import User from './components/User';
@@ -36,6 +37,7 @@ function App() {
       <div className={classes.background}>
         <BrowserRouter>
           <Switch>
+            <Route exact path="/login" render={props => <Login {...props} />} />
             <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
             <Route exact path="/articles" render={props => <Article {...props} />} />
             <Route exact path="/users" render={props => <User {...props} />} />
