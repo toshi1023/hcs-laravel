@@ -95,6 +95,14 @@ const MenuDrawer = (props) => {
       </List>
       <Divider />
       <List>
+        {['ログイン'].map((text, index) => (
+          <ListItem button key={text} onClick={() => history.push('/login')}>
+            <ListItemIcon><InboxIcon /></ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <List>
         {['ログアウト'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon><InboxIcon /></ListItemIcon>
