@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import HcsAppBar from '../parts/appBar';
-import ArticleCard from '../parts/articleCard';
-import PrefectureSelects from '../parts/articleSearch';
+import ArticleCard from '../parts/articleParts/articleCard';
+import PrefectureSelects from '../parts/articleParts/articleSearch';
 import axios from 'axios';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
@@ -9,8 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
-      paddingLeft: '20px',
-      paddingRight: '20px',
+      paddingTop: '10px',
       paddingBottom: '20px'
     },
     
