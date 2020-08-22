@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import HcsAppBar from './parts/appBar';
-import ArticleCard from './parts/articleCard';
-import PrefectureSelects from './parts/articleSearch';
+import HcsAppBar from '../parts/appBar';
+import ArticleCard from '../parts/articleCard';
+import PrefectureSelects from '../parts/articleSearch';
 import axios from 'axios';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
@@ -52,9 +52,8 @@ function Article() {
     return (
         <>
             <HcsAppBar />
-            <h1>記事一覧</h1>
             <PrefectureSelects values={articles.prefectures} />
-            <Grid container spacing={3} className={classes.gridContainer}>
+            <Grid container className={classes.gridContainer} justify="center">
                 {renderArticles()}
             </Grid>
         </>

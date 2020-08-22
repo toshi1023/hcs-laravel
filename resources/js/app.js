@@ -17,16 +17,17 @@ require('./components/Home');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Login from './components/Login';
+import Login from './components/users/Login';
 import Home from './components/Home';
-import Article from './components/Article';
-import User from './components/User';
+import Article from './components/articles/Index';
+import User from './components/users/Index';
+import UserCreate from './components/users/Create';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   background: {
-    backgroundColor: '#ecf7f7'
+    backgroundColor: '#f0f1f3'
   }
 }));
 
@@ -41,6 +42,7 @@ function App() {
             <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
             <Route exact path="/articles" render={props => <Article {...props} />} />
             <Route exact path="/users" render={props => <User {...props} />} />
+            <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
           </Switch>
         </BrowserRouter> 
       </div>

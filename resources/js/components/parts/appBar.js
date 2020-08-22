@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  badge: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const Title = styled.h1`
@@ -86,8 +89,8 @@ export default function HcsAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>プロフィール</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My記事</MenuItem>
     </Menu>
   );
 
@@ -109,7 +112,7 @@ export default function HcsAppBar() {
             <MailIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>メッセージ</p>
       </MenuItem>
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
@@ -117,7 +120,7 @@ export default function HcsAppBar() {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <p>ニュース</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -128,7 +131,7 @@ export default function HcsAppBar() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>アカウント</p>
       </MenuItem>
     </Menu>
   );
@@ -147,14 +150,14 @@ export default function HcsAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton aria-label="show 4 new mails" color="inherit" className={classes.badge}>
               <Badge badgeContent={4} color="secondary">
-                <MailIcon />
+                <MailIcon fontSize="large" />
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 11 new notifications" color="inherit">
+            <IconButton aria-label="show 11 new notifications" color="inherit" className={classes.badge}>
               <Badge badgeContent={11} color="secondary">
-                <NotificationsIcon />
+                <NotificationsIcon fontSize="large" />
               </Badge>
             </IconButton>
             <IconButton
@@ -165,7 +168,7 @@ export default function HcsAppBar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <AccountCircle fontSize="large" />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>

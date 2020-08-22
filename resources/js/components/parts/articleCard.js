@@ -17,6 +17,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ReplyIcon from '@material-ui/icons/Reply';
 import DateFormat from './dateFormat';
+import Carousel from '../parts/Carousel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
