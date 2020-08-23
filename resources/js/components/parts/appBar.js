@@ -7,6 +7,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import styled from "styled-components";
 import MenuDrawer from './drawer';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -46,7 +47,7 @@ const Title = styled.h1`
   font-family: 'Cabin Sketch', cursive;
 `;
 
-export default function HcsAppBar() {
+function HcsAppBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -69,6 +70,11 @@ export default function HcsAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+
+  const handleMessage = () => {
+    () => history.push('/login')
+    handleMobileMenuClose();
+  }
 
   // Logout処理
   const handleMenuCloseLogout = () => {
@@ -113,7 +119,7 @@ export default function HcsAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
+        <IconButton aria-label="show 4 new mails" color="inherit" onClick={handleMessage}>
           <Badge badgeContent={4} color="secondary">
             <MailIcon />
           </Badge>
@@ -156,7 +162,7 @@ export default function HcsAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit" className={classes.badge}>
+            <IconButton aria-label="show 4 new mails" color="inherit" className={classes.badge} onClick={handleMessage}>
               <Badge badgeContent={4} color="secondary">
                 <MailIcon fontSize="large" />
               </Badge>
@@ -195,3 +201,5 @@ export default function HcsAppBar() {
     </div>
   );
 }
+
+export default withRouter(HcsAppBar)

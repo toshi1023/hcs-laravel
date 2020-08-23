@@ -62,7 +62,7 @@ const MenuDrawer = (props) => {
     {
       text: 'メッセージ',
       icon: <MailIcon />,
-      onClick: () => history.push('/')
+      onClick: () => history.push('/messages')
     }, 
   ]
 

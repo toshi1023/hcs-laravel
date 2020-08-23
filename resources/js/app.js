@@ -22,6 +22,7 @@ import Home from './components/Home';
 import Article from './components/articles/Index';
 import User from './components/users/Index';
 import UserCreate from './components/users/Create';
+import Message from './components/messages/Message';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -43,6 +44,7 @@ function App() {
             <Route exact path="/articles" render={props => <Article {...props} />} />
             <Route exact path="/users" render={props => <User {...props} />} />
             <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
+            <Route exact path="/messages" render={props => <Message {...props} />} />
           </Switch>
         </BrowserRouter> 
       </div>
