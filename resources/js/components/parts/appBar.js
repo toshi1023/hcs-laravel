@@ -1,12 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import {AppBar, Toolbar, IconButton, Typography, Badge, MenuItem, Menu} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -60,17 +54,28 @@ export default function HcsAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  // アカウントメニューを表示
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+  // Mobileメニューをクローズ
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
 
+  // アカウントメニューをクローズ
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  // Logout処理
+  const handleMenuCloseLogout = () => {
+    if(confirm('ログアウトをしますか？')) {
+      setAnchorEl(null);
+      handleMobileMenuClose();
+    }
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -91,6 +96,7 @@ export default function HcsAppBar() {
     >
       <MenuItem onClick={handleMenuClose}>プロフィール</MenuItem>
       <MenuItem onClick={handleMenuClose}>My記事</MenuItem>
+      <MenuItem onClick={handleMenuCloseLogout}>ログアウト</MenuItem>
     </Menu>
   );
 

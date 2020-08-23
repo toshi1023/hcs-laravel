@@ -1,16 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import HcsAppBar from '../parts/appBar';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import {Input, InputLabel, InputAdornment, FormControl, Button, Grid, Card, CardHeader, CardContent} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
 import SwitchType from '../parts/switch';

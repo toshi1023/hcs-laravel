@@ -1,72 +1,82 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    width: '100%',
+    maxWidth: 500,
+    backgroundColor: theme.palette.background.paper,
   },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
+  list: {
+    marginLeft: 10,
+    fontSize: 20
   },
-  content: {
-    flex: '1 0 auto',
+  avatar: {
+    // Avatarのサイズ変更
+    width: theme.spacing(7),
+    height: theme.spacing(7),
   },
-  cover: {
-    width: 151,
-  },
-  controls: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-  playIcon: {
-    height: 38,
-    width: 38,
+  icon: {
+    color: 'blue',
+    fontSize: 30
   },
 }));
 
 export default function UserCard() {
   const classes = useStyles();
-  const theme = useTheme();
+  const [checked, setChecked] = React.useState([1]);
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
 
   return (
-    <Card className={classes.root}>
-      <CardMedia
-          className={classes.cover}
-          image="/static/images/cards/live-from-space.jpg"
-          title="Live from space album cover"
-      />
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-            Live From Space
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            Mac Miller
-          </Typography>
-        </CardContent>
-        <div className={classes.controls}>
-          <IconButton aria-label="previous">
-            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-          </IconButton>
-          <IconButton aria-label="play/pause">
-            <PlayArrowIcon className={classes.playIcon} />
-          </IconButton>
-          <IconButton aria-label="next">
-            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-          </IconButton>
-        </div>
-      </div>
-    </Card>
+    <List dense className={classes.root}>
+      {[0, 1, 2, 3].map((value) => {
+        const labelId = `checkbox-list-secondary-label-${value}`;
+        return (
+          <>
+            <ListItem key={value} button >
+              <ListItemAvatar>
+                <Avatar
+                  alt={`Avatar n°${value + 1}`}
+                  src={'https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no_image.png'}
+                  className={classes.avatar}
+                />
+              </ListItemAvatar>
+              <ListItemText id={labelId} primary={`Line item ${value + 1}`} classes={{primary: classes.list}} />
+              <ListItemSecondaryAction>
+                <IconButton style={{backgroundColor: '#d0ddf5'}}>
+                  <PersonAddIcon
+                    edge="end"
+                    onChange={handleToggle(value)}
+                    inputProps={{ 'aria-labelledby': labelId }}
+                    className={classes.icon}
+                  />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+            <hr />
+          </>
+        );
+      })}
+    </List>
   );
 }
