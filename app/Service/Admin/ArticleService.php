@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Admin;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
-use App\DataProvider\ArticleDatabaseInterface;
+use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
 use Storage;
 
 class ArticleService

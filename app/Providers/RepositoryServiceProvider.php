@@ -10,8 +10,8 @@ use App\Model\ArticleImage;
 use App\Model\Prefecture;
 
 use App\Consts\Consts;
-use App\DataProvider\ArticleDatabaseInterface;
-use App\DataProvider\UserDatabaseInterface;
+use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
+use App\DataProvider\DatabaseInterface\UserDatabaseInterface;
 use App\DataProvider\ArticleRepository;
 use App\DataProvider\UserRepository;
 

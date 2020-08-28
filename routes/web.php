@@ -2,35 +2,43 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+/**
+ * 管理者ページのルーティング
+ * 
+ * URL: hcs-admin/{ルーティングで設定したアドレス}
+ * フォルダの名前スペース: Admin/{各コントローラファイル}
+ */
+Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(function(){
+    // 認証機能のルーティング
+    Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
-// ログイン機能のルーティング
-// Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-// Route::post('/login', 'Auth\LoginController@login')->name('postlogin');
-Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
+    // ルートページ
+    Route::get('/home', 'HomeController@index')->name('admin_home');
+});
 
-// ルートページ
-Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/welcome', 'HomeController@welcome')->name('welcome');
+/**
+ * フロントページのルーティング
+ * 
+ */
+Route::namespace('Web')->group(function(){
+    // ログイン機能のルーティング
+    Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
-// 記事関連のルート
-Route::resource('articles', 'ArticleController');
-// Route::resource('articles' , 'Api\ArticleController');
+    // ルートページ
+    Route::get('/', 'HomeController@index')->name('home');
 
-// ユーザ関連のルート
-Route::resource('users', 'UserController');
-// ユーザデータのPDF出力ルート
-Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
+    Route::get('/welcome', 'HomeController@welcome')->name('welcome');
 
-// ログアウト機能のルーティング
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+    // 記事関連のルート
+    Route::resource('articles', 'ArticleController');
+    // Route::resource('articles' , 'Api\ArticleController');
+
+    // ユーザ関連のルート
+    Route::resource('users', 'UserController');
+    // ユーザデータのPDF出力ルート
+    Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
+
+    // ログアウト機能のルーティング
+    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+});

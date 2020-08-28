@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
-use App\Service\Web\UserService;
+use App\Service\Admin\UserService;
 
-class UserController extends Controller
+class AdminController extends Controller
 {
 
     protected $database;
@@ -98,10 +98,17 @@ class UserController extends Controller
     public function update(Request $request, $user)
     {
       $user = $this->database->getEdit($user)['user'];
+      
+      $filename = null;
+
+      if ($_FILES['prof_photo']['name']){
+        // ファイル名を変数に代入
+        $filename = $_FILES['prof_photo']['name'];
+      }
 
       DB::beginTransaction();
 
-      if ($this->database->userSave($request, null, $user)) {
+      if ($this->database->userSave($request, $filename, $user)) {
         DB::commit();
         return redirect()->route('users.show', ['user' => $user])->with('message', 'プロフィールの変更を保存しました');
       } else {
