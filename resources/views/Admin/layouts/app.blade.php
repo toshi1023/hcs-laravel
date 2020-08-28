@@ -6,13 +6,13 @@
     <title>HitcHike Community Space</title>
     <!-- cssの呼び出し -->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/admin-style.css') }}" rel="stylesheet">
     {{-- bootstrapの呼び出し --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- Title -->
-    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap" rel="stylesheet">
   </head>
-<body>
+<body class="body">
   <header>
     {{-- <div id="app"></div> --}}
     {{-- <div class="container">
@@ -60,61 +60,44 @@
       @endif
     </div> --}}
 
-
-    {{-- <div class="header"></div>
-      <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
-      <label for="openSidebarMenu" class="sidebarIconToggle">
-        <div class="spinner diagonal part-1"></div>
-        <div class="spinner horizontal"></div>
-        <div class="spinner diagonal part-2"></div>
-      </label>
-      <div id="sidebarMenu">
-        <ul class="sidebarMenuInner">
-          <li>Jelena Jovanovic <span>Web Developer</span></li>
-          <li><a href="" target="_blank">Company</a></li>
-          <li><a href="" target="_blank">Instagram</a></li>
-          <li><a href="" target="_blank">Twitter</a></li>
-          <li><a href="" target="_blank">YouTube</a></li>
-          <li><a href="" target="_blank">Linkedin</a></li>
-        </ul>
-      </div>
-      <div id='center' class="main center">
-        <div class="mainInner">
-          <div>PURE CSS SIDEBAR TOGGLE MENU</div>
-        </div>
-        <div class="mainInner">
-          <div>PURE CSS SIDEBAR TOGGLE MENU</div>
-        </div>
-        <div class="mainInner">
-          <div>PURE CSS SIDEBAR TOGGLE MENU</div>
-        </div>
-  </div> --}}
-
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" style="font-size: 25px; font-family: 'Cabin Sketch', cursive;" href="/hcs-admin">HitcHike Community Space Admin</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
+        {{-- @if(Auth::check()) --}}
+          <li class="nav-item active">
+            <a class="nav-link menu-list" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              ユーザ
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">ユーザ一覧</a>
+              <a class="dropdown-item" href="#">ユーザ作成</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              記事
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">記事一覧</a>
+              <a class="dropdown-item" href="#">記事作成</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link menu-list" href="#" id="logout">ログアウト</a>
+          </li>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
+        {{-- @endif --}}
         <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown link
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
+          <a class="nav-link menu-list" href="{{ route('hcs-admin.login') }}">ログイン</a>
         </li>
       </ul>
     </div>
@@ -128,12 +111,13 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-  <!-- 画像アップロードのファイル名表示を設定 -->
-  <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+  {{-- トグルメニューの閉じる操作(リンク押下後) --}}
   <script>
-    $(document).ready(function () {
-      bsCustomFileInput.init();
-    })
+    $(document).on('click','.navbar-collapse',function(e) {
+        if( $(e.target).is('a') ) {
+            $(this).collapse('hide');
+        }
+    });
   </script>
 
   <!-- ログアウト処理 -->
@@ -147,9 +131,7 @@
   @endif
 
   <!-- Scripts -->
-  <script src="{{ asset('js/hcs.js') }}">
-
-  </script>
+  <script src="{{ asset('js/hcs.js') }}"></script>
   <script src="{{ asset('js/app.js') }}" defer></script>
   @yield('scripts')
 </body>
