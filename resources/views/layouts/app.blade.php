@@ -13,7 +13,7 @@
   </head>
 <body>
   <header>
-    <div id="app"></div>
+    {{-- <div id="app"></div> --}}
     <div class="container">
       <!-- ログインしているかをチェック -->
       @if(Auth::check())
