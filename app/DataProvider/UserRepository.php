@@ -2,6 +2,7 @@
 
 namespace App\DataProvider;
 
+use App\DataProvider\DatabaseInterface\UserDatabaseInterface;
 use App\Model\User;
 use App\Model\Prefecture;
 use App\Consts\Consts;

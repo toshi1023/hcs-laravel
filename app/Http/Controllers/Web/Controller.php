@@ -1,17 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\MessageBag;
-
-use App\Consts\Consts;
-use App\Service\DatabaseInterface;
-use App\Service\UserService;
-use App\Service\ArticleService;
 
 class Controller extends BaseController
 {
@@ -23,6 +18,5 @@ class Controller extends BaseController
     {
         // セッションに保存するメッセージ用メソッドをインスタンス化
         $this->messages = new MessageBag();
-
     }
 }

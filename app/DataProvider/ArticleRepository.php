@@ -2,6 +2,7 @@
 
 namespace App\DataProvider;
 
+use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
 use App\Model\Article;
 use App\Model\User;
 use App\Model\Prefecture;

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use App\Service\Web\ArticleService;
+use App\Service\Admin\ArticleService;
 use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
@@ -25,11 +25,10 @@ class ArticleController extends Controller
   {
       $articles = $this->database->getIndex();
       
-      return response()->json([
-        'articles' => $articles['articles'], 
-        'women_only_articles' => $articles['women_only_articles'],
-        'prefectures' => $articles['prefectures']
-      ],200, [], JSON_UNESCAPED_UNICODE);
+      return view('articles/index', [
+          'articles' => $articles['articles'],
+          'women_only_articles' => $articles['women_only_articles'],
+      ]);
   }
 
   /* 記事作成メソッド */

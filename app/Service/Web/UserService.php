@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Web;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
-use App\DataProvider\UserDatabaseInterface;
+use App\DataProvider\DatabaseInterface\UserDatabaseInterface;
 use Storage;
 
 class UserService

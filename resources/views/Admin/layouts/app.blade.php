@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HitcHike Community Space</title>
+    <!-- cssの呼び出し -->
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
+    {{-- bootstrapの呼び出し --}}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Title -->
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch&display=swap" rel="stylesheet">
+  </head>
+<body>
+  <header>
+    {{-- <div id="app"></div> --}}
+    {{-- <div class="container">
+      <!-- ログインしているかをチェック -->
+      @if(Auth::check())
+        <nav class="menubar">
+            <ul>
+                <li><a href="/">TOP</a></li>
+                <li><a href="{{ route('articles.index') }}">記事一覧</a></li>
+                <li><a href="{{ route('users.index') }}">友達検索</a></li>
+                <li><a href="{{ route('users.show', [ 'user' => Auth::user()->id]) }}">マイページ</a></li>
+                <li><a href="#" id="logout">ログアウト</a></li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+                </form>
+                <div class="right">
+                  <p>Welcome {{ Auth::user()->name }} さん!</p>
+                </div>
+            </ul>
+        </nav>
+      @else
+        <nav class="menubar">
+            <ul>
+                <li><a href="/">TOP</a></li>
+                <li><a href="{{ route('articles.index') }}">記事一覧</a></li>
+                <li><a href="{{ route('users.index') }}">友達検索</a></li>
+                <li><a href="{{ route('login') }}">ログイン</a></li>
+            </ul>
+        </nav>
+      @endif
+    </>
+    <div class="container">
+      <!-- フラッシュメッセージ -->
+      @if (session('message'))
+          <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
+      @endif
+    </div>
+    <div class="container">
+      @if($errors->any())
+        <div class="alert alert-danger">
+          @foreach($errors->all() as $message)
+            <li style="font-size: large">{{ $message }}</li>
+          @endforeach
+        </div>
+      @endif
+    </div> --}}
+
+
+    {{-- <div class="header"></div>
+      <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+      <label for="openSidebarMenu" class="sidebarIconToggle">
+        <div class="spinner diagonal part-1"></div>
+        <div class="spinner horizontal"></div>
+        <div class="spinner diagonal part-2"></div>
+      </label>
+      <div id="sidebarMenu">
+        <ul class="sidebarMenuInner">
+          <li>Jelena Jovanovic <span>Web Developer</span></li>
+          <li><a href="" target="_blank">Company</a></li>
+          <li><a href="" target="_blank">Instagram</a></li>
+          <li><a href="" target="_blank">Twitter</a></li>
+          <li><a href="" target="_blank">YouTube</a></li>
+          <li><a href="" target="_blank">Linkedin</a></li>
+        </ul>
+      </div>
+      <div id='center' class="main center">
+        <div class="mainInner">
+          <div>PURE CSS SIDEBAR TOGGLE MENU</div>
+        </div>
+        <div class="mainInner">
+          <div>PURE CSS SIDEBAR TOGGLE MENU</div>
+        </div>
+        <div class="mainInner">
+          <div>PURE CSS SIDEBAR TOGGLE MENU</div>
+        </div>
+  </div> --}}
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown link
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  </header>
+  <main>
+    @yield('content')
+  </main>
+  <!-- bootstrapの呼び出し -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  <!-- 画像アップロードのファイル名表示を設定 -->
+  <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+  <script>
+    $(document).ready(function () {
+      bsCustomFileInput.init();
+    })
+  </script>
+
+  <!-- ログアウト処理 -->
+  @if(Auth::check())
+    <script>
+      document.getElementById('logout').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('logout-form').submit();
+      });
+    </script>
+  @endif
+
+  <!-- Scripts -->
+  <script src="{{ asset('js/hcs.js') }}">
+
+  </script>
+  <script src="{{ asset('js/app.js') }}" defer></script>
+  @yield('scripts')
+</body>
+</html>
