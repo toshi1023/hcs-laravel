@@ -12,13 +12,13 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Home');
+require('./components/home/Home');
 
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Login from './components/users/Login';
-import Home from './components/Home';
+import Home from './components/home/Home';
 import Article from './components/articles/Index';
 import User from './components/users/Index';
 import UserCreate from './components/users/Create';

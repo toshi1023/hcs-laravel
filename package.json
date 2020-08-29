@@ -33,9 +33,11 @@
         "react-dropzone": "^11.0.3",
         "react-redux": "^7.2.1",
         "react-router-dom": "^5.2.0",
+        "react-slick": "^0.27.10",
         "react-swipeable-views": "^0.13.9",
         "react-swipeable-views-utils": "^0.13.9",
         "redux": "^4.0.5",
+        "slick-carousel": "^1.8.1",
         "styled-components": "^5.1.1",
         "yup": "^0.29.3"
     }
