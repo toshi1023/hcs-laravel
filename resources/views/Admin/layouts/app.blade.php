@@ -73,28 +73,55 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              管理ユーザ
+            </a>
+            <div class="dropdown">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item menu-list" href="#">管理ユーザ一覧</a>
+                <a class="dropdown-item menu-list" href="#">管理ユーザ作成</a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               ユーザ
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">ユーザ一覧</a>
-              <a class="dropdown-item" href="#">ユーザ作成</a>
+            <div class="dropdown">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item menu-list" href="#">ユーザ一覧</a>
+                <a class="dropdown-item menu-list" href="#">ユーザ作成</a>
+                <a class="dropdown-item menu-list" href="#">フレンド履歴</a>
+              </div>
             </div>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               記事
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">記事一覧</a>
-              <a class="dropdown-item" href="#">記事作成</a>
-            </div>
+            <div class="dropdown">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item menu-list" href="#">記事一覧</a>
+                <a class="dropdown-item menu-list" href="#">記事作成</a>
+              </div>
+            </div> 
           </li>
           <li class="nav-item dropdown">
+            <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              メッセージ
+            </a>
+            <div class="dropdown">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item menu-list" href="#">メッセージ履歴</a>
+                <a class="dropdown-item menu-list" href="#">メッセージ設定</a>
+              </div>
+            </div> 
+          </li>
+          {{-- <li class="nav-item dropdown">
             <a class="nav-link menu-list" href="#" id="logout">ログアウト</a>
           </li>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
-          </form>
+          </form> --}}
         {{-- @endif --}}
         <li class="nav-item">
           <a class="nav-link menu-list" href="{{ route('hcs-admin.login') }}">ログイン</a>
@@ -132,7 +159,6 @@
 
   <!-- Scripts -->
   <script src="{{ asset('js/hcs.js') }}"></script>
-  <script src="{{ asset('js/app.js') }}" defer></script>
   @yield('scripts')
 </body>
 </html>

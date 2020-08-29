@@ -1,7 +1,7 @@
 @extends('Admin.layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container login-container">
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div class="row justify-content-md-center">
@@ -13,14 +13,14 @@
                                 Login
                             </div>
                             <div class="col-3 offset-5 col-md-3 offset-md-6">
-                                <a href="{{ route('users.create') }}" class="btn btn-info" style="font-size: large">新規登録</a>
+                                <a href="{{ route('hcs-admin.admins.create') }}" class="btn btn-info" style="font-size: large">新規登録</a>
                             </div>
                         </div>
                     </h1>
                         
                     <div class="card-body">
                         <div class="form-group-lg row">
-                            <label for="nickname" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('ニックネーム') }}</label>
+                            <label for="nickname" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('ID') }}</label>
                 
                             <div class="col-10 col-md-6">
                                 <input id="nickname" type="nickname" class="form-control @error('nickname') is-invalid @enderror" name="nickname" value="{{ old('nickname') }}" required autocomplete="nickname" autofocus>

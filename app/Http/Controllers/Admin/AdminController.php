@@ -27,7 +27,7 @@ class AdminController extends Controller
       // 全ユーザデータを更新日時順にソートして取得
       $users = $this->database->getIndex('users')->get();
 
-      return view('users.index',[ 'users' => $users ]);
+      return view('Admin.users.index',[ 'users' => $users ]);
 
     }
 
@@ -36,7 +36,7 @@ class AdminController extends Controller
       // 都道府県データを会員登録フォームに渡す
       $prefectures = $this->database->getCreate('prefectures')->get();
 
-      return view('users.create', [
+      return view('Admin.users.create', [
           'prefectures' => $prefectures,
       ]);
     }

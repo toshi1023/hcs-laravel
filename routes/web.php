@@ -14,6 +14,12 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
 
     // ルートページ
     Route::get('/home', 'HomeController@index')->name('admin_home');
+
+    // 管理ユーザ関連のルート
+    Route::resource('admins', 'AdminController');
+
+    // ユーザデータのPDF出力ルート
+    Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
 });
 
 
@@ -36,8 +42,9 @@ Route::namespace('Web')->group(function(){
 
     // ユーザ関連のルート
     Route::resource('users', 'UserController');
-    // ユーザデータのPDF出力ルート
-    Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
+    
+    // メッセージ関連のルート
+    // Route::resource('messages', 'MessageController');
 
     // ログアウト機能のルーティング
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
