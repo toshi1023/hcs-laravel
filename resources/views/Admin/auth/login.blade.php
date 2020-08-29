@@ -1,7 +1,7 @@
 @extends('Admin.layouts.app')
 
 @section('content')
-<div class="container login-container">
+<div class="container card-container">
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div class="row justify-content-md-center">
@@ -11,9 +11,6 @@
                         <div class="row">
                             <div class="col-4 col-md-3">
                                 Login
-                            </div>
-                            <div class="col-3 offset-5 col-md-3 offset-md-6">
-                                <a href="{{ route('hcs-admin.admins.create') }}" class="btn btn-info" style="font-size: large">新規登録</a>
                             </div>
                         </div>
                     </h1>

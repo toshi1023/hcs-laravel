@@ -19,7 +19,7 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'prof_photo', 'photo_path', 'name', 'nickname','prefecture', 'birthday', 'gender', 'email', 'password',
+        'email', 'password',
     ];
 
     /**
@@ -43,6 +43,6 @@ class Admin extends Authenticatable
     // Articleテーブルと1対多のリレーション構築(1側の設定)
     public function articles()
     {
-        return $this->hasMany('App\Model\Article');
+        return $this->hasMany('App\Model\News');
     }
 }

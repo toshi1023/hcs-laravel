@@ -19,6 +19,7 @@ class CreateArticlesTable extends Migration
             $table->string('title', 40);
             $table->text('content');
             $table->boolean('women_only')->default(false);
+            $table->tinyInteger('delete_flg')->unsigned()->default(0);      // 0: noフラグ, 1: 削除
             // $table->integer('likes_count');
             $table->timestamps();
         });

@@ -17,14 +17,15 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('prof_photo_name')->nullable();
             $table->string('prof_photo_path')->nullable();
-            $table->string('name');
             $table->string('nickname')->unique();
-            $table->string('prefecture');
+            $table->string('prefecture');                               // お気に入り都道府県
             $table->date('birthday');
-            $table->integer('gender');
+            $table->tinyInteger('gender')->unsigned();                  // 0: 男性, 1: 女性
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('status')->default(false);                  // アカウント停止フラグ
+            $table->tinyInteger('delete_flg')->unsigned()->default(0);  // 0: noフラグ, 1: 削除
             $table->timestamp('login_time')->nullable();
             $table->rememberToken();
             $table->timestamps();

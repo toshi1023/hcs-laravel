@@ -9,6 +9,7 @@ import GroupIcon from '@material-ui/icons/Group';
 import MapIcon from '@material-ui/icons/Map';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import InfoIcon from '@material-ui/icons/Info';
 import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const useStyles = makeStyles({
@@ -88,6 +89,14 @@ const MenuDrawer = (props) => {
         })}
       </List>
       <Divider />
+      <List>
+        {['公式ニュース'].map((text, index) => (
+          <ListItem button key={text} onClick={() => history.push('/')}>
+            <ListItemIcon><InfoIcon /></ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
       <List>
         {['ログイン'].map((text, index) => (
           <ListItem button key={text} onClick={() => history.push('/login')}>

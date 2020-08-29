@@ -15,16 +15,10 @@ class CreateAdminsTable extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('prof_photo_name')->nullable();
-            $table->string('prof_photo_path')->nullable();
-            $table->string('name');
-            $table->string('nickname')->unique();
-            $table->string('prefecture');
-            $table->date('birthday');
-            $table->integer('gender');
-            $table->string('email')->unique();
+            $table->string('email')->unique();                                  // ID
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->tinyInteger('delete_flg')->unsigned()->default(0);          // 0: noフラグ, 1: 削除
             $table->timestamp('login_time')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -78,7 +78,7 @@
             <div class="dropdown">
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item menu-list" href="#">管理ユーザ一覧</a>
-                <a class="dropdown-item menu-list" href="#">管理ユーザ作成</a>
+                <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.create') }}">管理ユーザ作成</a>
               </div>
             </div>
           </li>
@@ -113,6 +113,17 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item menu-list" href="#">メッセージ履歴</a>
                 <a class="dropdown-item menu-list" href="#">メッセージ設定</a>
+              </div>
+            </div> 
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              ニュース
+            </a>
+            <div class="dropdown">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item menu-list" href="#">ニュース一覧</a>
+                <a class="dropdown-item menu-list" href="#">ニュース作成</a>
               </div>
             </div> 
           </li>

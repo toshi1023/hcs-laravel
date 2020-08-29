@@ -4,7 +4,7 @@
 
 /* 背景色 */
 body.body {
-    background-color: #f3f5e9;
+    background-color: #f0e8f0;
 }
 
 /* navメニュー */
@@ -16,11 +16,11 @@ body.body {
 .card-title {
     font-family: 'Cabin Sketch', cursive;
 }
+.card-container {
+    padding: 40px 0 30px 0;
+}
 
 /* ログインページ */
-.login-container {
-    padding-top: 40px;
-}
 button.login-button {
     margin-left: 5px;
 }

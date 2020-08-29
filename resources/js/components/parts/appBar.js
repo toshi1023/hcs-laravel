@@ -132,7 +132,7 @@ function HcsAppBar() {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>ニュース</p>
+        <p>通知</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
