@@ -8,7 +8,7 @@
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
     {{-- bootstrapの呼び出し --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- Title -->
+    <!-- TitleのCSSデザイン -->
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap" rel="stylesheet">
   </head>
 <body>

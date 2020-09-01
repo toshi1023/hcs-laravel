@@ -18,8 +18,8 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
     // 管理ユーザ関連のルート
     Route::resource('admins', 'AdminController');
 
-    // ユーザデータのPDF出力ルート
-    Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
+    // // ユーザデータのPDF出力ルート
+    // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
 });
 
 

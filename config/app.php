@@ -183,6 +183,8 @@ return [
         App\Providers\UserServiceProvider::class,
         // PDF作成用クラス
         Barryvdh\Snappy\ServiceProvider::class,
+        //DataTables用クラス
+        Yajra\DataTables\DataTablesServiceProvider::class,
 
     ],
 

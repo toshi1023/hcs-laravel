@@ -4,12 +4,29 @@
 
 /* 背景色 */
 body.body {
-    background-color: #f0e8f0;
+    background-color: #fafcef;
 }
 
 /* navメニュー */
 .menu-list {
     font-size: 15px;
+}
+
+/* タイトルテキスト */
+span.title-text {
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 5px;
+}
+
+/* カード */
+div.card {
+    background-color: #1b2538;
+}
+
+/* テーブルカラムの文字カラー */
+tr.th-text {
+    color: white;
 }
 
 /* カードタイトル */
