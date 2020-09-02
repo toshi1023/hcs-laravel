@@ -35,7 +35,7 @@ class BaseRepository
 
     /* *
     * 指定したデータをすべて取得するメソッド
-    * 引数: 検索用テーブル
+    * 引数: テーブル名
     * */
     public function getAllQuery($table)
     {
@@ -44,7 +44,7 @@ class BaseRepository
 
     /**
      * 検索条件作成
-     * 引数1: 検索用テーブル, 引数2: 検索条件(array)
+     * 引数1: テーブル名, 引数2: 検索条件(array)
      */
     public function getWhereQuery($table, $conditions=[]) {
 
