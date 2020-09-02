@@ -117,6 +117,52 @@ class BaseRepository
     }
 
     /**
+     * 指定ID検索
+     * 引数1:テーブル名, 引数2:ID
+     */
+    public function find($model, $id) {
+        return $model::query()->where('id', $id)->first();
+    }
+
+
+    /**
+    * 保存用メソッド
+    * 引数1:テーブル名, 引数2:データ, 引数3:トランザクションフラグ(同一アクションで複数テーブルを保存する場合はfalseにする)
+    * */
+    public function save($table, $data, $transaction=true)
+    {
+        if ($transaction) \DB::beginTransaction();
+
+        try {
+            $model = $this->getModel($table);
+            // 作成・更新日時を取得
+            $now = Carbon::now();
+        
+            // Updateかどうか判別
+            if (key_exists('id', $data) && $data['id']) {
+                $model = $this->find($model, $data["id"]);
+                // 更新日時を格納
+                $model->updated_at = $now;
+            } else {
+                // 作成日時を格納
+                $model->created_at = $now;
+            }
+
+            // データを保存
+            $model->fill($data);
+            $model->save();
+
+            // コミット
+            if ($transaction) \DB::commit();
+
+        } catch (\Exception $e) {
+            if ($transaction) \DB::rollBack();
+            \Log::error('database save error:'.$e->getMessage());
+            throw new \Exception($e);
+        }
+    }
+
+    /**
     * 削除用メソッド
     * 引数1:テーブル名, 引数2:削除データのID
     * */

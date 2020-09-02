@@ -20,9 +20,9 @@ span.title-text {
 }
 
 /* カード */
-div.card {
-    background-color: #1b2538;
-}
+/* div.card {
+    background-color: #e6e7e9;
+} */
 
 /* テーブルカラムの文字カラー */
 tr.th-text {
@@ -30,7 +30,7 @@ tr.th-text {
 }
 
 /* カードタイトル */
-.card-title {
+h1.card-title {
     font-family: 'Cabin Sketch', cursive;
 }
 .card-container {

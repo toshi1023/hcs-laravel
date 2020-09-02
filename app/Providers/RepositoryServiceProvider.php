@@ -34,6 +34,11 @@ class RepositoryServiceProvider extends ServiceProvider
 
         });
 
+        // AdminDatabaseInterfaceをAdminRepositoryのインスタンス化で解決
+        $this->app->bind(AdminDatabaseInterface::class, function($app) {
+            return new AdminRepository(new Admin, new Prefecture);
+        });
+
         // UserDatabaseInterfaceをUserRepositoryのインスタンス化で解決
         $this->app->bind(UserDatabaseInterface::class, function($app) {
             return new UserRepository(new User, new Prefecture);
