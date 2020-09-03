@@ -4,18 +4,8 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Article extends Model
+class Article extends BaseModel
 {
-
-  /**
-   * 一括割り当て可能な属性
-   * モデルに登録したい項目を追加
-   *
-   * @var array
-   */
-  protected $fillable = [
-    'prefecture', 'title', 'content', 'women_only',
-  ];
 
   // userテーブルと1対多のリレーション構築(多側の設定)
   public function admin()

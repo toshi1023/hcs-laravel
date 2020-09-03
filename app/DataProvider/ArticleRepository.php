@@ -13,18 +13,14 @@ use Storage;
 
 class ArticleRepository extends BaseRepository implements ArticleDatabaseInterface
 {
-    protected $article;
+
     protected $articleImage;
-    protected $user;
-    protected $prefecture;
 
     /* モデルのインスタンス化 */
-    public function __construct(Article $article, ArticleImage $articleImage,User $user, Prefecture $prefecture)
+    public function __construct(Article $article, ArticleImage $articleImage)
     {
-        $this->article = $article;
+        $this->model = $article;
         $this->articleImage = $articleImage;
-        $this->user = $user;
-        $this->prefecture = $prefecture;
     }
 
     /**
@@ -33,7 +29,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     public function getArticle()
     {
         // usersテーブルの値も結合して取得
-        return $this->article->leftjoin('users', 'articles.user_id', '=', 'users.id')
+        return $this->model->leftjoin('users', 'articles.user_id', '=', 'users.id')
                              ->leftjoin('article_images', 'article_images.article_id', '=', 'articles.id')
                              ->select(
                                  'articles.*', 
@@ -82,13 +78,13 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                 $filename = 'NoImage';
             }
 
-            $this->article->prefecture      = $data['prefecture'];
-            $this->article->title           = $data['title'];
-            $this->article->content         = $data['content'];
-            $this->article->women_only      = $data['women_only'];
-            $this->article->user_id         = $data['user_id'];
+            $this->model->prefecture      = $data['prefecture'];
+            $this->model->title           = $data['title'];
+            $this->model->content         = $data['content'];
+            $this->model->women_only      = $data['women_only'];
+            $this->model->user_id         = $data['user_id'];
             
-            $this->article->save();
+            $this->model->save();
 
             // 画像をアップロード
             $file_upload = $this->fileStore($data['article_photo'], \Auth::user()->nickname);

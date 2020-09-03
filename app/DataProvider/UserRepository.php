@@ -11,16 +11,10 @@ use Storage;
 
 class UserRepository extends BaseRepository implements UserDatabaseInterface
 {
-    protected $user;
-    protected $prefecture;
-
-    public function __construct (User $user, Prefecture $prefecture)
+    public function __construct (User $user)
     {
         // Userモデルをインスタンス化
-        $this->user = $user;
-
-        // Prefectureモデルをインスタンス化
-        $this->prefecture = $prefecture;
+        $this->model = $user;
     }
 
     /**
@@ -61,17 +55,17 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             
             // 画像をアップロードしDBにセット
             if ($file_upload[0]){
-                $this->user->prof_photo_name  = $filename;
-                $this->user->prof_photo_path  = $file_upload[1];
-                $this->user->name        = $data['name'];
-                $this->user->nickname    = $data['nickname'];
-                $this->user->prefecture  = $data['prefecture'];
-                $this->user->birthday    = $data['birthday'];
-                $this->user->gender      = $data['gender'];
-                $this->user->email       = $data['email'];
-                $this->user->password    = Hash::make($data['password']);
+                $this->model->prof_photo_name  = $filename;
+                $this->model->prof_photo_path  = $file_upload[1];
+                $this->model->name        = $data['name'];
+                $this->model->nickname    = $data['nickname'];
+                $this->model->prefecture  = $data['prefecture'];
+                $this->model->birthday    = $data['birthday'];
+                $this->model->gender      = $data['gender'];
+                $this->model->email       = $data['email'];
+                $this->model->password    = Hash::make($data['password']);
                 
-                $this->user->save();
+                $this->model->save();
             }
             return true;
         } catch (\Exception $e) {

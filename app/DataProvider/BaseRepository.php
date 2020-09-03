@@ -3,34 +3,33 @@
 namespace App\DataProvider;
 
 use App\Model\Article;
+use App\Model\ArticleImage;
+use App\Model\Admin;
 use App\Model\User;
 use App\Model\Prefecture;
 
 class BaseRepository
 {
-
+    protected $model;
     protected $article;
+    protected $articleImage;
+    protected $admin;
     protected $user;
     protected $prefecture;
 
-    protected function __construct(Article $article, User $user, Prefecture $prefecture)
+    protected function model()
     {
-        $this->article = $article;
-        $this->user = $user;
-        $this->prefecture = $prefecture;
+        return $this->model;
     }
 
+    /**
+     * 特定のモデルをインスタンス化
+     * 引数:テーブル名
+     */
     protected function getModel($table)
     {
-        if ($table === 'articles') {
-            return $this->article;
-        }
-        if ($table === 'users') {
-            return $this->user;
-        }
-        if ($table === 'prefectures') {
-            return $this->prefecture;
-        }
+        // 指定したテーブルをインスタンス化して返す
+        return $this->model = app()->make($table);
     }
 
     /* *
@@ -46,12 +45,15 @@ class BaseRepository
      * 検索条件作成
      * 引数1: テーブル名, 引数2: 検索条件(array)
      */
-    public function getWhereQuery($table, $conditions=[]) {
-
-        foreach($conditions as $key => $value) {
-            // 指定したモデルを変数に代入
+    public function getWhereQuery($table=null, $conditions=[]) {
+        // 指定したモデルを変数に代入
+        if($table) {
             $query = $this->getModel($table)->select($table.'.*');
-            // dd($this->getModel($table));
+        } else {
+            $query = $this->model;
+        }
+        
+        foreach($conditions as $key => $value) {
             if (preg_match('/@like/', $key)) {
                 // LIKE検索
                 $query->where(str_replace("@like", "", $key), 'like', '%'.$value.'%');
@@ -129,12 +131,16 @@ class BaseRepository
     * 保存用メソッド
     * 引数1:テーブル名, 引数2:データ, 引数3:トランザクションフラグ(同一アクションで複数テーブルを保存する場合はfalseにする)
     * */
-    public function save($table, $data, $transaction=true)
+    public function save($table=null, $data, $transaction=true)
     {
         if ($transaction) \DB::beginTransaction();
 
         try {
-            $model = $this->getModel($table);
+            if($table) {
+                $model = $this->getModel($table);
+            } else {
+                $model = $this->model;
+            }
             // 作成・更新日時を取得
             $now = Carbon::now();
         
@@ -166,11 +172,15 @@ class BaseRepository
     * 削除用メソッド
     * 引数1:テーブル名, 引数2:削除データのID
     * */
-    public function destroy($table, $id)
+    public function destroy($table=null, $id)
     {
         try {
             //  対象の記事を削除
-            $this->getModel($table)->where('id', '=', $id)->delete();
+            if($table) {
+                $this->getModel($table)->where('id', '=', $id)->delete();
+            } else {
+                $this->model->where('id', '=', $id)->delete();
+            }
             return true;
         } catch (\Exception $e) {
             \Log::error($table.' destroy error:'.$e->getmessage());
