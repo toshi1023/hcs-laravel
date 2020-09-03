@@ -4,6 +4,15 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use App\Model\Article;
+use App\Model\ArticleImage;
+use App\Model\Admin;
+use App\Model\User;
+use App\Model\News;
+use App\Model\Prefecture;
+// use App\Model\Friend;
+// use App\Model\Message;
+
 class NewModelServiceProvider extends ServiceProvider
 {
     /**
