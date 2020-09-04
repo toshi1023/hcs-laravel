@@ -9,8 +9,12 @@
     <link href="{{ asset('css/admin-style.css') }}" rel="stylesheet">
     {{-- bootstrapの呼び出し --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- Title -->
+    <!-- TitleのCSSデザイン -->
     <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap" rel="stylesheet">
+    {{-- DataTables --}}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
   </head>
 <body class="body">
   <header>
@@ -77,7 +81,7 @@
             </a>
             <div class="dropdown">
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item menu-list" href="#">管理ユーザ一覧</a>
+                <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.index') }}">管理ユーザ一覧</a>
                 <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.create') }}">管理ユーザ作成</a>
               </div>
             </div>
@@ -142,12 +146,23 @@
   </nav>
   </header>
   <main>
+    <div class="row">
+      <div class="col-12 offset-md-1 col-md-10 offset-md-1">
+        <span class="title-text">
+          @yield('title')
+        </span>
+      </div>
+    </div>
     @yield('content')
   </main>
   <!-- bootstrapの呼び出し -->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  {{-- DataTables --}}
+  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
 
   {{-- トグルメニューの閉じる操作(リンク押下後) --}}
   <script>

@@ -4,7 +4,7 @@
 
 /* 背景色 */
 body.body {
-    background-color: #eee8f0;
+    background-color: #fafcef;
 }
 
 /* navメニュー */
@@ -12,8 +12,25 @@ body.body {
     font-size: 15px;
 }
 
+/* タイトルテキスト */
+span.title-text {
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 5px;
+}
+
+/* カード */
+/* div.card {
+    background-color: #e6e7e9;
+} */
+
+/* テーブルカラムの文字カラー */
+tr.th-text {
+    color: white;
+}
+
 /* カードタイトル */
-.card-title {
+h1.card-title {
     font-family: 'Cabin Sketch', cursive;
 }
 .card-container {

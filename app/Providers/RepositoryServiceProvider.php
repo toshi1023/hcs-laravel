@@ -18,8 +18,6 @@ use App\DataProvider\UserRepository;
 class RepositoryServiceProvider extends ServiceProvider
 {   
 
-    protected $current_url;
-
     /**
      * Register services.
      *
@@ -30,13 +28,18 @@ class RepositoryServiceProvider extends ServiceProvider
         // ArticleDatabaseInterfaceをArticleRepositoryのインスタンス化で解決
         $this->app->bind(ArticleDatabaseInterface::class, function($app) {
         
-            return new ArticleRepository(new Article, new ArticleImage, new User, new Prefecture);
+            return new ArticleRepository(new Article, new ArticleImage);
 
+        });
+
+        // AdminDatabaseInterfaceをAdminRepositoryのインスタンス化で解決
+        $this->app->bind(AdminDatabaseInterface::class, function($app) {
+            return new AdminRepository(new Admin);
         });
 
         // UserDatabaseInterfaceをUserRepositoryのインスタンス化で解決
         $this->app->bind(UserDatabaseInterface::class, function($app) {
-            return new UserRepository(new User, new Prefecture);
+            return new UserRepository(new User);
         });
     }
 
