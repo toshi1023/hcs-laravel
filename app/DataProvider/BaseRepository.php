@@ -45,7 +45,7 @@ class BaseRepository
         } else {
             $query = $this->model;
         }
-
+        
         if($relation) {
             // テーブル名の取得
             $table_name = $query->getTable();
@@ -53,33 +53,34 @@ class BaseRepository
             foreach($relation as $key => $condition) {
                 // リレーション
                 $query->leftJoin($key, $table_name.'.id', '=', $key.$condition)
-                        ->select($key.'.*');
+                      ->select($key.'.*');
             }
         }
 
         // メインテーブルのデータを取得
         $query = $query->select($query->getTable().'.*');
 
-        // 絞り込み
-        $query = $query->getWhereQuery($conditions);
+        // 検索条件があれば絞り込み
+        if($conditions) {
+            $query = self::getWhereQuery('', $conditions, $query);
+        }
 
         return $query;
     }
 
     /**
      * 検索条件作成
-     * 引数1: テーブル名, 引数2: 検索条件(array)
+     * 引数1: テーブル名, 引数2: 検索条件(array), 引数3: クエリ途中のデータ
      */
-    public function getWhereQuery($table=null, $conditions=[]) {
-        // 検索条件がなければ実行しない
-        if(!$conditions) {
-            return;
-        }
-        // 指定したモデルを変数に代入
-        if($table) {
-            $query = $this->getModel($table)->select($table.'.*');
-        } else {
-            $query = $this->model->getTable()->select('.*');
+    static public function getWhereQuery($table=null, $conditions=[], $query=null) {
+
+        // クエリ途中のデータが無ければ、指定したモデルを変数に代入
+        if(!$query) {
+            if($table) {
+                $query = $this->getModel($table)->select($table.'.*');
+            } else {
+                $query = $this->model->getTable()->select('.*');
+            }
         }
         
         foreach($conditions as $key => $value) {
