@@ -98,8 +98,6 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
                 $this->articleImage->save();
             }
-
-
             return true;
 
         } catch (\Exception $e) {

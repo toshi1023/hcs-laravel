@@ -13,7 +13,7 @@
   </head>
 <body>
   <header>
-    <div id="app"></div>
+    {{-- <div id="app"></div> --}}
     <div class="container">
       <!-- ログインしているかをチェック -->
       @if(Auth::check())
@@ -28,7 +28,7 @@
                   @csrf
                 </form>
                 <div class="right">
-                  <p>Welcome {{ Auth::user()->name }} さん!</p>
+                  <p>Welcome {{ Auth::user()->nickname }} さん!</p>
                 </div>
             </ul>
         </nav>

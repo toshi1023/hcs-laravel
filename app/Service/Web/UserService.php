@@ -25,7 +25,8 @@ class UserService
   public function getIndex($table)
   {
     // 全ユーザデータを更新日時順にソートして取得
-    return $this->UserService->getAllQuery($table)->latest('users.updated_at');;
+    // dd($this->UserService->getQuery([], ['articles' => 'user_id'])->get());
+    return $this->UserService->getQuery();
 
   }
 

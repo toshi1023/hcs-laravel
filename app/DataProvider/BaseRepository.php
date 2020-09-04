@@ -34,11 +34,33 @@ class BaseRepository
 
     /* *
     * 指定したデータをすべて取得するメソッド
-    * 引数: テーブル名
+    * 引数1: テーブル名, 引数2: 結合テーブル(結合テーブル => 結合条件)
+    *   ※$relationの記載例) ['articles' => 'user_id']
     * */
-    public function getAllQuery($table)
+    public function getQuery($table=null, $relation=[])
     {
-        return $this->getModel($table)->select($table.'.*');
+        // 指定したモデルを変数に代入
+        if($table) {
+            $query = $this->getModel($table);
+        } else {
+            $query = $this->model;
+        }
+
+        if($relation) {
+            // テーブル名の取得
+            $table_name = $query->getTable();
+
+            foreach($relation as $key => $condition) {
+                // リレーション
+                $query->leftJoin($key, $table_name.'.id', '=', $key.$condition)
+                        ->select($key.'.*');
+            }
+        }
+
+        // メインテーブルのデータを取得
+        $query = $query->select($query->getTable().'.*');
+
+        return $query;
     }
 
     /**
@@ -50,7 +72,7 @@ class BaseRepository
         if($table) {
             $query = $this->getModel($table)->select($table.'.*');
         } else {
-            $query = $this->model;
+            $query = $this->model->getTable()->select('.*');
         }
         
         foreach($conditions as $key => $value) {
@@ -122,16 +144,16 @@ class BaseRepository
      * 指定ID検索
      * 引数1:テーブル名, 引数2:ID
      */
-    public function find($model, $id) {
+    public function getFind($model, $id) {
         return $model::query()->where('id', $id)->first();
     }
 
 
     /**
-    * 保存用メソッド
+    * fillableに登録されているデータの保存用メソッド
     * 引数1:テーブル名, 引数2:データ, 引数3:トランザクションフラグ(同一アクションで複数テーブルを保存する場合はfalseにする)
     * */
-    public function save($table=null, $data, $transaction=true)
+    public function getSave($table=null, $data, $transaction=true)
     {
         if ($transaction) \DB::beginTransaction();
 
@@ -172,7 +194,7 @@ class BaseRepository
     * 削除用メソッド
     * 引数1:テーブル名, 引数2:削除データのID
     * */
-    public function destroy($table=null, $id)
+    public function getDestroy($table=null, $id)
     {
         try {
             //  対象の記事を削除
