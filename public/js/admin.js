@@ -14,12 +14,6 @@ $(function(){
             $('#status').val(0);
         }
     });
-
-    $(document).on('click', '#btn-cancel', function() {
-        console.log('Hi');
-        console.log(window.parent.screen.width);
-        
-      });
 });
 
 /**

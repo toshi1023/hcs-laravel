@@ -5,7 +5,7 @@
     <form method="POST" action="{{ route('hcs-admin.admins.store') }}">
         @csrf
         <div class="row justify-content-md-center">
-            <div class="col-12 col-md-10">
+            <div class="col-11 col-md-10">
                 <div class="card">  
                     <h1 class="card-header card-title">
                         <div class="row">
@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <div class="container">
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-11">
                                     <div class="alert alert-info content_explanation" role="alert">
                                         管理ユーザの{{ $register_mode === 'create' ? '作成' : '編集' }}を実行します<span class="text-danger">※は必須入力</span>
                                     </div>

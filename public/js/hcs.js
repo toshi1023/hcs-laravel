@@ -1,11 +1,11 @@
 /*
   ArticleController
 */
-// 女性限定公開を設定
+
 $(function(){
 
   var num = 0;
-
+  // 女性限定公開を設定
   $('#women_only').click(function(){
     $(this).data("click", ++num);
     var click = $(this).data("click");
@@ -20,8 +20,27 @@ $(function(){
     }
   });
 
+  // スマホサイズの場合はzoomのcssを排除
+  checkWidth();
+  $(window).resize(checkWidth);
+  
 });
 
+// スマホサイズの場合はzoomのcssを排除
+var checkWidth = function() {
+    var width = $(window).width();
+    if (width < 500) {
+        $('.body').css('zoom', 1);
+        $('#top_title').text('HCS Admin');
+        // 検索フォーム
+        $('#id').css({'margin-top': 5, 'margin-bottom': 5});
+        $('#name').css({'margin-top': 5, 'margin-bottom': 5});
+    }
+    if (width > 500) {
+        $('.body').css('zoom', 1.2);
+        $('#top_title').text('HitcHike Community Space Admin');
+    }
+}
 
 // $(function(){
 //   // 一覧画面のみ適用(ID=main_listがある場合のみ)

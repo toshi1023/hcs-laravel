@@ -10,10 +10,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-3 d-flex">
-                    <div class="col-lg-2">
+                    <div class="col-8 col-lg-2">
                         <input type="text" class="form-control search-text" value="" name="id" id="id" placeholder="ID">
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-8 col-lg-2">
                         <input type="text" class="form-control search-text" value="" name="name" id="name" placeholder="ユーザ名">
                     </div>
                     <div class="col-lg-4">

@@ -49,7 +49,7 @@
                                                             <label class="col-md-4 col-form-label">性別<span class="text-danger">※</span></label>
                                                             <div class="col-md-8 form-inline" id="gender_checked">
                                                                 {{-- <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.open_name') }}" data-off="{{ config('const.private_name') }}" {{ $data->status ? 'checked' : '' }}> --}}
-                                                                <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.man') }}" data-off="{{ config('const.women') }}">
+                                                                <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.man_name') }}" data-off="{{ config('const.women_name') }}" data-onstyle="primary" data-offstyle="danger">
                                                                 <input type="hidden" id="gender" name="gender" value="{{ $register_mode === 'create' ? old('gender') : $data->gender }}">
                                                             </div>
                                                         </div>
