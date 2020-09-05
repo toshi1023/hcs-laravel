@@ -17,4 +17,11 @@ class AdminRepository extends BaseRepository implements AdminDatabaseInterface
         $this->model = $admin;
     }
 
+    /**
+     * adminsページの一覧データを取得
+     */
+    public function getBaseData() {
+        return $this->getQuery();
+    }
+
 }

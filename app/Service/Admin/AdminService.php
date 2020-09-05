@@ -4,18 +4,18 @@ namespace App\Service\Admin;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
-use App\DataProvider\DatabaseInterface\UserDatabaseInterface;
+use App\DataProvider\DatabaseInterface\AdminDatabaseInterface;
 use Storage;
 
-class UserService
+class AdminService
 {
 
-  protected $UserService;
+  protected $AdminService;
   
   /* DBリポジトリのインスタンス化 */
-  public function __construct(UserDatabaseInterface $service)
+  public function __construct(AdminDatabaseInterface $service)
   {
-    $this->UserService = $service; 
+    $this->AdminService = $service; 
   }
 
   /**
@@ -25,7 +25,7 @@ class UserService
   public function getIndex($table=null)
   {
     // 全ユーザデータを更新日時順にソートして取得
-    return $this->UserService->getQuery($table)->latest('users.updated_at');
+    return $this->AdminService->getQuery($table)->latest('updated_at');
 
   }
 
@@ -35,7 +35,7 @@ class UserService
    * */
   public function getShow($id)
   {
-    return $this->UserService->getWhereQuery('users', ['id' => $id])->first();
+    return $this->AdminService->getWhereQuery('users', ['id' => $id])->first();
   }
 
   /* *
@@ -44,7 +44,7 @@ class UserService
    * */
   public function getCreate($table=null)
   {
-    return $this->UserService->getQuery($table);
+    return $this->AdminService->getQuery($table);
   }
 
   /* *
@@ -54,18 +54,18 @@ class UserService
   public function getEdit($id)
   {
     $data['user'] = $this->UserService->getWhereQuery('users', ['id' => $id])->first();
-    $data['prefectures'] = $this->UserService->getAllQuery('prefectures')->get();
+    $data['prefectures'] = $this->UserService->getQuery('prefectures')->get();
 
     return $data;
   }
   
   /* *
-   * 新規ユーザ保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+   * ユーザ保存用メソッド
+   * 第一引数:登録データ
    * */
-  public function userSave($data, $filename, $updateData = null)
+  public function save($data)
   {
-    return $this->UserService->save($data, $filename, $updateData);
+    return $this->AdminService->getSave(null, $data, true);
   }
 
   /*
@@ -74,7 +74,7 @@ class UserService
   */
   public function filestore($file, $foldername)
   {
-    return $this->UserService->filestore($file, $foldername);
+    return $this->AdminService->filestore($file, $foldername);
   }
 
   /*
@@ -83,7 +83,7 @@ class UserService
   */
   public function fileDelete($request)
   {
-    return $this->UserService->fileDelete($request);
+    return $this->AdminService->fileDelete($request);
   }
 
 }

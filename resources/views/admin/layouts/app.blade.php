@@ -15,55 +15,9 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
-  </head>
+</head>
 <body class="body">
   <header>
-    {{-- <div id="app"></div> --}}
-    {{-- <div class="container">
-      <!-- ログインしているかをチェック -->
-      @if(Auth::check())
-        <nav class="menubar">
-            <ul>
-                <li><a href="/">TOP</a></li>
-                <li><a href="{{ route('articles.index') }}">記事一覧</a></li>
-                <li><a href="{{ route('users.index') }}">友達検索</a></li>
-                <li><a href="{{ route('users.show', [ 'user' => Auth::user()->id]) }}">マイページ</a></li>
-                <li><a href="#" id="logout">ログアウト</a></li>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                  @csrf
-                </form>
-                <div class="right">
-                  <p>Welcome {{ Auth::user()->name }} さん!</p>
-                </div>
-            </ul>
-        </nav>
-      @else
-        <nav class="menubar">
-            <ul>
-                <li><a href="/">TOP</a></li>
-                <li><a href="{{ route('articles.index') }}">記事一覧</a></li>
-                <li><a href="{{ route('users.index') }}">友達検索</a></li>
-                <li><a href="{{ route('login') }}">ログイン</a></li>
-            </ul>
-        </nav>
-      @endif
-    </>
-    <div class="container">
-      <!-- フラッシュメッセージ -->
-      @if (session('message'))
-          <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
-      @endif
-    </div>
-    <div class="container">
-      @if($errors->any())
-        <div class="alert alert-danger">
-          @foreach($errors->all() as $message)
-            <li style="font-size: large">{{ $message }}</li>
-          @endforeach
-        </div>
-      @endif
-    </div> --}}
-
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" style="font-size: 25px; font-family: 'Cabin Sketch', cursive;" href="/hcs-admin">HitcHike Community Space Admin</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +47,7 @@
             <div class="dropdown">
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item menu-list" href="#">ユーザ一覧</a>
-                <a class="dropdown-item menu-list" href="#">ユーザ作成</a>
+                <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.create') }}">ユーザ作成</a>
                 <a class="dropdown-item menu-list" href="#">フレンド履歴</a>
               </div>
             </div>
@@ -184,7 +138,8 @@
   @endif
 
   <!-- Scripts -->
-  <script src="{{ asset('js/hcs.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/hcs.js') }}"></script>
   @yield('scripts')
+
 </body>
 </html>

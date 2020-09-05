@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
 
         \App\Model\User::create([
             'prof_photo_name' => 'NoImage',
-            'nickname' => 'root',
+            'name' => 'root',
             'prefecture' => '兵庫県',
             'birthday' => '1992-1-1',
             'gender' => 0,

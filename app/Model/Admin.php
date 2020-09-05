@@ -40,9 +40,4 @@ class Admin extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Articleテーブルと1対多のリレーション構築(1側の設定)
-    public function articles()
-    {
-        return $this->hasMany('App\Model\News');
-    }
 }

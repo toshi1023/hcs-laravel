@@ -3,7 +3,7 @@
 @section('content')
   <div class="container">
     <div class="menu_title">
-        <p>{{ $article->user->nickname }}さんの記事</p>
+        <p>{{ $article->user->name }}さんの記事</p>
     </div>
     <a href="{{ route('articles.index') }}" class="btn color btn-success" style="font-size: large">戻る</a>　
     <!-- 非会員もしくは記事作成者以外には表示しない -->
@@ -44,10 +44,10 @@
                       <td class="list_background">
                         @if(Auth::check())
                           <a href="{{ route('users.show', [ 'user' => $article->user_id]) }}">
-                            {{ $article->user->nickname }}さんのページへ行く
+                            {{ $article->user->name }}さんのページへ行く
                           </a>
                         @else
-                          {{ $article->user->nickname }}さんのページへ行く
+                          {{ $article->user->name }}さんのページへ行く
                         @endif
                       </td>
               </thead>

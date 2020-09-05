@@ -179,8 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         // Dataロジック用クラス
         App\Providers\RepositoryServiceProvider::class,
-        App\Providers\ArticleServiceProvider::class,
-        App\Providers\UserServiceProvider::class,
         // モデルのインスタンス化用クラス
         App\Providers\NewModelServiceProvider::class,
         // PDF作成用クラス

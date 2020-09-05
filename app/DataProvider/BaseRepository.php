@@ -34,8 +34,8 @@ class BaseRepository
 
     /* *
     * 指定したデータをすべて取得するメソッド
-    * 引数1: テーブル名, 引数2: 検索条件, 引数3: 結合テーブル(結合テーブル => 結合条件)
-    *   ※$relationの記載例) ['articles' => 'user_id']
+    * 引数1: テーブル名, 引数2: 検索条件, 引数3: 結合テーブル(結合テーブル => 結合元の結合条件)
+    *   ※$relationの記載例) ['articles' => 'user_id']  idを結合条件としたときのみ適用
     * */
     public function getQuery($table=null, $conditions=[], $relation=[])
     {
@@ -52,7 +52,7 @@ class BaseRepository
 
             foreach($relation as $key => $condition) {
                 // リレーション
-                $query->leftJoin($key, $table_name.'.id', '=', $key.$condition)
+                $query->leftJoin($key, $table_name.$condition, '=', $key.'.id')
                       ->select($key.'.*');
             }
         }
@@ -62,7 +62,7 @@ class BaseRepository
 
         // 検索条件があれば絞り込み
         if($conditions) {
-            $query = self::getWhereQuery('', $conditions, $query);
+            $query = self::getWhereQuery(null, $conditions, $query);
         }
 
         return $query;
@@ -145,6 +145,28 @@ class BaseRepository
                $query->where($key, $value);
             }
         }
+        return $query;
+    }
+
+    /**
+     * 外部キーのname取得(idを結合条件としている場合のみ適用)
+     * 引数1:テーブル名, 引数2: [モデルの結合メソッド => 結合先の外部キー]
+     */
+    public function getNameQuery($table=null, $relation=[]) {
+        // 指定したモデルを変数に代入
+        if($table) {
+            $query = $this->getModel($table);
+        } else {
+            $query = $this->model;
+        }
+
+        foreach($relation as $key => $condition) {
+            // リレーション(結合先のnameは'{テーブル名}_name'に設定)
+            $query = $query->with([$key.':'.$condition.',name as '.$key.'_name']);
+
+            return $query;
+        }
+
         return $query;
     }
 

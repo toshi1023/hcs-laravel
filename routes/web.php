@@ -18,6 +18,15 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
     // 管理ユーザ関連のルート
     Route::resource('admins', 'AdminController');
 
+    // ユーザ関連のルート
+    Route::resource('users', 'UserController');
+
+    /**
+     * Api通信ルート
+     */
+    // 管理ユーザ一覧
+    Route::get('ajax/admins', 'AdminController@apiIndex')->name('admin');
+
     // // ユーザデータのPDF出力ルート
     // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
 });

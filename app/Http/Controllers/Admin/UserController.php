@@ -7,15 +7,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use yajra\Datatables\Datatables;
 
-use App\Service\Admin\AdminService;
+use App\Service\Admin\UserService;
 
-class AdminController extends Controller
+class UserController extends Controller
 {
 
     protected $database;
-    protected $service;
 
-    public function __construct(AdminService $database)
+    public function __construct(UserService $database)
     {
       Parent::__construct();
       
@@ -26,7 +25,7 @@ class AdminController extends Controller
     public function index()
     {
 
-      return view('admin.admins.index',[]);
+      return view('admin.users.index',[]);
 
     }
     public function apiIndex()
@@ -40,7 +39,7 @@ class AdminController extends Controller
 
     public function create()
     {
-      return view('admin.admins.register', [
+      return view('admin.users.register', [
         'register_mode' => 'create'
       ]);
     }
@@ -87,7 +86,7 @@ class AdminController extends Controller
     {
       $data = $this->database->getEdit($user);
 
-      return view('admin.admins.register', [
+      return view('admin.users.register', [
         'register_mode' => 'edit',
         'user' => $data['user'],
         'prefectures' => $data['prefectures'],
@@ -100,7 +99,7 @@ class AdminController extends Controller
 
       if ($this->database->save($request)) {
         DB::commit();
-        return redirect()->route('hcs-admin.admins.index')->with('message', 'プロフィールの変更を保存しました');
+        return redirect()->route('hcs-admin.users.index')->with('message', 'プロフィールの変更を保存しました');
       } else {
         DB::rollBack();
         $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');

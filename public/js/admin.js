@@ -13,7 +13,13 @@ $(function(){
         } else {
             $('#status').val(0);
         }
-    })
+    });
+
+    $(document).on('click', '#btn-cancel', function() {
+        console.log('Hi');
+        console.log(window.parent.screen.width);
+        
+      });
 });
 
 /**
@@ -36,7 +42,6 @@ function initList(search) {
             {data: 'id'},
             {data: 'email'},
             {data: 'updated_at'},
-            {data: 'memo'},
             // 各操作列
             {
                 data: function (p) {
@@ -50,10 +55,10 @@ function initList(search) {
         // 各列ごとの装飾
         // 操作列(ボタン等)や画像項目はソート不可・text-centerを付与する
         [
-            { targets: [1], orderable: false, className: 'text-left', width: '150px'},
-            { targets: [2], orderable: false, className: 'text-center', width: '150px'},
-            { targets: [6], orderable: false, className: 'text-center', width: '100px'},
-            { targets: [7], orderable: false, className: 'text-center', width: '150px'},
+            // { targets: [1], orderable: false, className: 'text-left', width: '150px'},
+            // { targets: [2], orderable: false, className: 'text-center', width: '150px'},
+            // { targets: [6], orderable: false, className: 'text-center', width: '100px'},
+            // { targets: [7], orderable: false, className: 'text-center', width: '150px'},
         ],
         search
     );

@@ -18,6 +18,13 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     }
 
     /**
+     * usersページの一覧データを取得
+     */
+    public function getBaseData() {
+        return $this->getQuery();
+    }
+
+    /**
      * ユーザ保存用メソッド
      * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
      */

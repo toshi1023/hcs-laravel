@@ -24,16 +24,16 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     }
 
     /**
-     * articlesページに関わるデータの取得
+     * articlesページの一覧データを取得
      */
-    public function getArticle()
+    public function getBaseData()
     {
         // usersテーブルの値も結合して取得
         return $this->model->leftjoin('users', 'articles.user_id', '=', 'users.id')
-                             ->leftjoin('article_images', 'article_images.article_id', '=', 'articles.id')
+                             ->leftjoin('article_images', 'articles.id', '=', 'article_images.article_id')
                              ->select(
                                  'articles.*', 
-                                 'users.nickName', 
+                                 'users.name', 
                                  'users.gender', 
                                  'users.prof_photo_path', 
                                  'article_images.article_photo_name',

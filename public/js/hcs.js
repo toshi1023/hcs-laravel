@@ -23,23 +23,23 @@ $(function(){
 });
 
 
-$(function(){
-  // 一覧画面のみ適用(ID=main_listがある場合のみ)
-  if ($('#main_list').length) {
+// $(function(){
+//   // 一覧画面のみ適用(ID=main_listがある場合のみ)
+//   if ($('#main_list').length) {
 
-      // DataTables初期化
-      initList(false);
-  }
+//       // DataTables初期化
+//       initList(false);
+//   }
 
-  // 公開フラグのvalue値設定
-  $('#open_flg').change(function() {
-      if($('#open_flg').prop('checked')) {
-          $('#status').val(1);
-      } else {
-          $('#status').val(0);
-      }
-  })
-});
+//   // 公開フラグのvalue値設定
+//   $('#open_flg').change(function() {
+//       if($('#open_flg').prop('checked')) {
+//           $('#status').val(1);
+//       } else {
+//           $('#status').val(0);
+//       }
+//   })
+// });
 
 // @1 ファイルドロップ
 $(function () {
@@ -113,8 +113,8 @@ $(function () {
               $('.preview').empty();
               $('.preview').append($('<img>').attr({
                   src: e.target.result, // readAsDataURLの読み込み結果がresult
-                  width: "350px",
-                  height: "250px",
+                  width: "250px",
+                  height: "200px",
                   class: "preview",
                   title: file.name
               }));  // previewに画像を表示
@@ -166,8 +166,8 @@ $(function(){
       if($('#image').val() === "" && $('#image_flg').val() === "") {
           $preview.append($('<img>').attr({
               src: outImage,
-              width: "350px",
-              height: "250px",
+              width: "250px",
+              height: "200px",
               class: "preview",
           }));
       }
@@ -191,8 +191,8 @@ $(function(){
       // .prevewの領域の中にロードした画像を表示するimageタグを追加
       $preview.append($('<img>').attr({
           src: outImage,
-          width: "350px",
-          height: "250px",
+          width: "250px",
+          height: "200px",
           class: "preview",
       }));
 
@@ -210,14 +210,14 @@ $(function(){
 */
 function customCheck() {
 
-// 公開フラグの確認アラート
-if($('#status').val() == 0){
-      if(confirm('公開ステータスが非公開に設定されています。\n\nこのまま登録しても宜しいでしょうか？')) {
-          $('#main_form').submit();
-      }
-}else{
-      $('#main_form').submit();
-}
+    // 公開フラグの確認アラート
+    if($('#status').val() == 0){
+        if(confirm('公開ステータスが非公開に設定されています。\n\nこのまま登録しても宜しいでしょうか？')) {
+            $('#main_form').submit();
+        }
+    }else{
+        $('#main_form').submit();
+    }
 }
 
 /**
@@ -292,16 +292,12 @@ function settingDataTables(elm_id, url, data, columns, columnDefs, search) {
             document.body.style.cursor = 'auto';
 
         },
-        // 'scrollX'       : true,
-        // "fixedColumns":   {
-        //     leftColumns: 1
-        // },
         "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
             // 色変更フラグが正の行データの背景色変更
             if (aData.change_row_color) {
                 $('td', nRow).css('background-color', aData.change_row_color );
             }
-        }
+        },
     });
     // 検索処理の場合、ページング初期化
     if (search) {

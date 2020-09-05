@@ -10,4 +10,5 @@ class Consts
     const USER_URL     = 'users';
     const REGISTER_URL = 'register';
     const LOGIN_URL = 'login';
+    
 }

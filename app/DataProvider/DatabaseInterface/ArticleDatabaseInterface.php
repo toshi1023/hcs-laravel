@@ -5,8 +5,8 @@ namespace App\DataProvider\DatabaseInterface;
 /* DBに関する処理を設定 */
 interface ArticleDatabaseInterface {
 
-    // DBに保存する処理を記述
-    public function save($data, $filename, $file);
+    // 一覧に表示するデータの取得処理を記述
+    public function getBaseData();
 
     // ファイルをアップロードする処理を記述
     public function filestore($file, $foldername);
