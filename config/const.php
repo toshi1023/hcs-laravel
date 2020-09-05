@@ -8,5 +8,4 @@ return [
     'man'           => 1,
     'women_name'    => 'women',
     'man_name'      => 'man',
-
 ];
