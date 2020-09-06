@@ -42,6 +42,9 @@ h1.card-title {
 button.login-button {
     margin-left: 5px;
 }
+label.login-text {
+    font-size: 13px;
+}
 
 /* フォーム設定 */
 .form-list {

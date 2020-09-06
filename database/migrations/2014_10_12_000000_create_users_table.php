@@ -20,12 +20,12 @@ class CreateUsersTable extends Migration
             $table->string('name')->unique();
             $table->string('prefecture');                               // お気に入り都道府県
             $table->date('birthday');
-            $table->tinyInteger('gender')->unsigned();                  // 0: 男性, 1: 女性
+            $table->boolean('gender')->default(false);                  // 0: 女性, 1: 男性
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('status')->default(false);                  // アカウント停止フラグ
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);  // 0: noフラグ, 1: 削除
+            $table->boolean('delete_flg')->default(false);  // 0: noフラグ, 1: 削除
             $table->timestamp('login_time')->nullable();
             $table->rememberToken();
             $table->timestamps();

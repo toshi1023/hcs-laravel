@@ -16,26 +16,26 @@
                     </h1>
                         
                     <div class="card-body">
-                        <div class="form-group-lg row">
-                            <label for="nickname" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('ID') }}</label>
+                        <div class="form-group row">
+                            <label for="nickname" class="col-4 col-md-4 col-form-label text-md-right login-text">{{ __('ID') }}</label>
                 
-                            <div class="col-10 col-md-6">
+                            <div class="col-6 col-md-6">
                                 <input id="nickname" type="nickname" class="form-control @error('nickname') is-invalid @enderror" name="nickname" value="{{ old('nickname') }}" required autocomplete="nickname" autofocus>
                             </div>
                         </div>
                 
                         <br>
-                        <div class="form-group-lg row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('パスワード') }}</label>
+                        <div class="form-group row">
+                            <label for="password" class="col-4 col-md-4 col-form-label text-md-right login-text">{{ __('パスワード') }}</label>
                 
-                            <div class="col-10 col-md-6">
+                            <div class="col-6 col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
                             </div>
                         </div>
                         <br>
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary" style="font-size: large">
+                                <button type="submit" class="btn btn-primary">
                                     {{ __('ログイン') }}
                                 </button>
                 

@@ -20,12 +20,20 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
 
     // ユーザ関連のルート
     Route::resource('users', 'UserController');
+    
+    // 記事関連のルート
+    Route::resource('articles', 'ArticleController');
+    
+    // ニュース関連のルート
+    Route::resource('news', 'NewsController');
 
     /**
      * Api通信ルート
      */
     // 管理ユーザ一覧
     Route::get('ajax/admins', 'AdminController@apiIndex')->name('admin');
+    // ユーザ一覧
+    Route::get('ajax/users', 'UserController@apiIndex')->name('user');
 
     // // ユーザデータのPDF出力ルート
     // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');

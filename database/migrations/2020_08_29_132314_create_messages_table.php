@@ -18,7 +18,7 @@ class CreateMessagesTable extends Migration
             $table->integer('user_id_sender')->unsigned();                  // 発信者
             $table->integer('user_id_receiver')->unsigned();                // 受信者
             $table->string('content');
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);      // 0: noフラグ, 1: 削除
+            $table->boolean('delete_flg')->default(false);      // 0: noフラグ, 1: 削除
             $table->timestamps();
 
             // 外部キー制約

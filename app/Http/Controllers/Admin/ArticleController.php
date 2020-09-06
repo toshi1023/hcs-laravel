@@ -25,7 +25,7 @@ class ArticleController extends Controller
   {
       $articles = $this->database->getIndex();
       
-      return view('articles/index', [
+      return view('admin.articles.index', [
           'articles' => $articles['articles'],
           'women_only_articles' => $articles['women_only_articles'],
       ]);
@@ -36,8 +36,9 @@ class ArticleController extends Controller
   {
     $prefectures = $this->database->getCreate('prefectures');
 
-    return view('articles/create', [
-        'prefectures' => $prefectures,
+    return view('admin.articles.register', [
+        'register_mode' => 'create',
+        'prefectures'   => $prefectures,
     ]);
   }
 
@@ -80,7 +81,8 @@ class ArticleController extends Controller
   {
     $data = $this->database->getEdit($article);
 
-    return view('articles.edit', [
+    return view('admin.articles.register', [
+      'register_mode' => 'edit',
       'article' => $data['article'],
       'prefectures' => $data['prefectures'],
     ]);

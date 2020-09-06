@@ -18,7 +18,7 @@ class CreateFriendsTable extends Migration
             $table->integer('user_id_requester')->unsigned();                // 申請者
             $table->integer('user_id_target')->unsigned();                   // 対象
             $table->tinyInteger('status')->unsigned()->default(1);           // 1: 申請中, 2: 承認済み, 3: 却下
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);;      // 0: noフラグ, 1: 削除
+            $table->boolean('delete_flg')->default(false);;      // 0: noフラグ, 1: 削除
             $table->timestamps();
         });
     }

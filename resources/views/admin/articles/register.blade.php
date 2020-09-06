@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container card-container">
-    <form method="POST" action="{{ route('hcs-admin.users.store') }}">
+    <form method="POST" action="{{ route('hcs-admin.articles.store') }}">
         @csrf
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-10">
@@ -10,7 +10,7 @@
                     <h1 class="card-header card-title">
                         <div class="row">
                             <div class="col-7 col-md-6">
-                                {{ $register_mode === 'create' ? 'User Create' : 'User Edit' }}
+                                {{ $register_mode === 'create' ? 'Article Create' : 'Article Edit' }}
                             </div>
                         </div>
                     </h1>
@@ -20,19 +20,13 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="alert alert-info content_explanation" role="alert">
-                                        ユーザの{{ $register_mode === 'create' ? '作成' : '編集' }}を実行します<span class="text-danger">※は必須入力</span>
+                                        記事の{{ $register_mode === 'create' ? '作成' : '編集' }}を実行します<span class="text-danger">※は必須入力</span>
                                     </div>
                                         <div class="card-body">
                                             <form class="form-horizontal" action="{{ route('hcs-admin.admins.store') }}" method="post" id="main_form" enctype='multipart/form-data'>
                                                 {{ csrf_field() }}
                                                 <div class="row">
                                                     <div class="col-sm-10 col-md-6">
-                                                        <div class="form-group row">
-                                                            <label class="col-md-4 col-form-label" for="name">ニックネーム<span class="text-danger">※</span></label>
-                                                            <div class="col-md-8">
-                                                                <input class="form-control required-text" type="text" id="name" name="name" maxlength="50" placeholder="ニックネーム" value="{{ $register_mode === 'create' ? old('name') : $data->name }}">
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row">
                                                             <label class="col-md-4 col-form-label" for="prefecture">都道府県<span class="text-danger">※</span></label>
                                                             <div class="col-6 col-md-6">
@@ -45,35 +39,38 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-4 col-form-label" for="birthday">誕生日<span class="text-danger">※</span></label>
-                                                            <div class="col-md-8">
-                                                                <input class="form-control required-text" type="text" id="birthday" name="birthday" maxlength="50" placeholder="誕生日" value="{{ $register_mode === 'create' ? old('birthday') : $data->birthday }}">
+                                                            <label class="col-md-4 col-form-label" for="prefecture">緯度・経度<span class="text-danger">※</span></label>
+                                                            <div class="col-4 col-md-4">
+                                                                <input class="form-control required-text" type="text" id="latitude" name="latitude" maxlength="20" placeholder="緯度" value="{{ $register_mode === 'create' ? old('latitude') : $data->latitude }}">
+                                                            </div>
+                                                            <div class="col-4 col-md-4">
+                                                                <input class="form-control required-text" type="text" id="longitude" name="longitude" maxlength="20" placeholder="経度" value="{{ $register_mode === 'create' ? old('longitude') : $data->longitude }}">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-4 col-form-label">性別<span class="text-danger">※</span></label>
+                                                            <label class="col-md-4 col-form-label" for="title">タイトル<span class="text-danger">※</span></label>
+                                                            <div class="col-md-8">
+                                                                <input class="form-control required-text" type="text" id="title" name="title" maxlength="50" placeholder="タイトル" value="{{ $register_mode === 'create' ? old('title') : $data->title }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-4 col-form-label" for="content">内容</label>
+                                                            <div class="col-md-8">
+                                                                <textarea class="form-control" name="content" id="content" maxlength="500" rows="5" placeholder="内容">{{ $register_mode === 'create' ? old('content') : $data->content }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-4 col-form-label">公開対象<span class="text-danger">※</span></label>
                                                             <div class="col-md-8 form-inline" id="gender_checked">
                                                                 {{-- <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.open_name') }}" data-off="{{ config('const.private_name') }}" {{ $data->status ? 'checked' : '' }}> --}}
-                                                                <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.man_name') }}" data-off="{{ config('const.women_name') }}" data-onstyle="primary" data-offstyle="danger">
-                                                                <input type="hidden" id="gender" name="gender" value="{{ $register_mode === 'create' ? old('gender') : $data->gender }}">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-4 col-form-label" for="email">メールアドレス<span class="text-danger">※</span></label>
-                                                            <div class="col-md-8">
-                                                                <input class="form-control required-text" type="text" id="email" name="email" maxlength="50" placeholder="メールアドレス" value="{{ $register_mode === 'create' ? old('email') : $data->email }}">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-4 col-form-label" for="name">パスワード<span class="text-danger">※</span></label>
-                                                            <div class="col-md-8">
-                                                                <input class="form-control required-text" type="password" id="password" name="password" maxlength="50" placeholder="名前" value="{{ $register_mode === 'create' ? old('password') : $data->password }}">
+                                                                <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.member_name') }}" data-off="{{ config('const.all_name') }}" data-onstyle="primary" data-offstyle="secondary">
+                                                                <input type="hidden" id="type" name="type" value="{{ $register_mode === 'create' ? old('type') : $data->type }}">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-10 col-md-6">
                                                         <div class="form-group row">
-                                                            <label class="col-md-4 col-form-label" for="marker_image">プロフィール画像</label>
+                                                            <label class="col-md-4 col-form-label" for="marker_image">投稿画像</label>
                                                             <div class="col-md-8 user-icon-dnd-wrapper">
                                                                 <div id="drop_area" class="drop_area">
                                                                     <div class="preview">
@@ -110,7 +107,7 @@
                                                         <input type="hidden" name="id" id="id" value="{{ $register_mode === 'edit' ? $data->id : null }}" />
                                                         {{-- <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" /> --}}
                                                         @include('admin.layouts.components.button.register', ['register_mode' => $register_mode])
-                                                        @include('admin.layouts.components.button.cancel', ['url' => "{{ route('hcs-admin.users.index') }}"])
+                                                        @include('admin.layouts.components.button.cancel', ['url' => "{{ route('hcs-admin.articles.index') }}"])
                                                     </div>
                                                 </div>
                                             </form>

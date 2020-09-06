@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    記事一覧
+    ユーザ一覧
 @endsection
 
 @section('content')
@@ -10,11 +10,14 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-3 d-flex">
-                    <div class="col-lg-2">
+                    <div class="col-8 col-lg-2">
                         <input type="text" class="form-control search-text" value="" name="id" id="id" placeholder="ID">
                     </div>
                     <div class="col-lg-2">
-                        <input type="text" class="form-control search-text" value="" name="name" id="name" placeholder="ユーザ名">
+                        <input type="text" class="form-control search-text" value="" name="name" id="name" placeholder="ニックネーム">
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control search-text" value="" name="email" id="email" placeholder="メールアドレス">
                     </div>
                     <div class="col-lg-4">
                         @include('admin.layouts.components.button.search')
@@ -26,9 +29,11 @@
                     <thead>
                         <tr role="row" class="th-text">
                             <th>ID</th>
+                            <th>プロフィール画像</th>
+                            <th>ニックネーム</th>
                             <th>Eメール</th>
+                            <th>性別</th>
                             <th>更新日</th>
-                            <th>備考</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -37,4 +42,7 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+    <script src="{{ asset('js/admin.js') }}"></script>
 @endsection

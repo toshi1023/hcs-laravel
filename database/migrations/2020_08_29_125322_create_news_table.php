@@ -20,7 +20,7 @@ class CreateNewsTable extends Migration
             $table->boolean('status')->default(false);                       // 0:非公開, 1:公開
             $table->tinyInteger('type')->unsigned()->default(0);             // 0:全員, 1:会員
             $table->integer('admin_id')->unsigned();
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);;      // 0: noフラグ, 1: 削除
+            $table->boolean('delete_flg')->default(false);;      // 0: noフラグ, 1: 削除
             $table->timestamps();
 
             // 外部キー制約

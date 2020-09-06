@@ -18,7 +18,7 @@ class CreateAdminsTable extends Migration
             $table->string('email')->unique();                                  // ID
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);          // 0: noフラグ, 1: 削除
+            $table->boolean('delete_flg')->default(false);          // 0: noフラグ, 1: 削除
             $table->timestamp('login_time')->nullable();
             $table->rememberToken();
             $table->timestamps();

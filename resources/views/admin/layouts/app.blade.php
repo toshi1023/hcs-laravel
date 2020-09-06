@@ -47,7 +47,7 @@
               </a>
               <div class="dropdown">
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="#">ユーザ一覧</a>
+                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.index') }}">ユーザ一覧</a>
                   <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.create') }}">ユーザ作成</a>
                   <a class="dropdown-item menu-list" href="#">フレンド履歴</a>
                 </div>
@@ -60,7 +60,7 @@
               <div class="dropdown">
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item menu-list" href="#">記事一覧</a>
-                  <a class="dropdown-item menu-list" href="#">記事作成</a>
+                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.articles.create') }}">記事作成</a>
                 </div>
               </div> 
             </li>
@@ -82,7 +82,7 @@
               <div class="dropdown">
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item menu-list" href="#">ニュース一覧</a>
-                  <a class="dropdown-item menu-list" href="#">ニュース作成</a>
+                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.news.create') }}">ニュース作成</a>
                 </div>
               </div> 
             </li>

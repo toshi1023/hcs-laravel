@@ -28,7 +28,7 @@ class ArticleService
     $women_only_articles = $this->ArticleService->getArticle()->where('women_only', '=', 0)->get();
 
     // 都道府県取得
-    $prefectures = $this->ArticleService->getAllQuery('prefectures')->get();
+    $prefectures = $this->ArticleService->getQuery('prefectures')->get();
 
     return [
       'articles' => $articles, 
@@ -53,7 +53,7 @@ class ArticleService
    * */
   public function getCreate($request)
   {
-    return $this->ArticleService->getAllQuery($request)->get();
+    return $this->ArticleService->getQuery($request)->get();
   }
 
   /* *
@@ -66,7 +66,7 @@ class ArticleService
     $data['article'] = $this->ArticleService->getArticle()->where('articles.id', '=' , $id)->first();
 
     // 都道府県データをすべて取得
-    $data['prefectures'] = $this->ArticleService->getAllQuery('prefectures')->get();
+    $data['prefectures'] = $this->ArticleService->getQuery('prefectures')->get();
 
     return $data;
   }

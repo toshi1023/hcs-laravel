@@ -16,10 +16,12 @@ class CreateArticlesTable extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('prefecture');
+            $table->double('latitude')->unsigned();
+            $table->double('longitude')->unsigned();
             $table->string('title', 40);
             $table->text('content');
-            $table->boolean('women_only')->default(false);
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);      // 0: noフラグ, 1: 削除
+            $table->boolean('type')->unsigned()->default(false);        // 0: 全員, 1: 会員
+            $table->boolean('delete_flg')->unsigned()->default(0);      // 0: noフラグ, 1: 削除
             // $table->integer('likes_count');
             $table->timestamps();
         });

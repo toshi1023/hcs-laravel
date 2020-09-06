@@ -8,4 +8,17 @@ return [
     'man'           => 1,
     'women_name'    => '女性',
     'man_name'      => '男性',
+
+    // 公開フラグ
+    'private'        => 0,
+    'public'       => 1,
+    'private_name'   => '非公開',
+    'public_name'  => '公開',
+    
+    // 対象フラグ
+    'all'           => 0,
+    'member'        => 1,
+    'all_name'      => '全員',
+    'member_name'   => '会員限定',
+    
 ];

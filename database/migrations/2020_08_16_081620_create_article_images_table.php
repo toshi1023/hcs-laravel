@@ -23,7 +23,7 @@ class CreateArticleImagesTable extends Migration
             $table->string('article_photo_path')->nullable();               // 画像パス
             $table->integer('article_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->tinyInteger('delete_flg')->unsigned()->default(0);      // 0: noフラグ, 1: 削除
+            $table->boolean('delete_flg')->default(false);      // 0: noフラグ, 1: 削除
 
             // 外部キー制約
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

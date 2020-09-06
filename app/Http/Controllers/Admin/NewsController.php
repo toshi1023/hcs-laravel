@@ -3,19 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use yajra\Datatables\Datatables;
 
-use App\Service\Admin\AdminService;
+use App\Service\Admin\NewsService;
 
-class AdminController extends Controller
+class NewsController extends Controller
 {
-
     protected $database;
-    protected $service;
 
-    public function __construct(AdminService $database)
+    public function __construct(NewsService $database)
     {
       Parent::__construct();
       
@@ -26,10 +21,9 @@ class AdminController extends Controller
     public function index()
     {
 
-      return view('admin.admins.index',[]);
+      return view('admin.news.index',[]);
 
     }
-    
     public function apiIndex()
     {
       // 全管理ユーザデータを更新日時順にソートして取得
@@ -41,8 +35,11 @@ class AdminController extends Controller
 
     public function create()
     {
-      return view('admin.admins.register', [
-        'register_mode' => 'create'
+      $prefectures = $this->database->getCreate('prefectures');
+
+      return view('admin.news.register', [
+        'register_mode' => 'create',
+        'prefectures'   => $prefectures,
       ]);
     }
 
@@ -88,7 +85,7 @@ class AdminController extends Controller
     {
       $data = $this->database->getEdit($user);
 
-      return view('admin.admins.register', [
+      return view('admin.users.register', [
         'register_mode' => 'edit',
         'user' => $data['user'],
         'prefectures' => $data['prefectures'],
@@ -101,7 +98,7 @@ class AdminController extends Controller
 
       if ($this->database->save($request)) {
         DB::commit();
-        return redirect()->route('hcs-admin.admins.index')->with('message', 'プロフィールの変更を保存しました');
+        return redirect()->route('hcs-admin.users.index')->with('message', 'プロフィールの変更を保存しました');
       } else {
         DB::rollBack();
         $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');

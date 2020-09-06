@@ -13,14 +13,19 @@ class ArticlesTableSeeder extends Seeder
     {
         \App\Model\Article::create([
             'prefecture' => '兵庫県',
+            'latitude'   => '132',
+            'longitude'  => '35',
             'title'      => '初投稿！',
             'content'    => '今日ヒッチハイクの専門サイトをオープンしました！どんどん盛り上げていきましょう！',
             'user_id'    => 1,
         ]);
         \App\Model\Article::create([
             'prefecture' => '兵庫県',
+            'latitude'   => '138',
+            'longitude'  => '28',
             'title'      => 'どんどん活用してください！',
             'content'    => 'ヒッチハイクが好きならば投稿は大歓迎です！',
+            'type'       => 1,
             'user_id'    => 1,
         ]);
     }

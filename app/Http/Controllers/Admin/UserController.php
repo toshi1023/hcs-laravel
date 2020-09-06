@@ -39,8 +39,11 @@ class UserController extends Controller
 
     public function create()
     {
+      $prefectures = $this->database->getCreate('prefectures');
+
       return view('admin.users.register', [
-        'register_mode' => 'create'
+        'register_mode' => 'create',
+        'prefectures'   => $prefectures,
       ]);
     }
 
