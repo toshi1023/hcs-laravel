@@ -45,7 +45,7 @@ $(function() {
         $.extend( $.fn.dataTable.defaults, {
             language: {
                 "sEmptyTable":     "データはありません。",
-                "sProcessing":   "<img style='width:50px; height:50px;' src='/images/loading/loading.gif' />", // 処理中のロード画面をカスタマイズ
+                "sProcessing":   "処理中", // 処理中のロード画面をカスタマイズ
                 "sLengthMenu":   "_MENU_ 件表示",
                 "sZeroRecords":  "データはありません。",
                 "sInfo":         " _TOTAL_ 件中 _START_ から _END_ まで表示",
