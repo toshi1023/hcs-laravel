@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use yajra\Datatables\Datatables;
+// use Yajra\DataTables\Facades\DataTables;
 
 use App\Service\Admin\UserService;
 
@@ -34,7 +35,7 @@ class UserController extends Controller
       $users = $this->database->getIndex();
 
       return Datatables::eloquent($users)->make(true);
-
+      // return DataTables::eloquent($this->mainService->searchQuery($conditions, $sort, $relations))->make();
     }
 
     public function create()
