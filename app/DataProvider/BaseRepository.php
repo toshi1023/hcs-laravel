@@ -72,7 +72,7 @@ class BaseRepository
      * 検索条件作成
      * 引数1: テーブル名, 引数2: 検索条件(array), 引数3: クエリ途中のデータ
      */
-    static public function getWhereQuery($table=null, $conditions=[], $query=null) {
+    public function getWhereQuery($table=null, $conditions=[], $query=null) {
 
         // クエリ途中のデータが無ければ、指定したモデルを変数に代入
         if(!$query) {

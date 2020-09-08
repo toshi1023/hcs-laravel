@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\AuthenticationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -52,4 +53,18 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
+    /**
+     * 未ログイン時のリダイレクト先を設定
+     */
+    public function unauthenticated($request, AuthenticationException $exception)
+   {
+       if (in_array('admin', $exception->guards())) {
+           return redirect()->guest(route('hcs-admin.login'));
+       }
+
+       if (in_array('user', $exception->guards())) {
+           return redirect()->guest(route('login'));
+       }
+   }
 }

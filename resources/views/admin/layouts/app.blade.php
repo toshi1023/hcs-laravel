@@ -86,16 +86,17 @@
                 </div>
               </div> 
             </li>
-            {{-- <li class="nav-item dropdown">
+            <li class="nav-item dropdown">
               <a class="nav-link menu-list" href="#" id="logout">ログアウト</a>
             </li>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            <form id="logout-form" action="{{ route('hcs-admin.logout') }}" method="POST" style="display: none;">
               @csrf
-            </form> --}}
+            </form>
+          {{-- @else --}}
+            <li class="nav-item">
+              <a class="nav-link menu-list" href="{{ route('hcs-admin.login') }}">ログイン</a>
+            </li>
           {{-- @endif --}}
-          <li class="nav-item">
-            <a class="nav-link menu-list" href="{{ route('hcs-admin.login') }}">ログイン</a>
-          </li>
         </ul>
       </div>
     </nav>

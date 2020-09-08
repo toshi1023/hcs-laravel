@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container card-container">
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('hcs-admin.login') }}">
         @csrf
         <div class="row justify-content-md-center">
             <div class="col-md-6">
@@ -17,10 +17,10 @@
                         
                     <div class="card-body">
                         <div class="form-group row">
-                            <label for="nickname" class="col-4 col-md-4 col-form-label text-md-right login-text">{{ __('ID') }}</label>
+                            <label for="nickname" class="col-4 col-md-4 col-form-label text-md-right login-text">{{ __('メールアドレス') }}</label>
                 
                             <div class="col-6 col-md-6">
-                                <input id="nickname" type="nickname" class="form-control @error('nickname') is-invalid @enderror" name="nickname" value="{{ old('nickname') }}" required autocomplete="nickname" autofocus>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="nickname" autofocus>
                             </div>
                         </div>
                 
