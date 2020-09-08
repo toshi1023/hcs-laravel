@@ -34,11 +34,11 @@ function getNow() {
 $(function() {
 
     // ajaxトークン初期設定
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    // $.ajaxSetup({
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     }
+    // });
 
     // Datatables日本語化
     if ($.fn.dataTable) {

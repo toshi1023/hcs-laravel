@@ -13,6 +13,7 @@ class HomeController extends Controller
 
     public function index()
     {
+        // dd(\Auth::guard());
         return view('admin/home');
     }
 

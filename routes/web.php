@@ -12,31 +12,35 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
     // 認証機能のルーティング
     Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
-    // ルートページ
-    Route::get('/home', 'HomeController@index')->name('admin_home');
+    // ログイン認証後
+    Route::middleware('auth:admin')->group(function () {
 
-    // 管理ユーザ関連のルート
-    Route::resource('admins', 'AdminController');
+        // ルートページ
+        Route::get('/home', 'HomeController@index')->name('admin_home');
 
-    // ユーザ関連のルート
-    Route::resource('users', 'UserController');
-    
-    // 記事関連のルート
-    Route::resource('articles', 'ArticleController');
-    
-    // ニュース関連のルート
-    Route::resource('news', 'NewsController');
+        // 管理ユーザ関連のルート
+        Route::resource('admins', 'AdminController');
 
-    /**
-     * Api通信ルート
-     */
-    // 管理ユーザ一覧
-    Route::get('ajax/admins', 'AdminController@apiIndex')->name('admin');
-    // ユーザ一覧
-    Route::get('ajax/users', 'UserController@apiIndex')->name('user');
+        // ユーザ関連のルート
+        Route::resource('users', 'UserController');
+        
+        // 記事関連のルート
+        Route::resource('articles', 'ArticleController');
+        
+        // ニュース関連のルート
+        Route::resource('news', 'NewsController');
 
-    // // ユーザデータのPDF出力ルート
-    // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
+        /**
+         * Api通信ルート
+         */
+        // 管理ユーザ一覧
+        Route::get('ajax/admins', 'AdminController@apiIndex')->name('admin');
+        // ユーザ一覧
+        Route::get('ajax/users', 'UserController@apiIndex')->name('user');
+
+        // // ユーザデータのPDF出力ルート
+        // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
+    });
 });
 
 
@@ -50,6 +54,7 @@ Route::namespace('Web')->group(function(){
 
     // ルートページ
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('home');
 
     Route::get('/welcome', 'HomeController@welcome')->name('welcome');
 

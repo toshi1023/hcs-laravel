@@ -26,7 +26,7 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          {{-- @if(Auth::check()) --}}
+          @if(Auth::check('admin'))
             <li class="nav-item active">
               <a class="nav-link menu-list" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
@@ -92,11 +92,11 @@
             <form id="logout-form" action="{{ route('hcs-admin.logout') }}" method="POST" style="display: none;">
               @csrf
             </form>
-          {{-- @else --}}
+          @else
             <li class="nav-item">
               <a class="nav-link menu-list" href="{{ route('hcs-admin.login') }}">ログイン</a>
             </li>
-          {{-- @endif --}}
+          @endif
         </ul>
       </div>
     </nav>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -44,6 +45,7 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+      // dd(\Session::get('admins'));
       return view('admin.auth.login');
     }
 
@@ -54,6 +56,22 @@ class LoginController extends Controller
       return Auth::guard('admin');
     }
 
-    
+    /**
+     * ログアウト処理の実行
+     */
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout();
+
+        return $this->loggedOut($request);
+    }
+
+    /**
+     * ログアウト後のリダイレクト先を設定
+     */
+    protected function loggedOut(Request $request)
+    {
+      return redirect(route('hcs-admin.login'));
+    }
 
 }
