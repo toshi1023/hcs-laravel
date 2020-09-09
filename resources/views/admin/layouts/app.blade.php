@@ -109,6 +109,10 @@
           @yield('title')
         </span>
       </div>
+      <!-- フラッシュメッセージ -->
+      @if (session('message'))
+          <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
+      @endif
     </div>
     @yield('content')
   </main>

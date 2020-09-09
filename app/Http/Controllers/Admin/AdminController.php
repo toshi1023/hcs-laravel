@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
+use App\Http\Requests\AdminCreateRequest;
 use App\Service\Admin\AdminService;
 
 class AdminController extends Controller
@@ -14,6 +15,8 @@ class AdminController extends Controller
 
     protected $database;
     protected $service;
+    // 保存対象の除外リスト
+    protected $except = ['register_mode'];
 
     public function __construct(AdminService $database)
     {
@@ -47,10 +50,12 @@ class AdminController extends Controller
     }
 
     /* ユーザ保存メソッド */
-    public function store(Request $request)
+    public function store(AdminCreateRequest $request)
     {
-      
       DB::beginTransaction();
+      // 除外処理
+      $request = $request->except($this->except);
+
       if ($this->database->save($request)){
         DB::commit();
         return redirect()->route('hcs-admin.admins.index')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
@@ -95,9 +100,12 @@ class AdminController extends Controller
       ]);
     }
 
-    public function update(Request $request, $admin)
+    public function update(AdminCreateRequest $request, $admin)
     {
       DB::beginTransaction();
+
+      // 除外処理
+      $request = $request->except($this->except);
 
       if ($this->database->save($request)) {
         DB::commit();
