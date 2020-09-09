@@ -28,7 +28,7 @@
                   @csrf
                 </form>
                 <div class="right">
-                  <p>Welcome {{ Auth::user()->nickname }} さん!</p>
+                  <p>Welcome {{ Auth::user()->name }} さん!</p>
                 </div>
             </ul>
         </nav>

@@ -54,7 +54,7 @@ Route::namespace('Web')->group(function(){
 
     // ルートページ
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('home2');
 
     Route::get('/welcome', 'HomeController@welcome')->name('welcome');
 

@@ -32,22 +32,22 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {   
         // ArticleDatabaseInterfaceをArticleRepositoryのインスタンス化で解決
-        $this->app->bind(ArticleDatabaseInterface::class, function($app) {
+        $this->app->singleton(ArticleDatabaseInterface::class, function($app) {
             return new ArticleRepository(new Article, new ArticleImage);
         });
 
         // AdminDatabaseInterfaceをAdminRepositoryのインスタンス化で解決
-        $this->app->bind(AdminDatabaseInterface::class, function($app) {
+        $this->app->singleton(AdminDatabaseInterface::class, function($app) {
             return new AdminRepository(new Admin);
         });
 
         // UserDatabaseInterfaceをUserRepositoryのインスタンス化で解決
-        $this->app->bind(UserDatabaseInterface::class, function($app) {
+        $this->app->singleton(UserDatabaseInterface::class, function($app) {
             return new UserRepository(new User);
         });
 
         // NewsDatabaseInterfaceをNewsRepositoryのインスタンス化で解決
-        $this->app->bind(NewsDatabaseInterface::class, function($app) {
+        $this->app->singleton(NewsDatabaseInterface::class, function($app) {
             return new NewsRepository(new News);
         });
     }

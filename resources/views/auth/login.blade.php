@@ -14,10 +14,10 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div class="form-group-lg row">
-            <label for="nickname" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('ニックネーム') }}</label>
+            <label for="name" class="col-md-4 col-form-label text-md-right" style="font-size: large">{{ __('ニックネーム') }}</label>
 
             <div class="col-md-6">
-                <input id="nickname" type="nickname" class="form-control @error('nickname') is-invalid @enderror" name="nickname" value="{{ old('nickname') }}" required autocomplete="nickname" autofocus>
+                <input id="name" type="nickname" class="form-control @error('nickname') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
             </div>
         </div>
 

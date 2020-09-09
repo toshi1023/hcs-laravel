@@ -35,12 +35,11 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             if (!empty($updateData)) {
                 if (!empty($filename)) {
                     // 画像をアップロード
-                    $file_upload = $this->fileStore($data['prof_photo'], $data['nickname']);
+                    $file_upload = $this->fileStore($data['prof_photo'], $data['name']);
                     $updateData->prof_photo_name = $filename;
                     $updateData->prof_photo_path = $file_upload[1];
                 }
                 $updateData->name       = $data['name'];
-                $updateData->nickname   = $data['nickname'];
                 $updateData->prefecture = $data['prefecture'];
                 $updateData->birthday   = $data['birthday'];
                 $updateData->gender     = $data['gender'];
@@ -58,14 +57,13 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             }
 
             // 画像をアップロード
-            $file_upload = $this->fileStore($data['prof_photo'], $data['nickname']);
+            $file_upload = $this->fileStore($data['prof_photo'], $data['name']);
             
             // 画像をアップロードしDBにセット
             if ($file_upload[0]){
                 $this->model->prof_photo_name  = $filename;
                 $this->model->prof_photo_path  = $file_upload[1];
                 $this->model->name        = $data['name'];
-                $this->model->nickname    = $data['nickname'];
                 $this->model->prefecture  = $data['prefecture'];
                 $this->model->birthday    = $data['birthday'];
                 $this->model->gender      = $data['gender'];

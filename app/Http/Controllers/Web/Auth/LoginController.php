@@ -45,11 +45,11 @@ class LoginController extends Controller
     }
 
     /**
-     * nickname値をログインIDに設定
+     * name値をログインIDに設定
      */
     public function username()
     {
-      return 'nickname';
+      return 'name';
     }
 
     /**
