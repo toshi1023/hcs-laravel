@@ -4,6 +4,9 @@ $(function(){
 
         // DataTables初期化
         initList(false);
+
+        // 一覧詳細ボタンクリック
+        settingDetailAjax('/community/detail/', '.btn-community');
     }
 
     // 公開フラグのvalue値設定
