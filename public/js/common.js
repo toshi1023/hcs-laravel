@@ -241,3 +241,15 @@ $(function() {
 /**
  * // @2 登録・編集画面の設定
  */
+
+ /**
+ * 指定Textが入力されているかどうか
+ * @param elm
+ * @returns {boolean}
+ */
+function isInputValue(elm) {
+    if ($(elm).val() == "" || $(elm).val() == null || $(elm).val() == undefined) {
+        return false;
+    }
+    return true;
+}

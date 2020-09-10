@@ -25,32 +25,31 @@ $(function(){
 */
 function customCheck() {
 
-    $(document).on('click', '#btn-register', function() {
-        let check = false;
+    $('#main_form').submit();
+        // let check = false;
 
-        // IDの確認アラート
-        if($('#email').val() == null){
-            alert('メールアドレスが未入力です');
-            return false;
-        }
-        // パスワードの確認アラート
-        if($('#password').val() == null){
-            alert('パスワードが未入力です');
-            return false;
-        }
+        // // IDの確認アラート
+        // if($('#email').val() == null){
+        //     alert('メールアドレスが未入力です');
+        //     return false;
+        // }
+        // // パスワードの確認アラート
+        // if($('#password').val() == null){
+        //     alert('パスワードが未入力です');
+        //     return false;
+        // }
 
-        // メールアドレスの半角英数字チェック
-        if(str.match(/^[A-Za-z0-9]*$/)){
-            check = true;
-        }else{
-            alert('メールアドレスは半角英数字で入力が必要です');
-            return false;
-        }
+        // // メールアドレスの半角英数字チェック
+        // if(str.match(/^[A-Za-z0-9]*$/)){
+        //     check = true;
+        // }else{
+        //     alert('メールアドレスは半角英数字で入力が必要です');
+        //     return false;
+        // }
 
-        if(check) {
-            $('#main_form').submit();
-        }
-    });
+        // if(check) {
+        //     $('#main_form').submit();
+        // }
 }
 
 /**

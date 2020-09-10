@@ -20,7 +20,7 @@
 <body class="body">
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" id="top_title" style="font-size: 25px; font-family: 'Cabin Sketch', cursive;" href="/hcs-admin"></a>
+      <a class="navbar-brand" id="top_title" style="font-size: 25px; font-family: 'Cabin Sketch', cursive;" href="{{ route('hcs-admin.home') }}"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -109,11 +109,27 @@
           @yield('title')
         </span>
       </div>
-      <!-- フラッシュメッセージ -->
-      @if (session('message'))
-          <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
-      @endif
     </div>
+
+    <div class="row justify-content-md-center">
+      <div class="col align-self-center col-md-7">
+        {{-- エラーメッセージ --}}
+        @if ($errors->any())
+        <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        </div>
+        @endif
+        <!-- フラッシュメッセージ -->
+        @if (session('message'))
+          <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
+        @endif
+      </div>
+    </div>
+
     @yield('content')
   </main>
   <!-- bootstrapの呼び出し -->
@@ -150,6 +166,7 @@
   @endif
 
   <!-- Scripts -->
+  <script src="{{ asset('js/vendor/short-and-sweet.min.js') }}" ></script>
   <script type="text/javascript" src="{{ asset('js/hcs.js') }}"></script>
   <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
   @yield('scripts')

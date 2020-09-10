@@ -16,7 +16,7 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
     Route::middleware('auth:admin')->group(function () {
 
         // ルートページ
-        Route::get('/home', 'HomeController@index')->name('admin_home');
+        Route::get('/home', 'HomeController@index')->name('home');
 
         // 管理ユーザ関連のルート
         Route::resource('admins', 'AdminController');
