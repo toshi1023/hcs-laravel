@@ -103,14 +103,6 @@
     </header>
   
   <main>
-    <div class="row">
-      <div class="col-12 offset-md-1 col-md-10 offset-md-1">
-        <span class="title-text">
-          @yield('title')
-        </span>
-      </div>
-    </div>
-
     <div class="row justify-content-md-center">
       <div class="col align-self-center col-md-7">
         {{-- エラーメッセージ --}}
@@ -127,6 +119,14 @@
         @if (session('message'))
           <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
         @endif
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-12 offset-md-1 col-md-10 offset-md-1">
+        <span class="title-text">
+          @yield('title')
+        </span>
       </div>
     </div>
 

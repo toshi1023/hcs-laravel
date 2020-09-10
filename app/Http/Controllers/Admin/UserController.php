@@ -24,10 +24,9 @@ class UserController extends Controller
 
     public function index()
     {
-
       return view('admin.users.index',[]);
-
     }
+    
     public function apiIndex()
     {
       // 全管理ユーザデータを更新日時順にソートして取得

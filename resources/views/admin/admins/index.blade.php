@@ -24,7 +24,7 @@
                 <hr>
                 <table class="table table-striped table-bordered datatable table-sm" id="main_list">
                     <thead>
-                        <tr role="row" class="th-text">
+                        <tr role="row">
                             <th>ID</th>
                             <th>Eメール</th>
                             <th>更新日</th>

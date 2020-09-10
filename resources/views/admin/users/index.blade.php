@@ -27,7 +27,7 @@
                 <hr>
                 <table class="table table-striped table-bordered datatable table-sm" id="main_list">
                     <thead>
-                        <tr role="row" class="th-text">
+                        <tr role="row">
                             <th>ID</th>
                             <th>プロフィール画像</th>
                             <th>ニックネーム</th>
@@ -44,5 +44,5 @@
 </div>
 @endsection
 @section('scripts')
-    <script src="{{ asset('js/admin.js') }}"></script>
+    <script src="{{ asset('js/user.js') }}"></script>
 @endsection

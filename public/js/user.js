@@ -35,7 +35,35 @@ function initList(search) {
         // 各列ごとの表示定義
         [
             {data: 'id'},
-            {data: 'prof_ptoto_path'},
+            {
+                data: function (p) {
+                    return `
+                        <a href="" data-toggle="modal" data-target="#modal${p.id}">
+                            <img src="${p.image_path}" height="45" width="65">
+                        </a>
+
+                        <div class="modal fade" id="modal${p.id}" tabindex="-1"
+                            role="dialog" aria-labelledby="label1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="label1">プロフィール画像</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <img src="${p.image_path}" id="image_modal" height="350" width="450">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
             {data: 'name'},
             {data: 'email'},
             {data: 'gender'},

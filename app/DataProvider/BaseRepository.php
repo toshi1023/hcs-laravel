@@ -2,6 +2,7 @@
 
 namespace App\DataProvider;
 
+use Carbon\Carbon;
 use App\Model\Article;
 use App\Model\ArticleImage;
 use App\Model\Admin;
@@ -194,16 +195,16 @@ class BaseRepository
                 $model = $this->model;
             }
             // 作成・更新日時を取得
-            $now = Carbon::now();
+            // $now = Carbon::now();
         
             // Updateかどうか判別
             if (key_exists('id', $data) && $data['id']) {
                 $model = $this->find($model, $data["id"]);
                 // 更新日時を格納
-                $model->updated_at = $now;
+                // $model->updated_at = $now;
             } else {
                 // 作成日時を格納
-                $model->created_at = $now;
+                // $model->created_at = $now;
             }
 
             // データを保存
@@ -212,10 +213,12 @@ class BaseRepository
 
             // コミット
             if ($transaction) \DB::commit();
-
+            
+            // リターン
+            return true;
         } catch (\Exception $e) {
-            if ($transaction) \DB::rollBack();
             \Log::error('database save error:'.$e->getMessage());
+            if ($transaction) \DB::rollBack();
             throw new \Exception($e);
         }
     }

@@ -183,8 +183,10 @@ return [
         App\Providers\NewModelServiceProvider::class,
         // PDF作成用クラス
         Barryvdh\Snappy\ServiceProvider::class,
-        //DataTables用クラス
+        // DataTables用クラス
         Yajra\DataTables\DataTablesServiceProvider::class,
+        // SQL出力用クラス
+        App\Providers\DataBaseQueryServiceProvider::class,
 
     ],
 

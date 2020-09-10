@@ -26,8 +26,9 @@ class AdminCreateRequest extends FormRequest
     {
         return [
             // Adminユーザのバリデーションチェック
-            'email' => ['required', 'email', 'max:100', new Hankaku],
+            'email' => ['required', 'email', 'max:100'],
             'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6',
         ];
     }
 }

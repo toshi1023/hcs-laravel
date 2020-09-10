@@ -20,5 +20,11 @@ return [
     'member'        => 1,
     'all_name'      => '全員',
     'member_name'   => '会員限定',
+
+    // 画像差し替えフラグ
+    'no_image'       => 'NoImage',
+    'out_image'      => 'OutImage',
+    'no_image_path'  => '',
+    'out_image_path' => '',
     
 ];

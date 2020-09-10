@@ -20,6 +20,7 @@
         "laravel/tinker": "^2.0",
         "laravelcollective/html": "^6.1",
         "league/flysystem-aws-s3-v3": "~1.0",
+        "nesbot/carbon": "^2.39",
         "yajra/laravel-datatables-oracle": "^9.10"
     },
     "require-dev": {

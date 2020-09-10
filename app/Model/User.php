@@ -45,4 +45,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Model\Article');
     }
+
+    /**
+     * 画像が設定されていない場合の差し替えパスを返す
+     * (数値からconst.phpで定義した文字列へと変換)
+     * @return string
+     */
+    public function getImagePathAttribute() {
+        if ($this->prof_photo_name == config('const.no_image'))   return config('const.no_image_path');
+        if ($this->prof_photo_name == config('const.out_image'))  return config('const.out_image_path');
+    }
 }
