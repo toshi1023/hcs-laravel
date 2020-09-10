@@ -233,10 +233,6 @@ $(function() {
         }
     });
     
-    // registerのキャンセルボタンイベント
-    $('#btn_cancel').on('click', function(){
-        location.href = $(this).data('url');
-    });
 });
 /**
  * // @2 登録・編集画面の設定

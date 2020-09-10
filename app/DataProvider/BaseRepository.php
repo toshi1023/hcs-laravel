@@ -197,11 +197,6 @@ class BaseRepository
                 $model = $this->model;
             }
 
-            // パスワードのハッシュ処理
-            if(!is_null($data['password'])) {
-                $data['password'] = Hash::make($data['password']);
-            }
-
             // 作成・更新日時を取得
             // $now = Carbon::now();
         

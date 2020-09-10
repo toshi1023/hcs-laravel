@@ -1,1 +1,1 @@
-<button type="button" class="btn btn-outline-secondary width-100" id="btn_cancel" data-url="{{ $url }}">キャンセル</button>
+<button type="button" class="btn btn-outline-secondary width-100"><a href="{{ $url }}">キャンセル</a></button>

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AdminUpdateRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class AdminUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,8 +27,6 @@ class AdminUpdateRequest extends FormRequest
         return [
             // Adminユーザの更新時バリデーションチェック
             'email' => ['required', 'email', 'max:100', Rule::unique('admins')->ignore($this->id, 'id')->where('delete_flg', '=', 0)],
-            'password' => ['min:6', 'confirmed'],
-            'password_confirmation' => ['min:6'],
         ];
     }
 }
