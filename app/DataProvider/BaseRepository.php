@@ -9,6 +9,8 @@ use App\Model\Admin;
 use App\Model\User;
 use App\Model\Prefecture;
 
+use Illuminate\Support\Facades\Hash;
+
 class BaseRepository
 {
     protected $model;
@@ -187,19 +189,25 @@ class BaseRepository
     public function getSave($table=null, $data, $transaction=true)
     {
         if ($transaction) \DB::beginTransaction();
-
+        // dd($data);
         try {
             if($table) {
                 $model = $this->getModel($table);
             } else {
                 $model = $this->model;
             }
+
+            // パスワードのハッシュ処理
+            if(!is_null($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+            }
+
             // 作成・更新日時を取得
             // $now = Carbon::now();
         
             // Updateかどうか判別
             if (key_exists('id', $data) && $data['id']) {
-                $model = $this->find($model, $data["id"]);
+                $model = $this->getFind($model, $data['id']);
                 // 更新日時を格納
                 // $model->updated_at = $now;
             } else {

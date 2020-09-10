@@ -76,9 +76,9 @@ function initList(search) {
             {
                 data: function (p) {
                     // 編集
-                    return getListLink('detail', p.id ,'hcs-admin/admins/detail/'+p.id, 'list-button') + 
-                           getListLink('edit', 0, 'hcs-admin/admins/edit/'+p.id, 'list-button') + 
-                           getListLink('remove', p.id ,'hcs-admin/admins/detail/'+p.id, 'list-button');
+                    return getListLink('detail', p.id , '', 'list-button') + 
+                           getListLink('edit', p.id, `/hcs-admin/admins/${p.id}/edit/`, 'list-button') + 
+                           getListLink('remove', p.id , '', 'list-button');
                 }
             }
         ],

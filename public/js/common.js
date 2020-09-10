@@ -118,43 +118,43 @@ $(function() {
     $('#btn_register').on('click', function() {
         // 画面内必須classを持つ項目の必須チェック
         let check = true;
-        $('.error-area').remove();
-        // 逆順での処理(下の項目から、上へ)
-        $($('.required-text').get().reverse()).each(function(index, elm){
-            // elmで指定した項目のエラーがある場合、
-            // エラーメッセージを表示する
-            if (!isInputValue(elm)) {
-                $(elm).focus();
-                $(elm).after("<p class='error-area text-danger mb-0'>"+$(elm).attr("data-title")+"は必須入力です</p>");
-                check = false;
-            }
-        })
-        // エラーがある場合は処理しない
-        if (!check) {
-            return false;
-        }
-        // 数値のみチェック
-        $($('.number-only-text').get().reverse()).each(function(index, elm){
-            if ($(elm).val() != "" && !isNumber($(elm).val())) {
-                // if (!$.isNumeric($(elm).val())) {
-                $(elm).focus();
-                $(elm).after("<p class='error-area text-danger mb-0'>"+$(elm).attr("data-title")+"は数値(0以上)のみ入力可能です</p>");
-                check = false;
-            }
-        })
-        // 数値のみチェック(空白はOK)
-        $($('.number-check').get().reverse()).each(function(index, elm){
-            if ($(elm).val() != "" && !isNumber($(elm).val())) {
-                // if (!$.isNumeric($(elm).val())) {
-                $(elm).focus();
-                $(elm).after("<p class='error-area text-danger mb-0'>"+$(elm).attr("data-title")+"は数値(0以上)のみ入力可能です</p>");
-                check = false;
-            }
-        })
-        // エラーがある場合は処理しない
-        if (!check) {
-            return false;
-        }
+        // $('.error-area').remove();
+        // // 逆順での処理(下の項目から、上へ)
+        // $($('.required-text').get().reverse()).each(function(index, elm){
+        //     // elmで指定した項目のエラーがある場合、
+        //     // エラーメッセージを表示する
+        //     if (!isInputValue(elm)) {
+        //         $(elm).focus();
+        //         $(elm).after("<p class='error-area text-danger mb-0'>"+$(elm).attr("data-title")+"は必須入力です</p>");
+        //         check = false;
+        //     }
+        // })
+        // // エラーがある場合は処理しない
+        // if (!check) {
+        //     return false;
+        // }
+        // // 数値のみチェック
+        // $($('.number-only-text').get().reverse()).each(function(index, elm){
+        //     if ($(elm).val() != "" && !isNumber($(elm).val())) {
+        //         // if (!$.isNumeric($(elm).val())) {
+        //         $(elm).focus();
+        //         $(elm).after("<p class='error-area text-danger mb-0'>"+$(elm).attr("data-title")+"は数値(0以上)のみ入力可能です</p>");
+        //         check = false;
+        //     }
+        // })
+        // // 数値のみチェック(空白はOK)
+        // $($('.number-check').get().reverse()).each(function(index, elm){
+        //     if ($(elm).val() != "" && !isNumber($(elm).val())) {
+        //         // if (!$.isNumeric($(elm).val())) {
+        //         $(elm).focus();
+        //         $(elm).after("<p class='error-area text-danger mb-0'>"+$(elm).attr("data-title")+"は数値(0以上)のみ入力可能です</p>");
+        //         check = false;
+        //     }
+        // })
+        // // エラーがある場合は処理しない
+        // if (!check) {
+        //     return false;
+        // }
         // 各機能jsの固有チェック呼び出し(各テーブルごとに設定)
         customCheck();
 

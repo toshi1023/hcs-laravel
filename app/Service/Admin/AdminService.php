@@ -49,12 +49,11 @@ class AdminService
 
   /* *
    * editページ用データを取得するメソッド
-   * 引数: 自身のID
+   * 引数: 管理ユーザのID
    * */
   public function getEdit($id)
   {
-    $data['user'] = $this->UserService->getWhereQuery('users', ['id' => $id])->first();
-    $data['prefectures'] = $this->UserService->getQuery('prefectures')->get();
+    $data = $this->AdminService->getWhereQuery('admins', ['id' => $id])->first();
 
     return $data;
   }

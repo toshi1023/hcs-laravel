@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
-use App\Http\Requests\AdminCreateRequest;
+use App\Http\Requests\Admin\AdminCreateRequest;
+use App\Http\Requests\Admin\AdminUpdateRequest;
 use App\Service\Admin\AdminService;
 
 class AdminController extends Controller
@@ -58,10 +59,10 @@ class AdminController extends Controller
 
       if ($this->database->save($request)){
         DB::commit();
-        return redirect()->route('hcs-admin.admins.index')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
+        return redirect()->route('hcs-admin.admins.index')->with('info_message', '管理ユーザを登録しました');
       } else {
         DB::rollBack();
-        $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
+        $this->messages->add('error_message', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
         return redirect()->route('hcs-admin.admins.index')->withErrors($this->messages);
       }
     }
@@ -89,19 +90,20 @@ class AdminController extends Controller
       ]);
     }
 
-    public function edit($user)
+    public function edit($admin)
     {
-      $data = $this->database->getEdit($user);
-
+      $data = $this->database->getEdit($admin);
+  
       return view('admin.admins.register', [
         'register_mode' => 'edit',
-        'user' => $data['user'],
-        'prefectures' => $data['prefectures'],
+        'data' => $data,
       ]);
     }
 
-    public function update(AdminCreateRequest $request, $admin)
+    public function update(AdminUpdateRequest $request, $admin)
     {
+      dd($request);
+      exit;
       DB::beginTransaction();
 
       // 除外処理
@@ -109,10 +111,10 @@ class AdminController extends Controller
 
       if ($this->database->save($request)) {
         DB::commit();
-        return redirect()->route('hcs-admin.admins.index')->with('message', 'プロフィールの変更を保存しました');
+        return redirect()->route('hcs-admin.admins.index')->with('info_message', '管理ユーザの変更を保存しました');
       } else {
         DB::rollBack();
-        $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');
+        $this->messages->add('error_message', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');
         
         return redirect()->route('hcs-admin.admins.index')->withErrors($this->messages);
       }

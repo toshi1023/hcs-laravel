@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\Hankaku;
+use Illuminate\Validation\Rule;
+use App\Model\Admin;
 
 class AdminCreateRequest extends FormRequest
 {
@@ -25,10 +26,10 @@ class AdminCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            // Adminユーザのバリデーションチェック
-            'email' => ['required', 'email', 'max:100'],
-            'password' => 'required|min:6|confirmed',
-            'password_confirmation' => 'required|min:6',
+            // Adminユーザの新規作成時バリデーションチェック
+            'email' => ['required', 'email', 'max:100', Rule::unique('admins')->ignore($this->id, 'id')->where('delete_flg', '=', 0)],
+            'password' => ['required', 'min:6', 'confirmed'],
+            'password_confirmation' => ['required', 'min:6'],
         ];
     }
 }
