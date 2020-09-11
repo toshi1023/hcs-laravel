@@ -72,19 +72,19 @@ class ArticleService
   }
 
   /**
-   * 記事保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+   * 記事 & 記事のイメージ保存用メソッド
+   * 第一引数:登録データ, 第二引数:ファイル名
    */
-  public function articleSave($data, $filename = null, $updateData = null)
+  public function save($data, $filename = null, $updateData = null)
   {
-    return $this->ArticleService->save($data, $filename, $updateData);
+    return $this->ArticleService->articleSave($data, $filename);
   } 
 
   /**
     * 記事削除用メソッド
     * 引数:記事ID
     * */
-    public function articleDestroy($id)
+    public function destroy($id)
     {
       return $this->ArticleService->destroy('articles', $id);
     }

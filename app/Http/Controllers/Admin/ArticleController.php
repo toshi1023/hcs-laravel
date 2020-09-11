@@ -11,6 +11,8 @@ class ArticleController extends Controller
 {
 
   protected $database;
+  // 保存対象の除外リスト
+  protected $except = ['register_mode', 'map', 'delete_flg_on', 'image_flg', 'img_delete'];
 
   public function __construct(ArticleService $database)
   {
@@ -36,7 +38,7 @@ class ArticleController extends Controller
   {
     $prefectures = $this->database->getCreate('prefectures');
 
-    return view('admin.articles.register', [
+    return view('admin.articles.create', [
         'register_mode' => 'create',
         'prefectures'   => $prefectures,
     ]);
@@ -45,16 +47,25 @@ class ArticleController extends Controller
   /* 記事保存メソッド */
   public function store(Request $request)
   {
+    dd($request);
     DB::beginTransaction();
 
     $filename = null;
 
-    if ($_FILES['article_photo']['name']){
+    // 緯度・経度を分割
+    $map = explode(',', $request->map);
+
+    // 緯度・経度を配列に追加
+    $request['latitude'] = $map[0];
+    $request['longitude'] = $map[1];
+
+    if ($_FILES['upload_image']['name']){
       // ファイル名を変数に代入
-      $filename = $_FILES['article_photo']['name'];
+      $filename = $_FILES['upload_image']['name'];
     }
 
-    if ($this->database->articleSave($request, $filename)) {
+    // 記事の保存
+    if ($this->database->save($request, $filename)) {
       DB::commit();
       return redirect()->route('articles.index')->with('message', '記事を作成しました');
     } else {
@@ -81,7 +92,7 @@ class ArticleController extends Controller
   {
     $data = $this->database->getEdit($article);
 
-    return view('admin.articles.register', [
+    return view('admin.articles.edit', [
       'register_mode' => 'edit',
       'article' => $data['article'],
       'prefectures' => $data['prefectures'],
@@ -94,6 +105,13 @@ class ArticleController extends Controller
     $article = $this->database->getEdit($article)['article'];
 
     DB::beginTransaction();
+
+    // 緯度・経度を分割
+    $map = explode(',', $request->map);
+
+    // 緯度・経度を配列に追加
+    $request['latitude'] = $map[0];
+    $request['longitude'] = $map[1];
 
     if ($this->database->articleSave($request, null, $article)) {
       DB::commit();

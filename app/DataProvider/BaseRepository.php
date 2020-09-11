@@ -181,6 +181,14 @@ class BaseRepository
         return $model::query()->where('id', $id)->first();
     }
 
+    /**
+     * 指定ID検索(boolean)
+     * 引数1:テーブル名, 引数2:ID
+     */
+    public function getExist($model, $id) {
+        return $model::query()->where('id', $id)->exists();
+    }
+
 
     /**
     * fillableに登録されているデータの保存用メソッド
@@ -189,7 +197,7 @@ class BaseRepository
     public function getSave($table=null, $data, $transaction=true)
     {
         if ($transaction) \DB::beginTransaction();
-        // dd($data);
+
         try {
             if($table) {
                 $model = $this->getModel($table);

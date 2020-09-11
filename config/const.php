@@ -26,5 +26,8 @@ return [
     'out_image'      => 'OutImage',
     'no_image_path'  => '',
     'out_image_path' => '',
+
+    // BingMapのURL
+    'bing_url'              => 'https://www.bing.com/maps',
     
 ];

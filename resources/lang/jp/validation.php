@@ -155,6 +155,15 @@ return [
       |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'email'                     => 'メールアドレス',
+        'password'                  => 'パスワード',
+        'password_confirmation'     => 'パスワード(確認用)',
+        'name'                      => 'ニックネーム',
+        'prefecture'                => '都道府県',
+        'birthday'                  => '誕生日',
+        'gender'                    => '性別',
+        
+    ],
 
 ];

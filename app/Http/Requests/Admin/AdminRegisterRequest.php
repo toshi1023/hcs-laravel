@@ -4,9 +4,8 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Model\Admin;
 
-class AdminCreateRequest extends FormRequest
+class AdminRegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,10 +25,8 @@ class AdminCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            // Adminユーザの新規作成時バリデーションチェック
+            // Adminユーザのバリデーションチェック
             'email' => ['required', 'email', 'max:100', Rule::unique('admins')->ignore($this->id, 'id')->where('delete_flg', '=', 0)],
-            'password' => ['required', 'min:6', 'confirmed'],
-            'password_confirmation' => ['required', 'min:6'],
         ];
     }
 }

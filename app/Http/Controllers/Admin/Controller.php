@@ -18,6 +18,14 @@ class Controller extends BaseController
     {
         // セッションに保存するメッセージ用メソッドをインスタンス化
         $this->messages = new MessageBag();
+    }
 
+    // パスワードをバリデート
+    public function passwordValidation($request)
+    {
+        $request->validate([
+            'password' => ['required', 'min:6', 'confirmed'],
+            'password_confirmation' => ['required', 'min:6'],
+        ]);
     }
 }

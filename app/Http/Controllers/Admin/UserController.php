@@ -40,7 +40,7 @@ class UserController extends Controller
     {
       $prefectures = $this->database->getCreate('prefectures');
 
-      return view('admin.users.register', [
+      return view('admin.users.create', [
         'register_mode' => 'create',
         'prefectures'   => $prefectures,
       ]);
@@ -49,8 +49,11 @@ class UserController extends Controller
     /* ユーザ保存メソッド */
     public function store(Request $request)
     {
-      
       DB::beginTransaction();
+
+      // パスワードをバリデーションチェック
+      $this->passwordValidation($request);
+      
       if ($this->database->save($request)){
         DB::commit();
         return redirect()->route('hcs-admin.admins.index')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
@@ -88,7 +91,7 @@ class UserController extends Controller
     {
       $data = $this->database->getEdit($user);
 
-      return view('admin.users.register', [
+      return view('admin.users.edit', [
         'register_mode' => 'edit',
         'user' => $data['user'],
         'prefectures' => $data['prefectures'],
@@ -98,6 +101,18 @@ class UserController extends Controller
     public function update(Request $request, $admin)
     {
       DB::beginTransaction();
+
+      // パスワードのハッシュ処理
+      if(!is_null($request['password'])) {
+        // バリデーションチェック
+        $this->passwordValidation($request);
+        // ハッシュ処理
+        $request['password'] = Hash::make($request['password']);
+      }
+      // パスワードが未入力の場合は保存対象から外す
+      if (is_null($request['password'])) {
+        unset($request['password']);
+      }
 
       if ($this->database->save($request)) {
         DB::commit();

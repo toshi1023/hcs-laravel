@@ -6,7 +6,6 @@ use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
 use App\Model\Article;
 use App\Model\User;
 use App\Model\Prefecture;
-use App\Model\ArticleImage;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
@@ -17,10 +16,9 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     protected $articleImage;
 
     /* モデルのインスタンス化 */
-    public function __construct(Article $article, ArticleImage $articleImage)
+    public function __construct(Article $article)
     {
         $this->model = $article;
-        $this->articleImage = $articleImage;
     }
 
     /**
@@ -44,69 +42,89 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
     /**
      * 記事保存用メソッド
-     * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+     * 第一引数:登録データ, 第二引数:ファイル名
      */
-    public function save($data, $filename = null, $updateData = null)
+    public function articleSave($data, $filename = null)
     {
         try {
-            // 更新対象データが空でない場合は、アップデート処理を実行
-            if (!empty($updateData)) {
+            // Updateかどうか判別
+            if (key_exists('id', $data) && $data['id']) {
+                $this->model = $this->getFind($this->model, $data['id']);
+            }
+
+            // データを保存
+            $this->model->fill($data);
+            $this->model->save();
+
+            // 新規作成の場合は保存した記事情報のIDを配列に追加
+            if (!key_exists('id', $data) && !$data['id']) {
+                $data['id'] = $this->model->id;
+            }
+
+            // 記事イメージの保存処理を実行
+            $this->imageSave($data, $filename);
+
+        } catch (\Exception $e) {
+            \Log::error('article save error:'.$e->getmessage());
+            return false;
+        }
+    }
+
+    /**
+     * 記事イメージ保存用メソッド
+     * 第一引数:登録データ, 第二引数:ファイル名
+     */
+    public function imageSave($data, $filename = null)
+    {
+        try {
+            // モデルをインスタンス化
+            $model = $this->getModel('article_images');
+
+            /* 更新パターン */
+            if($this->getExist($model, $data['id'])) {
+                // データが存在すれば更新処理へ
+                $model = $this->getFind($model, $data['id']);
+
+                // 画像をアップロード
+                $file_upload = $this->fileStore($data['upload_image'], \Auth::user()->name);
+                // ファイル名が設定されていなければ統一名を代入
                 if (!$filename) {
-                    $updateArticleImage = $this->articleImage->where('article_id', '=', $data['id']);
-
-                    // 画像をアップロード
-                    $file_upload = $this->fileStore($data['article_photo'], \Auth::user()->nickname);
-                    $updateArticleImage->article_photo_name = $filename;
-                    $updateArticleImage->article_photo_path = $file_upload[1];
-
-                    $updateArticleImage->save();
+                    // ファイル名を変数に代入
+                    $filename = 'NoImage';
                 }
-                $updateData->prefecture = $data['prefecture'];
-                $updateData->title      = $data['title'];
-                $updateData->content    = $data['content'];
-                $updateData->women_only = $data['women_only'];
-                $updateData->user_id    = $data['user_id'];
-                
-                $updateData->save();
+
+                $model->article_photo_name = $filename;
+                $model->article_photo_path = $file_upload[1];
+                $model->article_id = $data['id'];
+                $model->user_id = $data['user_id'];
+
+                $model->save();
 
                 return true;
             }
-            
+
+            /* 新規登録パターン */
+
             // ファイル名が設定されていなければ統一名を代入
             if (!$filename) {
                 // ファイル名を変数に代入
                 $filename = 'NoImage';
             }
 
-            $this->model->prefecture      = $data['prefecture'];
-            $this->model->title           = $data['title'];
-            $this->model->content         = $data['content'];
-            $this->model->women_only      = $data['women_only'];
-            $this->model->user_id         = $data['user_id'];
-            
-            $this->model->save();
+            $model->article_photo_name = $filename;
+            $model->article_photo_path = $file_upload[1];
+            $model->article_id = $data['id'];
+            $model->user_id = $data['user_id'];
 
-            // 画像をアップロード
-            $file_upload = $this->fileStore($data['article_photo'], \Auth::user()->nickname);
+            $model->save();
 
-            // 画像をアップロードしDBにセット
-            if ($file_upload[0]){
-                $this->articleImage->article_photo_name = $filename;
-                $this->articleImage->article_photo_path = $file_upload[1];
-                $this->articleImage->article_id    = $this->article->id;
-                $this->articleImage->user_id       = $this->article->user_id;
-
-                $this->articleImage->save();
-            }
             return true;
-
+            
         } catch (\Exception $e) {
-            \Log::error('article save error:'.$e->getmessage());
+            \Log::error('image save error:'.$e->getmessage());
             return false;
         }
-        
-        // }
-    } 
+    }
 
     /**
      * ファイルアップロード用メソッド

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AdminUpdateRequest extends FormRequest
+class UserRegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class AdminUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            // Adminユーザの更新時バリデーションチェック
+            // ユーザのバリデーションチェック
             'email' => ['required', 'email', 'max:100', Rule::unique('admins')->ignore($this->id, 'id')->where('delete_flg', '=', 0)],
         ];
     }

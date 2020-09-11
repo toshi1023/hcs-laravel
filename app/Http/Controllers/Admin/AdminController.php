@@ -7,11 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
-use App\Http\Requests\Admin\AdminCreateRequest;
-use App\Http\Requests\Admin\AdminUpdateRequest;
+use App\Http\Requests\Admin\AdminRegisterRequest;
 use App\Service\Admin\AdminService;
-
-use App\SubValidation\SubValidation;
 
 class AdminController extends Controller
 {
@@ -22,15 +19,12 @@ class AdminController extends Controller
     // 保存対象の除外リスト
     protected $except = ['register_mode'];
 
-    public function __construct(AdminService $database, SubValidation $validation)
+    public function __construct(AdminService $database)
     {
       Parent::__construct();
       
       // DB操作のクラスをインスタンス化
       $this->database = $database;
-
-      // パスワードのバリデーションクラスをインスタンス化
-      $this->validation = $validation;
     }
 
     public function index()
@@ -57,9 +51,11 @@ class AdminController extends Controller
     }
 
     /* ユーザ保存メソッド */
-    public function store(AdminCreateRequest $request)
+    public function store(AdminRegisterRequest $request)
     {
       DB::beginTransaction();
+      // パスワードをバリデーションチェック
+      $this->passwordValidation($request);
       // 除外処理
       $request = $request->except($this->except);
 
@@ -106,20 +102,20 @@ class AdminController extends Controller
       ]);
     }
 
-    public function update(AdminUpdateRequest $request, $admin)
+    public function update(AdminRegisterRequest $request, $admin)
     {
       DB::beginTransaction();
 
       // パスワードのハッシュ処理
       if(!is_null($request['password'])) {
         // バリデーションチェック
-        $request['password'] = $this->validation->passwordValidation($request);
+        $this->passwordValidation($request);
         // ハッシュ処理
         $request['password'] = Hash::make($request['password']);
       }
       // パスワードが未入力の場合は保存対象から外す
       if (is_null($request['password'])) {
-        $this->except['password'] = 'password';
+        unset($request['password']);
       }
 
       // 除外処理

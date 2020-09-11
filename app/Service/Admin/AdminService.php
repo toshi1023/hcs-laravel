@@ -67,22 +67,4 @@ class AdminService
     return $this->AdminService->getSave(null, $data, true);
   }
 
-  /*
-  ファイルアップロード用メソッド
-  第一引数:ファイル, 第二引数:フォルダ名に使用するための値
-  */
-  public function filestore($file, $foldername)
-  {
-    return $this->AdminService->filestore($file, $foldername);
-  }
-
-  /*
-  ファイル削除用メソッド
-  引数:ファイルパス
-  */
-  public function fileDelete($request)
-  {
-    return $this->AdminService->fileDelete($request);
-  }
-
 }
