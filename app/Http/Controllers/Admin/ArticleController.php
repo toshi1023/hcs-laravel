@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Service\Admin\ArticleService;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class ArticleController extends Controller
 {
@@ -24,14 +25,18 @@ class ArticleController extends Controller
   }
 
   public function index()
-  {
-      $articles = $this->database->getIndex();
-      
-      return view('admin.articles.index', [
-          'articles' => $articles['articles'],
-          'free_articles' => $articles['free_articles'],
-      ]);
+  {   
+      return view('admin.articles.index', []);
   }
+
+  public function apiIndex()
+    {
+      // 全管理ユーザデータを更新日時順にソートして取得
+      $articles = $this->database->getIndex();
+
+      return Datatables::eloquent($articles)->make(true);
+
+    }
 
   /* 記事作成メソッド */
   public function create()
@@ -62,7 +67,7 @@ class ArticleController extends Controller
       // ファイル名を変数に代入
       $filename = $_FILES['upload_image']['name'];
     }
-
+    
     // 記事の保存
     if ($this->database->save($request, $filename)) {
       DB::commit();
@@ -93,7 +98,7 @@ class ArticleController extends Controller
 
     return view('admin.articles.edit', [
       'register_mode' => 'edit',
-      'article' => $data['article'],
+      'data' => $data['article'],
       'prefectures' => $data['prefectures'],
     ]);
   }
@@ -101,7 +106,6 @@ class ArticleController extends Controller
   // 記事の変更を反映
   public function update(Request $request, $article)
   {
-    $article = $this->database->getEdit($article)['article'];
 
     DB::beginTransaction();
 
@@ -112,7 +116,13 @@ class ArticleController extends Controller
     $request['latitude'] = $map[0];
     $request['longitude'] = $map[1];
 
-    if ($this->database->articleSave($request, null, $article)) {
+    // if ($_FILES['upload_image']['name']){
+      // ファイル名を変数に代入
+      $filename = $_FILES['upload_image']['name'];
+    // }
+    // dd($filename);
+
+    if ($this->database->save($request, $filename)) {
       DB::commit();
       return redirect()->route('hcs-admin.articles.index')->with('message', '記事を保存しました');
     } else {

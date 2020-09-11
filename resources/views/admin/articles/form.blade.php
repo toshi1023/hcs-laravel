@@ -37,7 +37,7 @@
             <div class="col-md-8 form-inline" id="gender_checked">
                 {{-- <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.open_name') }}" data-off="{{ config('const.private_name') }}" {{ $data->status ? 'checked' : '' }}> --}}
                 <input type="checkbox" id="open_flg" data-toggle="toggle" data-on="{{ config('const.member_name') }}" data-off="{{ config('const.all_name') }}" data-onstyle="primary" data-offstyle="secondary">
-                <input type="hidden" id="type" name="type" value="{{ $register_mode === 'create' ? old('type') : $data->type }}">
+                <input type="hidden" id="type" name="type" value="{{ $register_mode === 'create' ? (old('type') ? old('type') : 0) : $data->type }}">
             </div>
         </div>
     </div>

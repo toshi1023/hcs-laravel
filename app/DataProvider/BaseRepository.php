@@ -209,7 +209,7 @@ class BaseRepository
             // $now = Carbon::now();
         
             // Updateかどうか判別
-            if (key_exists('id', $data) && $data['id']) {
+            if ($data['id'] && key_exists('id', $data)) {
                 $model = $this->getFind($model, $data['id']);
                 // 更新日時を格納
                 // $model->updated_at = $now;

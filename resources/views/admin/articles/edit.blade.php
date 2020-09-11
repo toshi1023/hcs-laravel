@@ -21,14 +21,16 @@
                                     記事の{{ $register_mode === 'create' ? '作成' : '編集' }}を実行します<span class="text-danger">※は必須入力</span>
                                 </div>
                                     <div class="card-body">
-                                        <form class="form-horizontal" action="{{ route('hcs-admin.articles.update') }}" method="post" id="main_form" enctype='multipart/form-data'>
+                                        <form class="form-horizontal" action="{{ route('hcs-admin.articles.update', ['article' => $data->id]) }}" method="post" id="main_form" enctype='multipart/form-data'>
                                             @method('PUT')
                                             @csrf
-                                            @include('admin.articles.form', ['register_mode' => $register_mode, 'data' => 'data' => $data])
+                                            @include('admin.articles.form', ['register_mode' => $register_mode, 'data' => $data])
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <input type="hidden" name="id" id="id" value="{{ $register_mode === 'edit' ? $data->id : null }}" />
-                                                    {{-- <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" /> --}}
+                                                    <input type="hidden" name="image_id" id="image_id" value="{{ $data->image_id ? $data->image_id : null }}" />
+                                                    <input type="hidden" name="user_id" id="user_id" value="{{ $register_mode === 'edit' ? $data->user_id : Auth::user()->id }}" />
+                                                    <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" />
                                                     @include('admin.layouts.components.button.register', ['register_mode' => $register_mode])
                                                     @include('admin.layouts.components.button.cancel', ['url' => "{{ route('hcs-admin.articles.index') }}"])
                                                 </div>
@@ -45,4 +47,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript" src="{{ asset('js/article.js') }}"></script>
 @endsection

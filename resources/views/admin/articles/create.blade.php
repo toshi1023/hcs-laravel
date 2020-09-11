@@ -28,7 +28,7 @@
                                                 <div class="col-md-12">
                                                     <input type="hidden" name="id" id="id" value="{{ $register_mode === 'edit' ? $data->id : null }}" />
                                                     <input type="hidden" name="user_id" id="user_id" value="{{ $register_mode === 'edit' ? $data->user_id : Auth::user()->id }}" />
-                                                    {{-- <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" /> --}}
+                                                    <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" />
                                                     @include('admin.layouts.components.button.register', ['register_mode' => $register_mode])
                                                     @include('admin.layouts.components.button.cancel', ['url' => "{{ route('hcs-admin.articles.index') }}"])
                                                 </div>
@@ -45,4 +45,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript" src="{{ asset('js/article.js') }}"></script>
 @endsection

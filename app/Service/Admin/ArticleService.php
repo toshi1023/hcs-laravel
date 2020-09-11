@@ -22,19 +22,7 @@ class ArticleService
   public function getIndex()
   {
     // 記事を全て取得(Userモデルのテーブルも結合して取得！)
-    $articles = $this->ArticleService->getBaseData()->get();
-
-    // 会員限定公開をされていない記事のみ取得
-    $free_articles = $this->ArticleService->getBaseData()->where('type', '=', 0)->get();
-
-    // 都道府県取得
-    $prefectures = $this->ArticleService->getQuery('prefectures')->get();
-
-    return [
-      'articles' => $articles, 
-      'free_articles' => $free_articles,
-      'prefectures' => $prefectures
-    ];
+    return $articles = $this->ArticleService->getBaseData();
   }
 
   /* *
@@ -77,7 +65,7 @@ class ArticleService
    */
   public function save($data, $filename = null, $updateData = null)
   {
-    return $this->ArticleService->articleSave($data, $filename);
+    return $this->ArticleService->save($data, $filename);
   } 
 
   /**

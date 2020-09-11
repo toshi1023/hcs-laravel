@@ -46,3 +46,7 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
+    <script type="text/javascript" src="{{ asset('js/user.js') }}"></script>
+@endsection

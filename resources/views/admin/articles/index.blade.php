@@ -29,10 +29,11 @@
                     <thead>
                         <tr role="row">
                             <th>ID</th>
+                            <th>フォト</th>
                             <th>都道府県</th>
                             <th>タイトル</th>
-                            <th>内容</th>
                             <th>公開フラグ</th>
+                            <th>投稿者</th>
                             <th>更新日</th>
                             <th>操作</th>
                         </tr>
@@ -44,5 +45,5 @@
 </div>
 @endsection
 @section('scripts')
-    <script src="{{ asset('js/user.js') }}"></script>
+    <script src="{{ asset('js/article.js') }}"></script>
 @endsection
