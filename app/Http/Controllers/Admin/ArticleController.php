@@ -29,7 +29,7 @@ class ArticleController extends Controller
       
       return view('admin.articles.index', [
           'articles' => $articles['articles'],
-          'women_only_articles' => $articles['women_only_articles'],
+          'free_articles' => $articles['free_articles'],
       ]);
   }
 
@@ -47,7 +47,6 @@ class ArticleController extends Controller
   /* 記事保存メソッド */
   public function store(Request $request)
   {
-    dd($request);
     DB::beginTransaction();
 
     $filename = null;
@@ -67,11 +66,11 @@ class ArticleController extends Controller
     // 記事の保存
     if ($this->database->save($request, $filename)) {
       DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を作成しました');
+      return redirect()->route('hcs-admin.articles.index')->with('message', '記事を作成しました');
     } else {
       DB::rollBack();
       $this->messages->add('', '記事の作成に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
+      return redirect()->route('hcs-admin.articles.index')->withErrors($this->messages);
     }
     
   }
@@ -115,11 +114,11 @@ class ArticleController extends Controller
 
     if ($this->database->articleSave($request, null, $article)) {
       DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を保存しました');
+      return redirect()->route('hcs-admin.articles.index')->with('message', '記事を保存しました');
     } else {
       DB::rollBack();
       $this->messages->add('', '記事の保存に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
+      return redirect()->route('hcs-admin.articles.index')->withErrors($this->messages);
     }
   }
 
@@ -130,11 +129,11 @@ class ArticleController extends Controller
 
     if ($this->database->articleDestroy($article)) {
       DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を削除しました');
+      return redirect()->route('hcs-admin.articles.index')->with('message', '記事を削除しました');
     } else {
       DB::rollBack();
       $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
+      return redirect()->route('hcs-admin.articles.index')->withErrors($this->messages);
     }
   }
 }

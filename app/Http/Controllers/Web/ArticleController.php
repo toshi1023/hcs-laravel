@@ -27,7 +27,7 @@ class ArticleController extends Controller
       
       return view('articles/index', [
           'articles' => $articles['articles'],
-          'women_only_articles' => $articles['women_only_articles'],
+          'free_articles' => $articles['free_articles'],
       ]);
   }
 

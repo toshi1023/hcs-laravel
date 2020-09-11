@@ -44,18 +44,18 @@
                             </tr>
                           @endforeach
                         @else
-                          @foreach ($women_only_articles as $women_only_article)
+                          @foreach ($free_articles as $free_article)
                             <tr class="list_background">
-                                <th scope="row">{{ $women_only_article->updated_at }}</th>
-                                <td>{{ $women_only_article->prefecture }}</td>
+                                <th scope="row">{{ $free_article->updated_at }}</th>
+                                <td>{{ $free_article->prefecture }}</td>
                                 <!-- 性別によって名前の色表示を切り替え -->
-                                @if($women_only_article->user->gender === 0)
-                                  <td style="color: rgb(3, 32, 173);">{{ $women_only_article->user->name }}</td>
+                                @if($free_article->user->gender === 0)
+                                  <td style="color: rgb(3, 32, 173);">{{ $free_article->user->name }}</td>
                                 @else
-                                  <td style="color: red;">{{ $women_only_article->user->name }}</td>
+                                  <td style="color: red;">{{ $free_article->user->name }}</td>
                                 @endif
-                                <td>{{ $women_only_article->title }}</td>
-                                <td><a href="{{ route('articles.show', [ 'article' => $women_only_article->id]) }}">詳細</a></td>
+                                <td>{{ $free_article->title }}</td>
+                                <td><a href="{{ route('articles.show', [ 'article' => $free_article->id]) }}">詳細</a></td>
                             </tr>
                           @endforeach
                         @endif

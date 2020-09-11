@@ -22,17 +22,17 @@ class ArticleService
   public function getIndex()
   {
     // 記事を全て取得(Userモデルのテーブルも結合して取得！)
-    $articles = $this->ArticleService->getArticle()->get();
+    $articles = $this->ArticleService->getBaseData()->get();
 
-    // 女性限定公開をされていない記事のみ取得
-    $women_only_articles = $this->ArticleService->getArticle()->where('women_only', '=', 0)->get();
+    // 会員限定公開をされていない記事のみ取得
+    $free_articles = $this->ArticleService->getBaseData()->where('type', '=', 0)->get();
 
     // 都道府県取得
     $prefectures = $this->ArticleService->getQuery('prefectures')->get();
 
     return [
       'articles' => $articles, 
-      'women_only_articles' => $women_only_articles,
+      'free_articles' => $free_articles,
       'prefectures' => $prefectures
     ];
   }
@@ -44,7 +44,7 @@ class ArticleService
   public function getShow($id)
   {
     // 記事と紐づくユーザ情報の値を取得
-    return $this->ArticleService->getArticle()->where('articles.id', '=' , $id)->first();
+    return $this->ArticleService->getBaseData()->where('articles.id', '=' , $id)->first();
   }
 
   /* *
@@ -63,7 +63,7 @@ class ArticleService
   public function getEdit($id)
   {
     //  自身の記事テーブルの値を取得
-    $data['article'] = $this->ArticleService->getArticle()->where('articles.id', '=' , $id)->first();
+    $data['article'] = $this->ArticleService->getBaseData()->where('articles.id', '=' , $id)->first();
 
     // 都道府県データをすべて取得
     $data['prefectures'] = $this->ArticleService->getQuery('prefectures')->get();
