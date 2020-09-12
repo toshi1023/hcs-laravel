@@ -8,21 +8,17 @@ class Article extends BaseModel
 {
 
   /**
-     * モデルの配列形態に追加するアクセサ(JSON形式で使用できるようにするため)
-     *
-     * @var array
-     */
-    protected $appends = ['type_name']; 
+   * モデルの配列形態に追加するアクセサ(JSON形式で使用できるようにするため)
+   *
+   * @var array
+   */
+  protected $appends = ['type_name']; 
 
   // 公開対象のアクセサ
   public function getTypeNameAttribute()
   {
-    if($this->type === config('const.all')) {
-      return config('const.all_name');
-    }
-    if($this->type === config('const.member')) {
-      return config('const.member_name');
-    }
+    if($this->type === config('const.all'))  return config('const.all_name');
+    if($this->type === config('const.member')) return config('const.member_name');
   }
 
   // userテーブルと1対多のリレーション構築(多側の設定)

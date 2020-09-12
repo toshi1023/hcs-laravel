@@ -164,16 +164,16 @@ $(function () {
 // @2 プレビュー画像削除時の設定
 $(function(){
   // 画像のセット
-  let outImage = 'http://nakamarker.localhost/images/noImage/no_image.png';
+  let outImage = 'https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no-image2.jpg';
   
   $('#delete_flg').change(function() {
       // 画像の強制削除フラグ確認
       if($('#delete_flg').prop('checked') === true) {
-          outImage = 'http://nakamarker.localhost/images/noImage/out_images.png';
+          outImage = 'https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no_image.png';
           $('#delete_flg_on').val(true);
       }
       if($('#delete_flg').prop('checked') === false) {
-          outImage = 'http://nakamarker.localhost/images/noImage/no_image.png';
+          outImage = 'https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no-image2.jpg';
           $('#delete_flg_on').val(false);
       }
       $preview = $(".preview");

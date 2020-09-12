@@ -23,6 +23,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * モデルの配列形態に追加するアクセサ(JSON形式で使用できるようにするため)
+     *
+     * @var array
+     */
+    protected $appends = ['gender_name']; 
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -47,12 +54,11 @@ class User extends Authenticatable
     }
 
     /**
-     * 画像が設定されていない場合の差し替えパスを返す
-     * (数値からconst.phpで定義した文字列へと変換)
+     * 性別を日本語名で返す
      * @return string
      */
-    public function getImagePathAttribute() {
-        if ($this->prof_photo_name == config('const.no_image'))   return config('const.no_image_path');
-        if ($this->prof_photo_name == config('const.out_image'))  return config('const.out_image_path');
+    public function getGenderNameAttribute() {
+        if ($this->gender == config('const.women'))   return config('const.women_name');
+        if ($this->gender == config('const.man'))  return config('const.man_name');
     }
 }

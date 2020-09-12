@@ -11,6 +11,8 @@ class UserService
 {
 
   protected $UserService;
+  // 保存対象の除外リスト
+  protected $except = ['password_confirmation', 'image_flg', 'delete_flg_on', 'img_delete'];
   
   /* DBリポジトリのインスタンス化 */
   public function __construct(UserDatabaseInterface $service)
@@ -61,11 +63,14 @@ class UserService
   
   /* *
    * 新規ユーザ保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+   * 第一引数:登録データ, 第二引数:ファイル名
    * */
-  public function userSave($data, $filename, $updateData = null)
+  public function save($data, $filename)
   {
-    return $this->UserService->save($data, $filename, $updateData);
+    // 除外処理
+    $data = $data->except($this->except);
+
+    return $this->UserService->save($data, $filename);
   }
 
   /*

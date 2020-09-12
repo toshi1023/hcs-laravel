@@ -28,7 +28,7 @@
         <ul class="navbar-nav">
           @if(Auth::check('admin'))
             <li class="nav-item active">
-              <a class="nav-link menu-list" href="#">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link menu-list" href="{{ route('hcs-admin.home') }}">Home</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,7 +59,7 @@
               </a>
               <div class="dropdown">
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="#">記事一覧</a>
+                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.articles.index') }}">記事一覧</a>
                   <a class="dropdown-item menu-list" href="{{ route('hcs-admin.articles.create') }}">記事作成</a>
                 </div>
               </div> 

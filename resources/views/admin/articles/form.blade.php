@@ -4,7 +4,7 @@
             <label class="col-md-4 col-form-label" for="prefecture">都道府県<span class="text-danger">※</span></label>
             <div class="col-6 col-md-6">
                 <select id="prefecture" class="form-control" name="prefecture">
-                    <option selected >都道府県を選択してください</option>
+                    <option disabled selected >都道府県を選択してください</option>
                     @foreach ($prefectures as $prefecture)
                         <option value="{{ $prefecture->name }}">{{ $prefecture->name }}</option>
                     @endforeach
@@ -27,9 +27,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="content">内容</label>
+            <label class="col-md-4 col-form-label" for="content">内容<span class="text-danger">※</span></label>
             <div class="col-md-8">
-                <textarea class="form-control" name="content" id="content" maxlength="500" rows="5" placeholder="内容">{{ $register_mode === 'create' ? old('content') : $data->content }}</textarea>
+                <textarea class="form-control" name="content" id="content" maxlength="1000" rows="5" placeholder="内容">{{ $register_mode === 'create' ? old('content') : $data->content }}</textarea>
             </div>
         </div>
         <div class="form-group row">
@@ -43,13 +43,12 @@
     </div>
     <div class="col-sm-10 col-md-6">
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="marker_image">投稿画像</label>
-            <div class="col-md-8 user-icon-dnd-wrapper">
+            <label class="col-md-3 col-form-label" for="marker_image">投稿画像</label>
+            <div class="col-md-9 user-icon-dnd-wrapper">
                 <div id="drop_area" class="drop_area">
                     <div class="preview">
                         <img id="preview" 
-                             {{-- src="{{ $data->image_file ? Storage::url("images/".$data->image_file) : asset('images/noImage/no_image.png') }}"  --}}
-                             src=""
+                             src="{{ $register_mode === 'create' ? env('AWS_NOIMAGE') : $data->article_photo_path }}" 
                              width="250" 
                              height="200"
                         >

@@ -8,12 +8,12 @@ use App\Service\Admin\ArticleService;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
+use App\Http\Requests\Admin\ArticleRegisterRequest;
+
 class ArticleController extends Controller
 {
 
   protected $database;
-  // 保存対象の除外リスト
-  protected $except = ['register_mode', 'map', 'delete_flg_on', 'image_flg', 'img_delete'];
 
   public function __construct(ArticleService $database)
   {
@@ -50,11 +50,9 @@ class ArticleController extends Controller
   }
 
   /* 記事保存メソッド */
-  public function store(Request $request)
+  public function store(ArticleRegisterRequest $request)
   {
     DB::beginTransaction();
-
-    $filename = null;
 
     // 緯度・経度を分割
     $map = explode(',', $request->map);
@@ -63,8 +61,9 @@ class ArticleController extends Controller
     $request['latitude'] = $map[0];
     $request['longitude'] = $map[1];
 
+    // アップロードファイルのファイル名を設定
+    $filename = null;
     if ($_FILES['upload_image']['name']){
-      // ファイル名を変数に代入
       $filename = $_FILES['upload_image']['name'];
     }
     
@@ -104,7 +103,7 @@ class ArticleController extends Controller
   }
 
   // 記事の変更を反映
-  public function update(Request $request, $article)
+  public function update(ArticleRegisterRequest $request, $article)
   {
 
     DB::beginTransaction();
@@ -116,12 +115,9 @@ class ArticleController extends Controller
     $request['latitude'] = $map[0];
     $request['longitude'] = $map[1];
 
-    // if ($_FILES['upload_image']['name']){
-      // ファイル名を変数に代入
-      $filename = $_FILES['upload_image']['name'];
-    // }
-    // dd($filename);
-
+    // ファイル名の設定
+    $filename = $_FILES['upload_image']['name'];
+    
     if ($this->database->save($request, $filename)) {
       DB::commit();
       return redirect()->route('hcs-admin.articles.index')->with('message', '記事を保存しました');

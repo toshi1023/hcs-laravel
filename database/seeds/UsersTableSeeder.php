@@ -30,10 +30,11 @@ class UsersTableSeeder extends Seeder
 
         \App\Model\User::create([
             'prof_photo_name' => 'NoImage',
+            'prof_photo_path' => env('AWS_NOIMAGE'),
             'name' => 'root',
             'prefecture' => '兵庫県',
             'birthday' => '1992-1-1',
-            'gender' => 0,
+            'gender' => 1,
             'email' => 'root@xxx.co.jp',
             'password' => Hash::make("root"),
         ]);

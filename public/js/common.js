@@ -45,7 +45,8 @@ $(function() {
         $.extend( $.fn.dataTable.defaults, {
             language: {
                 "sEmptyTable":     "データはありません。",
-                "sProcessing":   "処理中", // 処理中のロード画面をカスタマイズ
+                // "sProcessing":   "処理中", // 処理中のロード画面をカスタマイズ
+                "sProcessing":   `<div class="loader"><div class="ball-scale-multiple"><div></div><div></div><div></div></div></div>`, // 処理中のロード画面をカスタマイズ
                 "sLengthMenu":   "_MENU_ 件表示",
                 "sZeroRecords":  "データはありません。",
                 "sInfo":         " _TOTAL_ 件中 _START_ から _END_ まで表示",
@@ -233,6 +234,9 @@ $(function() {
         }
     });
     
+    $(document).on('click', '.btn-cancel', function() {
+        window.location.href = $('.btn-cancel').data('url');
+    });
 });
 /**
  * // @2 登録・編集画面の設定

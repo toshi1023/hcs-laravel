@@ -40,7 +40,7 @@ function initList(search) {
                 data: function (p) {
                     return `
                         <a href="" data-toggle="modal" data-target="#modal${p.id}">
-                            <img src="${p.image_path}" height="45" width="65">
+                            <img src="${p.article_photo_path}" height="45" width="65">
                         </a>
 
                         <div class="modal fade" id="modal${p.id}" tabindex="-1"
@@ -48,13 +48,13 @@ function initList(search) {
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="label1">プロフィール画像</h5>
+                                        <h5 class="modal-title" id="label1">HitcHike Photo</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.image_path}" id="image_modal" height="350" width="450">
+                                    <img src="${p.article_photo_path}" id="image_modal" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -74,19 +74,21 @@ function initList(search) {
             {
                 data: function (p) {
                     // 編集
-                    return getListLink('detail', p.id ,'hcs-admin/articles/detail/'+p.id, 'list-button') + 
-                           getListLink('edit', 0, 'hcs-admin/articles/edit/'+p.id, 'list-button') + 
-                           getListLink('remove', p.id ,'hcs-admin/articles/detail/'+p.id, 'list-button');
+                    return getListLink('detail', p.id ,`hcs-admin/articles/${p.id}`, 'list-button') + 
+                           getListLink('edit', 0, `hcs-admin/articles/${p.id}/edit`, 'list-button') + 
+                           getListLink('remove', p.id ,`hcs-admin/articles/${p.id}`, 'list-button');
                 }
             }
         ],
         // 各列ごとの装飾
         // 操作列(ボタン等)や画像項目はソート不可・text-centerを付与する
         [
-            // { targets: [1], orderable: false, className: 'text-left', width: '150px'},
-            // { targets: [2], orderable: false, className: 'text-center', width: '150px'},
-            // { targets: [6], orderable: false, className: 'text-center', width: '100px'},
-            // { targets: [7], orderable: false, className: 'text-center', width: '150px'},
+            { targets: [1], orderable: false, className: 'text-center', width: '100px'},
+            { targets: [2], orderable: false, width: '100px'},
+            { targets: [3], orderable: false, width: '160px'},
+            { targets: [4], orderable: false, width: '100px'},
+            { targets: [5], orderable: false, width: '100px'},
+            { targets: [7], orderable: false, className: 'text-center', width: '120px'},
         ],
         search
     );

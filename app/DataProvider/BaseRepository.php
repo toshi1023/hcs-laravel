@@ -192,9 +192,9 @@ class BaseRepository
 
     /**
     * fillableに登録されているデータの保存用メソッド
-    * 引数1:テーブル名, 引数2:データ, 引数3:トランザクションフラグ(同一アクションで複数テーブルを保存する場合はfalseにする)
+    * 引数1:データ, 引数2:テーブル名, 引数3:トランザクションフラグ(同一アクションで複数テーブルを保存する場合はfalseにする)
     * */
-    public function getSave($table=null, $data, $transaction=true)
+    public function getSave($data, $table=null, $transaction=true)
     {
         if ($transaction) \DB::beginTransaction();
 
@@ -236,9 +236,9 @@ class BaseRepository
 
     /**
     * 削除用メソッド
-    * 引数1:テーブル名, 引数2:削除データのID
+    * 引数1:削除データのID, 引数2:テーブル名
     * */
-    public function getDestroy($table=null, $id)
+    public function getDestroy($id, $table=null)
     {
         try {
             //  対象の記事を削除

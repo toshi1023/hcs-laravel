@@ -15,9 +15,6 @@ class AdminController extends Controller
 
     protected $database;
     protected $service;
-    protected $validation;
-    // 保存対象の除外リスト
-    protected $except = ['register_mode'];
 
     public function __construct(AdminService $database)
     {
@@ -56,8 +53,8 @@ class AdminController extends Controller
       DB::beginTransaction();
       // パスワードをバリデーションチェック
       $this->passwordValidation($request);
-      // 除外処理
-      $request = $request->except($this->except);
+      // パスワードのハッシュ処理
+      $request['password'] = Hash::make($request['password']);
 
       if ($this->database->save($request)){
         DB::commit();
@@ -117,9 +114,6 @@ class AdminController extends Controller
       if (is_null($request['password'])) {
         unset($request['password']);
       }
-
-      // 除外処理
-      $request = $request->except($this->except);
 
       if ($this->database->save($request)) {
         DB::commit();

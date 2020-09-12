@@ -64,19 +64,18 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             // モデルをインスタンス化
             $model = $this->getModel('article_images');
 
-            /* 更新パターン */
+            // Updateかどうか判別
             if($this->getExist($model, $data['image_id'])) {
-                // データが存在すれば更新処理へ
+                // 更新対象のデータを取得
                 $model = $this->getFind($model, $data['image_id']);
             }
 
-            // 画像をアップロード
-            $file_upload = $this->fileStore($data['upload_image'], \Auth::user()->name);
             // ファイル名が設定されていなければ統一名を代入
-            if (!$filename) {
-                // ファイル名を変数に代入
+            if (is_null($filename)) {
                 $filename = 'NoImage';
             }
+            // 画像をアップロード(フロントはユーザネーム、管理画面はメールアドレスをフォルダ名に設定)
+            $file_upload = $this->fileStore($data['upload_image'], \Auth::user()->name ? \Auth::user()->name : \Auth::user()->email);
 
             $model->article_photo_name = $filename;
             $model->article_photo_path = $file_upload[1];
@@ -99,18 +98,19 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     public function fileStore($file, $foldername)
     {
         if (!is_null($file)){
-        try {
-            //s3アップロード開始
-            // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
-            $path = Storage::disk('s3')->putFile(env('AWS_ARTICLE_BUCKET').$foldername, $file, 'public');
-            // アップロードしたファイルのURLを取得し、DBにセット
-            $photo_path = Storage::disk('s3')->url($path);
+            try {
+                //s3アップロード開始
+                // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
+                $path = Storage::disk('s3')->putFile(config('const.aws_article_bucket').$foldername, $file, 'public');
+                // アップロードしたファイルのURLを取得し、DBにセット
+                $photo_path = Storage::disk('s3')->url($path);
 
-        } catch (\Exception $e) {
-            \Log::error('article image file save error:'.$e->getmessage());
-            return [false, null];
-        }
-            return [true, $photo_path];
+                return [true, $photo_path];
+
+            } catch (\Exception $e) {
+                \Log::error('article image file save error:'.$e->getmessage());
+                return [false, null];
+            }
         } else {
             // アップロードファイルがなければデフォルトの画像を設定
             return [true, env('AWS_NOIMAGE')];

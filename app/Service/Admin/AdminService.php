@@ -11,6 +11,8 @@ class AdminService
 {
 
   protected $AdminService;
+  // 保存対象の除外リスト
+  protected $except = ['register_mode'];
   
   /* DBリポジトリのインスタンス化 */
   public function __construct(AdminDatabaseInterface $service)
@@ -64,7 +66,10 @@ class AdminService
    * */
   public function save($data)
   {
-    return $this->AdminService->getSave(null, $data, true);
+    // 除外処理
+    $data = $data->except($this->except);
+
+    return $this->AdminService->getSave($data);
   }
 
 }

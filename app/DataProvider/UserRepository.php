@@ -26,53 +26,34 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
 
     /**
      * ユーザ保存用メソッド
-     * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+     * 第一引数:登録データ, 第二引数:ファイル名
      */
-    public function save($data, $filename, $updateData = null)
+    public function save($data, $filename = null)
     {
+        // dd($data['upload_image']);
+        // dd($_FILES['upload_image']);
         try{
-            // 更新対象データが空でない場合は、アップデート処理を実行
-            if (!empty($updateData)) {
-                if (!empty($filename)) {
-                    // 画像をアップロード
-                    $file_upload = $this->fileStore($data['prof_photo'], $data['name']);
-                    $updateData->prof_photo_name = $filename;
-                    $updateData->prof_photo_path = $file_upload[1];
-                }
-                $updateData->name       = $data['name'];
-                $updateData->prefecture = $data['prefecture'];
-                $updateData->birthday   = $data['birthday'];
-                $updateData->gender     = $data['gender'];
-                $updateData->email      = $data['email'];
-                $updateData->password   = Hash::make($data['password']);
-                $updateData->save();
-
-                return true;
+            // Updateかどうか判別
+            if ($data['id']) {
+                $this->model = $this->getFind($this->model, $data['id']);
             }
-            
+
             // ファイル名が設定されていなければ統一名を代入
             if (!$filename) {
-            // ファイル名を変数に代入
                 $filename = 'NoImage';
             }
-
+           
             // 画像をアップロード
-            $file_upload = $this->fileStore($data['prof_photo'], $data['name']);
+            $file_upload = $this->fileStore($data['upload_image'], $data['name']);
             
-            // 画像をアップロードしDBにセット
-            if ($file_upload[0]){
-                $this->model->prof_photo_name  = $filename;
-                $this->model->prof_photo_path  = $file_upload[1];
-                $this->model->name        = $data['name'];
-                $this->model->prefecture  = $data['prefecture'];
-                $this->model->birthday    = $data['birthday'];
-                $this->model->gender      = $data['gender'];
-                $this->model->email       = $data['email'];
-                $this->model->password    = Hash::make($data['password']);
-                
-                $this->model->save();
-            }
+            // データを保存
+            $this->model->prof_photo_name = $filename;
+            $this->model->prof_photo_path = $file_upload[1];
+            $this->model->fill($data);
+            $this->model->save();
+
             return true;
+            
         } catch (\Exception $e) {
             \Log::error('database register error:'.$e->getMessage());
             return false;
@@ -88,18 +69,18 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
         if ($file){
             try {
                 //s3アップロード開始
-                // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
-                $path = Storage::disk('s3')->putFile(env('AWS_USER_BUCKET').$foldername, $file, 'public');
+                // バケットの'aws-hcs-image/User/{ニックネーム名}'フォルダへアップロード
+                $path = Storage::disk('s3')->putFile(config('const.aws_user_bucket').$foldername, $file, 'public');
                 // アップロードしたファイルのURLを取得し、DBにセット
                 $photo_path = Storage::disk('s3')->url($path);
+
+                // 画像のパスと一緒にリターン
+                return [true, $photo_path];
 
             } catch (\Exception $e) {
                 \Log::error('user image file save error:'.$e->getmessage());
                 return [false, null];
             }
-            // 画像のパスと一緒にリターン
-            return [true, $photo_path];
-
         } else {
             // アップロードファイルがなければデフォルトの画像を設定
             return [true, env('AWS_NOIMAGE')];

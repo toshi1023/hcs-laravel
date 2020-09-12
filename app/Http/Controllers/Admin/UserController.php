@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 use App\Service\Admin\UserService;
+use App\Http\Requests\UserRegisterRequest;
 
 class UserController extends Controller
 {
@@ -47,20 +48,28 @@ class UserController extends Controller
     }
 
     /* ユーザ保存メソッド */
-    public function store(Request $request)
+    public function store(UserRegisterRequest $request)
     {
       DB::beginTransaction();
 
       // パスワードをバリデーションチェック
       $this->passwordValidation($request);
+      // パスワードのハッシュ処理
+      $request['password'] = Hash::make($request['password']);
+
+      // アップロードファイルのファイル名を設定
+      $filename = null;
+      if ($_FILES['upload_image']['name']){
+        $filename = $_FILES['upload_image']['name'];
+      }
       
-      if ($this->database->save($request)){
+      if ($this->database->save($request, $filename)){
         DB::commit();
-        return redirect()->route('hcs-admin.admins.index')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
+        return redirect()->route('hcs-admin.users.index')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
       } else {
         DB::rollBack();
         $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
-        return redirect()->route('hcs-admin.admins.index')->withErrors($this->messages);
+        return redirect()->route('hcs-admin.users.index')->withErrors($this->messages);
       }
     }
 
@@ -98,7 +107,7 @@ class UserController extends Controller
       ]);
     }
 
-    public function update(Request $request, $admin)
+    public function update(UserRegisterRequest $request, $admin)
     {
       DB::beginTransaction();
 
@@ -114,14 +123,17 @@ class UserController extends Controller
         unset($request['password']);
       }
 
-      if ($this->database->save($request)) {
+      // ファイル名の設定
+      $filename = $_FILES['upload_image']['name'];
+
+      if ($this->database->save($request, $filename)) {
         DB::commit();
         return redirect()->route('hcs-admin.users.index')->with('message', 'プロフィールの変更を保存しました');
       } else {
         DB::rollBack();
         $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');
         
-        return redirect()->route('hcs-admin.admins.index')->withErrors($this->messages);
+        return redirect()->route('hcs-admin.users.index')->withErrors($this->messages);
       }
     }
 }

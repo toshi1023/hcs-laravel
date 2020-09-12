@@ -11,6 +11,8 @@ class ArticleService
 {
 
   protected $ArticleService;
+  // 保存対象の除外リスト
+  protected $except = ['register_mode', 'map', 'delete_flg_on', 'image_flg', 'img_delete'];
 
   /* DBリポジトリのインスタンス化 */
   public function __construct(ArticleDatabaseInterface $service)
@@ -65,6 +67,9 @@ class ArticleService
    */
   public function save($data, $filename = null, $updateData = null)
   {
+    // 除外処理
+    $data = $data->except($this->except);
+
     return $this->ArticleService->save($data, $filename);
   } 
 

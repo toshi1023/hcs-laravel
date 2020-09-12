@@ -6,12 +6,12 @@ $(function(){
         initList(false);
     }
 
-    // 公開フラグのvalue値設定
-    $('#open_flg').change(function() {
-        if($('#open_flg').prop('checked')) {
-            $('#status').val(1);
+    // 性別フラグのvalue値設定
+    $('#gender_flg').change(function() {
+        if($('#gender_flg').prop('checked')) {
+            $('#gender').val(1);
         } else {
-            $('#status').val(0);
+            $('#gender').val(0);
         }
     });
 });
@@ -39,7 +39,7 @@ function initList(search) {
                 data: function (p) {
                     return `
                         <a href="" data-toggle="modal" data-target="#modal${p.id}">
-                            <img src="${p.image_path}" height="45" width="65">
+                            <img src="${p.prof_photo_path}" height="45" width="65">
                         </a>
 
                         <div class="modal fade" id="modal${p.id}" tabindex="-1"
@@ -53,7 +53,7 @@ function initList(search) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.image_path}" id="image_modal" height="350" width="450">
+                                    <img src="${p.prof_photo_path}" id="image_modal" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -66,7 +66,15 @@ function initList(search) {
             },
             {data: 'name'},
             {data: 'email'},
-            {data: 'gender'},
+            {
+                data: function (p) {
+                    // 文字色を性別によって切り分け
+                    if (p.gender == 0) {
+                        return `<span style="color: red">${p.gender_name}</span>`;
+                    }
+                    return `<span style="color: blue">${p.gender_name}</span>`;
+                }
+            },
             {data: 'updated_at'},
             // 各操作列
             {
@@ -81,10 +89,11 @@ function initList(search) {
         // 各列ごとの装飾
         // 操作列(ボタン等)や画像項目はソート不可・text-centerを付与する
         [
-            // { targets: [1], orderable: false, className: 'text-left', width: '150px'},
-            // { targets: [2], orderable: false, className: 'text-center', width: '150px'},
-            // { targets: [6], orderable: false, className: 'text-center', width: '100px'},
-            // { targets: [7], orderable: false, className: 'text-center', width: '150px'},
+            { targets: [1], orderable: false, className: 'text-center', width: '150px'},
+            { targets: [2], orderable: false, width: '150px'},
+            { targets: [3], orderable: false, width: '100px'},
+            { targets: [4], orderable: false, width: '100px'},
+            { targets: [6], orderable: false, className: 'text-center', width: '150px'},
         ],
         search
     );
