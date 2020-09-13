@@ -56,7 +56,7 @@ class UserService
   public function getEdit($id)
   {
     $data['user'] = $this->UserService->getWhereQuery('users', ['id' => $id])->first();
-    $data['prefectures'] = $this->UserService->getAllQuery('prefectures')->get();
+    $data['prefectures'] = $this->UserService->getQuery('prefectures')->get();
 
     return $data;
   }

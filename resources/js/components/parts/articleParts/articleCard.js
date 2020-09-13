@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 200,
     backgroundColor: '#e5ecf8',
+    marginTop: 10,
+    marginBottom: 10,
   },
   headerTitleName: {
     fontSize: 20,
@@ -63,9 +65,9 @@ export default function ArticleCard(props) {
 
   const nickNameDesign = () => {
     if(props.article.gender === 1) {
-      return <Typography className={classes.headerTitleNameWoman}>{props.article.nickName}</Typography>
+      return <Typography className={classes.headerTitleNameWoman}>{props.article.name}</Typography>
     }
-    return <Typography className={classes.headerTitleName}>{props.article.nickName}</Typography>
+    return <Typography className={classes.headerTitleName}>{props.article.name}</Typography>
   }
 
   return (
