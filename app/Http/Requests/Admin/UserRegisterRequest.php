@@ -32,7 +32,7 @@ class UserRegisterRequest extends FormRequest
             'birthday'              => ['required', 'date'],
             'password'              => ['required', 'min:6', 'confirmed'],
             'password_confirmation' => ['required', 'min:6'],
-            'upload_image'          => 'image|mimes:jpeg,png,jpg,gif|max:1024|dimensions:max_width=250,ratio=1/1',
+            'upload_image'          => 'image|mimes:jpeg,png,jpg,gif|max:1024',
         ];
     }
 
@@ -44,7 +44,6 @@ class UserRegisterRequest extends FormRequest
         return [
             "mines"         => "指定された拡張子（PNG/JPG/GIF）ではありません。",
             "max"           => "１Ｍを超えています。",
-            "dimensions"    => "画像の比率は1：1で横は最大250pxです。",
         ];
     }
 }

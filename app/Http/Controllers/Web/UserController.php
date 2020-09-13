@@ -25,8 +25,8 @@ class UserController extends Controller
     public function index()
     {
       // 全ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex('users')->get();
-
+      $users = $this->database->getIndex();
+  
       return view('users.index',[ 'users' => $users ]);
 
     }

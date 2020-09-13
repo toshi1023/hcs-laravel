@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserList() {
+export default function UserList(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([1]);
 
@@ -43,24 +43,24 @@ export default function UserList() {
 
   return (
     <List dense className={classes.root}>
-      {[0, 1, 2, 3].map((value) => {
-        const labelId = `checkbox-list-secondary-label-${value}`;
+      {props.users.map((user) => {
+        const labelId = `checkbox-list-secondary-label-${user}`;
         return (
           <>
-            <ListItem key={value} button >
+            <ListItem key={user.id} button >
               <ListItemAvatar>
                 <Avatar
-                  alt={`Avatar n°${value + 1}`}
-                  src={'https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no_image.png'}
+                  alt={`Avatar n°${user.id + 1}`}
+                  src={user.prof_photo_path}
                   className={classes.avatar}
                 />
               </ListItemAvatar>
-              <ListItemText id={labelId} primary={`Line item ${value + 1}`} classes={{primary: classes.list}} />
+              <ListItemText id={labelId} primary={`Line item ${user.id + 1}`} classes={{primary: classes.list}} />
               <ListItemSecondaryAction>
                 <IconButton style={{backgroundColor: '#d0ddf5'}}>
                   <PersonAddIcon
                     edge="end"
-                    onChange={handleToggle(value)}
+                    onChange={handleToggle(user.id)}
                     inputProps={{ 'aria-labelledby': labelId }}
                     className={classes.icon}
                   />

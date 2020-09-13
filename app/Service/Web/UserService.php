@@ -22,11 +22,11 @@ class UserService
    * Indexページ用データを取得するメソッド
    * 引数：検索用テーブル
    */
-  public function getIndex($table)
+  public function getIndex($table=null)
   {
     // 全ユーザデータを更新日時順にソートして取得
     // dd($this->UserService->getQuery([], ['articles' => 'user_id'])->get());
-    return $this->UserService->getQuery();
+    return $this->UserService->getQuery($table)->get();
 
   }
 

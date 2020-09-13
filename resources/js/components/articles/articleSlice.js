@@ -84,12 +84,6 @@ const articleSlice = createSlice({
                 updated_at: '',             // 記事の更新日
             },
         ],
-        prefectures: [
-            {
-                id: 0,
-                name: '',
-            },
-        ],
         // articleの編集時に選択・保持するstate
         editArticle: {
             user_id: 0,                 // ユーザid
@@ -120,6 +114,7 @@ const articleSlice = createSlice({
             type_name: '',              // 公開対象名
             latitude: '',               // 緯度
             longitude: '',              // 経度
+            delete_flg: '',             // 削除フラグ
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
         },
@@ -162,7 +157,7 @@ const articleSlice = createSlice({
         builder.addCase(fetchAsyncDelete.fulfilled, (state, action) => {
             return {
                 ...state,
-                // 削除対象のtask以外のidでフィルターをかけてstateを更新
+                // 削除対象のarticle以外のidでフィルターをかけてstateを更新
                 articles: state.articles.filter((a) => a.id !== action.payload.id),
                 // 値を初期値に再設定
                 selectedArticle: {
@@ -179,6 +174,7 @@ const articleSlice = createSlice({
                     type_name: '',              // 公開対象名
                     latitude: '',               // 緯度
                     longitude: '',              // 経度
+                    delete_flg: '',             // 削除フラグ
                     created_at: '',             // 記事の作成日
                     updated_at: '',             // 記事の更新日
                 },
