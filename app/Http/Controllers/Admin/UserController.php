@@ -91,9 +91,10 @@ class UserController extends Controller
     {
       $user = $this->database->getShow($user);
 
-      return view('admin.users.show', [
-        'user' => $user,
-      ]);
+      return [
+        'status' => 1,
+        'user'   => $user,
+      ];
     }
 
     public function edit($user)
