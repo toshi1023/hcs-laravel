@@ -45,7 +45,7 @@ class UserService
    * */
   public function getCreate($table)
   {
-    return $this->UserService->getAllQuery($table);
+    return $this->UserService->getQuery($table);
   }
 
   /* *
@@ -55,7 +55,7 @@ class UserService
   public function getEdit($id)
   {
     $data['user'] = $this->UserService->getWhereQuery('users', ['id' => $id])->first();
-    $data['prefectures'] = $this->UserService->getAllQuery('prefectures')->get();
+    $data['prefectures'] = $this->UserService->getQuery('prefectures')->get();
 
     return $data;
   }

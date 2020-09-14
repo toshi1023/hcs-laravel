@@ -25,7 +25,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('status')->default(false);                  // アカウント停止フラグ
-            $table->boolean('delete_flg')->default(false);  // 0: noフラグ, 1: 削除
+            $table->text('memo')->nullable();
+            $table->boolean('delete_flg')->default(false);              // 0: noフラグ, 1: 削除
             $table->timestamp('login_time')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -76,8 +76,7 @@ function initList(search) {
             {
                 data: function (p) {
                     // 編集
-                    return getListLink('detail', p.id , '', 'list-button') + 
-                           getListLink('edit', p.id, `/hcs-admin/admins/${p.id}/edit/`, 'list-button') + 
+                    return getListLink('edit', p.id, `/hcs-admin/admins/${p.id}/edit/`, 'list-button') + 
                            getListLink('remove', p.id , '', 'list-button');
                 }
             }
@@ -99,9 +98,6 @@ function initList(search) {
  * @returns {string}
  */
 function getListLink(type, id, link, clazz) {
-    if (type == "detail") {
-        return '<a href="javascript:void(0)" class="btn btn-success btn-detail '+clazz+'" data-toggle="tooltip" title="詳細" data-placement="top" data-id="'+id+'"><i class="fas fa-search fa-fw"></i></a>';
-    }
     if (type == "edit") {
         return '<a href="'+link+'" class="btn btn-primary '+clazz+'" data-toggle="tooltip" title="編集" data-placement="top"><i class="fas fa-edit fa-fw"></i></a>';
     }

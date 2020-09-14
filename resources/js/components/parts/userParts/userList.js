@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar, Avatar, IconButton} from '@material-ui/core';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +32,7 @@ export default function UserList(props) {
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
+    
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
@@ -40,27 +41,27 @@ export default function UserList(props) {
 
     setChecked(newChecked);
   };
-
+console.log(props.user)
   return (
     <List dense className={classes.root}>
-      {props.users.map((user) => {
-        const labelId = `checkbox-list-secondary-label-${user}`;
+      {_.map(props.user.users, value => {
+        const labelId = `user-list-${value.id}`;
         return (
           <>
-            <ListItem key={user.id} button >
+            <ListItem key={value.id} button >
               <ListItemAvatar>
                 <Avatar
-                  alt={`Avatar n°${user.id + 1}`}
-                  src={user.prof_photo_path}
+                  alt={`Avatar n°${value.id}`}
+                  src={`${value.prof_photo_path}`}
                   className={classes.avatar}
                 />
               </ListItemAvatar>
-              <ListItemText id={labelId} primary={`Line item ${user.id + 1}`} classes={{primary: classes.list}} />
+              <ListItemText id={labelId} primary={`${value.name}`} classes={{primary: classes.list}} />
               <ListItemSecondaryAction>
                 <IconButton style={{backgroundColor: '#d0ddf5'}}>
                   <PersonAddIcon
                     edge="end"
-                    onChange={handleToggle(user.id)}
+                    onChange={handleToggle(value.id)}
                     inputProps={{ 'aria-labelledby': labelId }}
                     className={classes.icon}
                   />

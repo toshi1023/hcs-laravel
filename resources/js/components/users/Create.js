@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader,CardContent} from '@material-ui/core';
+import {useDropzone} from 'react-dropzone';
 import styled from "styled-components";
 import HcsAppBar from '../parts/appBar';
 import FileUploads from '../parts/fileUpload';
@@ -39,6 +40,15 @@ const useStyles = makeStyles((theme) => ({
         width: 100,
         fontSize: 15
     },
+    preview: {
+        paddingTop: 30,
+        paddingLeft: 30,
+        paddingBottom: 15
+    },
+    fileText: {
+        paddingLeft: 30,
+        fontSize: 15,
+    }
 }));
 
 const Title = styled.h1`
@@ -48,6 +58,14 @@ const Title = styled.h1`
 export default function UserCreate() {
   const classes = useStyles();
 
+    /**
+     * ファイルのドラッグ&ドロップ設定
+     */
+    const {acceptedFiles, getRootProps, getInputProps} = useDropzone()
+    const files = acceptedFiles.map(file => (
+        <li className={classes.fileText}>{file.path}</li>
+    ));
+        console.log(getRootProps)
   return (
     <>
         <HcsAppBar />
@@ -119,6 +137,22 @@ export default function UserCreate() {
                                     <InputLabel htmlFor="input-with-icon-adornment" style={{fontSize: 15}}>プロフィール画像</InputLabel>
                                     {/* <FileUploads /> */}
                                 </FormControl>
+                            </div>
+                            <div className="container">
+                                <div {...getRootProps({className: 'dropzone'})}>
+                                    <input {...getInputProps()} />
+                                    <div className={classes.preview}>
+                                        <img id="preview" 
+                                            src=""
+                                            width="250" 
+                                            height="200"
+                                        />
+                                    </div>
+                                </div>
+                                <span className={classes.fileText}>ファイルをドラッグしてください</span>
+                                <ul>
+                                    {files}
+                                </ul>
                             </div>
                         </CardContent>
                     </Grid>

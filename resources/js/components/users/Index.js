@@ -33,7 +33,7 @@ export default function User() {
         fetchUserProf()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
-    console.log(users)
+
     // ユーザ一覧を生成
     const renderUsers = () => {
         return (
