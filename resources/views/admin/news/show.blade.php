@@ -3,18 +3,12 @@
     <div class="modal-dialog modal-success modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">ユーザ詳細データ</h5>
+                <h5 class="modal-title">ニュース詳細データ</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
-
-                <ul class="list-inline font-weight-bold">
-                    <li class="list-inline-item">ユーザ名</li>
-                    <li class="list-inline-item"><span id="detail_name" class="detail-view"></span> さん</li>
-                    <li class="list-inline-item">（<span id="detail_gender" class="detail-view"></span>）</li>
-                </ul>
 
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
@@ -28,33 +22,21 @@
                         <div class="row">
                             <div class="col-10 col-sm-5">
                                 <dl class="row">
-                                    <dt class="col-3 text-right">都道府県</dt>
-                                    <dd class="col-9"><span id="detail_prefecture" class="detail-view"></span></dd>
+                                    <dt class="col-3 text-right">種別</dt>
+                                    <dd class="col-9"><span id="detail_type" class="detail-view"></span></dd>
                                 </dl>
                                 <dl class="row">
-                                    <dt class="col-3 text-right">生年月日</dt>
-                                    <dd class="col-9"><span id="detail_birthday" class="detail-view"></span></dd>
+                                    <dt class="col-3 text-right">タイトル</dt>
+                                    <dd class="col-9"><span id="detail_title" class="detail-view"></span></dd>
                                 </dl>
                                 <dl class="row">
                                     <dt class="col-3 text-right">公開ステータス</dt>
                                     <dd class="col-9"><span id="detail_status" class="detail-view"></span></dd>
                                 </dl>
                                 <dl class="row">
-                                    <dt class="col-3 text-right">メールアドレス</dt>
-                                    <dd class="col-9"><span id="detail_email" class="detail-view"></span></dd>
+                                    <dt class="col-3 text-right">更新日</dt>
+                                    <dd class="col-9"><span id="detail_updated_at" class="detail-view"></span></dd>
                                 </dl>
-                                <dl class="row">
-                                    <dt class="col-3 text-right">登録日時</dt>
-                                    <dd class="col-9"><span id="detail_created_at" class="detail-view"></span></dd>
-                                </dl>
-                                <dl class="row">
-                                    <dt class="col-3 text-right">最終ログイン日時</dt>
-                                    <dd class="col-9"><span id="detail_login_time" class="detail-view"></span></dd>
-                                </dl>
-                                {{-- <dl class="row">
-                                    <dt class="col-4 text-right">ユーザエージェント</dt>
-                                    <dd class="col-8"><span id="detail_user_agent" class="detail-view"></span></dd>
-                                </dl> --}}
                                 <dl class="row">
                                     <dt class="col-3 text-right">備考</dt>
                                     <dd class="col-9"><span id="detail_memo" class="detail-view"></span></dd>
@@ -62,10 +44,8 @@
                             </div>
                             <div class="col-10 col-sm-7">
                                 <dl class="row">
-                                    <dt class="col-3 text-right">画像</dt>
-                                    <div class="col-9">
-                                        <img id="detail_image_file" src="" width="300" height="250" class="detail-view">
-                                    </div>
+                                    <dt class="col-3 text-right">内容</dt>
+                                    <dd class="col-9"><span id="detail_content" class="detail-view"></span></dd>
                                 </dl>
                             </div>
                         </div>
@@ -76,8 +56,8 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">閉じる</button>
             </div>
-            {{-- ユーザIDの値保持に利用 --}}
-            <span id="user_id" data-id=""></span>
+            {{-- ニュースIDの値保持に利用 --}}
+            <span id="news_id" data-id=""></span>
         </div>
         <!-- /.modal-content-->
     </div>

@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    {{-- CoreUI --}}
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css">
 </head>
 <body class="body">
   <header>
@@ -81,7 +83,7 @@
               </a>
               <div class="dropdown">
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="#">ニュース一覧</a>
+                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.news.index') }}">ニュース一覧</a>
                   <a class="dropdown-item menu-list" href="{{ route('hcs-admin.news.create') }}">ニュース作成</a>
                 </div>
               </div> 
@@ -146,6 +148,8 @@
   {{-- ajax --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
+  {{-- CoreUI --}}
+  <script src="https://unpkg.com/@coreui/coreui/dist/js/coreui.bundle.min.js"></script>
   {{-- トグルメニューの閉じる操作(リンク押下後) --}}
   <script>
     $(document).on('click','.navbar-collapse',function(e) {

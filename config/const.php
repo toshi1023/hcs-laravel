@@ -11,15 +11,27 @@ return [
 
     // 公開フラグ
     'private'        => 0,
-    'public'       => 1,
+    'public'         => 1,
     'private_name'   => '非公開',
-    'public_name'  => '公開',
+    'public_name'    => '公開',
+
+    // アカウント停止フラグ
+    'available'         => 0,
+    'unavailable'       => 1,
+    'available_name'    => '有効',
+    'unavailable_name'  => '停止中',
     
     // 対象フラグ
     'all'           => 0,
     'member'        => 1,
     'all_name'      => '全員',
     'member_name'   => '会員限定',
+
+    // ニュースの種別フラグ
+    'official'          => 1,
+    'alert'             => 2,
+    'official_name'     => '公式情報',
+    'alert_name'        => '警告',
 
     // 画像差し替えフラグ
     'no_image'       => 'NoImage',

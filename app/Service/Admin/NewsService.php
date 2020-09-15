@@ -11,6 +11,8 @@ class NewsService
 {
 
   protected $NewsService;
+  // 保存対象の除外リスト
+  protected $except = [];
   
   /* DBリポジトリのインスタンス化 */
   public function __construct(NewsDatabaseInterface $service)
@@ -49,41 +51,22 @@ class NewsService
 
   /* *
    * editページ用データを取得するメソッド
-   * 引数: 自身のID
+   * 引数: ニュースID
    * */
   public function getEdit($id)
   {
     $data['news'] = $this->NewsService->getWhereQuery('news', ['id' => $id])->first();
-    $data['prefectures'] = $this->NewsService->getAllQuery('prefectures')->get();
+    $data['prefectures'] = $this->NewsService->getQuery('prefectures')->get();
 
     return $data;
   }
   
   /* *
    * 新規ユーザ保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+   * 第一引数:登録データ, 第二引数:ファイル名
    * */
-  public function save($data, $filename, $updateData = null)
+  public function save($data, $filename)
   {
-    return $this->NewsService->save($data, $filename, $updateData);
+    return $this->NewsService->save($data, $filename);
   }
-
-  /*
-  ファイルアップロード用メソッド
-  第一引数:ファイル, 第二引数:フォルダ名に使用するための値
-  */
-  public function filestore($file, $foldername)
-  {
-    return $this->NewsService->filestore($file, $foldername);
-  }
-
-  /*
-  ファイル削除用メソッド
-  引数:ファイルパス
-  */
-  public function fileDelete($request)
-  {
-    return $this->NewsService->fileDelete($request);
-  }
-
 }

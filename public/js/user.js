@@ -94,31 +94,38 @@ function setDetailView(data, button) {
     /* 
      *   モーダルに表示する会員情報
      */
-        $('#detail_name').html(data.name);
-        $('#detail_gender').html(data.gender_name);
-        $('#detail_prefecture').html(data.prefecture);
-        $('#detail_birthday').html(data.birthday);
-        $('#detail_status').html(data.status_name);
-        $('#detail_email').html(data.email);
-        $('#detail_login_time').html(data.login_time);
-        $('#detail_created_at').html(data.created_at);
-        $('#detail_image_file').attr('src', data.prof_photo_path);
+        $('#detail_name').html(data.user.name);
+        $('#detail_gender').html(data.user.gender_name);
+        $('#detail_prefecture').html(data.user.prefecture);
+        $('#detail_birthday').html(data.user.birthday);
+        $('#detail_status').html(data.user.status_name);
+        $('#detail_email').html(data.user.email);
+        $('#detail_login_time').html(data.user.login_time);
+        $('#detail_created_at').html(data.user.created_at);
+        $('#detail_image_file').attr('src', data.user.prof_photo_path);
         // $('#detail_user_agent').html(data.user_agent);
-        $('#detail_memo').html(data.memo);
-        $('#user_id').data('id', data.id);              // 各タグで共有
+        $('#detail_memo').html(data.user.memo);
+        $('#user_id').data('id', data.user.id);              // 各タグで共有
 
         // 性別によって文字色を変更
-        if(data.gender == 0) {
+        if(data.user.gender == 0) {
             $('#detail_gender').css('color','red');
         }
-        if(data.gender == 1) {
+        if(data.user.gender == 1) {
             $('#detail_gender').css('color','blue');
         }
+        // アカウントステータスによって文字色を変更
+        if(data.user.status == 0) {
+            $('#detail_status').css('color','blue');
+        }
+        if(data.user.status == 1) {
+            $('#detail_status').css('color','red');
+        }
+
         $('#detail_modal').modal('show');
-        console.log(data)
 
     /* 
-     *   "詳細"モーダルの表示処理("登録場所"タブ)
+     *   "詳細"モーダルの表示処理("フレンド一覧"タブ)
      */
         // if(button == '.btn-detail') {
         //     // 過去に表示したテーブルのリセット
@@ -249,9 +256,9 @@ function initList(search) {
                             <img src="${p.prof_photo_path}" height="45" width="65">
                         </a>
 
-                        <div class="modal fade" id="modal${p.id}" tabindex="-1"
+                        <div class="modal" id="modal${p.id}" tabindex="-1"
                             role="dialog" aria-labelledby="label1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-dialog modal-warning modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="label1">プロフィール画像</h5>
@@ -287,9 +294,9 @@ function initList(search) {
             {
                 data: function (p) {
                     // 編集
-                    return getListLink('detail', p.id ,'hcs-admin/admins/detail/'+p.id, 'list-button') + 
-                           getListLink('edit', 0, 'hcs-admin/admins/edit/'+p.id, 'list-button') + 
-                           getListLink('remove', p.id ,'hcs-admin/admins/detail/'+p.id, 'list-button');
+                    return getListLink('detail', p.id ,`admins/${p.id}`, 'list-button') + 
+                           getListLink('edit', 0, `admins/${p.id}/edit`, 'list-button') + 
+                           getListLink('remove', p.id ,`admins/${p.id}`, 'list-button');
                 }
             }
         ],

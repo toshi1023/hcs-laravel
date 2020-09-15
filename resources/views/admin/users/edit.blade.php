@@ -30,7 +30,7 @@
                                                     <input type="hidden" name="id" id="id" value="{{ $register_mode === 'edit' ? $data->id : null }}" />
                                                     {{-- <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" /> --}}
                                                     @include('admin.layouts.components.button.register', ['register_mode' => $register_mode])
-                                                    @include('admin.layouts.components.button.cancel', ['url' => "{{ route('hcs-admin.users.index') }}"])
+                                                    @include('admin.layouts.components.button.cancel', ['url' => "/hcs-admin/users"])
                                                 </div>
                                             </div>
                                         </form>

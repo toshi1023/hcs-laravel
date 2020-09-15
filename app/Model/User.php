@@ -27,7 +27,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ['gender_name']; 
+    protected $appends = ['gender_name', 'status_name']; 
 
     /**
      * The attributes that should be hidden for arrays.
@@ -60,5 +60,14 @@ class User extends Authenticatable
     public function getGenderNameAttribute() {
         if ($this->gender == config('const.women'))   return config('const.women_name');
         if ($this->gender == config('const.man'))  return config('const.man_name');
+    }
+
+    /**
+     * アカウントステータスを日本語名で返す
+     * @return string
+     */
+    public function getStatusNameAttribute() {
+        if ($this->status == config('const.available'))   return config('const.available_name');
+        if ($this->status == config('const.unavailable'))  return config('const.unavailable_name');
     }
 }

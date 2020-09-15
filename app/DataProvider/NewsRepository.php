@@ -17,7 +17,7 @@ class NewsRepository extends BaseRepository implements NewsDatabaseInterface
     }
 
     /**
-     * adminsページの一覧データを取得
+     * newsページの一覧データを取得
      */
     public function getBaseData() {
         return $this->getQuery();

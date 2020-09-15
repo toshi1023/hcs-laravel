@@ -236,19 +236,22 @@ class BaseRepository
 
     /**
     * 削除用メソッド
-    * 引数1:削除データのID, 引数2:テーブル名
+    * 引数1:削除データのID, 引数2:テーブル名, 引数3:トランザクションフラグ
     * */
-    public function getDestroy($id, $table=null)
+    public function getDestroy($id, $table=null, $transaction=true)
     {
+        if ($transaction) \DB::beginTransaction();
+
         try {
             //  対象の記事を削除
-            if($table) {
-                $this->getModel($table)->where('id', '=', $id)->delete();
-            } else {
-                $this->model->where('id', '=', $id)->delete();
-            }
+            $data = $this->getFind($this->getModel($table), $id);
+            $data->delete_flg = 1;
+            $data->save();
+
+            if ($transaction) \DB::commit();
             return true;
         } catch (\Exception $e) {
+            if ($transaction) \DB::rollBack();
             \Log::error($table.' destroy error:'.$e->getmessage());
             return false; 
         }

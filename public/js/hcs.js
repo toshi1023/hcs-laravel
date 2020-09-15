@@ -255,7 +255,7 @@ function settingDetailAjax(url, button) {
             .done(function(response){
                 if (response.status == 1) {
                     // 各機能別jsで定義する
-                    setDetailView(response.user, button);
+                    setDetailView(response, button);
                 } else {
                     alert('no data error');
                 }

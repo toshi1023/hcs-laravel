@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 use App\Service\Admin\NewsService;
 
@@ -20,14 +21,28 @@ class NewsController extends Controller
 
     public function index()
     {
-      return view('admin.news.index',[]);
+      // 種別のリスト
+      $type = [
+        ['id' => config('const.official'),      'name' => config('const.official_name')],
+        ['id' => config('const.alert'), 'name' => config('const.alert_name')],
+      ];
+      // 公開ステータスのリスト
+      $status = [
+        ['id' => config('const.private'),      'name' => config('const.private_name')],
+        ['id' => config('const.public'),       'name' => config('const.public_name')],
+      ];
+      
+      return view('admin.news.index',[
+        'type_list'   => $type,
+        'status_list' => $status,
+      ]);
     }
     public function apiIndex()
     {
-      // 全管理ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex();
+      // 全ニュースを更新日時順にソートして取得
+      $news = $this->database->getIndex();
 
-      return Datatables::eloquent($users)->make(true);
+      return Datatables::eloquent($news)->make(true);
 
     }
 
@@ -48,44 +63,31 @@ class NewsController extends Controller
       DB::beginTransaction();
       if ($this->database->save($request)){
         DB::commit();
-        return redirect()->route('hcs-admin.admins.index')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
+        return redirect()->route('hcs-admin.news.index')->with('message', 'ニュースを作成しました');
       } else {
         DB::rollBack();
-        $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
-        return redirect()->route('hcs-admin.admins.index')->withErrors($this->messages);
+        $this->messages->add('', 'ニュースの作成に失敗しました。管理者に問い合わせてください');
+        return redirect()->route('hcs-admin.news.index')->withErrors($this->messages);
       }
     }
 
-    public function pdf()
+    public function show($news)
     {
-      echo "test";
-      // 全ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex()->get();
-      $pdf = \PDF::loadView('/layouts/pdf_template');
+      $news = $this->database->getShow($news);
 
-      // ブラウザ上で開く
-      return $pdf->inline('thisis.pdf');
-
-      // ダウンロードする場合
-      // return $pdf->download('download.pdf');
+      return [
+        'status' => 1,
+        'news' => $news,
+      ];
     }
 
-    public function show($user)
+    public function edit($news)
     {
-      $user = $this->database->getShow($user);
+      $data = $this->database->getEdit($news);
 
-      return view('admin.users.show', [
-        'user' => $user,
-      ]);
-    }
-
-    public function edit($user)
-    {
-      $data = $this->database->getEdit($user);
-
-      return view('admin.users.register', [
+      return view('admin.news.register', [
         'register_mode' => 'edit',
-        'user' => $data['user'],
+        'news' => $data['news'],
         'prefectures' => $data['prefectures'],
       ]);
     }

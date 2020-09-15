@@ -30,7 +30,7 @@
                                                     <input type="hidden" name="user_id" id="user_id" value="{{ $register_mode === 'edit' ? $data->user_id : Auth::user()->id }}" />
                                                     <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" />
                                                     @include('admin.layouts.components.button.register', ['register_mode' => $register_mode])
-                                                    @include('admin.layouts.components.button.cancel', ['url' => "hcs-admin/articles"])
+                                                    @include('admin.layouts.components.button.cancel', ['url' => "/hcs-admin/articles"])
                                                 </div>
                                             </div>
                                         </form>
