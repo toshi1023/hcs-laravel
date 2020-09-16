@@ -22,7 +22,7 @@ export default function TopImageSlider() {
   return (
     <Slider {...settings}>
         <Grid container justify="center">
-            <Grid item xs={10} sm={6}>
+            <Grid item xs={12} sm={6}>
                 <div>
                     <h1>香川県からレビュー！</h1>
                     <img src="https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no_image.png"></img>
@@ -30,14 +30,20 @@ export default function TopImageSlider() {
             </Grid>
         </Grid>
         <Grid container justify="center">
-            <div>
-                <h3>2</h3>
-            </div>
+            <Grid item xs={12} sm={6}>
+                <div>
+                    <h1>徳島県からレビュー！</h1>
+                    <img src="https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no_image.png"></img>
+                </div>
+            </Grid>
         </Grid>
         <Grid container justify="center">
-            <div>
-                <h3>3</h3>
-            </div>
+            <Grid item xs={12} sm={6}>
+                <div>
+                    <h1>岡山県からレビュー！</h1>
+                    <img src="https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no_image.png"></img>
+                </div>
+            </Grid>
         </Grid>
             {/* <div>
                 <h3>4</h3>

@@ -18,7 +18,7 @@ function Home() {
         <>
             <HcsAppBar />
             <Grid container className={classes.gridContainer} justify="center">
-                <Grid item xs={10} sm={8}>
+                <Grid item xs={8} sm={8}>
                     <TopImageSlider />
                 </Grid>
             </Grid>

@@ -5,7 +5,7 @@ import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid,
 import {useDropzone} from 'react-dropzone';
 import styled from "styled-components";
 import HcsAppBar from '../parts/appBar';
-import FileUploads from '../parts/fileUpload';
+import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/switch';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,7 +70,7 @@ export default function UserCreate() {
     <>
         <HcsAppBar />
         <Grid container justify="center">
-        <Grid item xs={11} sm={8} md={8} lg={8}>
+        <Grid item xs={12} sm={8} md={8} lg={8}>
             <Card className={classes.root}>
                 <CardHeader 
                     title={
@@ -79,7 +79,7 @@ export default function UserCreate() {
                     className={classes.header}
                 />
                 <Grid container>
-                    <Grid item sm={12} md={12} lg={6}>
+                    <Grid item sm={12} md={8} lg={6}>
                         <CardContent>
                             <Link to="/login" style={{fontSize: 13, width: 150}}>ログインはこちら</Link>
                             <div>
@@ -135,25 +135,9 @@ export default function UserCreate() {
                             <div>
                                 <FormControl className={classes.margin}>
                                     <InputLabel htmlFor="input-with-icon-adornment" style={{fontSize: 15}}>プロフィール画像</InputLabel>
-                                    {/* <FileUploads /> */}
                                 </FormControl>
                             </div>
-                            <div className="container">
-                                <div {...getRootProps({className: 'dropzone'})}>
-                                    <input {...getInputProps()} />
-                                    <div className={classes.preview}>
-                                        <img id="preview" 
-                                            src=""
-                                            width="250" 
-                                            height="200"
-                                        />
-                                    </div>
-                                </div>
-                                <span className={classes.fileText}>ファイルをドラッグしてください</span>
-                                <ul>
-                                    {files}
-                                </ul>
-                            </div>
+                            <ProfileDropzone />
                         </CardContent>
                     </Grid>
                     <Grid item sm={12} md={12} lg={6}>

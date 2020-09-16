@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => ['api']], function() {
-    Route::resource('articles' , 'Api\ArticleController');
-    Route::resource('users' , 'Api\UserController');
+Route::group(['middleware' => ['api'], 'prefix'], function() {
+    Route::resource('api_articles' , 'Api\ArticleController');
+    Route::resource('api_users' , 'Api\UserController');
 });
