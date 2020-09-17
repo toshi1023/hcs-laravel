@@ -103,4 +103,14 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             return false;     
         }
     }
+
+    /**
+     * usersページのフレンド一覧データを取得
+     * 引数：ユーザID
+     */
+    public function getFriendsQuery($user_id) {
+        return $this->model->leftjoin('friends', 'users.id', '=', 'friends.user_id_requester')
+                           ->select('users.*', 'friends.id as frend_id', 'friends.user_id_target')
+                           ->where('friends.user_id_requester', '=', $user_id);
+    }
 }

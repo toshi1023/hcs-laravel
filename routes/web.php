@@ -41,6 +41,8 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         Route::get('ajax/articles', 'ArticleController@apiIndex')->name('api_article');
         // ニュース一覧
         Route::get('ajax/news', 'NewsController@apiIndex')->name('api_news');
+        // フレンド一覧
+        Route::get('ajax/users/{user}/friends', 'UserController@apiFriendsIndex')->name('api_friends');
 
         // // ユーザデータのPDF出力ルート
         // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');

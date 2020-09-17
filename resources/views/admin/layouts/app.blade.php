@@ -20,119 +20,121 @@
     <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css">
 </head>
 <body class="body">
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" id="top_title" style="font-size: 25px; font-family: 'Cabin Sketch', cursive;" href="{{ route('hcs-admin.home') }}"></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          @if(Auth::check('admin'))
-            <li class="nav-item active">
-              <a class="nav-link menu-list" href="{{ route('hcs-admin.home') }}">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                管理ユーザ
-              </a>
-              <div class="dropdown">
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.index') }}">管理ユーザ一覧</a>
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.create') }}">管理ユーザ作成</a>
+  <div class="col-12">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" id="top_title" style="font-size: 25px; font-family: 'Cabin Sketch', cursive;" href="{{ route('hcs-admin.home') }}"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            @if(Auth::check('admin'))
+              <li class="nav-item active">
+                <a class="nav-link menu-list" href="{{ route('hcs-admin.home') }}">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  管理ユーザ
+                </a>
+                <div class="dropdown">
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.index') }}">管理ユーザ一覧</a>
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.create') }}">管理ユーザ作成</a>
+                  </div>
                 </div>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ユーザ
-              </a>
-              <div class="dropdown">
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.index') }}">ユーザ一覧</a>
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.create') }}">ユーザ作成</a>
-                  <a class="dropdown-item menu-list" href="#">フレンド履歴</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  ユーザ
+                </a>
+                <div class="dropdown">
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.index') }}">ユーザ一覧</a>
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.create') }}">ユーザ作成</a>
+                    <a class="dropdown-item menu-list" href="#">フレンド履歴</a>
+                  </div>
                 </div>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                記事
-              </a>
-              <div class="dropdown">
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.articles.index') }}">記事一覧</a>
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.articles.create') }}">記事作成</a>
-                </div>
-              </div> 
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                メッセージ
-              </a>
-              <div class="dropdown">
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="#">メッセージ履歴</a>
-                  <a class="dropdown-item menu-list" href="#">メッセージ設定</a>
-                </div>
-              </div> 
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ニュース
-              </a>
-              <div class="dropdown">
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.news.index') }}">ニュース一覧</a>
-                  <a class="dropdown-item menu-list" href="{{ route('hcs-admin.news.create') }}">ニュース作成</a>
-                </div>
-              </div> 
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link menu-list" href="#" id="logout">ログアウト</a>
-            </li>
-            <form id="logout-form" action="{{ route('hcs-admin.logout') }}" method="POST" style="display: none;">
-              @csrf
-            </form>
-          @else
-            <li class="nav-item">
-              <a class="nav-link menu-list" href="{{ route('hcs-admin.login') }}">ログイン</a>
-            </li>
-          @endif
-        </ul>
-      </div>
-    </nav>
-    </header>
-  
-  <main>
-    <div class="row justify-content-md-center">
-      <div class="col align-self-center col-md-7">
-        {{-- エラーメッセージ --}}
-        @if ($errors->any())
-        <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li class="error_message">{{ $error }}</li>
-            @endforeach
-        </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  記事
+                </a>
+                <div class="dropdown">
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.articles.index') }}">記事一覧</a>
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.articles.create') }}">記事作成</a>
+                  </div>
+                </div> 
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  メッセージ
+                </a>
+                <div class="dropdown">
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item menu-list" href="#">メッセージ履歴</a>
+                    <a class="dropdown-item menu-list" href="#">メッセージ設定</a>
+                  </div>
+                </div> 
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  ニュース
+                </a>
+                <div class="dropdown">
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.news.index') }}">ニュース一覧</a>
+                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.news.create') }}">ニュース作成</a>
+                  </div>
+                </div> 
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link menu-list" href="#" id="logout">ログアウト</a>
+              </li>
+              <form id="logout-form" action="{{ route('hcs-admin.logout') }}" method="POST" style="display: none;">
+                @csrf
+              </form>
+            @else
+              <li class="nav-item">
+                <a class="nav-link menu-list" href="{{ route('hcs-admin.login') }}">ログイン</a>
+              </li>
+            @endif
+          </ul>
         </div>
-        @endif
-        <!-- フラッシュメッセージ -->
-        @if (session('message'))
-          <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
-        @endif
-      </div>
-    </div>
+      </nav>
+      </header>
     
-    <div class="row">
-      <div class="col-12 offset-md-1 col-md-10 offset-md-1">
-        <span class="title-text">
-          @yield('title')
-        </span>
+    <main>
+      <div class="row justify-content-md-center">
+        <div class="col align-self-center col-md-7">
+          {{-- エラーメッセージ --}}
+          @if ($errors->any())
+          <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li class="error_message">{{ $error }}</li>
+              @endforeach
+          </ul>
+          </div>
+          @endif
+          <!-- フラッシュメッセージ -->
+          @if (session('message'))
+            <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
+          @endif
+        </div>
       </div>
-    </div>
+      
+      <div class="row">
+        <div class="col-12 offset-md-1 col-md-10 offset-md-1">
+          <span class="title-text">
+            @yield('title')
+          </span>
+        </div>
+      </div>
 
-    @yield('content')
+      @yield('content')
+    </div>
   </main>
   <!-- bootstrapの呼び出し -->
   {{-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

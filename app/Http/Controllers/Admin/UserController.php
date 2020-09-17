@@ -87,6 +87,9 @@ class UserController extends Controller
       // return $pdf->download('download.pdf');
     }
 
+    /**
+     * 詳細モーダル情報の取得
+     */
     public function show($user)
     {
       $user = $this->database->getShow($user);
@@ -96,6 +99,15 @@ class UserController extends Controller
         'user'   => $user,
       ];
     }
+
+    /**
+     * フレンド情報の取得
+     */
+    public function apiFriendsIndex($user) {
+        
+      // ユーザのフレンド情報を取得
+      return DataTables::eloquent($this->database->getFriendsQuery($user))->make();
+  }
 
     public function edit($user)
     {

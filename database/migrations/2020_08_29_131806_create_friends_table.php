@@ -20,6 +20,17 @@ class CreateFriendsTable extends Migration
             $table->tinyInteger('status')->unsigned()->default(1);           // 1: 申請中, 2: 承認済み, 3: 却下
             $table->boolean('delete_flg')->default(false);;                  // 0: noフラグ, 1: 削除
             $table->timestamps();
+        
+            // 外部キー制約
+            $table->foreign('user_id_requester')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
+
+            $table->foreign('user_id_target')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
         });
     }
 

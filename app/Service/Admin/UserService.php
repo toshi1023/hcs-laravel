@@ -91,4 +91,13 @@ class UserService
     return $this->UserService->fileDelete($request);
   }
 
+  /**
+   * フレンド情報の取得
+   * 引数：ユーザID
+   */
+  public function getFriendsQuery($user_id)
+  {
+    return $this->UserService->getFriendsQuery($user_id);
+  }
+
 }

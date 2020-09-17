@@ -11,23 +11,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // faker使う(引数には日本語を設定している)
-        // $faker = Faker\Factory::create('ja_JP');
-
-        // レコード15件分出力
-        // for($i=0; $i < 15; $i++){
-        //     \App\Model\User::create([
-        //         'name' => 'test'.$i,
-        //         'email' => 'test'.$i.'@nakamarker.co.jp',
-        //         'password' => Hash::make("test"),
-        //         'device_token' => 'test'.(string)$i,
-        //         'status' => 1,
-        //         'user_agent' => $faker->userAgent,
-        //         'del_flg' => 0,
-        //         'update_user_id' => $i + 1,
-        //     ]);
-        // }
-
         \App\Model\User::create([
             'prof_photo_name' => 'NoImage',
             'prof_photo_path' => env('AWS_NOIMAGE'),
@@ -38,5 +21,23 @@ class UsersTableSeeder extends Seeder
             'email' => 'root@xxx.co.jp',
             'password' => Hash::make("root"),
         ]);
+
+        // faker使う(引数には日本語を設定している)
+        $faker = Faker\Factory::create('ja_JP');
+
+        // レコード14件分出力
+        for($i=1; $i < 15; $i++){
+            \App\Model\User::create([
+                'prof_photo_name' => 'NoImage',
+                'prof_photo_path' => env('AWS_NOIMAGE'),
+                'name' => 'test'.$i,
+                'prefecture' => $faker->prefecture,
+                'birthday' => '1993-1-'.$i,
+                'gender' => 1,
+                'email' => 'test'.$i.'@nakamarker.co.jp',
+                'password' => Hash::make("test"),
+                // 'user_agent' => $faker->userAgent,
+            ]);
+        }
     }
 }
