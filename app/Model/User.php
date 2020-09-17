@@ -70,4 +70,12 @@ class User extends Authenticatable
         if ($this->status == config('const.available'))   return config('const.available_name');
         if ($this->status == config('const.unavailable'))  return config('const.unavailable_name');
     }
+
+    /**
+     * フレンドデータを取得
+     */
+    public function friends()
+    {
+        return $this->belongsToMany('App\Model\User');
+    }
 }

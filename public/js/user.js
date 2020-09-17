@@ -127,88 +127,88 @@ function setDetailView(data, button) {
     /* 
      *   "詳細"モーダルの表示処理("フレンド一覧"タブ)
      */
-        // if(button == '.btn-detail') {
-        //     // 過去に表示したテーブルのリセット
-        //     if ($.fn.DataTable.isDataTable('#user_location_list')) {
-        //         $('#user_location_list').DataTable().destroy();
-        //     }
-        //     // DataTable設定("登録場所")
-        //     settingDataTables(
-        //         // 取得
-        //         // tableのID
-        //         'user_location_list',
-        //         // 取得URLおよびパラメタ
-        //         '/ajax/user/detail/'+ data.id +'/location',
-        //         {},
-        //         // 各列ごとの表示定義
-        //         [
-        //             {data: 'location_id'},
-        //             {data: 'marker_name'},
-        //             {data: 'location_name'},
-        //             {
-        //                 // ロケーションイメージの画像を表示(モーダル形式)
-        //                 data: function (p) {
+        if(button == '.btn-detail') {
+            // 過去に表示したテーブルのリセット
+            if ($.fn.DataTable.isDataTable('#user_friend_list')) {
+                $('#user_friend_list').DataTable().destroy();
+            }
+            // DataTable設定("登録場所")
+            settingDataTables(
+                // 取得
+                // tableのID
+                'user_friend_list',
+                // 取得URLおよびパラメタ
+                `ajax/users/${data.id}/friends`,
+                {},
+                // 各列ごとの表示定義
+                [
+                    {data: 'id'},
+                    // {data: 'marker_name'},
+                    // {data: 'location_name'},
+                    // {
+                    //     // ロケーションイメージの画像を表示(モーダル形式)
+                    //     data: function (p) {
                             
-        //                     return `
-        //                         <a href="" data-toggle="modal" data-target="#location_modal${p.location_id}">
-        //                             <img src="${p.image_url}" id="location_image" height="45" width="65">
-        //                         </a>
+                    //         return `
+                    //             <a href="" data-toggle="modal" data-target="#location_modal${p.location_id}">
+                    //                 <img src="${p.image_url}" id="location_image" height="45" width="65">
+                    //             </a>
         
-        //                         <div class="modal fade" id="location_modal${p.location_id}" tabindex="-1"
-        //                             role="dialog" aria-labelledby="label1" aria-hidden="true">
-        //                             <div class="modal-dialog modal-dialog-centered" role="document">
-        //                                 <div class="modal-content">
-        //                                     <div class="modal-header">
-        //                                         <h5 class="modal-title" id="label1">ロケーションイメージ</h5>
-        //                                         <button type="button" class="close" data-id="${p.location_id}" aria-label="Close">
-        //                                         <span aria-hidden="true">&times;</span>
-        //                                         </button>
-        //                                     </div>
-        //                                     <div class="modal-body">
-        //                                     <img src="${p.image_url}" id="image_modal_user" height="350" width="450">
-        //                                     </div>
-        //                                     <div class="modal-footer">
-        //                                         <button type="button" class="btn btn-danger btn-delete" data-id="${p.location_id}">強制削除</button>
-        //                                         <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.location_id}">Close</button>
-        //                                     </div>
-        //                                 </div>
-        //                             </div>
-        //                         </div>
-        //                     `;
-        //                 }
-        //             },
-        //             {data: 'created_at'},
-        //             // GoogleMapのリンクを埋め込み
-        //             {
-        //                 data: function (p) {
-        //                     // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
-        //                     let url = `https://www.google.com/maps?q=${p.latitude},${p.longitude}`;
-        //                     // 登録場所の備考ボタン・削除ボタンの設定(備考はデータがあるときのみ表示)
-        //                     return getListLink('map', p.location_id, url, 'list-button');
-        //                 }
-        //             },
-        //             {
-        //                 data: function (p) {
-        //                     // 登録場所の備考ボタン・削除ボタンの設定(備考はデータがあるときのみ表示)
-        //                     if(p.memo == null) {
-        //                         return getListLink('remove', p.location_id, '', 'list-button');
-        //                     }
-        //                     return getListLink('location', p.location_id, '', 'list-button') +
-        //                         getListLink('remove', p.location_id, '', 'list-button');
-        //                 }
-        //             }
-        //         ],
-        //         // 各列ごとの装飾
-        //         [
-        //             { targets: [0], width: '100px'},
-        //             { targets: [1], width: '150px'},
-        //             { targets: [2], width: '150px'},
-        //             { targets: [3], orderable: false, className: 'text-center', width: '100px'},
-        //             { targets: [5], orderable: false, className: 'text-center', width: '100px'},
-        //             { targets: [6], orderable: false, className: 'text-center', width: '100px'},
-        //         ],
-        //         false
-        //     );
+                    //             <div class="modal fade" id="location_modal${p.location_id}" tabindex="-1"
+                    //                 role="dialog" aria-labelledby="label1" aria-hidden="true">
+                    //                 <div class="modal-dialog modal-dialog-centered" role="document">
+                    //                     <div class="modal-content">
+                    //                         <div class="modal-header">
+                    //                             <h5 class="modal-title" id="label1">ロケーションイメージ</h5>
+                    //                             <button type="button" class="close" data-id="${p.location_id}" aria-label="Close">
+                    //                             <span aria-hidden="true">&times;</span>
+                    //                             </button>
+                    //                         </div>
+                    //                         <div class="modal-body">
+                    //                         <img src="${p.image_url}" id="image_modal_user" height="350" width="450">
+                    //                         </div>
+                    //                         <div class="modal-footer">
+                    //                             <button type="button" class="btn btn-danger btn-delete" data-id="${p.location_id}">強制削除</button>
+                    //                             <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.location_id}">Close</button>
+                    //                         </div>
+                    //                     </div>
+                    //                 </div>
+                    //             </div>
+                    //         `;
+                    //     }
+                    // },
+                    // {data: 'created_at'},
+                    // // GoogleMapのリンクを埋め込み
+                    // {
+                    //     data: function (p) {
+                    //         // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
+                    //         let url = `https://www.google.com/maps?q=${p.latitude},${p.longitude}`;
+                    //         // 登録場所の備考ボタン・削除ボタンの設定(備考はデータがあるときのみ表示)
+                    //         return getListLink('map', p.location_id, url, 'list-button');
+                    //     }
+                    // },
+                    // {
+                    //     data: function (p) {
+                    //         // 登録場所の備考ボタン・削除ボタンの設定(備考はデータがあるときのみ表示)
+                    //         if(p.memo == null) {
+                    //             return getListLink('remove', p.location_id, '', 'list-button');
+                    //         }
+                    //         return getListLink('location', p.location_id, '', 'list-button') +
+                    //             getListLink('remove', p.location_id, '', 'list-button');
+                    //     }
+                    // }
+                ],
+                // 各列ごとの装飾
+                [
+                    // { targets: [0], width: '100px'},
+                    // { targets: [1], width: '150px'},
+                    // { targets: [2], width: '150px'},
+                    // { targets: [3], orderable: false, className: 'text-center', width: '100px'},
+                    // { targets: [5], orderable: false, className: 'text-center', width: '100px'},
+                    // { targets: [6], orderable: false, className: 'text-center', width: '100px'},
+                ],
+                false
+            );
 
         // /* 
         // *   "詳細"モーダルの表示処理("マーカー"タブ)
@@ -227,7 +227,7 @@ function setDetailView(data, button) {
         //     setPointTable(data.id);
             
             // $('#detail_modal').modal('show');
-        // }
+        }
 }
 
 /**

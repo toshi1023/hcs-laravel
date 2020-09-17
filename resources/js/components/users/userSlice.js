@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost/api/users'
+const apiUrl = 'http://localhost/api/api_users'
 // const token = localStorage.localJWT
 
 /**
