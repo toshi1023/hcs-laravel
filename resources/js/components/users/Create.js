@@ -66,7 +66,6 @@ export default function UserCreate() {
     const files = acceptedFiles.map(file => (
         <li className={classes.fileText}>{file.path}</li>
     ));
-        console.log(getRootProps)
   return (
     <>
         <HcsAppBar />

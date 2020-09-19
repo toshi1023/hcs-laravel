@@ -36,11 +36,21 @@ export default function dateSelects(props) {
     day: null,
   })
 
-  const handleChange = (event) => {
+  const handleChangeYear = (event) => {
     setState({
       ...state,
       year: event.target.value,
+    })
+  }
+  const handleChangeMonth = (event) => {
+    setState({
+      ...state,
       month: event.target.value,
+    })
+  }
+  const handleChangeDay = (event) => {
+    setState({
+      ...state,
       day: event.target.value,
     })
   }
@@ -143,7 +153,7 @@ export default function dateSelects(props) {
         <Select
           native
           // value={state.year}
-          onChange={handleChange}
+          onChange={handleChangeYear}
           className={classes.selectBox}
         >
           <option aria-label="None">----</option>
@@ -153,7 +163,7 @@ export default function dateSelects(props) {
         <Select
           native
           // value={state.month}
-          onChange={handleChange}
+          onChange={handleChangeMonth}
           className={classes.selectBox}
         >
           <option aria-label="None">--</option>
@@ -163,7 +173,7 @@ export default function dateSelects(props) {
         <Select
           native
           // value={state.day}
-          onChange={handleChange}
+          onChange={handleChangeDay}
           className={classes.selectBox}
         >
           <option aria-label="None">--</option>
