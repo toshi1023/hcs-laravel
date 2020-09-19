@@ -99,7 +99,6 @@ export default function ProfileDropzone(props) {
     isDragAccept,
     isDragReject,
     acceptedFiles,
-    open,
   } = useDropzone({
       accept: 'image/*',
     //   画像プレビューの設定
@@ -121,6 +120,9 @@ export default function ProfileDropzone(props) {
     isDragAccept
   ]);
 
+  /**
+   * 画像プレビュー表示の関数
+   */
   const thumbs = files.map(file => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
@@ -139,7 +141,7 @@ export default function ProfileDropzone(props) {
   /**
    * ファイル名の表示
    */
-  const filepath = acceptedFiles.map(file => (
+  const filename = files.map(file => (
       <Grid container>
           <Grid item xs={12} sm={10} md={10} lg={10}>
             <li key={file.path}>
@@ -148,6 +150,13 @@ export default function ProfileDropzone(props) {
           </Grid>
       </Grid>
   ));
+
+  /**
+   * アップロードファイルの削除
+   */
+  const handleDelete = () => {
+    setFiles([])
+  }
 
   return (
       <>
@@ -166,14 +175,14 @@ export default function ProfileDropzone(props) {
         </Grid>
         <Grid container>
             <Grid item xs={4}>
-                <Button variant="contained" color="secondary" className={classes.delete}>削除</Button>
+                <Button variant="contained" color="secondary" className={classes.delete} onClick={handleDelete}>削除</Button>
             </Grid>
         </Grid>
         <Grid container>
             <Grid item xs={4}>
                 <aside>
                     <h4 className={classes.fileLabel}>Files</h4>
-                    {filepath}
+                    {filename}
                 </aside>
             </Grid>
         </Grid>

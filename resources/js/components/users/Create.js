@@ -7,6 +7,7 @@ import styled from "styled-components";
 import HcsAppBar from '../parts/appBar';
 import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/switch';
+import dateSelects from '../parts/common/dateSelects';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -120,6 +121,12 @@ export default function UserCreate() {
                                     className={classes.formFont}
                                     required
                                     />
+                                </FormControl>
+                            </div>
+                            <div>
+                                <FormControl className={classes.margin}>
+                                    <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
+                                    {dateSelects()}
                                 </FormControl>
                             </div>
                             <div>
