@@ -8,7 +8,6 @@ $(function(){
 
     // 公開フラグのvalue値設定
     $('#open_flg').change(function() {
-        console.log($('#open_flg').prop('checked'));
         if($('#open_flg').prop('checked')) {
             $('#type').val(1);
         } else {
@@ -74,9 +73,9 @@ function initList(search) {
             {
                 data: function (p) {
                     // 編集
-                    return getListLink('detail', p.id ,`hcs-admin/articles/${p.id}`, 'list-button') + 
-                           getListLink('edit', 0, `hcs-admin/articles/${p.id}/edit`, 'list-button') + 
-                           getListLink('remove', p.id ,`hcs-admin/articles/${p.id}`, 'list-button');
+                    return getListLink('detail', p.id ,`articles/${p.id}`, 'list-button') + 
+                           getListLink('edit', 0, `articles/${p.id}/edit`, 'list-button') + 
+                           getListLink('remove', p.id ,`articles/${p.id}`, 'list-button');
                 }
             }
         ],

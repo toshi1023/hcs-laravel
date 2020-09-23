@@ -19,8 +19,8 @@ export const fetchAsyncGet = createAsyncThunk('users/index', async() => {
 /**
  * データ作成
  */
-export const fetchAsyncCreate = createAsyncThunk('users/create', async(article) => {
-    const res = await axios.post(apiUrl, article, {
+export const fetchAsyncCreate = createAsyncThunk('users/create', async(user) => {
+    const res = await axios.post(apiUrl, user, {
         headers: {
             'Content-Type': 'application/json',
             // Authorization: `JWT ${token}`,
@@ -32,8 +32,8 @@ export const fetchAsyncCreate = createAsyncThunk('users/create', async(article) 
 /**
  * データの更新
  */
-export const fetchAsyncUpdate = createAsyncThunk('users/edit', async(article) => {
-    const res = await axios.put(`${apiUrl}/${user.id}`, article, {
+export const fetchAsyncUpdate = createAsyncThunk('users/edit', async(user) => {
+    const res = await axios.put(`${apiUrl}/${user.id}`, user, {
         headers: {
             'Content-Type': 'application/json',
             // Authorization: `JWT ${token}`,

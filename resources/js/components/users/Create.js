@@ -2,12 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader,CardContent} from '@material-ui/core';
-import {useDropzone} from 'react-dropzone';
 import styled from "styled-components";
 import HcsAppBar from '../parts/appBar';
 import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/switch';
 import dateSelects from '../parts/common/dateSelects';
+import {
+    fetchAsyncCreate, 
+    fetchAsyncUpdate, 
+    editUser, 
+    selectEditedUser
+} from './userSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,13 +64,44 @@ const Title = styled.h1`
 export default function UserCreate() {
   const classes = useStyles();
 
-    /**
-     * ファイルのドラッグ&ドロップ設定
-     */
-    const {acceptedFiles, getRootProps, getInputProps} = useDropzone()
-    const files = acceptedFiles.map(file => (
-        <li className={classes.fileText}>{file.path}</li>
-    ));
+  // ユーザデータ編集のデータを使用できるようにローカルのarticles定数に格納
+  const editUser = useSelector(selectEditedUser)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+      // 非同期の関数を定義
+      const fetchUserProf = async () => {
+          // ユーザ作成とログイン情報を取得
+          await dispatch(fetchAsyncCreate())
+          // await dispatch(fetchAsyncProf())
+      }
+      // 上で定義した非同期の関数を実行
+      fetchUserProf()
+      // dispatchをuseEffectの第2引数に定義する必要がある
+  }, [dispatch])
+
+  // stateのeditUserの値を変えるアクションをdispatch
+  const handleInputChange = (e) => {
+    editUser.id === 0 ? dispatch(editUser({ 
+                            id: 0,
+                            email: e.target.value,
+                            password: e.target.value,
+                            nickName: e.target.value,
+                            birthday: e.target.value,
+                            gender: e.target.value,
+                            image: e.target.value,
+                        }))
+                        : dispatch(editUser({ 
+                            id: editUser.id,
+                            email: e.target.value,
+                            password: e.target.value,
+                            nickName: e.target.value,
+                            birthday: e.target.value,
+                            gender: e.target.value,
+                            image: e.target.value,
+                        }))
+  }
+
   return (
     <>
         <HcsAppBar />
@@ -86,12 +122,12 @@ export default function UserCreate() {
                                 <FormControl className={classes.margin}>
                                     <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>メールアドレス</InputLabel>
                                     <Input
-                                    id="input-with-icon-adornment"
-                                    startAdornment={
-                                        <InputAdornment position="start" />
-                                    }
-                                    className={classes.formFont}
-                                    required
+                                        id="input-with-icon-adornment"
+                                        startAdornment={
+                                            <InputAdornment position="start" />
+                                        }
+                                        className={classes.formFont}
+                                        required
                                     />
                                 </FormControl>
                             </div>
@@ -99,13 +135,13 @@ export default function UserCreate() {
                                 <FormControl className={classes.margin}>
                                     <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
                                     <Input
-                                    id="input-with-icon-adornment"
-                                    startAdornment={
-                                        <InputAdornment position="start" />
-                                    }
-                                    type="password"
-                                    className={classes.formFont}
-                                    required
+                                        id="input-with-icon-adornment"
+                                        startAdornment={
+                                            <InputAdornment position="start" />
+                                        }
+                                        type="password"
+                                        className={classes.formFont}
+                                        required
                                     />
                                 </FormControl>
                             </div>
@@ -113,12 +149,12 @@ export default function UserCreate() {
                                 <FormControl className={classes.margin}>
                                     <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ニックネーム</InputLabel>
                                     <Input
-                                    id="input-with-icon-adornment"
-                                    startAdornment={
-                                        <InputAdornment position="start" />
-                                    }
-                                    className={classes.formFont}
-                                    required
+                                        id="input-with-icon-adornment"
+                                        startAdornment={
+                                            <InputAdornment position="start" />
+                                        }
+                                        className={classes.formFont}
+                                        required
                                     />
                                 </FormControl>
                             </div>
@@ -143,7 +179,10 @@ export default function UserCreate() {
                                     <InputLabel htmlFor="input-with-icon-adornment" style={{fontSize: 15}}>プロフィール画像</InputLabel>
                                 </FormControl>
                             </div>
+
+                            {/* ドラッグ&ドロップ */}
                             <ProfileDropzone />
+
                         </CardContent>
                     </Grid>
                     <Grid item sm={12} md={12} lg={6}>

@@ -186,7 +186,6 @@ export default function ProfileDropzone(props) {
                 </aside>
             </Grid>
         </Grid>
-
       </>
   );
 }
