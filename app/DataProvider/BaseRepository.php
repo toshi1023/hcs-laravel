@@ -183,7 +183,7 @@ class BaseRepository
      * 引数1:テーブル名, 引数2:ID
      */
     public function getFind($model, $id) {
-        return $model::query()->where('id', $id)->first();
+        return $model::query()->where('id', '=', $id)->first();
     }
 
     /**
@@ -249,7 +249,13 @@ class BaseRepository
 
         try {
             //  対象の記事を削除
-            $data = $this->getFind($this->getModel($table), $id);
+            if(is_null($table)) {
+                // メインテーブルのモデルからデータを取得
+                $data = $this->getFind($this->model, $id);
+            } else {
+                // $tableにテーブル名の指定があれば対応したモデルからデータを取得
+                $data = $this->getFind($this->getModel($table), $id);
+            }
             $data->delete_flg = 1;
             $data->save();
 

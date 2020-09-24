@@ -36,6 +36,11 @@
         </div>
     </div>
 </div>
+{{-- 削除確認Modal読み込み --}}
+@include('admin.layouts.components.remove', [
+    'title' => '削除確認', 'message' => '対象データを削除します。よろしいですか？', 'btn_id' => 'btn_remove'
+])
+
 @endsection
 @section('scripts')
     <script src="{{ asset('js/admin.js') }}"></script>

@@ -94,12 +94,25 @@ class NewsController extends Controller
 
       if ($this->database->save($request)) {
         DB::commit();
-        return redirect()->route('hcs-admin.users.index')->with('message', 'プロフィールの変更を保存しました');
+        return redirect()->route('hcs-admin.news.index')->with('message', 'ニュースの変更を保存しました');
       } else {
         DB::rollBack();
-        $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');
+        $this->messages->add('', 'ニュースの変更に失敗しました。管理者に問い合わせてください');
         
-        return redirect()->route('hcs-admin.admins.index')->withErrors($this->messages);
+        return redirect()->route('hcs-admin.news.index')->withErrors($this->messages);
       }
+    }
+
+    /**
+     * 削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroy(Request $request) {
+      if($this->database->remove($request->id)) {
+        return redirect(route('hcs-admin.news.index'))->with('message', 'ニュースを削除しました');
+      }
+      $this->messages->add('', 'ニュースの削除に失敗しました。管理者に問い合わせてください');
+      return redirect(route('hcs-admin.news.index'))->withErrors($this->messages);
     }
 }

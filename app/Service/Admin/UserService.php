@@ -101,12 +101,12 @@ class UserService
   }
 
   /**
-   * フレンド情報の取得
+   * ユーザの削除
    * 引数：ユーザID
    */
-  public function remove($user_id)
+  public function remove($id)
   {
-    return $this->UserService->getDestroy($user_id);
+    return $this->UserService->getDestroy($id);
   }
 
 }

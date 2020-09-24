@@ -21,11 +21,20 @@ class Controller extends BaseController
     }
 
     // パスワードをバリデート
-    public function passwordValidation($request)
+    public function passwordValidation(Request $request)
     {
         $request->validate([
             'password' => ['required', 'min:6', 'confirmed'],
             'password_confirmation' => ['required', 'min:6'],
+        ]);
+    }
+
+    // 経度・緯度をバリデート
+    public function mapValidation(Request $request)
+    {
+        $request->validate([
+            'latitude' => ['numeric'],
+            'longitude' => ['numeric'],
         ]);
     }
 }

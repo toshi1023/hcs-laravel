@@ -125,4 +125,17 @@ class AdminController extends Controller
         return redirect()->route('hcs-admin.admins.index')->withErrors($this->messages);
       }
     }
+
+    /**
+     * 削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroy(Request $request) {
+      if($this->database->remove($request->id)) {
+        return redirect(route('hcs-admin.admins.index'))->with('message', '管理ユーザを削除しました');
+      }
+      $this->messages->add('', '管理ユーザの削除に失敗しました。管理者に問い合わせてください');
+      return redirect(route('hcs-admin.admins.index'))->withErrors($this->messages);
+    }
 }

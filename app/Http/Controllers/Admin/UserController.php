@@ -168,10 +168,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Request $request) {
-      if($this->mainService->remove($request->id)) {
-        return redirect(route($this->mainRoot))->with('info_message', $this->mainTitle.'情報を削除しました');
+      if($this->database->remove($request->id)) {
+        return redirect(route('hcs-admin.users.index'))->with('message', 'ユーザを削除しました');
       }
       $this->messages->add('', 'ユーザの削除に失敗しました。管理者に問い合わせてください');
-      return redirect(route($this->mainRoot))->withErrors($this->messages);
+      return redirect(route('hcs-admin.users.index'))->withErrors($this->messages);
     }
 }

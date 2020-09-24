@@ -43,6 +43,13 @@
         </div>
     </div>
 </div>
+{{-- 詳細Modal読み込み --}}
+{{-- @include('admin.articles.show') --}}
+
+{{-- 削除確認Modal読み込み --}}
+@include('admin.layouts.components.remove', [
+    'title' => '削除確認', 'message' => '対象データを削除します。よろしいですか？', 'btn_id' => 'btn_remove'
+])
 @endsection
 @section('scripts')
     <script src="{{ asset('js/article.js') }}"></script>

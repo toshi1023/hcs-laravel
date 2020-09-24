@@ -72,4 +72,13 @@ class AdminService
     return $this->AdminService->getSave($data);
   }
 
+  /**
+   * 管理ユーザの削除
+   * 引数：管理ユーザID
+   */
+  public function remove($id)
+  {
+    return $this->AdminService->getDestroy($id);
+  }
+
 }

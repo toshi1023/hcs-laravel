@@ -69,4 +69,13 @@ class NewsService
   {
     return $this->NewsService->save($data, $filename);
   }
+
+  /**
+    *ニュース削除用メソッド
+    * 引数:ニュースID
+    * */
+    public function remove($id)
+    {
+      return $this->NewsService->getDestroy($id);
+    }
 }

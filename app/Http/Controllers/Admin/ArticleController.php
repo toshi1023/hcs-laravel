@@ -115,6 +115,9 @@ class ArticleController extends Controller
     $request['latitude'] = $map[0];
     $request['longitude'] = $map[1];
 
+    // 緯度・経度のバリデーション
+    $this->mapValidation($request);
+
     // ファイル名の設定
     $filename = $_FILES['upload_image']['name'];
     
@@ -128,18 +131,16 @@ class ArticleController extends Controller
     }
   }
 
-  // 記事を削除
-  public function destroy($article)
-  {
-    DB::beginTransaction();
-
-    if ($this->database->articleDestroy($article)) {
-      DB::commit();
-      return redirect()->route('hcs-admin.articles.index')->with('message', '記事を削除しました');
-    } else {
-      DB::rollBack();
+    /**
+     * 削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroy(Request $request) {
+      if($this->database->remove($request->id)) {
+        return redirect(route('hcs-admin.articles.index'))->with('message', '記事を削除しました');
+      }
       $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('hcs-admin.articles.index')->withErrors($this->messages);
+      return redirect(route('hcs-admin.articles.index'))->withErrors($this->messages);
     }
-  }
 }

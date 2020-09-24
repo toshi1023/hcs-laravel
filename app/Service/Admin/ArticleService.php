@@ -77,9 +77,9 @@ class ArticleService
     * 記事削除用メソッド
     * 引数:記事ID
     * */
-    public function destroy($id)
+    public function remove($id)
     {
-      return $this->ArticleService->destroy('articles', $id);
+      return $this->ArticleService->getDestroy($id);
     }
 
   /*
