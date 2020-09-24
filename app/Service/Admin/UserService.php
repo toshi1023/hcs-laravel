@@ -100,4 +100,13 @@ class UserService
     return $this->UserService->getFriendsQuery($user_id);
   }
 
+  /**
+   * フレンド情報の取得
+   * 引数：ユーザID
+   */
+  public function remove($user_id)
+  {
+    return $this->UserService->getDestroy($user_id);
+  }
+
 }

@@ -71,7 +71,13 @@ function initList(search) {
         [
             {data: 'id'},
             {data: 'email'},
-            {data: 'updated_at'},
+            {
+                data: function(p) {
+                    // 日付フォーマットの形式を調整
+                    let time = moment(p.updated_at);
+                    return time.format("YYYY年MM月DD日 HH時mm分");
+                }, name: 'updated_at'
+            },
             // 各操作列
             {
                 data: function (p) {

@@ -94,14 +94,17 @@ function setDetailView(data, button) {
     /* 
      *   モーダルに表示する会員情報
      */
+        // 日付フォーマットの形式を調整
+        let time = moment(data.user.created_at);
+        let create_time = time.format("YYYY年MM月DD日 HH時mm分");
+        
         $('#detail_name').html(data.user.name);
         $('#detail_gender').html(data.user.gender_name);
         $('#detail_prefecture').html(data.user.prefecture);
         $('#detail_birthday').html(data.user.birthday);
         $('#detail_status').html(data.user.status_name);
         $('#detail_email').html(data.user.email);
-        $('#detail_login_time').html(data.user.login_time);
-        $('#detail_created_at').html(data.user.created_at);
+        $('#detail_created_at').html(create_time);
         $('#detail_image_file').attr('src', data.user.prof_photo_path);
         // $('#detail_user_agent').html(data.user_agent);
         $('#detail_memo').html(data.user.memo);
@@ -289,14 +292,20 @@ function initList(search) {
                     return `<span style="color: blue">${p.gender_name}</span>`;
                 }
             },
-            {data: 'updated_at'},
+            {
+                data: function(p) {
+                    // 日付フォーマットの形式を調整
+                    let time = moment(p.updated_at);
+                    return time.format("YYYY年MM月DD日 HH時mm分");
+                }, name: 'updated_at'
+            },
             // 各操作列
             {
                 data: function (p) {
                     // 編集
-                    return getListLink('detail', p.id ,`admins/${p.id}`, 'list-button') + 
-                           getListLink('edit', 0, `admins/${p.id}/edit`, 'list-button') + 
-                           getListLink('remove', p.id ,`admins/${p.id}`, 'list-button');
+                    return getListLink('detail', p.id ,`users/${p.id}`, 'list-button') + 
+                           getListLink('edit', 0, `users/${p.id}/edit`, 'list-button') + 
+                           getListLink('remove', p.id ,`users/${p.id}`, 'list-button');
                 }
             }
         ],
@@ -328,6 +337,6 @@ function getListLink(type, id, link, clazz) {
         return '<a href="'+link+'" class="btn btn-primary '+clazz+'" data-toggle="tooltip" title="編集" data-placement="top"><i class="fas fa-edit fa-fw"></i></a>';
     }
     if (type == "remove") {
-        return '<a href="javascript:void(0)" class="btn btn-danger btn-remove '+clazz+'" data-toggle="tooltip" title="削除" data-placement="top" data-id="'+id+'"><i class="fas fa-trash-alt fa-fw"></i></a>';
+        return '<a href="javascript:void(0)" class="btn btn-danger btn-remove '+clazz+'" data-toggle="tooltip" title="削除" data-placement="top" data-id="'+id+'" data-url="'+ link+ '"><i class="fas fa-trash-alt fa-fw"></i></a>';
     }
 }

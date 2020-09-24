@@ -24,7 +24,7 @@
                                         <form class="form-horizontal" action="{{ route('hcs-admin.users.store') }}" method="post" id="main_form" enctype='multipart/form-data'>
                                             @method('PUT')
                                             @csrf
-                                            @include('admin.users.form', ['register_mode' => $register_mode, 'data' => $data])
+                                            @include('admin.users.form', ['register_mode' => $register_mode, 'data' => $data, 'prefectures' => $prefectures])
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <input type="hidden" name="id" id="id" value="{{ $register_mode === 'edit' ? $data->id : null }}" />

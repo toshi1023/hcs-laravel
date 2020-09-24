@@ -23,6 +23,9 @@ class UserController extends Controller
       $this->database = $database;
     }
 
+    /**
+     * 一覧ページ
+     */
     public function index()
     {
       return view('admin.users.index',[]);
@@ -37,6 +40,9 @@ class UserController extends Controller
       // return DataTables::eloquent($this->mainService->searchQuery($conditions, $sort, $relations))->make();
     }
 
+    /**
+     * 作成ページ
+     */
     public function create()
     {
       $prefectures = $this->database->getCreate('prefectures');
@@ -109,17 +115,23 @@ class UserController extends Controller
       return DataTables::eloquent($this->database->getFriendsQuery($user))->make();
   }
 
+    /**
+     * 編集ページ
+     */
     public function edit($user)
     {
       $data = $this->database->getEdit($user);
 
       return view('admin.users.edit', [
         'register_mode' => 'edit',
-        'user' => $data['user'],
+        'data' => $data['user'],
         'prefectures' => $data['prefectures'],
       ]);
     }
 
+    /**
+     * 更新処理
+     */
     public function update(UserRegisterRequest $request, $admin)
     {
       DB::beginTransaction();
@@ -148,5 +160,18 @@ class UserController extends Controller
         
         return redirect()->route('hcs-admin.users.index')->withErrors($this->messages);
       }
+    }
+
+    /**
+     * 削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroy(Request $request) {
+      if($this->mainService->remove($request->id)) {
+        return redirect(route($this->mainRoot))->with('info_message', $this->mainTitle.'情報を削除しました');
+      }
+      $this->messages->add('', 'ユーザの削除に失敗しました。管理者に問い合わせてください');
+      return redirect(route($this->mainRoot))->withErrors($this->messages);
     }
 }

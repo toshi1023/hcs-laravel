@@ -48,11 +48,8 @@ class NewsController extends Controller
 
     public function create()
     {
-      $prefectures = $this->database->getCreate('prefectures');
-
-      return view('admin.news.register', [
+      return view('admin.news.create', [
         'register_mode' => 'create',
-        'prefectures'   => $prefectures,
       ]);
     }
 
@@ -85,10 +82,9 @@ class NewsController extends Controller
     {
       $data = $this->database->getEdit($news);
 
-      return view('admin.news.register', [
+      return view('admin.news.edit', [
         'register_mode' => 'edit',
-        'news' => $data['news'],
-        'prefectures' => $data['prefectures'],
+        'data' => $data['news'],
       ]);
     }
 

@@ -35,11 +35,15 @@ function setDetailView(data, button) {
     /* 
      *   モーダルに表示する会員情報
      */
+        // 日付フォーマットの形式を調整
+        let time = moment(data.news.updated_at);
+        let update_time = time.format("YYYY年MM月DD日 HH時mm分");
+
         $('#detail_type').html(data.news.type_name);
         $('#detail_title').html(data.news.title);
         $('#detail_content').html(data.news.content);
         $('#detail_status').html(data.news.status_name);
-        $('#detail_updated_at').html(data.news.updated_at);
+        $('#detail_updated_at').html(update_time);
         $('#detail_memo').html(data.news.memo);
         $('#news_id').data('id', data.news.id);              // 各タグで共有
 
@@ -103,7 +107,13 @@ function initList(search) {
                     return `<span style="color: blue">${p.status_name}</span>`;
                 }
             },
-            {data: 'updated_at'},
+            {
+                data: function(p) {
+                    // 日付フォーマットの形式を調整
+                    let time = moment(p.updated_at);
+                    return time.format("YYYY年MM月DD日 HH時mm分");
+                }, name: 'updated_at'
+            },
             // 各操作列
             {
                 data: function (p) {

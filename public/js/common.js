@@ -181,11 +181,11 @@ $(function() {
         $('#confirm_modal').modal('show');
     });
 
-    // 一覧詳細ボタンクリック
-
-    // 削除確認モーダルOKクリック
-    $('#btn_remove').on('click', function(){
-        $('#remove_form').submit();
+    // 削除ボタンクリック
+    $(document).on('click', '.btn-remove', function(){
+        // 確認用モーダル表示
+        $('#remove_modal').modal('show');
+        $('#remove_form').attr('action', $(this).data('url'));
     });
 
     // datepickerクラス設定

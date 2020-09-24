@@ -37,10 +37,10 @@ class BaseRepository
 
     /* *
     * 指定したデータをすべて取得するメソッド
-    * 引数1: テーブル名, 引数2: 検索条件, 引数3: 結合テーブル(結合テーブル => 結合元の結合条件)
+    * 引数1: テーブル名, 引数2: 検索条件, 引数3: 結合テーブル(結合テーブル => 結合元の結合条件), 引数4: 削除フラグのON・OFF
     *   ※$relationの記載例) ['articles' => 'user_id']  idを結合条件としたときのみ適用
     * */
-    public function getQuery($table=null, $conditions=[], $relation=[])
+    public function getQuery($table=null, $conditions=[], $relation=[], $delete_flg=true)
     {
         // 指定したモデルを変数に代入
         if($table) {
@@ -60,8 +60,13 @@ class BaseRepository
             }
         }
 
-        // メインテーブルのデータを取得
-        $query = $query->select($query->getTable().'.*');
+        // 削除フラグがtrueの値を排除するか否か
+        if($delete_flg) {
+            $query = $query->select($query->getTable().'.*')->where('delete_flg', '=', 0);
+        } else {
+            // メインテーブルのデータをすべて取得
+            $query = $query->select($query->getTable().'.*');
+        }
 
         // 検索条件があれば絞り込み
         if($conditions) {

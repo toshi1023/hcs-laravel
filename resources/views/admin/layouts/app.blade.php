@@ -149,9 +149,12 @@
   <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
   {{-- ajax --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-
   {{-- CoreUI --}}
   <script src="https://unpkg.com/@coreui/coreui/dist/js/coreui.bundle.min.js"></script>
+  {{-- 日付フォーマットのライブラリ --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ja.js"></script>
+
   {{-- トグルメニューの閉じる操作(リンク押下後) --}}
   <script>
     $(document).on('click','.navbar-collapse',function(e) {

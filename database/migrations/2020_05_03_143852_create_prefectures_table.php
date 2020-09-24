@@ -16,6 +16,7 @@ class CreatePrefecturesTable extends Migration
         Schema::create('prefectures', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->boolean('delete_flg')->default(false);              // 0: noフラグ, 1: 削除
 
             $table->timestamps();
         });
