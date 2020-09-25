@@ -40,7 +40,7 @@ function setDetailView(data, button) {
         $('#detail_type').html(data.article.type_name);
         $('#detail_updated_at').html(update_time);
         $('#detail_content').html(data.article.content);
-        $('#detail_photo').attr('src', data.article_photo_path);
+        $('#detail_photo').attr('src', data.article.article_photo_path);
         $('#detail_location').append(getListLink('map', data.article.id, url, 'list-button'));
 
         $('#article_id').data('id', data.article.id);              // 各タグで共有
