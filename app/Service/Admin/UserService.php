@@ -24,10 +24,10 @@ class UserService
    * Indexページ用データを取得するメソッド
    * 引数：検索用テーブル
    */
-  public function getIndex($table=null)
+  public function getIndex($table=null, $conditions=null)
   {
     // 全ユーザデータを更新日時順にソートして取得
-    return $this->UserService->getQuery($table)->latest('users.updated_at');
+    return $this->UserService->getQuery($table, $conditions)->latest('users.updated_at');
 
   }
 

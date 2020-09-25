@@ -32,13 +32,18 @@ class UserController extends Controller
       return view('admin.users.index',[]);
     }
     
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->id) { $conditions['users.id'] = $request->id; }
+      if ($request->name) { $conditions['users.name@like'] = $request->name; }
+      if ($request->email) { $conditions['users.email@like'] = $request->email; }
+
       // 全管理ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex();
+      $users = $this->database->getIndex(null, $conditions);
 
       return Datatables::eloquent($users)->make(true);
-      // return DataTables::eloquent($this->mainService->searchQuery($conditions, $sort, $relations))->make();
     }
 
     /**

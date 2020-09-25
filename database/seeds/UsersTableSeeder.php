@@ -34,7 +34,7 @@ class UsersTableSeeder extends Seeder
                 'prefecture' => $faker->prefecture,
                 'birthday' => '1993-1-'.$i,
                 'gender' => 1,
-                'email' => 'test'.$i.'@nakamarker.co.jp',
+                'email' => 'test'.$i.'@xxx.co.jp',
                 'password' => Hash::make("test"),
                 // 'user_agent' => $faker->userAgent,
             ]);
