@@ -28,6 +28,7 @@ class UserController extends Controller
      */
     public function index()
     {
+      // dd($this->database->getFriendsQuery(1)->get());
       return view('admin.users.index',[]);
     }
     
@@ -65,7 +66,7 @@ class UserController extends Controller
 
       // アップロードファイルのファイル名を設定
       $filename = null;
-      if ($_FILES['upload_image']['name']){
+      if ($request['upload_image']){
         $filename = $_FILES['upload_image']['name'];
       }
       
@@ -113,7 +114,7 @@ class UserController extends Controller
         
       // ユーザのフレンド情報を取得
       return DataTables::eloquent($this->database->getFriendsQuery($user))->make();
-  }
+    }
 
     /**
      * 編集ページ

@@ -17,7 +17,7 @@ class FriendsTableSeeder extends Seeder
         // レコード15件分出力
         for($i=0; $i < 15; $i++){
             \App\Model\Friend::create([
-                'user_id_requester' => $faker->numberBetween(1, 15),
+                'user_id' => $faker->numberBetween(1, 15),
                 'user_id_target' => $faker->numberBetween(1, 15),
                 'status' => $faker->numberBetween(1, 3),
             ]);

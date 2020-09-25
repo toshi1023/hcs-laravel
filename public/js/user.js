@@ -141,65 +141,66 @@ function setDetailView(data, button) {
                 // tableのID
                 'user_friend_list',
                 // 取得URLおよびパラメタ
-                `ajax/users/${data.id}/friends`,
+                `/hcs-admin/ajax/users/${data.user.id}/friends`,
                 {},
                 // 各列ごとの表示定義
                 [
-                    {data: 'id'},
-                    // {data: 'marker_name'},
-                    // {data: 'location_name'},
-                    // {
-                    //     // ロケーションイメージの画像を表示(モーダル形式)
-                    //     data: function (p) {
+                    {data: 'friend_id'},
+                    {
+                        // 友達のイメージ画像を表示(モーダル形式)
+                        data: function (p) {
                             
-                    //         return `
-                    //             <a href="" data-toggle="modal" data-target="#location_modal${p.location_id}">
-                    //                 <img src="${p.image_url}" id="location_image" height="45" width="65">
-                    //             </a>
+                            return `
+                                <a href="" data-toggle="modal" data-target="#friend_modal${p.friend_id}">
+                                    <img src="${p.prof_photo_path}" id="location_image" height="45" width="65">
+                                </a>
         
-                    //             <div class="modal fade" id="location_modal${p.location_id}" tabindex="-1"
-                    //                 role="dialog" aria-labelledby="label1" aria-hidden="true">
-                    //                 <div class="modal-dialog modal-dialog-centered" role="document">
-                    //                     <div class="modal-content">
-                    //                         <div class="modal-header">
-                    //                             <h5 class="modal-title" id="label1">ロケーションイメージ</h5>
-                    //                             <button type="button" class="close" data-id="${p.location_id}" aria-label="Close">
-                    //                             <span aria-hidden="true">&times;</span>
-                    //                             </button>
-                    //                         </div>
-                    //                         <div class="modal-body">
-                    //                         <img src="${p.image_url}" id="image_modal_user" height="350" width="450">
-                    //                         </div>
-                    //                         <div class="modal-footer">
-                    //                             <button type="button" class="btn btn-danger btn-delete" data-id="${p.location_id}">強制削除</button>
-                    //                             <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.location_id}">Close</button>
-                    //                         </div>
-                    //                     </div>
-                    //                 </div>
-                    //             </div>
-                    //         `;
-                    //     }
-                    // },
-                    // {data: 'created_at'},
-                    // // GoogleMapのリンクを埋め込み
-                    // {
-                    //     data: function (p) {
-                    //         // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
-                    //         let url = `https://www.google.com/maps?q=${p.latitude},${p.longitude}`;
-                    //         // 登録場所の備考ボタン・削除ボタンの設定(備考はデータがあるときのみ表示)
-                    //         return getListLink('map', p.location_id, url, 'list-button');
-                    //     }
-                    // },
-                    // {
-                    //     data: function (p) {
-                    //         // 登録場所の備考ボタン・削除ボタンの設定(備考はデータがあるときのみ表示)
-                    //         if(p.memo == null) {
-                    //             return getListLink('remove', p.location_id, '', 'list-button');
-                    //         }
-                    //         return getListLink('location', p.location_id, '', 'list-button') +
-                    //             getListLink('remove', p.location_id, '', 'list-button');
-                    //     }
-                    // }
+                                <div class="modal fade" id="friend_modal${p.friend_id}" tabindex="-1"
+                                    role="dialog" aria-labelledby="label1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="label1">プロフィール画像</h5>
+                                                <button type="button" class="close" data-id="${p.friend_id}" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                            <img src="${p.prof_photo_path}" id="image_modal_user" height="350" width="450">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.friend_id}">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    },
+                    {data: 'friend_name'},
+                    {data: 'prefecture'},
+                    {
+                        data: function (p) {
+                            // statusを分岐
+                            if(p.status == 1) {
+                                return `<span style="color: blue">申請中</span>`;
+                            }
+                            if(p.status == 2) {
+                                return `<span style="color: green">承認済み</span>`;
+                            }
+                            if(p.status == 3) {
+                                return `<span style="color: red">却下</span>`;
+                            }
+                        }, name: 'status'
+                    },
+                    {data: 'updated_at'},
+                    // 各操作列
+                    {
+                        data: function (p) {
+                            // 編集
+                            return getListLink('remove', p.friend_id ,`users/${p.id}/friends/${p.friend_id}`, 'list-button');
+                        }
+                    }
                 ],
                 // 各列ごとの装飾
                 [

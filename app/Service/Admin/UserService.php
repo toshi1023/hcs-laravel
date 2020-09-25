@@ -77,9 +77,9 @@ class UserService
   ファイルアップロード用メソッド
   第一引数:ファイル, 第二引数:フォルダ名に使用するための値
   */
-  public function filestore($file, $foldername)
+  public function fileSave($file, $foldername)
   {
-    return $this->UserService->filestore($file, $foldername);
+    return $this->UserService->fileSave($file, $foldername);
   }
 
   /*

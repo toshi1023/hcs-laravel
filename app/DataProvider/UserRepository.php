@@ -64,7 +64,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
      * ファイルアップロード用メソッド 
      * 第一引数:ファイル, 第二引数:フォルダ名に使用するための値
      */
-    public function fileStore($file, $foldername)
+    public function fileSave($file, $foldername)
     {
         if ($file){
             try {
@@ -109,8 +109,13 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
      * 引数：ユーザID
      */
     public function getFriendsQuery($user_id) {
-        return $this->model->leftjoin('friends', 'users.id', '=', 'friends.user_id_requester')
-                           ->select('users.*', 'friends.id as frend_id', 'friends.user_id_target')
-                           ->where('friends.user_id_requester', '=', $user_id);
+        return $this->model->leftjoin('friends', 'users.id', '=', 'friends.user_id')
+                           ->leftJoin('users as targets', 'friends.user_id_target', '=', 'targets.id')
+                           ->select('users.id', 'users.name as user_name', 'users.updated_at', 
+                                    'friends.id as friend_id', 'friends.user_id_target',
+                                    'friends.status', 'targets.prof_photo_name', 'targets.prof_photo_path',
+                                    'targets.name as friend_name', 'targets.prefecture'
+                                    )
+                           ->where('friends.user_id', '=', $user_id);
     }
 }

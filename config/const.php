@@ -27,6 +27,14 @@ return [
     'all_name'      => '全員',
     'member_name'   => '会員限定',
 
+    // フレンドの申請フラグ
+    'apply'             => 1,
+    'approval'          => 2,
+    'reject'            => 3,
+    'apply_name'        => '申請中',
+    'approval_name'     => '承認済み',
+    'reject_name'       => '却下',
+
     // ニュースの種別フラグ
     'official'          => 1,
     'alert'             => 2,

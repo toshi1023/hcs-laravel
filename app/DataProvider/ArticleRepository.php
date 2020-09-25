@@ -95,7 +95,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
      * ファイルアップロード用メソッド
      * 第一引数:ファイル, 第二引数:フォルダ名に使用するための値
      */
-    public function fileStore($file, $foldername)
+    public function fileSave($file, $foldername)
     {
         if (!is_null($file)){
             try {

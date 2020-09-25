@@ -76,6 +76,6 @@ class User extends Authenticatable
      */
     public function friends()
     {
-        return $this->belongsToMany('App\Model\User');
+        return $this->hasMany('App\Model\Friend');
     }
 }
