@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    記事一覧
+    <h1><span class="badge badge-pill badge-info text-white">記事一覧</span></h1>
 @endsection
 
 @section('content')
