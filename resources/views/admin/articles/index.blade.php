@@ -44,7 +44,7 @@
     </div>
 </div>
 {{-- 詳細Modal読み込み --}}
-{{-- @include('admin.articles.show') --}}
+@include('admin.articles.show')
 
 {{-- 削除確認Modal読み込み --}}
 @include('admin.layouts.components.remove', [

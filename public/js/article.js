@@ -4,6 +4,9 @@ $(function(){
 
         // DataTables初期化
         initList(false);
+
+        // 詳細ボタンをクリック
+        settingDetailAjax('articles/', '.btn-detail');
     }
 
     // 公開フラグのvalue値設定
@@ -15,6 +18,35 @@ $(function(){
         }
     });
 });
+
+/**
+ * 詳細表示
+ * @param data
+ */
+function setDetailView(data, button) {
+    /* 
+     *   モーダルに表示する会員情報
+     */
+        // 日付フォーマットの形式を調整
+        let time = moment(data.article.updated_at);
+        let update_time = time.format("YYYY年MM月DD日 HH時mm分");
+
+        // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
+        let url = `https://www.google.com/maps?q=${data.article.latitude},${data.article.longitude}`;
+        
+        $('#detail_title').html(data.article.title);
+        $('#detail_name').html(data.article.name);
+        $('#detail_prefecture').html(data.article.prefecture);
+        $('#detail_type').html(data.article.type_name);
+        $('#detail_updated_at').html(update_time);
+        $('#detail_content').html(data.article.content);
+        $('#detail_photo').attr('src', data.article_photo_path);
+        $('#detail_location').append(getListLink('map', data.article.id, url, 'list-button'));
+
+        $('#article_id').data('id', data.article.id);              // 各タグで共有
+        
+        $('#detail_modal').modal('show');
+}
 
 /**
  * 一覧初期化
@@ -115,5 +147,8 @@ function getListLink(type, id, link, clazz) {
     }
     if (type == "remove") {
         return '<a href="javascript:void(0)" class="btn btn-danger btn-remove '+clazz+'" data-toggle="tooltip" title="削除" data-placement="top" data-id="'+id+'"><i class="fas fa-trash-alt fa-fw"></i></a>';
+    }
+    if (type == "map") {
+        return '<a href="'+ link +'" target="_blank" class="btn btn-primary btn-map '+clazz+'" data-toggle="tooltip" title="Google Mapで表示" data-placement="top" data-id="'+id+'"><i class="fas fa-map-marked-alt"></i></a>';
     }
 }

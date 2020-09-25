@@ -26,6 +26,7 @@ class ArticleController extends Controller
 
   public function index()
   {   
+    // dd($this->database->getIndex()->get());
       return view('admin.articles.index', []);
   }
 
@@ -85,9 +86,10 @@ class ArticleController extends Controller
     // 詳細ページに表示する値を取得
     $article = $this->database->getShow($article);
 
-    return view('articles.show', [
+    return [
+      'status'  => 1,
       'article' => $article,
-    ]);
+    ];
   }
 
   // 記事の編集機能を設定

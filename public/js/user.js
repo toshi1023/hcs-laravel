@@ -5,7 +5,7 @@ $(function(){
         // DataTables初期化
         initList(false);
 
-        // 登録場所もしくは参加コミュニティボタンをクリック
+        // 詳細ボタンをクリック
         settingDetailAjax('users/', '.btn-detail');
     }
 
