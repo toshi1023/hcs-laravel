@@ -7,7 +7,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     maxWidth: 500,
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#f7fad1',
   },
   list: {
     marginLeft: 10,
@@ -55,7 +56,12 @@ export default function MessageList() {
                   className={classes.avatar}
                 />
               </ListItemAvatar>
-              <ListItemText id={labelId} primary={`Line item ${value + 1}`} classes={{primary: classes.list}} />
+              <ListItemText 
+                id={labelId} 
+                primary={`Line item ${value + 1}`} 
+                classes={{primary: classes.list}} 
+                style={{color: (value.gender == 1 ? 'blue' : 'red')}}
+              />
               <ListItemSecondaryAction>
                 <Badge badgeContent={1} color="secondary">
                   <IconButton style={{backgroundColor: '#d0ddf5'}}>

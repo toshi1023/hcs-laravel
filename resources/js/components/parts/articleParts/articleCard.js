@@ -13,7 +13,7 @@ import DateFormat from '../dateFormat';
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 200,
-    backgroundColor: '#e5ecf8',
+    backgroundColor: '#f7fad1',
     marginTop: 10,
     marginBottom: 10,
   },
@@ -63,11 +63,12 @@ export default function ArticleCard(props) {
     setExpanded(!expanded);
   };
 
+  // 性別によって名前の色を色分け
   const nickNameDesign = () => {
     if(props.article.gender === 1) {
-      return <Typography className={classes.headerTitleNameWoman}>{props.article.name}</Typography>
+      return <Typography className={classes.headerTitleName}>{props.article.name}</Typography>
     }
-    return <Typography className={classes.headerTitleName}>{props.article.name}</Typography>
+    return <Typography className={classes.headerTitleNameWoman}>{props.article.name}</Typography>
   }
 
   return (

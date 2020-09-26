@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     maxWidth: 500,
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#f7fad1',
   },
   list: {
     marginLeft: 10,
@@ -41,7 +42,7 @@ export default function UserList(props) {
 
     setChecked(newChecked);
   };
-console.log(props.user)
+
   return (
     <List dense className={classes.root}>
       {_.map(props.user.users, value => {
@@ -56,7 +57,12 @@ console.log(props.user)
                   className={classes.avatar}
                 />
               </ListItemAvatar>
-              <ListItemText id={labelId} primary={`${value.name}`} classes={{primary: classes.list}} />
+              <ListItemText 
+                id={labelId} 
+                primary={`${value.name}`} 
+                classes={{primary: classes.list}} 
+                style={{color: (value.gender == 1 ? 'blue' : 'red')}}
+              />
               <ListItemSecondaryAction>
                 <IconButton style={{backgroundColor: '#d0ddf5'}}>
                   <PersonAddIcon

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader,CardContent} from '@material-ui/core';
@@ -65,20 +66,20 @@ export default function UserCreate() {
   const classes = useStyles();
 
   // ユーザデータ編集のデータを使用できるようにローカルのarticles定数に格納
-  const editUser = useSelector(selectEditedUser)
+  const editedUser = useSelector(selectEditedUser)
   const dispatch = useDispatch()
 
-  useEffect(() => {
-      // 非同期の関数を定義
-      const fetchUserProf = async () => {
-          // ユーザ作成とログイン情報を取得
-          await dispatch(fetchAsyncCreate())
-          // await dispatch(fetchAsyncProf())
-      }
-      // 上で定義した非同期の関数を実行
-      fetchUserProf()
-      // dispatchをuseEffectの第2引数に定義する必要がある
-  }, [dispatch])
+//   useEffect(() => {
+//       // 非同期の関数を定義
+//       const fetchUserProf = async () => {
+//           // ユーザ作成とログイン情報を取得
+//           await dispatch(fetchAsyncCreate())
+//           // await dispatch(fetchAsyncProf())
+//       }
+//       // 上で定義した非同期の関数を実行
+//       fetchUserProf()
+//       // dispatchをuseEffectの第2引数に定義する必要がある
+//   }, [dispatch])
 
   // stateのeditUserの値を変えるアクションをdispatch
   const handleInputChange = (e) => {
@@ -92,7 +93,7 @@ export default function UserCreate() {
                             image: e.target.value,
                         }))
                         : dispatch(editUser({ 
-                            id: editUser.id,
+                            id: editedUser.id,
                             email: e.target.value,
                             password: e.target.value,
                             nickName: e.target.value,
@@ -101,6 +102,18 @@ export default function UserCreate() {
                             image: e.target.value,
                         }))
   }
+
+    // 作成(stateのeditedUserの値をApiで送信)
+    const createClicked = () => {
+        dispatch(fetchAsyncCreate(editedUser))
+        dispatch(editUser({ id: 0, title: '' }))
+    }
+
+    // 更新(stateのeditedUserの値をApiで送信)
+    const updateClicked = () => {
+        dispatch(fetchAsyncUpdate(editedUser))
+        dispatch(editUser({ id: 0, title: '' }))
+    }
 
   return (
     <>
@@ -189,7 +202,14 @@ export default function UserCreate() {
                         <CardContent>
                             <div>
                                 <FormControl>
-                                    <Button variant="contained" color="primary" className={classes.button}>作成する</Button>
+                                    {
+                                        // 作成と編集でボタン表記と処理を切り分け
+                                        editUser.id === 0 ? (
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={createClicked}>作成する</Button>
+                                        ) : (
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={updateClicked}>更新する</Button>
+                                        )
+                                    }
                                 </FormControl>
                             </div>
                         </CardContent>

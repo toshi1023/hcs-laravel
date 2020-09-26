@@ -82,7 +82,7 @@ const userSlice = createSlice({
             },
         ],
         // userの編集時に選択・保持するstate
-        editUser: {
+        editedUser: {
             id: '',                     // ID
             prof_photo_name: '',        // 画像名
             prof_photo_path: '',        // 画像パス
