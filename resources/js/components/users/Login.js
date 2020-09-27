@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import HcsAppBar from '../parts/appBar';
 import {Input, InputLabel, InputAdornment, FormControl, Button, Grid, Card, CardHeader, CardContent} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import styled from "styled-components";
@@ -49,7 +48,6 @@ export default function Login() {
 
   return (
     <>
-        <HcsAppBar />
         <Grid container justify="center">
             <Card className={classes.root}>
                 <CardHeader 

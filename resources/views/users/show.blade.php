@@ -6,9 +6,9 @@
         <p>{{ $user->nickname }}さんのページ</p>
     </div>
     <a href="{{ route('users.index') }}" class="btn btn-success" style="font-size: large">戻る</a>　
-    @if($user->id === Auth::user()->id)
+    {{-- @if($user->id === Auth::user()->id)
       <a href="{{ route('users.edit', ['user' => $user->id]) }}" class="btn btn-primary" style="font-size: large">会員情報を編集</a>
-    @endif
+    @endif --}}
     <br>
     <br>
     <div class="row">

@@ -1,5 +1,4 @@
 import React from 'react';
-import HcsAppBar from '../parts/appBar';
 import MessageList from '../parts/messageParts/messageList';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
@@ -17,7 +16,6 @@ export default function Message() {
     const classes = useStyles();
     return (
         <>
-            <HcsAppBar />
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={11} sm={6} md={6} lg={4}>
                     <UserSearch />

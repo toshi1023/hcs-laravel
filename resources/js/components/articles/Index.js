@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { fetchAsyncProf } from '../login/loginSlice';
 import { selectArticles, fetchAsyncGet } from './articleSlice';
-import HcsAppBar from '../parts/appBar';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/articleParts/prefectureSearch';
 import axios from 'axios';
@@ -47,7 +46,6 @@ function Article() {
     }
     return (
         <>
-            <HcsAppBar />
             <PrefectureSelects values={articles.prefectures} />
             <Grid container className={classes.gridContainer} justify="center">
                 {renderArticles()}

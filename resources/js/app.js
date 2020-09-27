@@ -21,8 +21,10 @@ import Login from './components/users/Login';
 import Home from './components/home/Home';
 import Article from './components/articles/Index';
 import User from './components/users/Index';
+import UserShow from './components/users/Show';
 import UserCreate from './components/users/Create';
 import Message from './components/messages/Message';
+import HcsAppBar from './components/parts/appBar';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { Provider } from "react-redux";
@@ -41,11 +43,13 @@ function App() {
       <div className={classes.background}>
         <Provider store={store}>
           <BrowserRouter>
+            <HcsAppBar />
             <Switch>
               <Route exact path="/login" render={props => <Login {...props} />} />
               <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
               <Route exact path="/articles" render={props => <Article {...props} />} />
               <Route exact path="/users" render={props => <User {...props} />} />
+              <Route exact path="/users/1" render={props => <UserShow {...props} />} />
               <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
               <Route exact path="/messages" render={props => <Message {...props} />} />
             </Switch>

@@ -1,5 +1,4 @@
 import React from 'react';
-import HcsAppBar from '../parts/appBar';
 import TopImageSlider from '../parts/homeParts/slick';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,7 +15,6 @@ function Home() {
 
     return (
         <>
-            <HcsAppBar />
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={8} sm={8}>
                     <TopImageSlider />

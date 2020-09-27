@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader,CardContent} from '@material-ui/core';
 import styled from "styled-components";
-import HcsAppBar from '../parts/appBar';
 import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/switch';
 import dateSelects from '../parts/common/dateSelects';
@@ -117,7 +116,6 @@ export default function UserCreate() {
 
   return (
     <>
-        <HcsAppBar />
         <Grid container justify="center">
         <Grid item xs={12} sm={8} md={8} lg={8}>
             <Card className={classes.root}>

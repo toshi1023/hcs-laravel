@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { fetchAsyncProf } from '../login/loginSlice';
 import { selectUsers, fetchAsyncGet } from './userSlice';
-import HcsAppBar from '../parts/appBar';
 import UserList from '../parts/userParts/userList';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
@@ -43,7 +42,6 @@ export default function User() {
 
     return (
         <>
-            <HcsAppBar />
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={11} sm={6} md={6} lg={4}>
                     <UserSearch />

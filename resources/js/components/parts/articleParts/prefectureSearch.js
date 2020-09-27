@@ -30,7 +30,7 @@ export default function PrefectureSelects(props) {
   const [state, setState] = React.useState({
     prefecture: null,
   })
-console.log(props.values)
+
   const handleChange = (event) => {
     setState({
       ...state,
