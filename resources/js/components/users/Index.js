@@ -5,6 +5,7 @@ import { selectUsers, fetchAsyncGet } from './userSlice';
 import UserList from '../parts/userParts/userList';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
+import { List } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import UserSearch from '../parts/userParts/userSearch';
 
@@ -13,6 +14,12 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '10px',
         paddingBottom: '20px'
     },
+    root: {
+        width: '100%',
+        maxWidth: 500,
+        // backgroundColor: theme.palette.background.paper,
+        backgroundColor: '#f7fad1',
+      },
 }));
 
 export default function User() {
@@ -36,10 +43,14 @@ export default function User() {
     // ユーザ一覧を生成
     const renderUsers = () => {
         return (
-            <UserList user={users} />
+            // <List dense className={classes.root}>
+            //     {_.map(users, value => {
+                    <UserList user={users} />
+            //     })}
+            // </List>
         )
     }
-
+    
     return (
         <>
             <Grid container className={classes.gridContainer} justify="center">

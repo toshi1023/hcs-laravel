@@ -4,7 +4,7 @@ import { selectSelectedUser } from './userSlice';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Button, Typography } from '@material-ui/core';
+import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +37,7 @@ export default function UserShow(props) {
     // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
     const selectedUsers = useSelector(selectSelectedUser)
     const dispatch = useDispatch()
-
+    console.log(selectedUsers)
     return (
         <Grid container className={classes.gridContainer} justify="center">
             <Grid item xs={12} sm={6}>

@@ -27,7 +27,7 @@ class LoginController extends Controller
         //     'message' => 'Unauthenticated.'
         // ], 401);
 
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('name', 'password');
 
         // 認証成功時はtokenを返す
         if (Auth::attempt($credentials)) {
