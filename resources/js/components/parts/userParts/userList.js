@@ -54,8 +54,8 @@ export default function UserList(props) {
     // selectedUserのstateを更新するReducerにdispatch
     dispatch(selectUser({
       id: value.id,
-      prof_photo_name: value.prof_photo_name, 
-      prof_photo_path: value.prof_photo_path,
+      users_photo_name: value.users_photo_name, 
+      users_photo_path: value.users_photo_path,
       name: value.name,
       prefecture: value.prefecture,
       birthday: value.birthday,
@@ -84,7 +84,7 @@ export default function UserList(props) {
               <ListItemAvatar>
                 <Avatar
                   alt={`Avatar n°${value.id}`}
-                  src={`${value.prof_photo_path}`}
+                  src={`${value.users_photo_path}`}
                   className={classes.avatar}
                 />
               </ListItemAvatar>

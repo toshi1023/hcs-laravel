@@ -256,8 +256,16 @@ class BaseRepository
                 // $tableにテーブル名の指定があれば対応したモデルからデータを取得
                 $data = $this->getFind($this->getModel($table), $id);
             }
+
             $data->delete_flg = 1;
             $data->save();
+
+            // テーブル名の取得
+            $table_name = $data->getTable();
+             // 画像パスがDBに保存されている場合は削除
+            if ($data[$table_name.'_photo_path']) {
+                $this->fileDelete($data[$table_name.'_photo_path']);
+            }
 
             if ($transaction) \DB::commit();
             return true;
@@ -265,6 +273,23 @@ class BaseRepository
             if ($transaction) \DB::rollBack();
             \Log::error($table.' destroy error:'.$e->getmessage());
             return false; 
+        }
+    }
+
+    /**
+     * ファイル削除用メソッド
+     * 引数:ファイルパス
+     */
+    public function fileDelete($path)
+    {
+        try {
+            // ファイルの削除を実行
+            $file = Storage::disk('s3');
+            $file->delete($path);
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('user image file delete error:'.$e->getmessage());
+            return false;     
         }
     }
 }

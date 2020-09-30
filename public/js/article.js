@@ -40,7 +40,7 @@ function setDetailView(data, button) {
         $('#detail_type').html(data.article.type_name);
         $('#detail_updated_at').html(update_time);
         $('#detail_content').html(data.article.content);
-        $('#detail_photo').attr('src', data.article.article_photo_path);
+        $('#detail_photo').attr('src', data.article.articles_photo_path);
         $('#detail_location').append(getListLink('map', data.article.id, url, 'list-button'));
 
         $('#article_id').data('id', data.article.id);              // 各タグで共有
@@ -71,7 +71,7 @@ function initList(search) {
                 data: function (p) {
                     return `
                         <a href="" data-toggle="modal" data-target="#modal${p.id}">
-                            <img src="${p.article_photo_path}" height="45" width="65">
+                            <img src="${p.articles_photo_path}" height="45" width="65">
                         </a>
 
                         <div class="modal fade" id="modal${p.id}" tabindex="-1"
@@ -85,7 +85,7 @@ function initList(search) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.article_photo_path}" id="image_modal" height="350" width="450">
+                                    <img src="${p.articles_photo_path}" id="image_modal" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

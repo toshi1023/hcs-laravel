@@ -80,7 +80,7 @@ export default function ArticleCard(props) {
             aria-label="article" 
             className={classes.large} 
             style={{ fontSize: 15 }}
-            src={props.article.prof_photo_path}
+            src={props.article.users_photo_path}
           />
         }
         action={
@@ -93,7 +93,7 @@ export default function ArticleCard(props) {
       />
       <CardMedia
         className={classes.media}
-        image={props.article.article_photo_path}
+        image={props.article.articles_photo_path}
         title={props.article.title}
       />
       <CardContent>

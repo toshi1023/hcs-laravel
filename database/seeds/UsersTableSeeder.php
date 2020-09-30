@@ -12,8 +12,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         \App\Model\User::create([
-            'prof_photo_name' => 'NoImage',
-            'prof_photo_path' => env('AWS_NOIMAGE'),
+            'users_photo_name' => 'NoImage',
+            'users_photo_path' => env('AWS_NOIMAGE'),
             'name' => 'root',
             'prefecture' => '兵庫県',
             'birthday' => '1992-1-1',
@@ -28,8 +28,8 @@ class UsersTableSeeder extends Seeder
         // レコード14件分出力
         for($i=1; $i < 15; $i++){
             \App\Model\User::create([
-                'prof_photo_name' => 'NoImage',
-                'prof_photo_path' => env('AWS_NOIMAGE'),
+                'users_photo_name' => 'NoImage',
+                'users_photo_path' => env('AWS_NOIMAGE'),
                 'name' => 'test'.$i,
                 'prefecture' => $faker->prefecture,
                 'birthday' => '1993-1-'.$i,

@@ -12,14 +12,14 @@ class ArticleImagesTableSeeder extends Seeder
     public function run()
     {
         \App\Model\ArticleImage::create([
-            'article_photo_name' => 'NoImage',
-            'article_photo_path' => env('AWS_NOIMAGE'),
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
             'article_id'         => 1,
             'user_id'            => 1,
         ]);
         \App\Model\ArticleImage::create([
-            'article_photo_name' => 'NoImage',
-            'article_photo_path' => env('AWS_NOIMAGE'),
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
             'article_id'         => 2,
             'user_id'            => 1,
         ]);

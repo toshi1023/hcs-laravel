@@ -69,13 +69,13 @@ const articleSlice = createSlice({
             {
                 user_id: 0,                 // ユーザid
                 name: '',                   // 投稿者のニックネーム
-                prof_photo_path: '',        // 投稿者のプロフィール画像
+                users_photo_path: '',       // 投稿者のプロフィール画像
                 prefecture: '',             // 都道府県
                 article_id: 0,              // 記事のid
-                article_photo_name: '',     // 記事の画像名
+                articles_photo_name: '',    // 記事の画像名
                 title: '',                  // 記事タイトル
                 content: '',                // 記事の内容
-                article_photo_path: '',     // 記事の画像パス
+                articles_photo_path: '',    // 記事の画像パス
                 type: 0,                    // 公開対象
                 type_name: '',              // 公開対象名
                 latitude: '',               // 緯度
@@ -89,10 +89,10 @@ const articleSlice = createSlice({
             user_id: 0,                 // ユーザid
             prefecture: '',             // 都道府県
             article_id: 0,              // 記事のid
-            article_photo_name: '',     // 記事の画像名
+            articles_photo_name: '',    // 記事の画像名
             title: '',                  // 記事タイトル
             content: '',                // 記事の内容
-            article_photo_path: '',     // 記事の画像パス
+            articles_photo_path: '',    // 記事の画像パス
             type: 0,                    // 公開対象
             latitude: '',               // 緯度
             longitude: '',              // 経度
@@ -103,13 +103,13 @@ const articleSlice = createSlice({
         selectedArticle: {
             user_id: 0,                 // ユーザid
             name: '',                   // 投稿者のニックネーム
-            prof_photo_path: '',        // 投稿者のプロフィール画像
+            users_photo_path: '',       // 投稿者のプロフィール画像
             prefecture: '',             // 都道府県
             article_id: 0,              // 記事のid
-            article_photo_name: '',     // 記事の画像名
+            articles_photo_name: '',    // 記事の画像名
             title: '',                  // 記事タイトル
             content: '',                // 記事の内容
-            article_photo_path: '',     // 記事の画像パス
+            articles_photo_path: '',    // 記事の画像パス
             type: 0,                    // 公開対象
             type_name: '',              // 公開対象名
             latitude: '',               // 緯度
@@ -163,13 +163,13 @@ const articleSlice = createSlice({
                 selectedArticle: {
                     user_id: 0,                 // ユーザid
                     name: '',                   // 投稿者のニックネーム
-                    prof_photo_path: '',        // 投稿者のプロフィール画像
+                    users_photo_path: '',       // 投稿者のプロフィール画像
                     prefecture: '',             // 都道府県
                     article_id: 0,              // 記事のid
-                    article_photo_name: '',     // 記事の画像名
+                    articles_photo_name: '',    // 記事の画像名
                     title: '',                  // 記事タイトル
                     content: '',                // 記事の内容
-                    article_photo_path: '',     // 記事の画像パス
+                    articles_photo_path: '',    // 記事の画像パス
                     type: 0,                    // 公開対象
                     type_name: '',              // 公開対象名
                     latitude: '',               // 緯度

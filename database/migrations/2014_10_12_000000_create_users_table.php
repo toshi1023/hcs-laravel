@@ -15,8 +15,8 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('prof_photo_name')->nullable();
-            $table->string('prof_photo_path')->nullable();
+            $table->string('users_photo_name')->nullable();
+            $table->string('users_photo_path')->nullable();
             $table->string('name')->unique();
             $table->string('prefecture');                               // お気に入り都道府県
             $table->date('birthday');

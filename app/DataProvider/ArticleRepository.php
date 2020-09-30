@@ -33,10 +33,10 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                                  'articles.*', 
                                  'users.name', 
                                  'users.gender', 
-                                 'users.prof_photo_path', 
+                                 'users.users_photo_path', 
                                  'article_images.id as image_id',
-                                 'article_images.article_photo_name',
-                                 'article_images.article_photo_path',
+                                 'article_images.articles_photo_name',
+                                 'article_images.articles_photo_path',
                              )
                              ->latest('articles.updated_at');
     }
@@ -77,8 +77,8 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             // 画像をアップロード(フロントはユーザネーム、管理画面はメールアドレスをフォルダ名に設定)
             $file_upload = $this->fileStore($data['upload_image'], \Auth::user()->name ? \Auth::user()->name : \Auth::user()->email);
 
-            $model->article_photo_name = $filename;
-            $model->article_photo_path = $file_upload[1];
+            $model->articles_photo_name = $filename;
+            $model->articles_photo_path = $file_upload[1];
             $model->article_id = $data['id'];
             $model->user_id = $data['user_id'];
             $model->save();

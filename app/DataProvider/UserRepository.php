@@ -47,8 +47,8 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             $file_upload = $this->fileStore($data['upload_image'], $data['name']);
             
             // データを保存
-            $this->model->prof_photo_name = $filename;
-            $this->model->prof_photo_path = $file_upload[1];
+            $this->model->users_photo_name = $filename;
+            $this->model->users_photo_path = $file_upload[1];
             $this->model->fill($data);
             $this->model->save();
 
@@ -88,23 +88,6 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     }
 
     /**
-     * ファイル削除用メソッド
-     * 引数:ファイルパス
-     */
-    public function fileDelete($path)
-    {
-        try {
-            // ファイルの削除を実行
-            $file = Storage::disk('s3');
-            $file->delete($path);
-            return true;
-        } catch (\Exception $e) {
-            \Log::error('user image file delete error:'.$e->getmessage());
-            return false;     
-        }
-    }
-
-    /**
      * usersページのフレンド一覧データを取得
      * 引数：ユーザID
      */
@@ -113,7 +96,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                            ->leftJoin('users as targets', 'friends.user_id_target', '=', 'targets.id')
                            ->select('users.id', 'users.name as user_name', 'users.updated_at', 
                                     'friends.id as friend_id', 'friends.user_id_target',
-                                    'friends.status', 'targets.prof_photo_name', 'targets.prof_photo_path',
+                                    'friends.status', 'targets.users_photo_name', 'targets.users_photo_path',
                                     'targets.name as friend_name', 'targets.prefecture'
                                     )
                            ->where('friends.user_id', '=', $user_id);

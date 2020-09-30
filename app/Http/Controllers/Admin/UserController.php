@@ -71,8 +71,8 @@ class UserController extends Controller
 
       // アップロードファイルのファイル名を設定
       $filename = null;
-      if ($request['upload_image']){
-        $filename = $_FILES['upload_image']['name'];
+      if ($request->file('upload_image')){
+        $filename = $this->getFilename($request->file('upload_image'));
       }
       
       if ($this->database->save($request, $filename)){
@@ -155,7 +155,11 @@ class UserController extends Controller
       }
 
       // ファイル名の設定
-      $filename = $_FILES['upload_image']['name'];
+      $filename = null;
+      if ($request->file('upload_image')){
+        $filename = $this->getFilename($request->file('upload_image'));
+      }
+      // $filename = $_FILES['upload_image']['name'];
 
       if ($this->database->save($request, $filename)) {
         DB::commit();

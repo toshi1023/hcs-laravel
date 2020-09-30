@@ -68,8 +68,8 @@ const userSlice = createSlice({
         users: [
             {
                 id: '',                     // ID
-                prof_photo_name: '',        // 画像名
-                prof_photo_path: '',        // 画像パス
+                users_photo_name: '',       // 画像名
+                users_photo_path: '',       // 画像パス
                 name: '',                   // ニックネーム
                 prefecture: '',             // 都道府県
                 birthday: '',               // 生年月日
@@ -84,8 +84,8 @@ const userSlice = createSlice({
         // userの編集時に選択・保持するstate
         editedUser: {
             id: '',                     // ID
-            prof_photo_name: '',        // 画像名
-            prof_photo_path: '',        // 画像パス
+            users_photo_name: '',       // 画像名
+            users_photo_path: '',       // 画像パス
             name: '',                   // ニックネーム
             prefecture: '',             // 都道府県
             birthday: '',               // 生年月日
@@ -99,8 +99,8 @@ const userSlice = createSlice({
         // userの詳細表示をした際に保持するstate
         selectedUser: {
             id: '',                     // ID
-            prof_photo_name: '',        // 画像名
-            prof_photo_path: '',        // 画像パス
+            users_photo_name: '',       // 画像名
+            users_photo_path: '',       // 画像パス
             name: '',                   // ニックネーム
             prefecture: '',             // 都道府県
             birthday: '',               // 生年月日

@@ -20,7 +20,24 @@ class Controller extends BaseController
         $this->messages = new MessageBag();
     }
 
-    // パスワードをバリデート
+    /**
+     * ファイル名の設定
+     * 引数：ファイル情報
+     */
+    public function getFilename($file)
+    {
+        $tmp_name   = md5(microtime());                    // フィル名取得(microtime() : Unixタイムスタンプ)
+        $ext        = $file->getClientOriginalExtension(); // 拡張子GET
+        $image_name = $tmp_name.".".$ext;
+
+        return $image_name;
+    }
+
+    
+    /**
+     * パスワードのバリデーションメソッド
+     * 引数：保存するデータ
+     */
     public function passwordValidation(Request $request)
     {
         $request->validate([
@@ -29,7 +46,10 @@ class Controller extends BaseController
         ]);
     }
 
-    // 経度・緯度をバリデート
+    /**
+     * 経度・緯度のバリデーションメソッド
+     * 引数：保存するデータ
+     */
     public function mapValidation(Request $request)
     {
         $request->validate([

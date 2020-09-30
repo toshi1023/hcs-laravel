@@ -105,7 +105,7 @@ function setDetailView(data, button) {
         $('#detail_status').html(data.user.status_name);
         $('#detail_email').html(data.user.email);
         $('#detail_created_at').html(create_time);
-        $('#detail_image_file').attr('src', data.user.prof_photo_path);
+        $('#detail_image_file').attr('src', data.user.users_photo_path);
         // $('#detail_user_agent').html(data.user_agent);
         $('#detail_memo').html(data.user.memo);
         $('#user_id').data('id', data.user.id);              // 各タグで共有
@@ -152,7 +152,7 @@ function setDetailView(data, button) {
                             
                             return `
                                 <a href="" data-toggle="modal" data-target="#friend_modal${p.friend_id}">
-                                    <img src="${p.prof_photo_path}" id="location_image" height="45" width="65">
+                                    <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
                                 </a>
         
                                 <div class="modal fade" id="friend_modal${p.friend_id}" tabindex="-1"
@@ -166,7 +166,7 @@ function setDetailView(data, button) {
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                            <img src="${p.prof_photo_path}" id="image_modal_user" height="350" width="450">
+                                            <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.friend_id}">Close</button>
@@ -257,7 +257,7 @@ function initList(search) {
                 data: function (p) {
                     return `
                         <a href="" data-toggle="modal" data-target="#modal${p.id}">
-                            <img src="${p.prof_photo_path}" height="45" width="65">
+                            <img src="${p.users_photo_path}" height="45" width="65">
                         </a>
 
                         <div class="modal" id="modal${p.id}" tabindex="-1"
@@ -271,7 +271,7 @@ function initList(search) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.prof_photo_path}" id="image_modal" height="350" width="450">
+                                    <img src="${p.users_photo_path}" id="image_modal" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
