@@ -79,7 +79,7 @@
                     {{-- タブ2つ目(フレンド管理) --}}
                     <div class="tab-pane" id="item2" role="tabpanel" aria-labelledby="item2-tab">
                         <table class="table table-striped table-bordered datatable table-sm" id="user_friend_list">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr role="row">
                                     <th>履歴ID</th>
                                     <th>プロフィール画像</th>

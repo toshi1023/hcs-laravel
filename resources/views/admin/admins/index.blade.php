@@ -23,7 +23,7 @@
                 </div>
                 <hr>
                 <table class="table table-striped table-bordered datatable table-sm" id="main_list">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr role="row">
                             <th>ID</th>
                             <th>Eメール</th>

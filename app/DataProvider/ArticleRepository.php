@@ -116,21 +116,4 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             return [true, env('AWS_NOIMAGE')];
         }
     }
-
-    /**
-    * ファイル削除用メソッド
-    * 引数:ファイルパス
-    * */
-    public function fileDelete($path)
-    {
-        try {
-            // ファイルの削除を実行
-            $file = Storage::disk('s3');
-            $file->delete($path);
-            return true;
-        } catch (\Exception $e) {
-            \Log::error('article image file delete error:'.$e->getmessage());
-            return false;
-        }
-    }
 }
