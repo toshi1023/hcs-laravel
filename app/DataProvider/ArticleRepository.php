@@ -24,7 +24,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     /**
      * articlesページの一覧データを取得
      */
-    public function getBaseData($conditions)
+    public function getBaseData($conditions=null)
     {
         // usersテーブルの値も結合して取得
         $query = $this->model->leftjoin('users', 'articles.user_id', '=', 'users.id')
