@@ -25,6 +25,9 @@
                         </div>
                     </div>
                     <hr>
+                    <div class="create_btn">
+                        @include('admin.layouts.components.button.create', ['url' => "/hcs-admin/users/create"])
+                    </div>
                     <table class="table table-striped table-bordered datatable table-sm" id="main_list">
                         <thead class="thead-dark">
                             <tr role="row">

@@ -24,10 +24,10 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     /**
      * articlesページの一覧データを取得
      */
-    public function getBaseData()
+    public function getBaseData($conditions)
     {
         // usersテーブルの値も結合して取得
-        return $this->model->leftjoin('users', 'articles.user_id', '=', 'users.id')
+        $query = $this->model->leftjoin('users', 'articles.user_id', '=', 'users.id')
                              ->leftjoin('article_images', 'articles.id', '=', 'article_images.article_id')
                              ->select(
                                  'articles.*', 
@@ -38,7 +38,13 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                                  'article_images.articles_photo_name',
                                  'article_images.articles_photo_path',
                              )
-                             ->latest('articles.updated_at');
+                             ->where('articles.delete_flg', '=', 0);
+        
+        // 検索条件が設定されている場合は検索を実行
+        if(!is_null($conditions)) {
+            $query = $this->getWhereQuery(null, $conditions, $query);
+        }
+        return $query;
     }
 
     /**

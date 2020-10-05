@@ -24,10 +24,14 @@ class AdminService
    * Indexページ用データを取得するメソッド
    * 引数：検索用テーブル
    */
-  public function getIndex($table=null)
+  public function getIndex($table=null, $conditions=null)
   {
-    // 全ユーザデータを更新日時順にソートして取得
-    return $this->AdminService->getQuery($table)->latest('updated_at');
+    if(is_null($table)) {
+      // ユーザデータを取得
+      return $this->AdminService->getBaseData($conditions);
+    }
+    // 指定したテーブルのデータをソートして取得
+    return $this->AdminService->getQuery($table, $conditions)->latest($table.'.updated_at');
 
   }
 

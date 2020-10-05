@@ -6,5 +6,5 @@ namespace App\DataProvider\DatabaseInterface;
 interface AdminDatabaseInterface {
     
     // 一覧に表示するデータの取得処理を記述
-    public function getBaseData();
+    public function getBaseData($conditions);
 }

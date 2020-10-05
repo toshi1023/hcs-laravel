@@ -31,10 +31,15 @@ class AdminController extends Controller
 
     }
     
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-      // 全管理ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex();
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->id) { $conditions['admins.id'] = $request->id; }
+      if ($request->email) { $conditions['admins.email@like'] = $request->email; }
+
+      // 管理ユーザデータを更新日時順にソートして取得
+      $users = $this->database->getIndex(null, $conditions);
 
       return Datatables::eloquent($users)->make(true);
 

@@ -30,10 +30,16 @@ class ArticleController extends Controller
       return view('admin.articles.index', []);
   }
 
-  public function apiIndex()
+  public function apiIndex(Request $request)
     {
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->id) { $conditions['articles.id'] = $request->id; }
+      if ($request->prefecture) { $conditions['articles.prefecture@like'] = $request->prefecture; }
+      if ($request->name) { $conditions['users.name@like'] = $request->name; }
+
       // 全管理ユーザデータを更新日時順にソートして取得
-      $articles = $this->database->getIndex();
+      $articles = $this->database->getIndex(null, $conditions);
 
       return Datatables::eloquent($articles)->make(true);
 

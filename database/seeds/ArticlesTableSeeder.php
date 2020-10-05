@@ -28,5 +28,14 @@ class ArticlesTableSeeder extends Seeder
             'type'       => 1,
             'user_id'    => 1,
         ]);
+        \App\Model\Article::create([
+            'prefecture' => '京都府',
+            'latitude'   => '135.749619',
+            'longitude'  => '35.005816',
+            'title'      => 'これからよろしく！',
+            'content'    => '一緒にヒッチハイクを盛り上げていきたいです！',
+            'type'       => 1,
+            'user_id'    => 2,
+        ]);
     }
 }

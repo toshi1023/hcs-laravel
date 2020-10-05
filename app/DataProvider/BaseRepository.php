@@ -174,7 +174,6 @@ class BaseRepository
 
             return $query;
         }
-
         return $query;
     }
 

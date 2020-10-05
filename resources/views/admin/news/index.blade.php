@@ -23,9 +23,6 @@
                             'blank'         => true
                         ])
                     </div>
-                    <div class="col-8 col-lg-2">
-                        <input type="text" class="form-control search-text" value="" name="name" id="name" placeholder="タイトル">
-                    </div>
                     <div class="col-lg-2">
                         @include('admin.layouts.components.select_option', [
                             'label'         => '公開ステータス',
@@ -42,6 +39,9 @@
                     </div>
                 </div>
                 <hr>
+                <div class="create_btn">
+                    @include('admin.layouts.components.button.create', ['url' => "/hcs-admin/news/create"])
+                </div>
                 <table class="table table-striped table-bordered datatable table-sm" id="main_list">
                     <thead class="thead-dark">
                         <tr role="row">

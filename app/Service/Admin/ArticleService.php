@@ -21,10 +21,14 @@ class ArticleService
   }
 
   /* Index用データ取得メソッド */
-  public function getIndex()
+  public function getIndex($table=null, $conditions=null)
   {
-    // 記事を全て取得(Userモデルのテーブルも結合して取得！)
-    return $articles = $this->ArticleService->getBaseData();
+    if(is_null($table)) {
+      // 記事を全て取得(Userモデルのテーブルも結合して取得)
+      return $this->ArticleService->getBaseData($conditions);
+    }
+    // 指定したテーブルのデータをソートして取得
+    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
   }
 
   /* *

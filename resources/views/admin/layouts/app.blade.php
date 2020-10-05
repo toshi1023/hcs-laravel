@@ -119,8 +119,8 @@
           </div>
           @endif
           <!-- フラッシュメッセージ -->
-          @if (session('message'))
-            <div class="alert alert-success" style="font-size: large">{{ session('message') }}</div>
+          @if (session('info_message'))
+            <div class="alert alert-success" style="font-size: large">{{ session('info_message') }}</div>
           @endif
         </div>
       </div>

@@ -112,6 +112,11 @@ $(function() {
         },500);
     }
 
+    // 新規作成ボタンをクリック
+    $(document).on('click', '.btn-create', function() {
+        window.location.href = $('.btn-create').data('url');
+    });
+
     /**
      * @2 登録・編集画面の設定
      */
@@ -234,6 +239,7 @@ $(function() {
         }
     });
     
+    // キャンセルボタンをクリックした場合
     $(document).on('click', '.btn-cancel', function() {
         window.location.href = $('.btn-cancel').data('url');
     });

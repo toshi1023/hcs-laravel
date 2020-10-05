@@ -20,8 +20,8 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     /**
      * usersページの一覧データを取得
      */
-    public function getBaseData() {
-        return $this->getQuery();
+    public function getBaseData($conditions) {
+        return $this->getQuery('users', $conditions, [], true);
     }
 
     /**

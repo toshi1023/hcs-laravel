@@ -37,10 +37,16 @@ class NewsController extends Controller
         'status_list' => $status,
       ]);
     }
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-      // 全ニュースを更新日時順にソートして取得
-      $news = $this->database->getIndex();
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->id) { $conditions['news.id'] = $request->id; }
+      if ($request->type) { $conditions['news.type'] = $request->type; }
+      if ($request->status) { $conditions['news.status'] = $request->status; }
+
+      // ニュースをデータを取得
+      $news = $this->database->getIndex(null, $conditions);
 
       return Datatables::eloquent($news)->make(true);
 

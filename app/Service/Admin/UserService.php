@@ -26,9 +26,12 @@ class UserService
    */
   public function getIndex($table=null, $conditions=null)
   {
-    // 全ユーザデータを更新日時順にソートして取得
-    return $this->UserService->getQuery($table, $conditions)->latest('users.updated_at');
-
+    if(is_null($table)) {
+      // ユーザデータを取得
+      return $this->UserService->getBaseData($conditions);
+    }
+    // 指定したテーブルのデータをソートして取得
+    return $this->UserService->getQuery($table, $conditions)->latest($table.'.updated_at');
   }
 
   /* *
@@ -73,6 +76,15 @@ class UserService
     return $this->UserService->save($data, $filename);
   }
 
+  /**
+   * ユーザの削除
+   * 引数：ユーザID
+   */
+  public function remove($id)
+  {
+    return $this->UserService->getDestroy($id);
+  }
+
   /*
   ファイルアップロード用メソッド
   第一引数:ファイル, 第二引数:フォルダ名に使用するための値
@@ -98,15 +110,6 @@ class UserService
   public function getFriendsQuery($user_id)
   {
     return $this->UserService->getFriendsQuery($user_id);
-  }
-
-  /**
-   * ユーザの削除
-   * 引数：ユーザID
-   */
-  public function remove($id)
-  {
-    return $this->UserService->getDestroy($id);
   }
 
 }

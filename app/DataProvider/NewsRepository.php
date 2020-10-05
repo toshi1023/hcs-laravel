@@ -19,8 +19,8 @@ class NewsRepository extends BaseRepository implements NewsDatabaseInterface
     /**
      * newsページの一覧データを取得
      */
-    public function getBaseData() {
-        return $this->getQuery();
+    public function getBaseData($conditions) {
+        return $this->getQuery('news', $conditions, [], true);
     }
 
 }

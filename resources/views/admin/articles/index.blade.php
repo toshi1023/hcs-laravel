@@ -14,10 +14,10 @@
                         <input type="text" class="form-control search-text" value="" name="id" id="id" placeholder="ID">
                     </div>
                     <div class="col-lg-2">
-                        <input type="text" class="form-control search-text" value="" name="name" id="name" placeholder="都道府県">
+                        <input type="text" class="form-control search-text" value="" name="prefecture" id="prefecture" placeholder="都道府県">
                     </div>
                     <div class="col-lg-2">
-                        <input type="text" class="form-control search-text" value="" name="email" id="email" placeholder="タイトル">
+                        <input type="text" class="form-control search-text" value="" name="name" id="name" placeholder="投稿者">
                     </div>
                     <div class="col-lg-4">
                         @include('admin.layouts.components.button.search')
@@ -25,6 +25,9 @@
                     </div>
                 </div>
                 <hr>
+                <div class="create_btn">
+                    @include('admin.layouts.components.button.create', ['url' => "/hcs-admin/articles/create"])
+                </div>
                 <table class="table table-striped table-bordered datatable table-sm" id="main_list">
                     <thead class="thead-dark">
                         <tr role="row">

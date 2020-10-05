@@ -14,7 +14,7 @@
                         <input type="text" class="form-control search-text" value="" name="id" id="id" placeholder="ID">
                     </div>
                     <div class="col-8 col-lg-2">
-                        <input type="text" class="form-control search-text" value="" name="name" id="name" placeholder="ユーザ名">
+                        <input type="text" class="form-control search-text" value="" name="email" id="email" placeholder="メールアドレス">
                     </div>
                     <div class="col-lg-4">
                         @include('admin.layouts.components.button.search')
@@ -22,6 +22,9 @@
                     </div>
                 </div>
                 <hr>
+                <div class="create_btn">
+                    @include('admin.layouts.components.button.create', ['url' => "/hcs-admin/admins/create"])
+                </div>
                 <table class="table table-striped table-bordered datatable table-sm" id="main_list">
                     <thead class="thead-dark">
                         <tr role="row">

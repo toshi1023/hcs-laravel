@@ -26,7 +26,7 @@ class Controller extends BaseController
      */
     public function getFilename($file)
     {
-        $tmp_name   = md5(microtime());                    // フィル名取得(microtime() : Unixタイムスタンプ)
+        $tmp_name   = md5(microtime());                    // ファイル名取得(microtime() : Unixタイムスタンプ)
         $ext        = $file->getClientOriginalExtension(); // 拡張子GET
         $image_name = $tmp_name.".".$ext;
 
@@ -38,7 +38,7 @@ class Controller extends BaseController
      * パスワードのバリデーションメソッド
      * 引数：保存するデータ
      */
-    public function passwordValidation(Request $request)
+    public function passwordValidation($request)
     {
         $request->validate([
             'password' => ['required', 'min:6', 'confirmed'],
@@ -50,7 +50,7 @@ class Controller extends BaseController
      * 経度・緯度のバリデーションメソッド
      * 引数：保存するデータ
      */
-    public function mapValidation(Request $request)
+    public function mapValidation($request)
     {
         $request->validate([
             'latitude' => ['numeric'],

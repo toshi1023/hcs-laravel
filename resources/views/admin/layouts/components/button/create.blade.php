@@ -1,0 +1,1 @@
+<button type="button" class="btn btn-primary btn-cancel width-100 mr-2" data-url={{ $url }}>新規作成</button>
