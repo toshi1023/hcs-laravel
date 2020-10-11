@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { fetchAsyncProf } from '../login/loginSlice';
+import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import { selectUsers, fetchAsyncGet } from './userSlice';
 import UserList from '../parts/userParts/userList';
 import _ from 'lodash';
@@ -31,9 +31,16 @@ export default function User() {
     useEffect(() => {
         // 非同期の関数を定義
         const fetchUserProf = async () => {
+            // Loading開始
+            await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
-            await dispatch(fetchAsyncGet())
-            // await dispatch(fetchAsyncProf())
+            const resultReg = await dispatch(fetchAsyncGet())
+            if (fetchAsyncLogin.fulfilled.match(resultReg)) {
+                // ロード終了
+                await dispatch(fetchCredEnd());       
+            }
+            // ロード終了
+            await dispatch(fetchCredEnd());  
         }
         // 上で定義した非同期の関数を実行
         fetchUserProf()

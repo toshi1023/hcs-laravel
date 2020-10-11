@@ -2,6 +2,8 @@
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/bootflat/2.0.4/css/bootflat.min.css');
 
+/* フロントエンドのローディングデザイン */
+
 /* articleCard.jsファイルにて設定 */
 h2 {
   width: 400px;

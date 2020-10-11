@@ -3,8 +3,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Input, InputLabel, InputAdornment, FormControl, Button, Grid, Card, CardHeader, CardContent} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import SwitchType from '../parts/switch';
+import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
+import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    fetchCredStart,
+    fetchCredEnd,
+} from '../app/appSlice';
+import {
+    selectMypage,
+    fetchAsyncLogin,
+} from './userSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +41,11 @@ const useStyles = makeStyles((theme) => ({
     formFont: {
         fontSize: 20
     },
+    error: {
+        marginLeft: theme.spacing(4),
+        fontSize: 13,
+        color: 'red',
+    },
     button: {
         marginLeft: theme.spacing(4),
         marginTop: theme.spacing(3),
@@ -44,7 +60,11 @@ const Title = styled.h1`
 `;
 
 export default function Login() {
+  const history = useHistory();
   const classes = useStyles();
+  const dispatch = useDispatch()
+  // storeのstateから値を参照
+  const mypage = useSelector(selectMypage)
 
   return (
     <>
@@ -56,52 +76,106 @@ export default function Login() {
                     }
                     className={classes.header}
                 />
-                <Grid item xs={12} md={12} spacing={3}>
+                <Grid item xs={12} md={12}>
                     <CardContent>
                         <Link to="/users/create" style={{fontSize: 13, width: 150}}>新規会員登録はこちら</Link>
-                        <div>
-                            <FormControl className={classes.margin}>
-                                <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ログインID</InputLabel>
-                                <Input
-                                id="input-with-icon-adornment"
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                    <AccountCircle />
-                                    </InputAdornment>
-                                }
-                                className={classes.formFont}
-                                required
-                                />
-                            </FormControl>
-                        </div>
-                        <div>
-                            <FormControl className={classes.margin}>
-                                <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
-                                <Input
-                                id="input-with-icon-adornment"
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                    <AccountCircle />
-                                    </InputAdornment>
-                                }
-                                type="password"
-                                className={classes.formFont}
-                                required
-                                />
-                            </FormControl>
-                        </div>
-                        <div>
-                            <FormControl>
-                                <Grid container>
-                                    <Grid item md={8} className={classes.button}>
-                                        <Button variant="contained" color="primary" >ログイン</Button>
-                                    </Grid>
-                                    {/* <Grid item md={6} spacing={10}>
-                                        <SwitchType />
-                                    </Grid>   */}
-                                </Grid>
-                            </FormControl>
-                        </div>
+                        <Formik
+                            initialErrors={{ name: "required" }}
+                            initialValues={{ name: "", password: "" }}
+                            onSubmit={async (values) => {
+                                // ロード開始
+                                await dispatch(fetchCredStart());
+                                // console.log(mypage)
+                                // history.push('/user/1')
+                                // await dispatch(fetchAsyncLogin(values));
+                                
+                                
+                                // if (fetchAsyncLogin.fulfilled.match(result)) {
+                                // ログインユーザのプロフィールを取得
+                                // await dispatch(fetchAsyncGetMyProf());
+                                // ログインユーザのマイページに遷移
+                                    // history.push(`/user/${mypage.id}`)
+                                    
+                                // }
+                                // ロード終了
+                                await dispatch(fetchCredEnd());
+                            }}
+                            validationSchema={Yup.object().shape({
+                                name: Yup.string().required("IDはの入力は必須です"),
+                                password: Yup.string().required("パスワードの入力は必須です"),
+                            })}
+                            >
+                            {({
+                                handleSubmit,
+                                handleChange,
+                                handleBlur,
+                                values,
+                                errors,
+                                touched,
+                                isValid,
+                            }) => (
+                                <Form onSubmit={handleSubmit}>
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ログインID</InputLabel>
+                                            <Input
+                                            id="input-with-icon-adornment"
+                                            name="name"
+                                            startAdornment={
+                                                <InputAdornment position="start">
+                                                <AccountCircle />
+                                                </InputAdornment>
+                                            }
+                                            className={classes.formFont}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.name}
+                                            required
+                                            />
+                                        </FormControl>
+                                        {touched.name && errors.name ? (
+                                            <div className={classes.error}>{errors.name}</div>
+                                        ) : null}
+                                    </div>
+                                    
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
+                                            <Input
+                                            id="input-with-icon-adornment"
+                                            name="password"
+                                            startAdornment={
+                                                <InputAdornment position="start">
+                                                <AccountCircle />
+                                                </InputAdornment>
+                                            }
+                                            type="password"
+                                            className={classes.formFont}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.password}
+                                            required
+                                            />
+                                        </FormControl>
+                                        {touched.password && errors.password ? (
+                                            <div className={classes.error}>{errors.password}</div>
+                                        ) : null}
+                                    </div>
+                                    <div>
+                                        <FormControl>
+                                            <Grid container>
+                                                <Grid item md={8} className={classes.button}>
+                                                    <Button variant="contained" color="primary" disabled={!isValid} type="submit">ログイン</Button>
+                                                </Grid>
+                                                {/* <Grid item md={6} spacing={10}>
+                                                    <SwitchType />
+                                                </Grid>   */}
+                                            </Grid>
+                                        </FormControl>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
                     </CardContent>
                 </Grid>
             </Card>

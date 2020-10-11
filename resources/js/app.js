@@ -15,7 +15,7 @@ require('./bootstrap');
 require('./components/home/Home');
 
 
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import Login from './components/users/Login';
 import Home from './components/home/Home';
@@ -25,10 +25,14 @@ import UserShow from './components/users/Show';
 import UserCreate from './components/users/Create';
 import Message from './components/messages/Message';
 import HcsAppBar from './components/parts/appBar';
+import LoadItem from './components/parts/common/loadItem';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { Provider } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { selectLoading, fetchCredStart, fetchCredEnd, } from "./components/app/appSlice";
 import store from "./store";
+
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -36,30 +40,55 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+/**
+ * redux-toolkitの機能を利用するためのラッパー関数を生成
+ */
+const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+}
+
 function App() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  let loading = useSelector(selectLoading);
+
+  // Loadingアイコンの制御
+  const handleLoading = async () => {
+
+    if(loading) {
+      await dispatch(fetchCredEnd())
+    } else {
+      await dispatch(fetchCredStart())
+    }
+    return;
+  }
+
   return (
     <>
       <div className={classes.background}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <HcsAppBar />
-            <Switch>
-              <Route exact path="/login" render={props => <Login {...props} />} />
-              <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
-              <Route exact path="/articles" render={props => <Article {...props} />} />
-              <Route exact path="/users" render={props => <User {...props} />} />
-              <Route exact path="/users/1" render={props => <UserShow {...props} />} />
-              <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
-              <Route exact path="/messages" render={props => <Message {...props} />} />
-            </Switch>
-          </BrowserRouter> 
-        </Provider>
+        <BrowserRouter>
+          <HcsAppBar />
+          <button onClick={handleLoading} />
+          <Switch>
+            <Route exact path="/login" render={props => <Login {...props} />} />
+            <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
+            <Route exact path="/articles" render={props => <Article {...props} />} />
+            <Route exact path="/users" render={props => <User {...props} />} />
+            <Route exact path="/users/1" render={props => <UserShow {...props} />} />
+            <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
+            <Route exact path="/messages" render={props => <Message {...props} />} />
+          </Switch>
+          {loading ? <LoadItem /> : null}
+        </BrowserRouter>
       </div>
     </>
   )
 }
 
 if (document.getElementById('app')) {
-    ReactDOM.render(<App />, document.getElementById('app'));
+    ReactDOM.render(<AppWrapper />, document.getElementById('app'));
 }

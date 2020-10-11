@@ -77,13 +77,24 @@ function HcsAppBar() {
 
     // アカウントメニューをクローズ
     const handleMenuClose = () => {
+        setAnchorEl(null);
+        handleMobileMenuClose();
+    };
+    // アカウントメニューをクローズ
+    const handleProfileClose = () => {
         history.push("/users/1");
+        setAnchorEl(null);
+        handleMobileMenuClose();
+    };
+    // My記事メニューをクローズ
+    const handleMyArticleClose = () => {
+        // history.push("");
         setAnchorEl(null);
         handleMobileMenuClose();
     };
 
     const handleMessage = () => {
-        history.push("/login");
+        history.push("/messages");
         handleMobileMenuClose();
     };
 
@@ -111,8 +122,8 @@ function HcsAppBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>プロフィール</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My記事</MenuItem>
+            <MenuItem onClick={handleProfileClose}>プロフィール</MenuItem>
+            <MenuItem onClick={handleMyArticleClose}>My記事</MenuItem>
             <MenuItem onClick={handleMenuCloseLogout}>ログアウト</MenuItem>
         </Menu>
     );
