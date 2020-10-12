@@ -17,6 +17,11 @@ import styled from "styled-components";
 import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import {
+    fetchCredStart,
+    fetchCredEnd,
+} from '../app/appSlice';
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -61,9 +66,9 @@ function HcsAppBar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const history = useHistory();
-
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const dispatch = useDispatch();
 
     // アカウントメニューを表示
     const handleProfileMenuOpen = event => {
@@ -98,11 +103,29 @@ function HcsAppBar() {
         handleMobileMenuClose();
     };
 
+    // Login処理
+    const handleMenuCloseLogin = () => {
+        history.push('/login')
+        setAnchorEl(null);
+        handleMobileMenuClose();
+    };
+
     // Logout処理
-    const handleMenuCloseLogout = () => {
+    const handleMenuCloseLogout = async () => {
         if (confirm("ログアウトをしますか？")) {
+            // ロード開始
+            await dispatch(fetchCredStart());
+            
+            // メニューを閉じた後にページ遷移
             setAnchorEl(null);
             handleMobileMenuClose();
+            history.push('/login');
+            // localStorageのTokenを削除(ログアウト処理)
+            localStorage.removeItem("localToken");
+            // ロード終了
+            if(!localStorage.getItem('localToken')) {
+                await dispatch(fetchCredEnd());
+            }
         }
     };
 
@@ -122,9 +145,18 @@ function HcsAppBar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleProfileClose}>プロフィール</MenuItem>
-            <MenuItem onClick={handleMyArticleClose}>My記事</MenuItem>
-            <MenuItem onClick={handleMenuCloseLogout}>ログアウト</MenuItem>
+            {
+                // ログインしているか否かで表示内容を変更
+                localStorage.getItem('localToken') ? 
+                <div>
+                    <MenuItem onClick={handleProfileClose}>プロフィール</MenuItem>
+                    <MenuItem onClick={handleMyArticleClose}>My記事</MenuItem>
+                    <MenuItem onClick={handleMenuCloseLogout}>ログアウト</MenuItem>
+                </div>
+                :
+                <MenuItem onClick={handleMenuCloseLogin}>ログイン</MenuItem>
+                
+            }
         </Menu>
     );
 

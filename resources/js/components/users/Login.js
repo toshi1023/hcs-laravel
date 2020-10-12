@@ -7,7 +7,7 @@ import { Link, useHistory } from 'react-router-dom';
 import SwitchType from '../parts/switch';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
     fetchCredStart,
     fetchCredEnd,
@@ -61,7 +61,7 @@ const Title = styled.h1`
 export default function Login() {
   const history = useHistory();
   const classes = useStyles();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -90,8 +90,7 @@ export default function Login() {
                                 // await dispatch(fetchAsyncGetMyProf());
                                 // ログインユーザのマイページに遷移
                                     // history.push(`/user/${mypage.id}`)
-                                    // history.push('/user/1')
-                                    console.log(login.payload.id)
+                                    history.push('/user/1')
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
                                     

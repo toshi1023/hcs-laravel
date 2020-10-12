@@ -11,6 +11,11 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import InfoIcon from '@material-ui/icons/Info';
 import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import { useDispatch } from 'react-redux';
+import {
+    fetchCredStart,
+    fetchCredEnd,
+} from '../app/appSlice';
 
 const useStyles = makeStyles({
   list: {
@@ -26,6 +31,7 @@ const MenuDrawer = (props) => {
   const [state, setState] = React.useState({
     left: false,
   });
+  const dispatch = useDispatch();
 
   // URL遷移のために設定
   const { history } = props
@@ -67,6 +73,22 @@ const MenuDrawer = (props) => {
     }, 
   ]
 
+  // Logout処理
+  const handleLogout = async () => {
+    if (confirm("ログアウトをしますか？")) {
+        // ロード開始
+        await dispatch(fetchCredStart());
+        
+        history.push('/login');
+        // localStorageのTokenを削除(ログアウト処理)
+        localStorage.removeItem("localToken");
+        // ロード終了
+        if(!localStorage.getItem('localToken')) {
+            await dispatch(fetchCredEnd());
+        }
+    }
+  };
+
   // リストを実装
   const list = (anchor) => (
     <div
@@ -97,6 +119,17 @@ const MenuDrawer = (props) => {
           </ListItem>
         ))}
       </List>
+      { // ログインしているか否かで表示内容を変更
+        localStorage.getItem('localToken') ? 
+      <List>
+        {['ログアウト'].map((text, index) => (
+          <ListItem button key={text} onClick={handleLogout}>
+            <ListItemIcon><InboxIcon /></ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+       : 
       <List>
         {['ログイン'].map((text, index) => (
           <ListItem button key={text} onClick={() => history.push('/login')}>
@@ -105,14 +138,7 @@ const MenuDrawer = (props) => {
           </ListItem>
         ))}
       </List>
-      <List>
-        {['ログアウト'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
+      }
     </div>
   );
 
