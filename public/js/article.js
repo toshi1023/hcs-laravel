@@ -17,6 +17,12 @@ $(function(){
             $('#type').val(0);
         }
     });
+
+    // いいねボタンクリック時
+    $(document).on('click', '.btn-like', function(){
+        // いいね数の更新処理
+        updateLike();
+    });
 });
 
 /**
@@ -44,8 +50,43 @@ function setDetailView(data, button) {
         $('#detail_location').append(getListLink('map', data.article.id, url, 'list-button'));
 
         $('#article_id').data('id', data.article.id);              // 各タグで共有
+
+        // いいねのボタン制御
+        if(data.user) {
+            $('#detail_like').append(`<button class="btn btn-danger btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+        } else {
+            $('#detail_like').append(`<button class="btn btn-secondary btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+        }
         
         $('#detail_modal').modal('show');
+}
+
+/**
+ * いいね数更新処理
+ * @param {*} search 
+ */
+function updateLike() {
+    let article_id = $('#article_id').data('id');
+    $.ajax({
+        url:    `ajax/articles/${article_id}/likes/update`,
+        type:   'POST',
+        dataType: 'json',
+        headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data:   {
+            'article_id': article_id,
+        }
+    }).done(function(response){
+        if (response.status == 1) {
+            // ボタンの再レンダー
+            if(response.data) {
+                $('#detail_like').append(`<button class="btn btn-danger btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+            } else {
+                $('#detail_like').append(`<button class="btn btn-secondary btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+            }
+        } else {
+            alert('save error');
+        }
+    })
 }
 
 /**

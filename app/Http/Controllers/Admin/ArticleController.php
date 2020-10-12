@@ -90,11 +90,12 @@ class ArticleController extends Controller
   public function show($article)
   {
     // 詳細ページに表示する値を取得
-    $article = $this->database->getShow($article);
-
+    $data = $this->database->getShow($article);
+    
     return [
       'status'  => 1,
-      'article' => $article,
+      'article' => $data['article'],
+      'user'   => $data['user'],
     ];
   }
 
@@ -150,5 +151,24 @@ class ArticleController extends Controller
       }
       $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
       return redirect(route('hcs-admin.articles.index'))->withErrors($this->messages);
+    }
+
+    /**
+     * いいねの更新
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function apiLikeUpdate(Request $request) {
+      // 更新処理を実行
+      $update = $this->database->getLikesUpdate($request->article_id);
+      // 更新に成功したとき
+      if($update['result']) {
+        return [
+          'status' => 1,
+          'data'   => $update['data'],
+        ];
+      }
+      // 更新に失敗したとき
+      return -1;
     }
 }

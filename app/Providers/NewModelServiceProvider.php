@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Model\Article;
 use App\Model\ArticleImage;
+use App\Model\Like;
 use App\Model\Admin;
 use App\Model\User;
 use App\Model\News;
@@ -29,6 +30,10 @@ class NewModelServiceProvider extends ServiceProvider
         // 'article_images'テーブルをインスタンス化して返す
         $this->app->singleton('article_images', function($app) {
             return new ArticleImage;
+        });
+        // 'likes'テーブルをインスタンス化して返す
+        $this->app->singleton('likes', function($app) {
+            return new Like;
         });
         // 'admins'テーブルをインスタンス化して返す
         $this->app->singleton('admins', function($app) {

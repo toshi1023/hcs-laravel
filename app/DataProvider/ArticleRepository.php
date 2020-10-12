@@ -26,9 +26,13 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
      */
     public function getBaseData($conditions=null)
     {
+        // 各記事のいいね数を取得
+        $likes = $this->getLikesCountQuery();
+
         // usersテーブルの値も結合して取得
         $query = $this->model->leftjoin('users', 'articles.user_id', '=', 'users.id')
                              ->leftjoin('article_images', 'articles.id', '=', 'article_images.article_id')
+                             ->leftJoinSub($likes, 'likes_counts', 'articles.id', '=', 'likes_counts.article_id')
                              ->select(
                                  'articles.*', 
                                  'users.name', 
@@ -37,6 +41,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                                  'article_images.id as image_id',
                                  'article_images.articles_photo_name',
                                  'article_images.articles_photo_path',
+                                 'likes_counts.likes_counts',
                              )
                              ->where('articles.delete_flg', '=', 0);
         
@@ -44,6 +49,22 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         if(!is_null($conditions)) {
             $query = $this->getWhereQuery(null, $conditions, $query);
         }
+        return $query;
+    }
+
+    /**
+     * 記事のいいね数を取得
+     * 
+     */
+    private function getLikesCountQuery() {
+        $query = $this->model()->query();
+
+        $query->leftjoin('likes', 'articles.id', '=', 'likes.article_id')
+              ->selectRaw('count(likes.user_id) as likes_counts')
+              ->addSelect('likes.article_id')
+              ->groupByRaw('likes.article_id')
+              ->where('likes.delete_flg', '=', 0);
+
         return $query;
     }
 
@@ -120,6 +141,36 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         } else {
             // アップロードファイルがなければデフォルトの画像を設定
             return [true, env('AWS_NOIMAGE')];
+        }
+    }
+
+    /**
+     * いいね数の更新処理
+     * 引数：保存するデータ
+     */
+    public function likeSave($data)
+    {
+        \DB::beginTransaction();
+
+        try {
+            // Likeモデルをインスタンス化
+            $model = $this->getModel('likes');
+            // 更新時の場合は更新用データを取得
+            if ($data['id'] && key_exists('id', $data)) {
+                $model = $this->getFind($model, $data['id']);
+            }
+            // データを保存
+            $model->fill($data);
+            $model->save();
+
+            \DB::commit();
+            // リターン
+            return true;
+
+        } catch (\Exception $e) {
+            \Log::error('database save error:'.$e->getMessage());
+            \DB::rollBack();
+            return false;
         }
     }
 }
