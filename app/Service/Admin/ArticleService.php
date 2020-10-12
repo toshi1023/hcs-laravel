@@ -38,7 +38,14 @@ class ArticleService
   public function getShow($id)
   {
     // 記事と紐づくユーザ情報の値を取得
-    return $this->ArticleService->getBaseData()->where('articles.id', '=' , $id)->first();
+    $article = $this->ArticleService->getBaseData(['articles.id' => $id])->first();
+    // 記事をいいねしたユーザデータを取得
+    $like_user_count = $this->ArticleService->getQuery('likes', ['likes.article_id' => $id, 'likes.user_id' => \Auth::user()->id])->first();
+  
+    return [
+      'article' => $article,
+      'user' => $like_user_count,
+    ];
   }
 
   /* *
@@ -93,6 +100,46 @@ class ArticleService
   public function fileDelete($request)
   {
     return $this->ArticleService->fileDelete($request);
+  }
+
+  /* *
+   * いいねの更新を実行するメソッド
+   * 引数: 記事ID
+   * */
+  public function getLikesUpdate($article_id)
+  {
+    // 保存するデータの配列を生成
+    $data = [
+      'article_id' => $article_id,
+      'user_id'    => \Auth::user()->id,
+    ];
+
+    // 値の更新処理
+    if($this->ArticleService->getExist('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id']])) {
+      // 更新用データの取得
+      $update_data = $this->ArticleService->getQuery('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id']])->first();
+      // 削除フラグの切り替え
+      if($update_data->delete_flg == 0) {
+        $update_data->delete_flg = 1;
+      } else {
+        $update_data->delete_flg = 0;
+      }
+
+      // 保存処理
+      $result = $this->ArticleService->likeSave($update_data->all());
+    } else {
+      // 値の新規登録
+      $result = $this->ArticleService->likeSave($data);
+    }
+    
+    // 保存したデータをDBから取得
+    $data = $this->ArticleService->getQuery('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id']])->first();
+    
+    // 結果をリターン
+    return $response = [
+      'result'  => $result,
+      'data'    => $data,
+    ];
   }
 
 }

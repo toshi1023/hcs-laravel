@@ -1,9 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const loginUrl = 'http://localhost/api/login'
 const apiUrl = 'http://localhost/api/api_users'
 // const token = localStorage.localJWT
 
+/**
+ * Login処理の非同期関数
+ */
+// auth: 認証に関わる情報(authen)を渡す引数
+export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
+    // axios: 引数1: URL, 引数2: 渡すデータ, 引数3: メタ情報
+    const res = await axios.post(loginUrl, auth, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    // Apiからの返り値
+    return res.data
+})
 /**
  * 一覧データの取得
  */
@@ -64,7 +79,15 @@ const userSlice = createSlice({
     name: 'user',
     // stateの初期状態
     initialState: {
-        // users: apiのエンドポイントで管理されているデータのため配列
+        // authen: ログイン用のユーザ情報を管理
+        authen: {
+            name: '',
+            password: '',
+        },
+        mypage: {
+            id: '',
+        },
+        // users: ユーザデータは複数ある前提のため配列
         users: [
             {
                 id: '',                     // ID
@@ -114,6 +137,17 @@ const userSlice = createSlice({
     },
     // Reducer (actionの処理を記述)
     reducers: {
+        editUsername(state, action) {
+            // action.payload: ユーザが入力したデータ
+            state.authen.name = action.payload
+        },
+        editPassword(state, action) {
+            // action.payload: ユーザが入力したデータ
+            state.authen.password = action.payload
+        },
+        editMypage(state, action) {
+            state.authen.password = action.payload
+        },
         editUser(state, action) {
             state.editUser = action.payload
         },
@@ -124,6 +158,12 @@ const userSlice = createSlice({
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {
         // Apiが成功したときの処理を記載
+        builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
+            // ブラウザのlocalStorageにTokenを保存
+            localStorage.setItem("localToken", action.payload.token)
+            // ログイン後はmypageのstateをログインユーザのIDに更新
+            editMypage(mypage, action.payload.id)
+        })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
@@ -162,8 +202,10 @@ const userSlice = createSlice({
     },
 })
 
-export const { editUser, selectUser } = userSlice.actions
+export const { editUsername, editPassword, editMypage, editUser, selectUser } = userSlice.actions
 
+export const selectAuthen = (state) => state.user.authen
+export const selectMypage = (state) => state.user.mypage
 export const selectSelectedUser = (state) => state.user.selectedUser
 export const selectEditedUser = (state) => state.user.editedUser
 export const selectUsers = (state) => state.user.users

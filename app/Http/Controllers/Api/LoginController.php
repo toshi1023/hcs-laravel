@@ -28,12 +28,12 @@ class LoginController extends Controller
         // ], 401);
 
         $credentials = $request->only('name', 'password');
-
+        
         // 認証成功時はtokenを返す
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-            return new JsonResponse(['token' => $token], 200);
+            return new JsonResponse(['token' => $token, 'id' => $user->id], 200);
         }
 
         // 認証失敗時はエラーメッセージを返す

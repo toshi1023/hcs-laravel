@@ -16,6 +16,9 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        flexGrow: 1,
+    },
+    card: {
         marginTop: theme.spacing(10),
         marginBottom: theme.spacing(10),
         minWidth: 400,
@@ -102,120 +105,134 @@ export default function UserCreate() {
                         }))
   }
 
+  const setBirthday = () => {
+      let year = document.getElementById("selectYear").value
+      let month = document.getElementById("selectMonth").value
+      let day = document.getElementById("selectDay").value
+
+      return `${year}-${month}-${day}`
+  }
+
     // 作成(stateのeditedUserの値をApiで送信)
     const createClicked = () => {
+        let birthday = setBirthday()
+        console.log(birthday)
         dispatch(fetchAsyncCreate(editedUser))
         dispatch(editUser({ id: 0, title: '' }))
     }
 
     // 更新(stateのeditedUserの値をApiで送信)
     const updateClicked = () => {
+        let birthday = setBirthday()
+        console.log(birthday)
         dispatch(fetchAsyncUpdate(editedUser))
         dispatch(editUser({ id: 0, title: '' }))
     }
 
   return (
     <>
-        <Grid container justify="center">
-        <Grid item xs={12} sm={8} md={8} lg={8}>
-            <Card className={classes.root}>
-                <CardHeader 
-                    title={
-                        <Title>New Create Account</Title>
-                    }
-                    className={classes.header}
-                />
-                <Grid container>
-                    <Grid item sm={12} md={8} lg={6}>
-                        <CardContent>
-                            <Link to="/login" style={{fontSize: 13, width: 150}}>ログインはこちら</Link>
-                            <div>
-                                <FormControl className={classes.margin}>
-                                    <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>メールアドレス</InputLabel>
-                                    <Input
-                                        id="input-with-icon-adornment"
-                                        startAdornment={
-                                            <InputAdornment position="start" />
-                                        }
-                                        className={classes.formFont}
-                                        required
-                                    />
-                                </FormControl>
-                            </div>
-                            <div>
-                                <FormControl className={classes.margin}>
-                                    <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
-                                    <Input
-                                        id="input-with-icon-adornment"
-                                        startAdornment={
-                                            <InputAdornment position="start" />
-                                        }
-                                        type="password"
-                                        className={classes.formFont}
-                                        required
-                                    />
-                                </FormControl>
-                            </div>
-                            <div>
-                                <FormControl className={classes.margin}>
-                                    <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ニックネーム</InputLabel>
-                                    <Input
-                                        id="input-with-icon-adornment"
-                                        startAdornment={
-                                            <InputAdornment position="start" />
-                                        }
-                                        className={classes.formFont}
-                                        required
-                                    />
-                                </FormControl>
-                            </div>
-                            <div>
-                                <FormControl className={classes.margin}>
-                                    <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
-                                    {dateSelects()}
-                                </FormControl>
-                            </div>
-                            <div>
-                                <FormControl className={classes.margin}>
-                                    <FormLabel style={{fontSize: 15}} display="block">性別</FormLabel>
-                                    <SwitchType switchLabel={{true: '男性', false: '女性'}} />
-                                </FormControl>
-                            </div>
-                        </CardContent>
-                    </Grid>
-                    <Grid item sm={12} md={12} lg={6}>
-                        <CardContent>
-                            <div>
-                                <FormControl className={classes.margin}>
-                                    <InputLabel htmlFor="input-with-icon-adornment" style={{fontSize: 15}}>プロフィール画像</InputLabel>
-                                </FormControl>
-                            </div>
+        <div className={classes.root}>
+            <Grid container justify="center">
+                <Grid item xs={12} sm={8} md={8} lg={8}>
+                    <Card className={classes.card}>
+                        <CardHeader 
+                            title={
+                                <Title>New Create Account</Title>
+                            }
+                            className={classes.header}
+                        />
+                        <Grid container>
+                            <Grid item sm={12} md={8} lg={6}>
+                                <CardContent>
+                                    <Link to="/login" style={{fontSize: 13, width: 150}}>ログインはこちら</Link>
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>メールアドレス</InputLabel>
+                                            <Input
+                                                id="input-with-icon-adornment"
+                                                startAdornment={
+                                                    <InputAdornment position="start" />
+                                                }
+                                                className={classes.formFont}
+                                                required
+                                            />
+                                        </FormControl>
+                                    </div>
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
+                                            <Input
+                                                id="input-with-icon-adornment"
+                                                startAdornment={
+                                                    <InputAdornment position="start" />
+                                                }
+                                                type="password"
+                                                className={classes.formFont}
+                                                required
+                                            />
+                                        </FormControl>
+                                    </div>
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ニックネーム</InputLabel>
+                                            <Input
+                                                id="input-with-icon-adornment"
+                                                startAdornment={
+                                                    <InputAdornment position="start" />
+                                                }
+                                                className={classes.formFont}
+                                                required
+                                            />
+                                        </FormControl>
+                                    </div>
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
+                                            {dateSelects()}
+                                        </FormControl>
+                                    </div>
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <FormLabel style={{fontSize: 15}} display="block">性別</FormLabel>
+                                            <SwitchType switchLabel={{true: '男性', false: '女性'}} />
+                                        </FormControl>
+                                    </div>
+                                </CardContent>
+                            </Grid>
+                            <Grid item sm={12} md={12} lg={6}>
+                                <CardContent>
+                                    <div>
+                                        <FormControl className={classes.margin}>
+                                            <InputLabel htmlFor="input-with-icon-adornment" style={{fontSize: 15}}>プロフィール画像</InputLabel>
+                                        </FormControl>
+                                    </div>
 
-                            {/* ドラッグ&ドロップ */}
-                            <ProfileDropzone />
+                                    {/* ドラッグ&ドロップ */}
+                                    <ProfileDropzone />
 
-                        </CardContent>
-                    </Grid>
-                    <Grid item sm={12} md={12} lg={6}>
-                        <CardContent>
-                            <div>
-                                <FormControl>
-                                    {
-                                        // 作成と編集でボタン表記と処理を切り分け
-                                        editUser.id === 0 ? (
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={createClicked}>作成する</Button>
-                                        ) : (
-                                            <Button variant="contained" color="primary" className={classes.button} onClick={updateClicked}>更新する</Button>
-                                        )
-                                    }
-                                </FormControl>
-                            </div>
-                        </CardContent>
-                    </Grid>
+                                </CardContent>
+                            </Grid>
+                            <Grid item sm={12} md={12} lg={6}>
+                                <CardContent>
+                                    <div>
+                                        <FormControl>
+                                            {
+                                                // 作成と編集でボタン表記と処理を切り分け
+                                                editUser.id === 0 ? (
+                                                    <Button variant="contained" color="primary" className={classes.button} onClick={createClicked}>作成する</Button>
+                                                ) : (
+                                                    <Button variant="contained" color="primary" className={classes.button} onClick={updateClicked}>更新する</Button>
+                                                )
+                                            }
+                                        </FormControl>
+                                    </div>
+                                </CardContent>
+                            </Grid>
+                        </Grid>
+                    </Card>
                 </Grid>
-            </Card>
-        </Grid>
-        </Grid>
+            </Grid>
+        </div>
     </>
   );
 }

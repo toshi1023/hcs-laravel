@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -14,9 +15,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 15
   },
   selectBox: {
-    width: 150,
+    width: 80,
     fontSize: 15,
-    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -149,37 +151,48 @@ export default function dateSelects(props) {
   return (
     <div>
       <FormControl className={classes.formControl}>
-        <Select
-          native
-          // value={state.year}
-          onChange={handleChangeYear}
-          className={classes.selectBox}
-        >
-          <option aria-label="None">----</option>
-          {renderYearValue()}
-        </Select>
-        年
-        <Select
-          native
-          // value={state.month}
-          onChange={handleChangeMonth}
-          className={classes.selectBox}
-        >
-          <option aria-label="None">--</option>
-          {renderMonthValue()}
-        </Select>
-        月
-        <Select
-          native
-          // value={state.day}
-          onChange={handleChangeDay}
-          className={classes.selectBox}
-        >
-          <option aria-label="None">--</option>
-          {renderDayValue()}
-        </Select>
-        日
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={4}>
+            <Select
+              native
+              // value={state.year}
+              onChange={handleChangeYear}
+              className={classes.selectBox}
+              id='selectYear'
+            >
+              <option aria-label="None">----</option>
+              {renderYearValue()}
+            </Select>
+            年
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Select
+              native
+              // value={state.month}
+              onChange={handleChangeMonth}
+              className={classes.selectBox}
+              id='selectMonth'
+            >
+              <option aria-label="None">--</option>
+              {renderMonthValue()}
+            </Select>
+            月
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Select
+              native
+              // value={state.day}
+              onChange={handleChangeDay}
+              className={classes.selectBox}
+              id='selectDay'
+            >
+              <option aria-label="None">--</option>
+              {renderDayValue()}
+            </Select>
+            日
+          </Grid>
+        </Grid>
       </FormControl>
     </div>
-  );
+  )
 }

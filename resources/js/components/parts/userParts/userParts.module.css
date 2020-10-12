@@ -1,0 +1,8 @@
+.note{
+    color: #696969;
+    margin: 2em 0;
+    font-weight: bold;
+    border: solid 1px #e6e6e6;
+    padding: 0.3em 1em 2em 1em;
+    box-shadow:2px 2px 0 rgba(0,0,0,.1);
+  }

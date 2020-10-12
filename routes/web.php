@@ -45,7 +45,10 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         Route::get('ajax/users/{user}/friends', 'UserController@apiFriendsIndex')->name('api_friends');
         // フレンド削除
         Route::delete('users/{user}/friends/{frend_id}', 'UserController@friendsDestroy')->name('api_friends.destroy');
-
+        // いいねの新規登録
+        Route::post('ajax/articles/{article}/likes/create', 'ArticleController@apiLikeCreate')->name('api_article.likes.create');
+        // いいね数の更新
+        Route::post('ajax/articles/{article}/likes/update', 'ArticleController@apiLikeUpdate')->name('api_article.likes.update');
         // // ユーザデータのPDF出力ルート
         // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
     });

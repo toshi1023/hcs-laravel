@@ -46,6 +46,10 @@
                                     <dt class="col-3 text-right">更新日</dt>
                                     <dd class="col-9"><span id="detail_updated_at" class="detail-view"></span></dd>
                                 </dl>
+                                <dl class="row">
+                                    <dt class="col-3 text-right">いいね</dt>
+                                    <dd class="col-9"><span id="detail_like" class="detail-view"></span></dd>
+                                </dl>
                                 
                             </div>
                             <div class="col-10 col-sm-7">

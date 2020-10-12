@@ -187,10 +187,10 @@ class BaseRepository
 
     /**
      * 指定ID検索(boolean)
-     * 引数1:テーブル名, 引数2:ID
+     * 引数1:テーブル名, 引数2:検索条件(配列)
      */
-    public function getExist($model, $id) {
-        return $model::query()->where('id', $id)->exists();
+    public function getExist($model, $conditions) {
+        return $model::query()->getWhereQuery($model, $conditions)->exists();
     }
 
 

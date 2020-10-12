@@ -22,14 +22,22 @@ class UserController extends Controller
       $this->database = $database;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+      // return response()->json([
+      //   'request' => $request,
+      // ],200, [], JSON_UNESCAPED_UNICODE);
       // 全ユーザデータを更新日時順にソートして取得
       $users = $this->database->getIndex();
 
       return response()->json([
         'users' => $users, 
       ],200, [], JSON_UNESCAPED_UNICODE);
+
+      // 認証失敗時はエラーメッセージを返す
+      return new JsonResponse([
+        'message' => 'Unauthenticated.'
+    ], 401);
 
     }
 
