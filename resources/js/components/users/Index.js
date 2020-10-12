@@ -35,7 +35,7 @@ export default function User() {
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
             const resultReg = await dispatch(fetchAsyncGet())
-            if (fetchAsyncLogin.fulfilled.match(resultReg)) {
+            if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }

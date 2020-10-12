@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const loginUrl = 'http://localhost/api/login'
 const apiUrl = 'http://localhost/api/api_users'
-// const token = localStorage.localJWT
+const token = localStorage.localToken
 
 /**
  * Login処理の非同期関数
@@ -23,11 +23,7 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('users/index', async() => {
-    const res = await axios.get(apiUrl, {
-        // headers: {
-        //     Authorization: `JWT ${token}`,
-        // },
-    })
+    const res = await axios.get(apiUrl, {})
     return res.data
 })
 
@@ -83,9 +79,6 @@ const userSlice = createSlice({
         authen: {
             name: '',
             password: '',
-        },
-        mypage: {
-            id: '',
         },
         // users: ユーザデータは複数ある前提のため配列
         users: [
@@ -145,9 +138,6 @@ const userSlice = createSlice({
             // action.payload: ユーザが入力したデータ
             state.authen.password = action.payload
         },
-        editMypage(state, action) {
-            state.authen.password = action.payload
-        },
         editUser(state, action) {
             state.editUser = action.payload
         },
@@ -161,8 +151,6 @@ const userSlice = createSlice({
         builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
             // ブラウザのlocalStorageにTokenを保存
             localStorage.setItem("localToken", action.payload.token)
-            // ログイン後はmypageのstateをログインユーザのIDに更新
-            editMypage(mypage, action.payload.id)
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
@@ -202,10 +190,9 @@ const userSlice = createSlice({
     },
 })
 
-export const { editUsername, editPassword, editMypage, editUser, selectUser } = userSlice.actions
+export const { editUsername, editPassword, editUser, selectUser } = userSlice.actions
 
 export const selectAuthen = (state) => state.user.authen
-export const selectMypage = (state) => state.user.mypage
 export const selectSelectedUser = (state) => state.user.selectedUser
 export const selectEditedUser = (state) => state.user.editedUser
 export const selectUsers = (state) => state.user.users

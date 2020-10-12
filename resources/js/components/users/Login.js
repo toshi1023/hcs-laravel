@@ -13,7 +13,6 @@ import {
     fetchCredEnd,
 } from '../app/appSlice';
 import {
-    selectMypage,
     fetchAsyncLogin,
 } from './userSlice';
 
@@ -63,8 +62,6 @@ export default function Login() {
   const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch()
-  // storeのstateから値を参照
-  const mypage = useSelector(selectMypage)
 
   return (
     <>
@@ -85,20 +82,21 @@ export default function Login() {
                             onSubmit={async (values) => {
                                 // ロード開始
                                 await dispatch(fetchCredStart());
-                                // console.log(mypage)
-                                // history.push('/user/1')
-                                // await dispatch(fetchAsyncLogin(values));
                                 
+                                const login = await dispatch(fetchAsyncLogin(values));
                                 
-                                // if (fetchAsyncLogin.fulfilled.match(result)) {
+                                if (fetchAsyncLogin.fulfilled.match(login)) {
                                 // ログインユーザのプロフィールを取得
                                 // await dispatch(fetchAsyncGetMyProf());
                                 // ログインユーザのマイページに遷移
                                     // history.push(`/user/${mypage.id}`)
+                                    // history.push('/user/1')
+                                    console.log(login.payload.id)
+                                    // ロード終了
+                                    await dispatch(fetchCredEnd());
                                     
-                                // }
-                                // ロード終了
-                                await dispatch(fetchCredEnd());
+                                }
+                                
                             }}
                             validationSchema={Yup.object().shape({
                                 name: Yup.string().required("IDはの入力は必須です"),
