@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Like extends Model
+class Like extends BaseModel
 {
 
   public function article()

@@ -76,12 +76,17 @@ function updateLike() {
             'article_id': article_id,
         }
     }).done(function(response){
+        console.log(response)
         if (response.status == 1) {
             // ボタンの再レンダー
-            if(response.data) {
-                $('#detail_like').append(`<button class="btn btn-danger btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+            if(response.like_flg) {
+                $('.btn-like').removeClass(`btn-secondary`);
+                $('.btn-like').addClass(`btn-danger`);
+                $('.like-badge').text(response.data);
             } else {
-                $('#detail_like').append(`<button class="btn btn-secondary btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+                $('.btn-like').removeClass(`btn-danger`);
+                $('.btn-like').addClass(`btn-secondary`);
+                $('.like-badge').text(response.data);
             }
         } else {
             alert('save error');

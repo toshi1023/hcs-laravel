@@ -164,8 +164,9 @@ class ArticleController extends Controller
       // 更新に成功したとき
       if($update['result']) {
         return [
-          'status' => 1,
-          'data'   => $update['data'],
+          'status'   => 1,
+          'like_flg' => $update['like_flg'],
+          'data'     => $update['data'],
         ];
       }
       // 更新に失敗したとき

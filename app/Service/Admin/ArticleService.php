@@ -39,12 +39,12 @@ class ArticleService
   {
     // 記事と紐づくユーザ情報の値を取得
     $article = $this->ArticleService->getBaseData(['articles.id' => $id])->first();
-    // 記事をいいねしたユーザデータを取得
-    $like_user_count = $this->ArticleService->getQuery('likes', ['likes.article_id' => $id, 'likes.user_id' => \Auth::user()->id])->first();
+    // 記事をいいねしたかどうかのフラグを取得
+    $like_flg = $this->ArticleService->getExist('likes', ['article_id' => $id, 'user_id' => \Auth::user()->id]);
   
     return [
       'article' => $article,
-      'user' => $like_user_count,
+      'user' => $like_flg,
     ];
   }
 
@@ -113,11 +113,12 @@ class ArticleService
       'article_id' => $article_id,
       'user_id'    => \Auth::user()->id,
     ];
-
+    
     // 値の更新処理
     if($this->ArticleService->getExist('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id']])) {
       // 更新用データの取得
-      $update_data = $this->ArticleService->getQuery('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id']])->first();
+      $update_data = $this->ArticleService->getQuery('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id']], [], false)->first();
+
       // 削除フラグの切り替え
       if($update_data->delete_flg == 0) {
         $update_data->delete_flg = 1;
@@ -125,20 +126,27 @@ class ArticleService
         $update_data->delete_flg = 0;
       }
 
+      // 配列にIDと削除フラグの更新値を格納
+      $data['id'] = $update_data->id;
+      $data['delete_flg'] = $update_data->delete_flg;
+
       // 保存処理
-      $result = $this->ArticleService->likeSave($update_data->all());
+      $result = $this->ArticleService->likeSave($data);
     } else {
       // 値の新規登録
       $result = $this->ArticleService->likeSave($data);
     }
-    
-    // 保存したデータをDBから取得
-    $data = $this->ArticleService->getQuery('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id']])->first();
-    
+
+    // フラグをリターン
+    $like_flg = $this->ArticleService->getExist('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id'], 'delete_flg' => 0]);
+    // 記事のいいね件数をDBから取得
+    $data = $this->ArticleService->getQuery('likes', ['article_id' => $data['article_id']])->count();
+
     // 結果をリターン
     return $response = [
-      'result'  => $result,
-      'data'    => $data,
+      'result'   => $result,
+      'like_flg' => $like_flg,
+      'data'     => $data,
     ];
   }
 

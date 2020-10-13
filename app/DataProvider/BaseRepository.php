@@ -3,22 +3,12 @@
 namespace App\DataProvider;
 
 use Carbon\Carbon;
-use App\Model\Article;
-use App\Model\ArticleImage;
-use App\Model\Admin;
-use App\Model\User;
-use App\Model\Prefecture;
 
 use Illuminate\Support\Facades\Hash;
 
 class BaseRepository
 {
     protected $model;
-    protected $article;
-    protected $articleImage;
-    protected $admin;
-    protected $user;
-    protected $prefecture;
 
     protected function model()
     {
@@ -190,7 +180,7 @@ class BaseRepository
      * 引数1:テーブル名, 引数2:検索条件(配列)
      */
     public function getExist($model, $conditions) {
-        return $model::query()->getWhereQuery($model, $conditions)->exists();
+        return $this->getWhereQuery($model, $conditions)->exists();
     }
 
 

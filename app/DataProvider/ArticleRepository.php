@@ -4,8 +4,6 @@ namespace App\DataProvider;
 
 use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
 use App\Model\Article;
-use App\Model\User;
-use App\Model\Prefecture;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Storage;
@@ -151,14 +149,15 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     public function likeSave($data)
     {
         \DB::beginTransaction();
-
+        
         try {
             // Likeモデルをインスタンス化
             $model = $this->getModel('likes');
             // 更新時の場合は更新用データを取得
-            if ($data['id'] && key_exists('id', $data)) {
+            if (key_exists('id', $data)) {
                 $model = $this->getFind($model, $data['id']);
             }
+
             // データを保存
             $model->fill($data);
             $model->save();
