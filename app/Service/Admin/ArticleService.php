@@ -40,11 +40,14 @@ class ArticleService
     // 記事と紐づくユーザ情報の値を取得
     $article = $this->ArticleService->getBaseData(['articles.id' => $id])->first();
     // 記事をいいねしたかどうかのフラグを取得
-    $like_flg = $this->ArticleService->getExist('likes', ['article_id' => $id, 'user_id' => \Auth::user()->id]);
-  
+    $like_flg = $this->ArticleService->getExist('likes', ['article_id' => $id, 'user_id' => \Auth::user()->id, 'delete_flg' => 0]);
+    // 記事のいいね一覧データを取得(usersテーブルも結合して取得)
+    $like_list = $this->ArticleService->getQuery('likes', ['article_id' => $id], ['users' => 'user_id'])->get();
+    
     return [
-      'article' => $article,
-      'user' => $like_flg,
+      'article'   => $article,
+      'like_flg'  => $like_flg,
+      'like_list' => $like_list,
     ];
   }
 

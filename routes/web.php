@@ -39,6 +39,8 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         Route::get('ajax/users', 'UserController@apiIndex')->name('api_user');
         // 記事一覧
         Route::get('ajax/articles', 'ArticleController@apiIndex')->name('api_article');
+        // 記事詳細(テーブルデータ取得)
+        Route::get('ajax/articles/{article}', 'ArticleController@apiShow')->name('api_articles.show');
         // ニュース一覧
         Route::get('ajax/news', 'NewsController@apiIndex')->name('api_news');
         // フレンド一覧
@@ -49,6 +51,8 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         Route::post('ajax/articles/{article}/likes/create', 'ArticleController@apiLikeCreate')->name('api_article.likes.create');
         // いいね数の更新
         Route::post('ajax/articles/{article}/likes/update', 'ArticleController@apiLikeUpdate')->name('api_article.likes.update');
+        // いいねの削除
+        // Route::post('ajax/articles/{article}/likes/destroy', 'ArticleController@apiLikeDestroy')->name('api_article.likes.destroy');
         // // ユーザデータのPDF出力ルート
         // Route::get('users/pdf', 'UserController@pdf')->name('users.pdf');
     });

@@ -19,7 +19,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" id="item1-tab" data-toggle="tab" href="#item1" role="tab" aria-controls="item1" aria-selected="true">詳細内容</a>
                     </li>
-                   
+                    <li class="nav-item">
+                        <a class="nav-link" id="item2-tab" data-toggle="tab" href="#item2" role="tab" aria-controls="item2" aria-selected="true">いいね一覧</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <!-- タブ1つ目(記事詳細)-->
@@ -64,6 +66,21 @@
                                 </dl>
                             </div>
                         </div>
+                    </div>
+
+                    {{-- タブ2つ目(いいね数管理) --}}
+                    <div class="tab-pane" id="item2" role="tabpanel" aria-labelledby="item2-tab">
+                        <table class="table table-striped table-bordered datatable table-sm" id="article_like_list">
+                            <thead class="thead-dark">
+                                <tr role="row">
+                                    <th>いいねID</th>
+                                    <th>プロフィール画像</th>
+                                    <th>ユーザ名</th>
+                                    <th>更新日時</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                     
                 </div>

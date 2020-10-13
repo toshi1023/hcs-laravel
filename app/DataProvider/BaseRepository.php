@@ -38,24 +38,23 @@ class BaseRepository
         } else {
             $query = $this->model;
         }
+        // テーブル名の取得
+        $table_name = $query->getTable();
         
         if($relation) {
-            // テーブル名の取得
-            $table_name = $query->getTable();
-
             foreach($relation as $key => $condition) {
                 // リレーション
-                $query->leftJoin($key, $table_name.$condition, '=', $key.'.id')
-                      ->select($key.'.*');
+                $query = $query->leftJoin($key, $table_name.'.'.$condition, '=', $key.'.id')
+                               ->addSelect($key.'.*');
             }
         }
-
+        
         // 削除フラグがtrueの値を排除するか否か
         if($delete_flg) {
-            $query = $query->select($query->getTable().'.*')->where('delete_flg', '=', 0);
+            $query = $query->addSelect($table_name.'.*')->where($table_name.'.delete_flg', '=', 0);
         } else {
             // メインテーブルのデータをすべて取得
-            $query = $query->select($query->getTable().'.*');
+            $query = $query->addSelect($table_name.'.*');
         }
 
         // 検索条件があれば絞り込み

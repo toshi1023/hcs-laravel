@@ -93,11 +93,23 @@ class ArticleController extends Controller
     $data = $this->database->getShow($article);
     
     return [
-      'status'  => 1,
-      'article' => $data['article'],
-      'user'   => $data['user'],
+      'status'    => 1,
+      'article'   => $data['article'],
+      'like_flg'  => $data['like_flg'],
+      'like_list' => $data['like_list']
     ];
   }
+
+  public function apiShow(Request $request, $article)
+    {
+      // 検索条件のセット
+      $conditions = [];
+      
+      // 詳細ページに表示する値を取得
+      $data = $this->database->getShow($article);
+
+      return Datatables::eloquent($data['like_list'])->make(true);
+    }
 
   // 記事の編集機能を設定
   public function edit($article)

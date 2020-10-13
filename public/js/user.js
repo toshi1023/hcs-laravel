@@ -135,7 +135,7 @@ function setDetailView(data, button) {
             if ($.fn.DataTable.isDataTable('#user_friend_list')) {
                 $('#user_friend_list').DataTable().destroy();
             }
-            // DataTable設定("登録場所")
+            // DataTable設定("フレンド一覧")
             settingDataTables(
                 // 取得
                 // tableのID
