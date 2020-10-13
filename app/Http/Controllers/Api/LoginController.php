@@ -6,26 +6,15 @@ use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Api\LoginRequest;
 
 class LoginController extends Controller
 {
     /**
      * Api通信でのログイン処理を実行
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        // Auth::guard('api')->login();
-
-        // $credentials = $request->only('email', 'password');
-
-        // if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        //     $accessToken = Auth::user()->createToken('authToken')->accessToken;
-        //     return response(['user' => Auth::user(), 'token' => $accessToken]);
-        // }
-
-        // return response([
-        //     'message' => 'Unauthenticated.'
-        // ], 401);
 
         $credentials = $request->only('name', 'password');
         
@@ -36,10 +25,6 @@ class LoginController extends Controller
             return new JsonResponse(['token' => $token, 'id' => $user->id], 200);
         }
 
-        // 認証失敗時はエラーメッセージを返す
-        return new JsonResponse([
-            'message' => 'Unauthenticated.'
-        ], 401);
     }
 
     /**
