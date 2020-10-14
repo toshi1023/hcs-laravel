@@ -39,14 +39,14 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         Route::get('ajax/users', 'UserController@apiIndex')->name('api_user');
         // 記事一覧
         Route::get('ajax/articles', 'ArticleController@apiIndex')->name('api_article');
-        // 記事詳細(テーブルデータ取得)
-        Route::get('ajax/articles/{article}', 'ArticleController@apiShow')->name('api_articles.show');
         // ニュース一覧
         Route::get('ajax/news', 'NewsController@apiIndex')->name('api_news');
         // フレンド一覧
         Route::get('ajax/users/{user}/friends', 'UserController@apiFriendsIndex')->name('api_friends');
         // フレンド削除
         Route::delete('users/{user}/friends/{frend_id}', 'UserController@friendsDestroy')->name('api_friends.destroy');
+        // いいね一覧
+        Route::get('ajax/articles/{article}/likes', 'ArticleController@apiLike')->name('api_articles.likes.index');
         // いいねの新規登録
         Route::post('ajax/articles/{article}/likes/create', 'ArticleController@apiLikeCreate')->name('api_article.likes.create');
         // いいね数の更新

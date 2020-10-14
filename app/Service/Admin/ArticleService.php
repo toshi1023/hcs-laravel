@@ -42,7 +42,7 @@ class ArticleService
     // 記事をいいねしたかどうかのフラグを取得
     $like_flg = $this->ArticleService->getExist('likes', ['article_id' => $id, 'user_id' => \Auth::user()->id, 'delete_flg' => 0]);
     // 記事のいいね一覧データを取得(usersテーブルも結合して取得)
-    $like_list = $this->ArticleService->getQuery('likes', ['article_id' => $id], ['users' => 'user_id'])->get();
+    $like_list = $this->ArticleService->getQuery('likes', ['article_id' => $id], ['users' => 'user_id']);
     
     return [
       'article'   => $article,

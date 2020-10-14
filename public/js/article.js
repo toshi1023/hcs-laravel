@@ -65,7 +65,8 @@ function setDetailView(data, button) {
      */
     if(button == '.btn-detail') {
         // 記事ID取得
-        let article_id = $('#article_id').data();
+        var article_id = $('#article_id').data('id');
+
         // 過去に表示したテーブルのリセット
         if ($.fn.DataTable.isDataTable('#article_like_list')) {
             $('#article_like_list').DataTable().destroy();
@@ -76,7 +77,7 @@ function setDetailView(data, button) {
             // tableのID
             'article_like_list',
             // 取得URLおよびパラメタ
-            `ajax/articles/${article_id}`,
+            `ajax/articles/${article_id}/likes`,
             {},
             // 各列ごとの表示定義
             [
@@ -158,7 +159,6 @@ function updateLike() {
             'article_id': article_id,
         }
     }).done(function(response){
-        console.log(response)
         if (response.status == 1) {
             // ボタンの再レンダー
             if(response.like_flg) {

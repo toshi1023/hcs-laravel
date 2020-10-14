@@ -5,7 +5,6 @@ namespace App\Http\Requests\Api;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
@@ -28,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => ['required', 'string', 'max:50', Rule::unique('users')->ignore($this->name, 'name')->where('delete_flg', '=', 0)],
+            'name'      => ['required', 'string', 'max:50'],
             'password'  => ['required', 'string', 'min:4'],
         ];
     }

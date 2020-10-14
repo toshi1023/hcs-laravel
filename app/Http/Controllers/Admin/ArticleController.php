@@ -100,16 +100,16 @@ class ArticleController extends Controller
     ];
   }
 
-  public function apiShow(Request $request, $article)
-    {
-      // 検索条件のセット
-      $conditions = [];
-      
-      // 詳細ページに表示する値を取得
-      $data = $this->database->getShow($article);
+  public function apiLike(Request $request, $article)
+  {
+    // 検索条件のセット
+    $conditions = [];
 
-      return Datatables::eloquent($data['like_list'])->make(true);
-    }
+    // 詳細ページに表示する値を取得
+    $data = $this->database->getShow($article);
+
+    return Datatables::eloquent($data['like_list'])->make(true);
+  }
 
   // 記事の編集機能を設定
   public function edit($article)
