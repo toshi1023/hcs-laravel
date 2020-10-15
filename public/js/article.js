@@ -60,88 +60,88 @@ function setDetailView(data, button) {
         
         $('#detail_modal').modal('show');
 
-        /* 
+    /* 
      *   "詳細"モーダルの表示処理("いいね一覧"タブ)
      */
     if(button == '.btn-detail') {
-        // 記事ID取得
-        var article_id = $('#article_id').data('id');
+        // いいねテーブルを表示
+        settingLikeTables()
+    }
+}
 
-        // 過去に表示したテーブルのリセット
-        if ($.fn.DataTable.isDataTable('#article_like_list')) {
-            $('#article_like_list').DataTable().destroy();
-        }
-        // DataTable設定("いいね一覧")
-        settingDataTables(
-            // 取得
-            // tableのID
-            'article_like_list',
-            // 取得URLおよびパラメタ
-            `ajax/articles/${article_id}/likes`,
-            {},
-            // 各列ごとの表示定義
-            [
-                {data: 'id'},
-                {
-                    // ユーザのイメージ画像を表示(モーダル形式)
-                    data: function (p) {
-                        
-                        return `
-                            <a href="" data-toggle="modal" data-target="#friend_modal${p.user_id}">
-                                <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
-                            </a>
-    
-                            <div class="modal fade" id="friend_modal${p.user_id}" tabindex="-1"
-                                role="dialog" aria-labelledby="label1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="label1">プロフィール画像</h5>
-                                            <button type="button" class="close" data-id="${p.user_id}" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                        <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.user_id}">Close</button>
-                                        </div>
+function settingLikeTables() {
+    // 記事ID取得
+    let article_id = $('#article_id').data('id');
+
+    // 過去に表示したテーブルのリセット
+    if ($.fn.DataTable.isDataTable('#article_like_list')) {
+        $('#article_like_list').DataTable().destroy();
+    }
+    // DataTable設定("いいね一覧")
+    settingDataTables(
+        // 取得
+        // tableのID
+        'article_like_list',
+        // 取得URLおよびパラメタ
+        `ajax/articles/${article_id}/likes`,
+        {},
+        // 各列ごとの表示定義
+        [
+            {data: 'id'},
+            {
+                // ユーザのイメージ画像を表示(モーダル形式)
+                data: function (p) {
+                    
+                    return `
+                        <a href="" data-toggle="modal" data-target="#friend_modal${p.user_id}">
+                            <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
+                        </a>
+
+                        <div class="modal fade" id="friend_modal${p.user_id}" tabindex="-1"
+                            role="dialog" aria-labelledby="label1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="label1">プロフィール画像</h5>
+                                        <button type="button" class="close" data-id="${p.user_id}" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.user_id}">Close</button>
                                     </div>
                                 </div>
                             </div>
-                        `;
-                    }
-                },
-                {data: 'name'},
-                {
-                    data: function(p) {
-                        // 日付フォーマットの形式を調整
-                        let time = moment(p.updated_at);
-                        return time.format("YYYY年MM月DD日 HH時mm分");
-                    }, name: 'updated_at'
-                },
-                // 各操作列
-                {
-                    data: function (p) {
-                        // 編集
-                        return getListLink('remove', p.id ,`ajax/articles/${article_id}/likes/destroy`, 'list-button');
-                    }
+                        </div>
+                    `;
                 }
-            ],
-            // 各列ごとの装飾
-            [
-                // { targets: [0], width: '100px'},
-                // { targets: [1], width: '150px'},
-                // { targets: [2], width: '150px'},
-                // { targets: [3], orderable: false, className: 'text-center', width: '100px'},
-                // { targets: [5], orderable: false, className: 'text-center', width: '100px'},
-                // { targets: [6], orderable: false, className: 'text-center', width: '100px'},
-            ],
-            false
-        );
-
-    }
+            },
+            {data: 'name'},
+            {
+                data: function(p) {
+                    // 日付フォーマットの形式を調整
+                    let time = moment(p.updated_at);
+                    return time.format("YYYY年MM月DD日 HH時mm分");
+                }, name: 'updated_at'
+            },
+            // 各操作列
+            {
+                data: function (p) {
+                    // 編集
+                    return getListLink('remove', p.id ,`ajax/articles/${article_id}/likes/destroy`, 'list-button');
+                }
+            }
+        ],
+        // 各列ごとの装飾
+        [
+            { targets: [1], orderable: false, className: 'text-center', width: '150px'},
+            { targets: [4], orderable: false, className: 'text-center', width: '100px'},
+        ],
+        false
+    );
 }
 
 /**
@@ -170,6 +170,8 @@ function updateLike() {
                 $('.btn-like').addClass(`btn-secondary`);
                 $('.like-badge').text(response.data);
             }
+            // いいねテーブルを再レンダー
+            settingLikeTables()
         } else {
             alert('save error');
         }

@@ -84,6 +84,15 @@ $(function(){
         let id = $(this).data('id');
         $(`#profile_modal${id}`).modal('hide');
     });
+    // フレンドの画像
+    $(document).on('click', '#friend_image_close', function(){
+        let id = $(this).data('id');
+        $(`#friend_modal${id}`).modal('hide');
+    });
+    $(document).on('click', '.close', function(){
+        let id = $(this).data('id');
+        $(`#friend_modal${id}`).modal('hide');
+    });
 });
 
 /**
@@ -155,7 +164,7 @@ function setDetailView(data, button) {
                                     <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
                                 </a>
         
-                                <div class="modal fade" id="friend_modal${p.friend_id}" tabindex="-1"
+                                <div class="modal" id="friend_modal${p.friend_id}" tabindex="-1"
                                     role="dialog" aria-labelledby="label1" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
@@ -166,10 +175,10 @@ function setDetailView(data, button) {
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                            <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
+                                            <img src="${p.users_photo_path}" id="image_modal_user" height="250" width="300">
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.friend_id}">Close</button>
+                                                <button type="button" class="btn btn-secondary" id="friend_image_close" data-id="${p.friend_id}">Close</button>
                                             </div>
                                         </div>
                                     </div>
@@ -271,7 +280,7 @@ function initList(search) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.users_photo_path}" id="image_modal" height="350" width="450">
+                                    <img src="${p.users_photo_path}" id="image_modal" height="250" width="300">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

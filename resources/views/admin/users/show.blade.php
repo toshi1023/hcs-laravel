@@ -69,7 +69,7 @@
                                 <dl class="row">
                                     <dt class="col-3 text-right">画像</dt>
                                     <div class="col-9">
-                                        <img id="detail_image_file" src="" width="300" height="250" class="detail-view">
+                                        <img id="detail_image_file" src="" width="250" height="200" class="detail-view">
                                     </div>
                                 </dl>
                             </div>
