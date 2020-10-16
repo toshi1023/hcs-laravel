@@ -53,7 +53,7 @@ class UserController extends Controller
     {
       $prefectures = $this->database->getCreate('prefectures');
 
-      return view('admin.users.create', [
+      return view('admin.users.register', [
         'register_mode' => 'create',
         'prefectures'   => $prefectures,
       ]);
@@ -77,7 +77,7 @@ class UserController extends Controller
       
       if ($this->database->save($request, $filename)){
         DB::commit();
-        return redirect()->route('hcs-admin.users.index')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
+        return redirect()->route('hcs-admin.users.index')->with('info_message', 'ユーザ登録に成功しました。ログインページからログインしてください');
       } else {
         DB::rollBack();
         $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
@@ -128,7 +128,7 @@ class UserController extends Controller
     {
       $data = $this->database->getEdit($user);
 
-      return view('admin.users.edit', [
+      return view('admin.users.register', [
         'register_mode' => 'edit',
         'data' => $data['user'],
         'prefectures' => $data['prefectures'],
@@ -163,7 +163,7 @@ class UserController extends Controller
 
       if ($this->database->save($request, $filename)) {
         DB::commit();
-        return redirect()->route('hcs-admin.users.index')->with('message', 'プロフィールの変更を保存しました');
+        return redirect()->route('hcs-admin.users.index')->with('info_message', 'プロフィールの変更を保存しました');
       } else {
         DB::rollBack();
         $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');

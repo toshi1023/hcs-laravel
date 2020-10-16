@@ -17,6 +17,14 @@ $(function(){
             $('#status').val(0);
         }
     });
+    // 公開対象フラグのvalue値設定
+    $('#open_member').change(function() {
+        if($('#open_member').prop('checked')) {
+            $('#member_flg').val(1);
+        } else {
+            $('#member_flg').val(0);
+        }
+    });
 });
 
 /**

@@ -66,11 +66,14 @@ class NewsService
   
   /* *
    * 新規ユーザ保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名
+   * 第一引数:登録データ
    * */
-  public function save($data, $filename)
+  public function save($data)
   {
-    return $this->NewsService->save($data, $filename);
+    // 除外処理
+    $data = $data->except($this->except);
+
+    return $this->NewsService->getSave($data);
   }
 
   /**

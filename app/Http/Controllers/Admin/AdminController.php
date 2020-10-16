@@ -47,7 +47,7 @@ class AdminController extends Controller
 
     public function create()
     {
-      return view('admin.admins.create', [
+      return view('admin.admins.register', [
         'register_mode' => 'create'
       ]);
     }
@@ -98,7 +98,7 @@ class AdminController extends Controller
     {
       $data = $this->database->getEdit($admin);
   
-      return view('admin.admins.edit', [
+      return view('admin.admins.register', [
         'register_mode' => 'edit',
         'data' => $data,
       ]);

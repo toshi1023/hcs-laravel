@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Admin\NewsRegisterRequest;
 
 use App\Service\Admin\NewsService;
 
@@ -54,19 +56,19 @@ class NewsController extends Controller
 
     public function create()
     {
-      return view('admin.news.create', [
+      return view('admin.news.register', [
         'register_mode' => 'create',
       ]);
     }
 
-    /* ユーザ保存メソッド */
-    public function store(Request $request)
+    /* お知らせ保存メソッド */
+    public function store(NewsRegisterRequest $request)
     {
       
       DB::beginTransaction();
       if ($this->database->save($request)){
         DB::commit();
-        return redirect()->route('hcs-admin.news.index')->with('message', 'ニュースを作成しました');
+        return redirect()->route('hcs-admin.news.index')->with('info_message', 'ニュースを作成しました');
       } else {
         DB::rollBack();
         $this->messages->add('', 'ニュースの作成に失敗しました。管理者に問い合わせてください');
@@ -88,19 +90,19 @@ class NewsController extends Controller
     {
       $data = $this->database->getEdit($news);
 
-      return view('admin.news.edit', [
+      return view('admin.news.register', [
         'register_mode' => 'edit',
         'data' => $data['news'],
       ]);
     }
 
-    public function update(Request $request, $admin)
+    public function update(NewsRegisterRequest $request, $admin)
     {
       DB::beginTransaction();
 
       if ($this->database->save($request)) {
         DB::commit();
-        return redirect()->route('hcs-admin.news.index')->with('message', 'ニュースの変更を保存しました');
+        return redirect()->route('hcs-admin.news.index')->with('info_message', 'ニュースの変更を保存しました');
       } else {
         DB::rollBack();
         $this->messages->add('', 'ニュースの変更に失敗しました。管理者に問い合わせてください');

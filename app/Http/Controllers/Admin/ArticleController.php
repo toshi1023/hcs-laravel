@@ -50,7 +50,7 @@ class ArticleController extends Controller
   {
     $prefectures = $this->database->getCreate('prefectures');
 
-    return view('admin.articles.create', [
+    return view('admin.articles.register', [
         'register_mode' => 'create',
         'prefectures'   => $prefectures,
     ]);
@@ -77,7 +77,7 @@ class ArticleController extends Controller
     // 記事の保存
     if ($this->database->save($request, $filename)) {
       DB::commit();
-      return redirect()->route('hcs-admin.articles.index')->with('message', '記事を作成しました');
+      return redirect()->route('hcs-admin.articles.index')->with('info_message', '記事を作成しました');
     } else {
       DB::rollBack();
       $this->messages->add('', '記事の作成に失敗しました。管理者に問い合わせてください');
@@ -116,7 +116,7 @@ class ArticleController extends Controller
   {
     $data = $this->database->getEdit($article);
 
-    return view('admin.articles.edit', [
+    return view('admin.articles.register', [
       'register_mode' => 'edit',
       'data' => $data['article'],
       'prefectures' => $data['prefectures'],
@@ -144,7 +144,7 @@ class ArticleController extends Controller
     
     if ($this->database->save($request, $filename)) {
       DB::commit();
-      return redirect()->route('hcs-admin.articles.index')->with('message', '記事を保存しました');
+      return redirect()->route('hcs-admin.articles.index')->with('info_message', '記事を保存しました');
     } else {
       DB::rollBack();
       $this->messages->add('', '記事の保存に失敗しました。管理者に問い合わせてください');
