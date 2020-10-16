@@ -83,7 +83,7 @@ class ArticleService
   {
     // 除外処理
     $data = $data->except($this->except);
-
+    
     return $this->ArticleService->save($data, $filename);
   } 
 

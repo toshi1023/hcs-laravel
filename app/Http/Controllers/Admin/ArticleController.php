@@ -60,7 +60,7 @@ class ArticleController extends Controller
   public function store(ArticleRegisterRequest $request)
   {
     DB::beginTransaction();
-
+    
     // 緯度・経度を分割
     $map = explode(',', $request->map);
 
@@ -73,7 +73,7 @@ class ArticleController extends Controller
     if ($_FILES['upload_image']['name']){
       $filename = $_FILES['upload_image']['name'];
     }
-    
+
     // 記事の保存
     if ($this->database->save($request, $filename)) {
       DB::commit();

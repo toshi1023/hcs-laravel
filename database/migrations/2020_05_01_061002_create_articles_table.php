@@ -16,8 +16,8 @@ class CreateArticlesTable extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('prefecture');
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->string('latitude', 50)->nullable();
+            $table->string('longitude', 50)->nullable();
             $table->string('title', 40);
             $table->text('content');
             $table->boolean('type')->unsigned()->default(false);        // 0: 全員, 1: 会員
