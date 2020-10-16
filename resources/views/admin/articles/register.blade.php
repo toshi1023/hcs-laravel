@@ -34,9 +34,24 @@
                                                         <label class="col-md-4 col-form-label" for="prefecture">都道府県<span class="text-danger">※</span></label>
                                                         <div class="col-6 col-md-6">
                                                             <select id="prefecture" class="form-control" name="prefecture">
-                                                                <option disabled selected >都道府県を選択してください</option>
+                                                                <option disabled {{ $register_mode === 'create' ? (old('prefecture') ? '' : 'selected') : ($data->prefecture ? '' : 'selected') }} >都道府県を選択してください</option>
                                                                 @foreach ($prefectures as $prefecture)
-                                                                    <option value="{{ $prefecture->name }}">{{ $prefecture->name }}</option>
+                                                                    @if ($register_mode === 'create')
+                                                                        <option 
+                                                                            value="{{ $prefecture->name == old('prefecture') ? old('prefecture') : $prefecture->name }}" 
+                                                                            {{ $prefecture->name == old('prefecture') ? 'selected' : '' }}
+                                                                        >
+                                                                            {{ $prefecture->name == old('prefecture') ? old('prefecture') : $prefecture->name }}
+                                                                        </option>
+                                                                    @endif
+                                                                    @if ($register_mode === 'edit')
+                                                                        <option 
+                                                                            value="{{ old('prefecture') ? ($prefecture->name == old('prefecture') ? old('prefecture') : $prefecture->name) : ($prefecture->name == $data->prefecture ? $data->prefecture : $prefecture->name) }}" 
+                                                                            {{ $prefecture->name == old('prefecture') || $prefecture->name == $data->prefecture ? 'selected' : '' }}
+                                                                        >
+                                                                            {{ old('prefecture') ? ($prefecture->name == old('prefecture') ? old('prefecture') : $prefecture->name) : ($prefecture->name == $data->prefecture ? $data->prefecture : $prefecture->name) }}
+                                                                        </option>
+                                                                    @endif
                                                                 @endforeach
                                                             </select>
                                                         </div>
