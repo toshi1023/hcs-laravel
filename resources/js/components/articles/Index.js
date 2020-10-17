@@ -80,7 +80,6 @@ function Article() {
             <div onBlur={getSearchPrefecture}>
                 <PrefectureSelects values={articles.prefectures} />
             </div>
-            <button onClick={getSearchPrefecture}>クリック</button>
             <Grid container className={classes.gridContainer} justify="center">
                 {renderArticles()}
             </Grid>
