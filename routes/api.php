@@ -10,6 +10,9 @@ Route::post('/login', 'Api\LoginController@login');
 Route::group(['middleware' => ['api'], 'prefix'], function() {
     Route::resource('api_articles' , 'Api\ArticleController', ['only' => ['index']]);
     Route::resource('api_users' , 'Api\UserController', ['only' => ['index']]);
+
+    // 記事の都道府県検索
+    Route::post('api_articles/prefecture/search', 'Api\ArticleController@searchPrefecture')->name('article.prefecture.search');
 });
 
 // 認証が必要なルートを設定

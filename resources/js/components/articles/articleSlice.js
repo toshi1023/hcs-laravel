@@ -7,11 +7,18 @@ const apiUrl = 'http://localhost/api/api_articles'
 /**
  * 一覧データの取得
  */
-export const fetchAsyncGet = createAsyncThunk('articles/index', async() => {
+export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions) => {
+    const res = await axios.get(`${apiUrl}?query=${conditions}`)
+    return res.data
+})
+/**
+ * 一覧データの都道府県検索処理
+ */
+export const fetchAsyncPrefectureSearch = createAsyncThunk('articles/prefecture/search', async(conditions) => {
     const res = await axios.get(apiUrl, {
-        // headers: {
-        //     Authorization: `JWT ${token}`,
-        // },
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
     return res.data
 })
@@ -23,7 +30,7 @@ export const fetchAsyncCreate = createAsyncThunk('articles/create', async(articl
     const res = await axios.post(apiUrl, article, {
         headers: {
             'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
+            // Authorization: `Bearer ${token}`,
         },
     })
     return res.data

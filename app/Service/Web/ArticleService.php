@@ -18,23 +18,30 @@ class ArticleService
     $this->ArticleService = $service;
   }
 
-  /* Index用データ取得メソッド */
-  public function getIndex()
+  /**
+   * Indexページ用データ取得メソッド
+   * 引数1：テーブル名, 引数2：検索条件
+   */
+  public function getIndex($table=null, $conditions=null)
   {
-    // 記事を全て取得(Userモデルのテーブルも結合して取得！)
-    $articles = $this->ArticleService->getBaseData()->get();
+    if(is_null($table)) {
+      // 記事を全て取得(Userモデルのテーブルも結合して取得)
+      $articles = $this->ArticleService->getBaseData($conditions)->get();
 
-    // 会員限定公開をされていない記事のみ取得
-    $free_articles = $this->ArticleService->getBaseData()->where('type', '=', 0)->get();
+      // 会員限定公開をされていない記事のみ取得
+      $free_articles = $this->ArticleService->getBaseData($conditions)->where('type', '=', 0)->get();
 
-    // 都道府県取得
-    $prefectures = $this->ArticleService->getQuery('prefectures')->get();
+      // 都道府県取得
+      $prefectures = $this->ArticleService->getQuery('prefectures')->get();
 
-    return [
-      'articles' => $articles, 
-      'free_articles' => $free_articles,
-      'prefectures' => $prefectures
-    ];
+      return [
+        'articles' => $articles, 
+        'free_articles' => $free_articles,
+        'prefectures' => $prefectures
+      ];
+    }
+    // 指定したテーブルのデータをソートして取得
+    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
   }
 
   /* *
@@ -89,13 +96,28 @@ class ArticleService
       return $this->ArticleService->destroy('articles', $id);
     }
 
-  /*
-  ファイル削除用メソッド
-  引数:ファイルパス
-  */
+  /**
+   * ファイル削除用メソッド
+   * 引数:ファイルパス
+   */
   public function fileDelete($request)
   {
     return $this->ArticleService->fileDelete($request);
+  }
+
+  /**
+   * 検索条件対応
+   * 引数：検索条件
+   */
+  public function searchIndex($conditions)
+  {
+    // 記事を全て取得(Userモデルのテーブルも結合して取得！)
+    $articles = $this->ArticleService->getBaseData($conditions)->get();
+
+    // 会員限定公開をされていない記事のみ取得
+    $free_articles = $this->ArticleService->getBaseData($conditions)->where('type', '=', 0)->get();
+
+    return ;
   }
 
 }

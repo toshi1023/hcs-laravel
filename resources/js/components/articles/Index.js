@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { fetchAsyncProf } from '../login/loginSlice';
+import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet } from './articleSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/articleParts/prefectureSearch';
-import axios from 'axios';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,14 +26,46 @@ function Article() {
     useEffect(() => {
         // 非同期の関数を定義
         const fetchArticleProf = async () => {
-            // 記事一覧とログイン情報を取得
-            await dispatch(fetchAsyncGet())
-            // await dispatch(fetchAsyncProf())
+            // Loading開始
+            await dispatch(fetchCredStart())
+            // 記事一覧を取得
+            const resultReg = await dispatch(fetchAsyncGet(document.getElementById("prefecture").value))
+            if (fetchAsyncGet.fulfilled.match(resultReg)) {
+                // ロード終了
+                await dispatch(fetchCredEnd());       
+            }
+            // ロード終了
+            await dispatch(fetchCredEnd());  
         }
         // 上で定義した非同期の関数を実行
         fetchArticleProf()
-        // dispatchをuseEffectの第2引数に定義する必要がある
-    }, [dispatch])
+        
+    }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
+
+
+    // 都道府県の検索条件をもとに記事の絞り込み
+    const getSearchPrefecture = () => {
+        // 非同期の関数を定義
+        const fetchArticleSearch = async () => {
+            // Loading開始
+            await dispatch(fetchCredStart())
+            // 都道府県情報をセット
+            let prefecture = document.getElementById("prefecture").value
+            if(prefecture == '全都道府県') {
+                prefecture = ''
+            }
+            // 記事一覧を取得
+            const resultSearch = await dispatch(fetchAsyncGet(prefecture))
+            if (fetchAsyncGet.fulfilled.match(resultSearch)) {
+                // ロード終了
+                await dispatch(fetchCredEnd());       
+            }
+            // ロード終了
+            await dispatch(fetchCredEnd());  
+        }
+        // 上で定義した非同期の関数を実行
+        fetchArticleSearch()
+    }
 
     // 記事一覧を生成
     const renderArticles = () => {
@@ -46,7 +77,10 @@ function Article() {
     }
     return (
         <>
-            <PrefectureSelects values={articles.prefectures} />
+            <div onBlur={getSearchPrefecture}>
+                <PrefectureSelects values={articles.prefectures} />
+            </div>
+            <button onClick={getSearchPrefecture}>クリック</button>
             <Grid container className={classes.gridContainer} justify="center">
                 {renderArticles()}
             </Grid>

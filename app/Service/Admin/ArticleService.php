@@ -20,7 +20,10 @@ class ArticleService
     $this->ArticleService = $service;
   }
 
-  /* Index用データ取得メソッド */
+  /**
+   * Indexページ用データ取得メソッド
+   * 引数1：テーブル名, 引数2：検索条件
+   */
   public function getIndex($table=null, $conditions=null)
   {
     if(is_null($table)) {

@@ -56,8 +56,10 @@ export default function PrefectureSelects(props) {
           value={state.prefecture}
           onChange={handleChange}
           className={classes.selectBox}
+          id="prefecture"
         >
-          <option aria-label="None" value="" />
+          <option aria-label="None" value="" selected disabled />
+          <option aria-label="None" value="全都道府県">全都道府県</option>
           {renderPrefectures()}
         </Select>
       </FormControl>
