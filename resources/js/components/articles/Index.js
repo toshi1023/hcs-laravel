@@ -66,7 +66,7 @@ function Article() {
         // 上で定義した非同期の関数を実行
         fetchArticleSearch()
     }
-
+    
     // 記事一覧を生成
     const renderArticles = () => {
         return _.map(articles.articles, article => (

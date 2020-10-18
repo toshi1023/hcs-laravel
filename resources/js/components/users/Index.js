@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function User() {
     const classes = useStyles();
-    // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
+    // stateで管理するユーザ一覧データを使用できるようにローカルのusers定数に格納
     const users = useSelector(selectUsers)
     const dispatch = useDispatch()
 

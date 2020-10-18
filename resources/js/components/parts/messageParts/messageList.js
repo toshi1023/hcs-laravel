@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar, Avatar, IconButton, Badge} from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
+import _ from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MessageList() {
+export default function MessageList(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([1]);
 
@@ -41,26 +42,27 @@ export default function MessageList() {
 
     setChecked(newChecked);
   };
-
+ 
   return (
     <List dense className={classes.root}>
-      {[0, 1, 2, 3].map((value) => {
-        const labelId = `checkbox-list-secondary-label-${value}`;
+      {_.map(props.message.messages, value => {
+        const labelId = `checkbox-list-secondary-label-${value.id}`;
+        console.log(value)
         return (
           <>
-            <ListItem key={value} button >
+            <ListItem key={value.id} button >
               <ListItemAvatar>
                 <Avatar
-                  alt={`Avatar n°${value + 1}`}
-                  src={'https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no_image.png'}
+                  alt={value.user_id_sender}
+                  src={value.sender_photo}
                   className={classes.avatar}
                 />
               </ListItemAvatar>
               <ListItemText 
                 id={labelId} 
-                primary={`Line item ${value + 1}`} 
+                primary={value.content} 
                 classes={{primary: classes.list}} 
-                style={{color: (value.gender == 1 ? 'blue' : 'red')}}
+                // style={{color: (value.gender == 1 ? 'blue' : 'red')}}
               />
               <ListItemSecondaryAction>
                 <Badge badgeContent={1} color="secondary">

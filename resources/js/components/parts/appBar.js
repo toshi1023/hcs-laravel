@@ -120,7 +120,8 @@ function HcsAppBar() {
             setAnchorEl(null);
             handleMobileMenuClose();
             history.push('/login');
-            // localStorageのTokenを削除(ログアウト処理)
+            // localStorageのTokenとIDを削除(ログアウト処理)
+            localStorage.removeItem("loginId");
             localStorage.removeItem("localToken");
             // ロード終了
             if(!localStorage.getItem('localToken')) {
@@ -172,29 +173,36 @@ function HcsAppBar() {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
-                <IconButton
-                    aria-label="show 4 new mails"
-                    color="inherit"
-                    onClick={handleMessage}
-                >
-                    <Badge badgeContent={4} color="secondary">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <p>メッセージ</p>
-            </MenuItem>
-            <MenuItem>
-                <IconButton
-                    aria-label="show 11 new notifications"
-                    color="inherit"
-                >
-                    <Badge badgeContent={11} color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <p>通知</p>
-            </MenuItem>
+            {   // ログインしているか否かで表示内容を変更
+                localStorage.getItem('localToken') ? 
+                <>
+                    <MenuItem>
+                        <IconButton
+                            aria-label="show 4 new mails"
+                            color="inherit"
+                            onClick={handleMessage}
+                        >
+                            <Badge badgeContent={4} color="secondary">
+                                <MailIcon />
+                            </Badge>
+                        </IconButton>
+                        <p>メッセージ</p>
+                    </MenuItem>
+                    <MenuItem>
+                        <IconButton
+                            aria-label="show 11 new notifications"
+                            color="inherit"
+                        >
+                            <Badge badgeContent={11} color="secondary">
+                                <NotificationsIcon />
+                            </Badge>
+                        </IconButton>
+                        <p>通知</p>
+                    </MenuItem>
+                </>
+                : ''
+            }
+            
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
                     aria-label="account of current user"
@@ -223,25 +231,32 @@ function HcsAppBar() {
                     </div>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
-                        <IconButton
-                            aria-label="show 4 new mails"
-                            color="inherit"
-                            className={classes.badge}
-                            onClick={handleMessage}
-                        >
-                            <Badge badgeContent={4} color="secondary">
-                                <MailIcon fontSize="large" />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            aria-label="show 11 new notifications"
-                            color="inherit"
-                            className={classes.badge}
-                        >
-                            <Badge badgeContent={11} color="secondary">
-                                <NotificationsIcon fontSize="large" />
-                            </Badge>
-                        </IconButton>
+                    {
+                        // ログインしているか否かで表示内容を変更
+                        localStorage.getItem('localToken') ? 
+                        <>
+                            <IconButton
+                                aria-label="show 4 new mails"
+                                color="inherit"
+                                className={classes.badge}
+                                onClick={handleMessage}
+                            >
+                                <Badge badgeContent={4} color="secondary">
+                                    <MailIcon fontSize="large" />
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                aria-label="show 11 new notifications"
+                                color="inherit"
+                                className={classes.badge}
+                            >
+                                <Badge badgeContent={11} color="secondary">
+                                    <NotificationsIcon fontSize="large" />
+                                </Badge>
+                            </IconButton>
+                        </>
+                        : ''
+                    }
                         <IconButton
                             edge="end"
                             aria-label="account of current user"

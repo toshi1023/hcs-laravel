@@ -105,19 +105,4 @@ class ArticleService
     return $this->ArticleService->fileDelete($request);
   }
 
-  /**
-   * 検索条件対応
-   * 引数：検索条件
-   */
-  public function searchIndex($conditions)
-  {
-    // 記事を全て取得(Userモデルのテーブルも結合して取得！)
-    $articles = $this->ArticleService->getBaseData($conditions)->get();
-
-    // 会員限定公開をされていない記事のみ取得
-    $free_articles = $this->ArticleService->getBaseData($conditions)->where('type', '=', 0)->get();
-
-    return ;
-  }
-
 }

@@ -37,8 +37,8 @@ const useStyles = makeStyles(theme => ({
         flex: "1 0 auto",
     },
     cover: {
-        margin: '30px 10px 0 10px',
-        height: 330
+        margin: '60px 10px 0 10px',
+        height: 280
     },
     gridContainer: {
         paddingTop: "10px",
@@ -55,7 +55,8 @@ function UserShow(props) {
     // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
     const selectedUsers = useSelector(selectSelectedUser);
     const dispatch = useDispatch();
-
+    
+    console.log(selectedUsers.value)
     return (
         <Grid container className={classes.gridContainer} justify="center">
             <Grid item xs={12} sm={6}>
@@ -63,7 +64,7 @@ function UserShow(props) {
                     <Grid item xs={8} sm={6}>
                         <CardMedia
                             className={classes.cover}
-                            image="https://aws-hcs-image.s3-ap-northeast-1.amazonaws.com/no-image2.jpg"
+                            image={selectedUsers.value.users_photo_path}
                             title="NoImage"
                         />
                     </Grid>
@@ -71,7 +72,7 @@ function UserShow(props) {
                         <div className={classes.details}>
                             <CardContent className={classes.content}>
                                 <div className={styles.note}>
-                                    <h1>Root</h1>
+                                    <h1>{selectedUsers.value.name}</h1>
                                     <List className={classes.list}>
                                     <ListItem>
                                         <ListItemAvatar>
@@ -79,7 +80,7 @@ function UserShow(props) {
                                             <RoomIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="都道府県" secondary="大阪府" classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="都道府県" secondary={selectedUsers.value.prefecture} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -88,7 +89,7 @@ function UserShow(props) {
                                             <EventIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="生年月日" secondary="1992年1月1日" classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="生年月日" secondary={selectedUsers.value.birthday} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -97,7 +98,7 @@ function UserShow(props) {
                                             <SupervisorAccountIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="性別" secondary="男性" classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="性別" secondary={selectedUsers.value.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -106,7 +107,7 @@ function UserShow(props) {
                                             <CommentIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="自己紹介" secondary="よろしくです" classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="自己紹介" secondary={selectedUsers.value.comment} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     </List>
                                 </div>

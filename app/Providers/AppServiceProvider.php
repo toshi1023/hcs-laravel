@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('UserService', UserService::class);
         $this->app->bind('AdminService', AdminService::class);
         $this->app->bind('NewsService', NewsService::class);
+        $this->app->bind('MessageService', MessageService::class);
     }
 
     /**

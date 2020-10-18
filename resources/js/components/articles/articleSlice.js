@@ -11,17 +11,6 @@ export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions
     const res = await axios.get(`${apiUrl}?query=${conditions}`)
     return res.data
 })
-/**
- * 一覧データの都道府県検索処理
- */
-export const fetchAsyncPrefectureSearch = createAsyncThunk('articles/prefecture/search', async(conditions) => {
-    const res = await axios.get(apiUrl, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    return res.data
-})
 
 /**
  * データ作成

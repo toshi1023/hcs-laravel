@@ -84,7 +84,7 @@ export default function Login() {
                                 await dispatch(fetchCredStart());
                                 
                                 const login = await dispatch(fetchAsyncLogin(values));
-                                console.log(login)
+                                
                                 if (fetchAsyncLogin.fulfilled.match(login)) {
                                 // ログインユーザのプロフィールを取得
                                 // await dispatch(fetchAsyncGetMyProf());

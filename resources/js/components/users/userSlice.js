@@ -91,6 +91,7 @@ const userSlice = createSlice({
                 birthday: '',               // 生年月日
                 gender: '',                 // 性別
                 email: '',                  // メールアドレス
+                comment: '',                // コメント
                 status: '',                 // 会員フラグ
                 delete_flg: '',             // 削除フラグ
                 created_at: '',             // 記事の作成日
@@ -107,6 +108,7 @@ const userSlice = createSlice({
             birthday: '',               // 生年月日
             gender: '',                 // 性別
             email: '',                  // メールアドレス
+            comment: '',                // コメント
             status: '',                 // 会員フラグ
             delete_flg: '',             // 削除フラグ
             created_at: '',             // 記事の作成日
@@ -122,6 +124,7 @@ const userSlice = createSlice({
             birthday: '',               // 生年月日
             gender: '',                 // 性別
             email: '',                  // メールアドレス
+            comment: '',                // コメント
             status: '',                 // 会員フラグ
             delete_flg: '',             // 削除フラグ
             created_at: '',             // 記事の作成日
@@ -149,8 +152,9 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         // Apiが成功したときの処理を記載
         builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
-            // ブラウザのlocalStorageにTokenを保存
+            // ブラウザのlocalStorageにTokenとIDを保存
             localStorage.setItem("localToken", action.payload.token)
+            localStorage.setItem("loginId", action.payload.id)
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {

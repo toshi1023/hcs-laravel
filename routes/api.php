@@ -10,6 +10,7 @@ Route::post('/login', 'Api\LoginController@login');
 Route::group(['middleware' => ['api'], 'prefix'], function() {
     Route::resource('api_articles' , 'Api\ArticleController', ['only' => ['index']]);
     Route::resource('api_users' , 'Api\UserController', ['only' => ['index']]);
+    Route::resource('api_messages' , 'Api\MessageController', ['only' => ['index']]);
 
     // 記事の都道府県検索
     Route::post('api_articles/prefecture/search', 'Api\ArticleController@searchPrefecture')->name('article.prefecture.search');
@@ -19,6 +20,7 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
 Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
     Route::resource('api_articles' , 'Api\ArticleController', ['except' => ['index']]);
     Route::resource('api_users' , 'Api\UserController', ['except' => ['index']]);
+    // Route::resource('api_messages' , 'Api\MessageController');
 });
 
 

@@ -12,7 +12,7 @@ use App\Model\User;
 use App\Model\News;
 use App\Model\Prefecture;
 // use App\Model\Friend;
-// use App\Model\Message;
+use App\Model\Message;
 
 class NewModelServiceProvider extends ServiceProvider
 {
@@ -55,10 +55,10 @@ class NewModelServiceProvider extends ServiceProvider
         // $this->app->bind('friends', function($app) {
         //     return new Friend;
         // });
-        // // 'messages'テーブルをインスタンス化して返す
-        // $this->app->bind('messages', function($app) {
-        //     return new Message;
-        // });
+        // 'messages'テーブルをインスタンス化して返す
+        $this->app->bind('messages', function($app) {
+            return new Message;
+        });
     }
 
     /**

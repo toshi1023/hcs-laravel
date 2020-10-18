@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
             'gender' => 1,
             'email' => 'root@xxx.co.jp',
             'password' => Hash::make("root"),
+            'comment'  => 'こんにちはrootです！これから盛り上げていきましょう！',
         ]);
 
         // faker使う(引数には日本語を設定している)
@@ -36,6 +37,7 @@ class UsersTableSeeder extends Seeder
                 'gender' => 1,
                 'email' => 'test'.$i.'@xxx.co.jp',
                 'password' => Hash::make("test"),
+                'comment'  => 'こんにちはtest'.$i.'です！これからよろしく！',
                 // 'user_agent' => $faker->userAgent,
             ]);
         }

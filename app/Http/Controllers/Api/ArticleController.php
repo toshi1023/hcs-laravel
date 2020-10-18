@@ -122,22 +122,4 @@ class ArticleController extends Controller
       return redirect()->route('articles.index')->withErrors($this->messages);
     }
   }
-
-  /**
-   * 記事の都道府県検索
-   */
-  public function searchPrefecture(Request $request)
-  {
-    // 検索条件のセット
-    $conditions = [];
-    if ($request->prefecture) { $conditions['articles.prefecture'] = $request->prefecture; }
-
-    $articles = $this->database->searchIndex();
-      
-    return response()->json([
-      'articles' => $articles['articles'], 
-      'free_articles' => $articles['free_articles'],
-      'prefectures' => $articles['prefectures']
-    ],200, [], JSON_UNESCAPED_UNICODE);
-  }
 }

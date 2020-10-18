@@ -30,7 +30,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { Provider } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoading, fetchCredStart, fetchCredEnd, } from "./components/app/appSlice";
+import { selectLoading, fetchCredStart, fetchCredEnd } from "./components/app/appSlice";
+import { selectSelectedUser } from "./components/users/userSlice";
 import store from "./store";
 
 
@@ -55,6 +56,7 @@ function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
   let loading = useSelector(selectLoading);
+  let selectedUsers = useSelector(selectSelectedUser);
 
   // Loadingアイコンの制御
   const handleLoading = async () => {
@@ -78,7 +80,7 @@ function App() {
             <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
             <Route exact path="/articles" render={props => <Article {...props} />} />
             <Route exact path="/users" render={props => <User {...props} />} />
-            <Route exact path="/users/1" render={props => <UserShow {...props} />} />
+            <Route path="/users/:id" render={props => <UserShow {...props} />} />
             <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
             <Route exact path="/messages" render={props => <Message {...props} />} />
           </Switch>

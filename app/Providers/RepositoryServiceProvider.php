@@ -10,16 +10,19 @@ use App\Model\Article;
 use App\Model\ArticleImage;
 use App\Model\Prefecture;
 use App\Model\News;
+use App\Model\Message;
 
 use App\Consts\Consts;
 use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
 use App\DataProvider\DatabaseInterface\UserDatabaseInterface;
 use App\DataProvider\DatabaseInterface\AdminDatabaseInterface;
 use App\DataProvider\DatabaseInterface\NewsDatabaseInterface;
+use App\DataProvider\DatabaseInterface\MessageDatabaseInterface;
 use App\DataProvider\ArticleRepository;
 use App\DataProvider\UserRepository;
 use App\DataProvider\AdminRepository;
 use App\DataProvider\NewsRepository;
+use App\DataProvider\MessageRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {   
@@ -49,6 +52,11 @@ class RepositoryServiceProvider extends ServiceProvider
         // NewsDatabaseInterfaceをNewsRepositoryのインスタンス化で解決
         $this->app->singleton(NewsDatabaseInterface::class, function($app) {
             return new NewsRepository(new News);
+        });
+
+        // MessageDatabaseInterfaceをMessageRepositoryのインスタンス化で解決
+        $this->app->singleton(MessageDatabaseInterface::class, function($app) {
+            return new MessageRepository(new Message);
         });
     }
 
