@@ -111,7 +111,8 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                            ->selectRaw('count(messages.id) as message_count')
                            ->addSelect('messages.user_id_sender')
                            ->groupByRaw('messages.id')
-                           ->where('messages.user_id_receiver', '=', $user_id);
+                           ->where('messages.user_id_receiver', '=', $user_id)
+                           ->orWhere('messages.user_id_sender', '=', $user_id);
     }
     /**
      * usersページのメッセージ送信者一覧データを取得

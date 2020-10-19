@@ -63,7 +63,8 @@ $(function(){
      * メッセージの詳細モーダルを表示
      */
     $(document).on('click', '.btn-message-detail', function(){
-        settingMessageTables();
+        let sender_id = $(this).data('id');
+        settingMessageTables(sender_id);
     });
 
     /* 
@@ -332,11 +333,11 @@ function settingMessageModals() {
 
 /**
  * メッセージテーブルの実装処理
+ * 引数：送信者ID
  */
-function settingMessageTables() {
-    // ユーザIDと送信者IDの取得
+function settingMessageTables(sender_id) {
+    // ユーザIDの取得
     let user_id = $('#user_id').data('id');
-    let sender_id = $('.btn-message-detail').data('id');
 
     // 過去に表示したテーブルのリセット
     if ($.fn.DataTable.isDataTable('#user_message_list')) {
