@@ -175,7 +175,7 @@ function HcsAppBar() {
         >
             {   // ログインしているか否かで表示内容を変更
                 localStorage.getItem('localToken') ? 
-                <>
+                <div>
                     <MenuItem>
                         <IconButton
                             aria-label="show 4 new mails"
@@ -199,7 +199,7 @@ function HcsAppBar() {
                         </IconButton>
                         <p>通知</p>
                     </MenuItem>
-                </>
+                </div>
                 : ''
             }
             
@@ -234,7 +234,7 @@ function HcsAppBar() {
                     {
                         // ログインしているか否かで表示内容を変更
                         localStorage.getItem('localToken') ? 
-                        <>
+                        <div>
                             <IconButton
                                 aria-label="show 4 new mails"
                                 color="inherit"
@@ -254,7 +254,7 @@ function HcsAppBar() {
                                     <NotificationsIcon fontSize="large" />
                                 </Badge>
                             </IconButton>
-                        </>
+                        </div>
                         : ''
                     }
                         <IconButton

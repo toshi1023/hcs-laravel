@@ -66,12 +66,15 @@ const MenuDrawer = (props) => {
       icon: <GroupIcon />,
       onClick: () => history.push('/users')
     },
+  ]
+  // ログインしているときはメッセージメニューを追加
+  localStorage.getItem('localToken') ? itemList.push(
     {
       text: 'メッセージ',
       icon: <MailIcon />,
       onClick: () => history.push('/messages')
-    }, 
-  ]
+    })
+  : '';
 
   // Logout処理
   const handleLogout = async () => {

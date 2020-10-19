@@ -83,12 +83,12 @@ export default function UserList(props) {
         // ユーザの詳細ページへリダイレクト
         history.push(`/users/${value.id}`);
     };
-
+    
     return (
         <List dense className={classes.root}>
             {_.map(props.user.users, value => {
                 //     const labelId = `user-list-${value.id}`;
-
+                
                 return (
                     <>
                         {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}

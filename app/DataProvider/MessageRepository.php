@@ -26,7 +26,8 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
                                  'senders.name as sender_name',
                                  'receivers.name as receiver_name', 
                                  'senders.users_photo_path as sender_photo',
-                                 'receivers.users_photo_path as receiver_photo', 
+                                 'receivers.users_photo_path as receiver_photo',
+                                 'senders.gender as sender_gender', 
                              )
                              ->where('messages.delete_flg', '=', 0);
         

@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar, Avatar, IconButton, Badge} from '@material-ui/core';
+import {List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar, Avatar, IconButton, Badge, Typography} from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import _ from "lodash";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,18 +14,35 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     marginLeft: 10,
-    fontSize: 20
   },
   avatar: {
     // Avatarのサイズ変更
     width: theme.spacing(7),
     height: theme.spacing(7),
   },
+  sender_name: {
+    marginLeft: 10,
+    fontSize: 15,
+  },
   icon: {
     color: 'blue',
     fontSize: 30
   },
 }));
+
+/**
+ * Typographyのカスタマイズ
+ */
+const theme = createMuiTheme();
+theme.typography.h3 = {
+  fontSize: '1.2rem',
+  '@media (min-width:600px)': {
+    fontSize: '1.5rem',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '2rem',
+  },
+};
 
 export default function MessageList(props) {
   const classes = useStyles();
@@ -47,7 +65,7 @@ export default function MessageList(props) {
     <List dense className={classes.root}>
       {_.map(props.message.messages, value => {
         const labelId = `checkbox-list-secondary-label-${value.id}`;
-        console.log(value)
+        
         return (
           <>
             <ListItem key={value.id} button >
@@ -57,13 +75,19 @@ export default function MessageList(props) {
                   src={value.sender_photo}
                   className={classes.avatar}
                 />
+                <p className={classes.sender_name} style={{color: (value.sender_gender == 1 ? 'blue' : 'red')}}>{value.sender_name}</p>
               </ListItemAvatar>
-              <ListItemText 
-                id={labelId} 
-                primary={value.content} 
-                classes={{primary: classes.list}} 
-                // style={{color: (value.gender == 1 ? 'blue' : 'red')}}
-              />
+              <div style={{ width: '70%', whiteSpace: 'nowrap' }}>
+                <ListItemText 
+                  id={labelId} 
+                  primary={
+                    <ThemeProvider theme={theme}>
+                      <Typography variant="h3" noWrap>{value.content}</Typography>
+                    </ThemeProvider>
+                  } 
+                  classes={{primary: classes.list}}
+                />
+              </div>
               <ListItemSecondaryAction>
                 <Badge badgeContent={1} color="secondary">
                   <IconButton style={{backgroundColor: '#d0ddf5'}}>
