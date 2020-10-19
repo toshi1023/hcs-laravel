@@ -116,6 +116,7 @@ function setDetailView(data, button) {
         $('#detail_created_at').html(create_time);
         $('#detail_image_file').attr('src', data.user.users_photo_path);
         // $('#detail_user_agent').html(data.user_agent);
+        $('#detail_comment').html(data.user.comment);
         $('#detail_memo').html(data.user.memo);
         $('#user_id').data('id', data.user.id);              // 各タグで共有
 
@@ -133,8 +134,6 @@ function setDetailView(data, button) {
         if(data.user.status == 1) {
             $('#detail_status').css('color','red');
         }
-
-        $('#detail_modal').modal('show');
 
     /* 
      *   "詳細"モーダルの表示処理("フレンド一覧"タブ)
@@ -166,7 +165,7 @@ function setDetailView(data, button) {
         
                                 <div class="modal" id="friend_modal${p.friend_id}" tabindex="-1"
                                     role="dialog" aria-labelledby="label1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-dialog modal-warning modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="label1">プロフィール画像</h5>
@@ -223,24 +222,94 @@ function setDetailView(data, button) {
                 false
             );
 
-        // /* 
-        // *   "詳細"モーダルの表示処理("マーカー"タブ)
-        // */
-        //     if ($.fn.DataTable.isDataTable('#user_markers_list')) {
-        //         $('#user_markers_list').DataTable().destroy();
-        //     }
-        //     setMarkerTable(data.id);
+            /* 
+            *   "詳細"モーダルの表示処理("メッセージ一覧"タブ)
+            */
+            settingMessageTables();
 
-        // /* 
-        // *   "詳細"モーダルの表示処理("ポイント履歴"タブ)
-        // */
-        //     if ($.fn.DataTable.isDataTable('#user_points_list')) {
-        //         $('#user_points_list').DataTable().destroy();
-        //     }
-        //     setPointTable(data.id);
-            
-            // $('#detail_modal').modal('show');
-        }
+            // モーダルの表示
+            $('#detail_modal').modal('show');
+        }       
+}
+
+/**
+ * メッセージテーブルの実装処理
+ */
+function settingMessageTables() {
+    // ユーザID取得
+    let user_id = $('#user_id').data('id')
+
+    // 過去に表示したテーブルのリセット
+    if ($.fn.DataTable.isDataTable('#user_message_list')) {
+        $('#user_message_list').DataTable().destroy();
+    }
+    // DataTable設定("メッセージ一覧")
+    settingDataTables(
+        // 取得
+        // tableのID
+        'user_message_list',
+        // 取得URLおよびパラメタ
+        `ajax/users/${user_id}/messages`,
+        {},
+        // 各列ごとの表示定義
+        [
+            {data: 'id'},
+            {
+                // 送信者のイメージ画像を表示(モーダル形式)
+                data: function (p) {
+                    
+                    return `
+                        <a href="" data-toggle="modal" data-target="#profile_modal${p.user_id_sender}">
+                            <img src="${p.users_photo_path}" id="profile_image" height="45" width="65">
+                        </a>
+
+                        <div class="modal" id="profile_modal${p.user_id_sender}" tabindex="-1"
+                            role="dialog" aria-labelledby="label1" aria-hidden="true">
+                            <div class="modal-dialog modal-warning modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="label1">プロフィール画像</h5>
+                                        <button type="button" class="close" data-id="${p.user_id_sender}" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" id="profile_image_close" data-id="${p.user_id_sender}">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+            {data: 'name'},
+            {data: 'content'},
+            {
+                data: function(p) {
+                    // 日付フォーマットの形式を調整
+                    let time = moment(p.updated_at);
+                    return time.format("YYYY年MM月DD日 HH時mm分");
+                }, name: 'updated_at'
+            },
+            // 各操作列
+            {
+                data: function (p) {
+                    // 編集
+                    return getListLink('remove', p.id ,`ajax/users/${user_id}/messages/destroy`, 'list-button');
+                }
+            }
+        ],
+        // 各列ごとの装飾
+        [
+            { targets: [1], orderable: false, className: 'text-center', width: '150px'},
+            { targets: [4], orderable: false, className: 'text-left', width: '200px'},
+            { targets: [5], orderable: false, className: 'text-center', width: '100px'},
+        ],
+        false
+    );
 }
 
 /**

@@ -112,4 +112,13 @@ class UserService
     return $this->UserService->getFriendsQuery($user_id);
   }
 
+  /**
+   * メッセージ情報の取得
+   * 引数1：検索条件, 引数2：結合条件
+   */
+  public function getMessagesQuery($conditions=null, $relations=null)
+  {
+    return $this->UserService->getQuery('messages', $conditions, $relations);
+  }
+
 }

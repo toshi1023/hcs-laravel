@@ -23,6 +23,19 @@ $(function(){
         // いいね数の更新処理
         updateLike();
     });
+
+    /* 
+    *   モーダルの終了処理
+    */
+    // プロフィールの画像
+    $(document).on('click', '#user_image_close', function(){
+        let id = $(this).data('id');
+        $(`#like_modal${id}`).modal('hide');
+    });
+    $(document).on('click', '.close', function(){
+        let id = $(this).data('id');
+        $(`#like_modal${id}`).modal('hide');
+    });
 });
 
 /**
@@ -69,6 +82,9 @@ function setDetailView(data, button) {
     }
 }
 
+/**
+ * いいねテーブルの実装処理
+ */
 function settingLikeTables() {
     // 記事ID取得
     let article_id = $('#article_id').data('id');
@@ -93,13 +109,13 @@ function settingLikeTables() {
                 data: function (p) {
                     
                     return `
-                        <a href="" data-toggle="modal" data-target="#friend_modal${p.user_id}">
+                        <a href="" data-toggle="modal" data-target="#like_modal${p.user_id}">
                             <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
                         </a>
 
-                        <div class="modal fade" id="friend_modal${p.user_id}" tabindex="-1"
+                        <div class="modal" id="like_modal${p.user_id}" tabindex="-1"
                             role="dialog" aria-labelledby="label1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-dialog modal-warning modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="label1">プロフィール画像</h5>
@@ -111,7 +127,7 @@ function settingLikeTables() {
                                     <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" id="location_image_close" data-id="${p.user_id}">Close</button>
+                                        <button type="button" class="btn btn-secondary" id="user_image_close" data-id="${p.user_id}">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -204,9 +220,9 @@ function initList(search) {
                             <img src="${p.articles_photo_path}" height="45" width="65">
                         </a>
 
-                        <div class="modal fade" id="modal${p.id}" tabindex="-1"
+                        <div class="modal" id="modal${p.id}" tabindex="-1"
                             role="dialog" aria-labelledby="label1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-dialog modal-warning modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="label1">HitcHike Photo</h5>

@@ -70,17 +70,6 @@
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  メッセージ
-                </a>
-                <div class="dropdown">
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item menu-list" href="#">メッセージ履歴</a>
-                    <a class="dropdown-item menu-list" href="#">メッセージ設定</a>
-                  </div>
-                </div> 
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   ニュース
                 </a>
                 <div class="dropdown">

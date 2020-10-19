@@ -49,6 +49,10 @@
                                     <dd class="col-9"><span id="detail_email" class="detail-view"></span></dd>
                                 </dl>
                                 <dl class="row">
+                                    <dt class="col-3 text-right">自己紹介文</dt>
+                                    <dd class="col-9"><span id="detail_comment" class="detail-view"></span></dd>
+                                </dl>
+                                <dl class="row">
                                     <dt class="col-3 text-right">登録日時</dt>
                                     <dd class="col-9"><span id="detail_created_at" class="detail-view"></span></dd>
                                 </dl>
@@ -87,6 +91,22 @@
                                     <th>都道府県</th>
                                     <th>申請状況</th>
                                     <th>登録日時</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    {{-- タブ3つ目(メッセージ管理) --}}
+                    <div class="tab-pane" id="item3" role="tabpanel" aria-labelledby="item3-tab">
+                        <table class="table table-striped table-bordered datatable table-sm" id="user_message_list">
+                            <thead class="thead-dark">
+                                <tr role="row">
+                                    <th>履歴ID</th>
+                                    <th>送信者のプロフィール画像</th>
+                                    <th>送信者名</th>
+                                    <th>内容</th>
+                                    <th>送信日時</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>

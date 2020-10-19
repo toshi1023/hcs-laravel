@@ -122,6 +122,22 @@ class UserController extends Controller
     }
 
     /**
+     * メッセージ情報の取得
+     */
+    public function apiMessagesIndex($user) {
+      // 検索条件のセット
+      $conditions = [];
+      if ($user) { $conditions['messages.user_id_receiver'] = $user; }
+
+      // 結合条件のセット
+      $relations = [];
+      $relations = ['users' => 'user_id_sender'];
+   
+      // ユーザのメッセージ情報を取得
+      return DataTables::eloquent($this->database->getMessagesQuery($conditions, $relations))->make();
+    }
+
+    /**
      * 編集ページ
      */
     public function edit($user)
