@@ -101,4 +101,41 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                                     )
                            ->where('friends.user_id', '=', $user_id);
     }
+
+    /**
+     * 送信者に紐づくメッセージのデータをカウント
+     * 引数：ユーザID(受信者ID)
+     */
+    public function getMessagesCountQuery($user_id) {
+        return $this->model->leftjoin('messages', 'users.id', '=', 'messages.user_id_sender')
+                           ->selectRaw('count(messages.id) as message_count')
+                           ->addSelect('messages.user_id_sender')
+                           ->groupByRaw('messages.id')
+                           ->where('messages.user_id_receiver', '=', $user_id);
+    }
+    /**
+     * usersページのメッセージ送信者一覧データを取得
+     * 引数：ユーザID(受信者ID)
+     */
+    public function getSendersQuery($user_id) {
+
+        $count = $this->getMessagesCountQuery($user_id);
+        
+        return $this->model->leftJoinSub($count, 'c', 'users.id', '=', 'c.user_id_sender')
+                           ->leftjoin('messages', 'users.id', '=', 'messages.user_id_sender')
+                           ->selectRaw('distinct(messages.user_id_sender)')
+                           ->addSelect('users.*', 'c.message_count')
+                           ->where('messages.user_id_receiver', '=', $user_id);
+    }
+    /**
+     * usersページの送信者とログインユーザ同士のメッセージ一覧データを取得
+     * 引数1：ユーザID(受信者ID), 引数2：送信者ID
+     */
+    public function getMessagesQuery($user_id, $sender_id) {
+        return $this->model->leftjoin('messages', 'users.id', '=', 'messages.user_id_sender')
+                           ->addSelect('messages.*', 'users.name', 'users.users_photo_path')
+                           ->whereIn('messages.user_id_receiver', [$user_id, $sender_id])
+                           ->whereIn('messages.user_id_sender', [$sender_id, $user_id]);
+    }
+    
 }

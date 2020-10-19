@@ -244,7 +244,7 @@ function initList(search) {
             },
             {data: 'prefecture'},
             {data: 'title'},
-            {data: 'type_name'},
+            {data: 'type_name', name: 'type'},
             {data: 'name'},
             {
                 data: function(p) {
@@ -267,10 +267,10 @@ function initList(search) {
         // 操作列(ボタン等)や画像項目はソート不可・text-centerを付与する
         [
             { targets: [1], orderable: false, className: 'text-center', width: '100px'},
-            { targets: [2], orderable: false, width: '100px'},
-            { targets: [3], orderable: false, width: '160px'},
-            { targets: [4], orderable: false, width: '100px'},
-            { targets: [5], orderable: false, width: '100px'},
+            { targets: [2], orderable: true, width: '100px'},
+            { targets: [3], orderable: true, width: '160px'},
+            { targets: [4], orderable: true, width: '100px'},
+            { targets: [5], orderable: true, width: '100px'},
             { targets: [7], orderable: false, className: 'text-center', width: '120px'},
         ],
         search

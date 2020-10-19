@@ -14,15 +14,16 @@ class CreateMessagesTable extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id_sender')->unsigned();                  // 発信者
-            $table->integer('user_id_receiver')->unsigned();                // 受信者
+            $table->bigIncrements('id');
+            $table->integer('user_id_sender')->unsigned();          // 発信者
+            $table->integer('user_id_receiver')->unsigned();        // 受信者
             $table->string('content');
-            $table->boolean('delete_flg')->default(false);      // 0: noフラグ, 1: 削除
+            $table->boolean('delete_flg')->default(false);          // 0: noフラグ, 1: 削除
             $table->timestamps();
 
             // 外部キー制約
             $table->foreign('user_id_sender')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id_receiver')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

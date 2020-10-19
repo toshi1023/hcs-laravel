@@ -53,8 +53,10 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         Route::post('ajax/articles/{article}/likes/update', 'ArticleController@apiLikeUpdate')->name('api_article.likes.update');
         // いいねの削除
         // Route::post('ajax/articles/{article}/likes/destroy', 'ArticleController@apiLikeDestroy')->name('api_article.likes.destroy');
-        // メッセージ一覧
-        Route::get('ajax/users/{user}/messages', 'UserController@apiMessagesIndex')->name('api_messages');
+        // メッセージ一覧(送信者リスト)
+        Route::get('ajax/users/{user}/messages', 'UserController@apiSenderIndex')->name('api_senders');
+        // メッセージ一覧(メッセージリスト)
+        Route::get('ajax/users/{user}/messages/{sender}', 'UserController@apiMessagesIndex')->name('api_messages');
         // メッセージの削除
         Route::post('ajax/users/{user}/messages/destroy', 'UserController@apiMessagesDestroy')->name('api_messages.destroy');
         // // ユーザデータのPDF出力ルート

@@ -59,9 +59,16 @@ $(function(){
         }
     });
 
-/* 
- *   モーダルの終了処理
- */
+    /**
+     * メッセージの詳細モーダルを表示
+     */
+    $(document).on('click', '.btn-message-detail', function(){
+        settingMessageTables();
+    });
+
+    /* 
+    *   モーダルの終了処理
+    */
     // 登録情報の備考
     $(document).on('click', '#location_modal_close', function(){
         $('#user_location_modal').modal('hide');
@@ -201,7 +208,13 @@ function setDetailView(data, button) {
                             }
                         }, name: 'status'
                     },
-                    {data: 'updated_at'},
+                    {
+                        data: function(p) {
+                            // 日付フォーマットの形式を調整
+                            let time = moment(p.updated_at);
+                            return time.format("YYYY年MM月DD日 HH時mm分");
+                        }, name: 'updated_at'
+                    },
                     // 各操作列
                     {
                         data: function (p) {
@@ -212,12 +225,8 @@ function setDetailView(data, button) {
                 ],
                 // 各列ごとの装飾
                 [
-                    // { targets: [0], width: '100px'},
-                    // { targets: [1], width: '150px'},
-                    // { targets: [2], width: '150px'},
-                    // { targets: [3], orderable: false, className: 'text-center', width: '100px'},
-                    // { targets: [5], orderable: false, className: 'text-center', width: '100px'},
-                    // { targets: [6], orderable: false, className: 'text-center', width: '100px'},
+                    { targets: [1], orderable: false, className: 'text-center', width: '150px'},
+                    { targets: [6], orderable: false, className: 'text-center', width: '100px'},
                 ],
                 false
             );
@@ -225,7 +234,7 @@ function setDetailView(data, button) {
             /* 
             *   "詳細"モーダルの表示処理("メッセージ一覧"タブ)
             */
-            settingMessageTables();
+            settingSendersTables();
 
             // モーダルの表示
             $('#detail_modal').modal('show');
@@ -233,21 +242,21 @@ function setDetailView(data, button) {
 }
 
 /**
- * メッセージテーブルの実装処理
+ * 送信者テーブルの実装処理
  */
-function settingMessageTables() {
+function settingSendersTables() {
     // ユーザID取得
     let user_id = $('#user_id').data('id')
 
     // 過去に表示したテーブルのリセット
-    if ($.fn.DataTable.isDataTable('#user_message_list')) {
-        $('#user_message_list').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#user_sender_list')) {
+        $('#user_sender_list').DataTable().destroy();
     }
     // DataTable設定("メッセージ一覧")
     settingDataTables(
         // 取得
         // tableのID
-        'user_message_list',
+        'user_sender_list',
         // 取得URLおよびパラメタ
         `ajax/users/${user_id}/messages`,
         {},
@@ -286,6 +295,72 @@ function settingMessageTables() {
                 }
             },
             {data: 'name'},
+            {data: 'message_count'},
+            // {
+            //     data: function(p) {
+            //         // 日付フォーマットの形式を調整
+            //         let time = moment(p.updated_at);
+            //         return time.format("YYYY年MM月DD日 HH時mm分");
+            //     }, name: 'updated_at'
+            // },
+            // 各操作列
+            {
+                data: function (p) {
+                    // 編集
+                    return getListLink('message_detail', p.user_id_sender ,`ajax/users/${user_id}/messages/${p.user_id_sender}`, 'list-button');
+                }
+            }
+        ],
+        // 各列ごとの装飾
+        [
+            { targets: [1], orderable: false, className: 'text-center', width: '150px'},
+            { targets: [3], orderable: true, className: 'text-center', width: '100px'},
+            { targets: [4], orderable: false, className: 'text-center', width: '100px'},
+        ],
+        false
+    );
+}
+
+/**
+ * メッセージ詳細モーダルの設定
+ */
+function settingMessageModals() {
+
+    $('#user_id').data('id', data.user.id);              // 各タグで共有
+    $('#sender_id').data('id', data.user.id);              // 各タグで共有
+}
+
+/**
+ * メッセージテーブルの実装処理
+ */
+function settingMessageTables() {
+    // ユーザIDと送信者IDの取得
+    let user_id = $('#user_id').data('id');
+    let sender_id = $('.btn-message-detail').data('id');
+
+    // 過去に表示したテーブルのリセット
+    if ($.fn.DataTable.isDataTable('#user_message_list')) {
+        $('#user_message_list').DataTable().destroy();
+    }
+    // DataTable設定("メッセージ一覧")
+    settingDataTables(
+        // 取得
+        // tableのID
+        'user_message_list',
+        // 取得URLおよびパラメタ
+        `ajax/users/${user_id}/messages/${sender_id}`,
+        {},
+        // 各列ごとの表示定義
+        [
+            {data: 'id'},
+            {
+                data: function (p) {
+                    if(p.user_id_sender == $('#user_id').data('id')) {
+                        return `<span style="color: green">${p.name}</span>`;
+                    }
+                    return `<span style="color: blue">${p.name}</span>`;
+                }, name: 'name'
+            },
             {data: 'content'},
             {
                 data: function(p) {
@@ -304,12 +379,13 @@ function settingMessageTables() {
         ],
         // 各列ごとの装飾
         [
-            { targets: [1], orderable: false, className: 'text-center', width: '150px'},
-            { targets: [4], orderable: false, className: 'text-left', width: '200px'},
-            { targets: [5], orderable: false, className: 'text-center', width: '100px'},
+            { targets: [2], orderable: true, className: 'text-left', width: '200px'},
+            { targets: [4], orderable: false, className: 'text-center', width: '100px'},
         ],
         false
     );
+    // モーダルの表示
+    $('#detail_message_modal').modal('show');
 }
 
 /**
@@ -392,9 +468,9 @@ function initList(search) {
         // 操作列(ボタン等)や画像項目はソート不可・text-centerを付与する
         [
             { targets: [1], orderable: false, className: 'text-center', width: '150px'},
-            { targets: [2], orderable: false, width: '150px'},
-            { targets: [3], orderable: false, width: '100px'},
-            { targets: [4], orderable: false, width: '100px'},
+            { targets: [2], orderable: true, width: '150px'},
+            { targets: [3], orderable: true, width: '100px'},
+            { targets: [4], orderable: true, width: '100px'},
             { targets: [6], orderable: false, className: 'text-center', width: '150px'},
         ],
         search
@@ -411,6 +487,9 @@ function initList(search) {
 function getListLink(type, id, link, clazz) {
     if (type == "detail") {
         return '<a href="javascript:void(0)" class="btn btn-success btn-detail '+clazz+'" data-toggle="tooltip" title="詳細" data-placement="top" data-id="'+id+'"><i class="fas fa-search fa-fw"></i></a>';
+    }
+    if (type == "message_detail") {
+        return '<a href="javascript:void(0)" class="btn btn-warning text-white btn-message-detail '+clazz+'" data-toggle="tooltip" title="詳細" data-placement="top" data-id="'+id+'"><i class="fas fa-search fa-fw"></i></a>';
     }
     if (type == "edit") {
         return '<a href="'+link+'" class="btn btn-primary '+clazz+'" data-toggle="tooltip" title="編集" data-placement="top"><i class="fas fa-edit fa-fw"></i></a>';

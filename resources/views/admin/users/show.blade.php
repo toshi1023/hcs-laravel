@@ -99,14 +99,13 @@
 
                     {{-- タブ3つ目(メッセージ管理) --}}
                     <div class="tab-pane" id="item3" role="tabpanel" aria-labelledby="item3-tab">
-                        <table class="table table-striped table-bordered datatable table-sm" id="user_message_list">
+                        <table class="table table-striped table-bordered datatable table-sm" id="user_sender_list">
                             <thead class="thead-dark">
                                 <tr role="row">
-                                    <th>履歴ID</th>
+                                    <th>ユーザID</th>
                                     <th>送信者のプロフィール画像</th>
                                     <th>送信者名</th>
-                                    <th>内容</th>
-                                    <th>送信日時</th>
+                                    <th>メッセージ数</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -125,3 +124,5 @@
     </div>
     <!-- /.modal-dialog-->
 </div>
+{{-- 詳細Modal読み込み --}}
+@include('admin.users.messageShow')
