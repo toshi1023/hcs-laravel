@@ -135,7 +135,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     public function getMessagesQuery($user_id, $sender_id) {
         return $this->model->leftjoin('messages', 'users.id', '=', 'messages.user_id_sender')
                            ->addSelect('messages.*', 'users.name', 'users.users_photo_path')
-                           ->whereIn('messages.user_id_receiver', [$user_id, $sender_id])
+                           ->whereIn('messages.user_id_receiver', [$user_id])
                            ->whereIn('messages.user_id_sender', [$sender_id, $user_id]);
     }
     
