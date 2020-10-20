@@ -7,6 +7,7 @@ $(function(){
 
         // 詳細ボタンをクリック
         settingDetailAjax('users/', '.btn-detail');
+        
     }
 
     // 性別フラグのvalue値設定
@@ -60,33 +61,45 @@ $(function(){
     });
 
     /**
-     * メッセージの詳細モーダルを表示
+     * メッセージ一覧タブの表示 & データを表示
      */
     $(document).on('click', '.btn-message-detail', function(){
+        // タブの自動切換え
+        $('.nav-link.active').removeClass('active');
+        $('#item4-tab').addClass('active');
+        $('.tab-pane.show').removeClass('show');
+        $('.tab-pane.active').removeClass('active');
+        $('#item4').addClass('show');
+        $('#item4').addClass('active');
+
+        // メッセージ一覧テーブルの表示
         let sender_id = $(this).data('id');
         settingMessageTables(sender_id);
+    });
+    $(document).on('click', '.nav-item', function(){
+        $('.nav-link.active').removeClass('active');
+        $('.tab-pane.show').removeClass('show');
+        $('.tab-pane.active').removeClass('active');
+        // クリックしたタブからインデックス番号を取得
+        const index = $(this).index();
+        
+        // クリックしたタブと同じインデックス番号をもつコンテンツを表示
+		$('.nav-link').eq(index).addClass('show');
+		$('.tab-pane').eq(index).addClass('show');
+		$('.tab-pane').eq(index).addClass('active');
     });
 
     /* 
     *   モーダルの終了処理
     */
     // 登録情報の備考
-    $(document).on('click', '#location_modal_close', function(){
-        $('#user_location_modal').modal('hide');
-    });
-    // 登録情報の画像
-    $(document).on('click', '#location_image_close', function(){
-        let id = $(this).data('id');
-        $(`#location_modal${id}`).modal('hide');
-    });
-    $(document).on('click', '.close', function(){
-        let id = $(this).data('id');
-        $(`#location_modal${id}`).modal('hide');
-    });
     // プロフィールの画像
     $(document).on('click', '#profile_image_close', function(){
         let id = $(this).data('id');
         $(`#profile_modal${id}`).modal('hide');
+        $(`#profile_modal${id}`).on('hidden.bs.modal', function () {
+            if ($('.modal').is(':visible')) $('body').addClass('modal-open');
+        });
     });
     $(document).on('click', '.close', function(){
         let id = $(this).data('id');
@@ -101,6 +114,16 @@ $(function(){
         let id = $(this).data('id');
         $(`#friend_modal${id}`).modal('hide');
     });
+
+    /**
+     * ユーザ詳細モーダルを閉じる処理
+     */
+    $(document).on('click', '#user_show_close', function(){
+        // 他の受信者ユーザのデータが表示されないように設定
+        $('#user_message_list').hide();
+    });
+    
+
 });
 
 /**
@@ -231,13 +254,10 @@ function setDetailView(data, button) {
                 ],
                 false
             );
-
-            /* 
-            *   "詳細"モーダルの表示処理("メッセージ一覧"タブ)
-            */
+            // 送信者テーブルの表示
             settingSendersTables();
 
-            // モーダルの表示
+            // 詳細モーダルの表示
             $('#detail_modal').modal('show');
         }       
 }
@@ -322,14 +342,6 @@ function settingSendersTables() {
     );
 }
 
-/**
- * メッセージ詳細モーダルの設定
- */
-function settingMessageModals() {
-
-    $('#user_id').data('id', data.user.id);              // 各タグで共有
-    $('#sender_id').data('id', data.user.id);              // 各タグで共有
-}
 
 /**
  * メッセージテーブルの実装処理
@@ -385,8 +397,11 @@ function settingMessageTables(sender_id) {
         ],
         false
     );
-    // モーダルの表示
-    $('#detail_message_modal').modal('show');
+    // メッセージ一覧テーブルの表示
+    if($('#user_message_list').hide()) {
+        $('#user_message_list').show();
+    }
+    
 }
 
 /**

@@ -24,7 +24,10 @@
                         <a class="nav-link" id="item2-tab" data-toggle="tab" href="#item2" role="tab" aria-controls="item2" aria-selected="true">フレンド一覧</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="item3-tab" data-toggle="tab" href="#item3" role="tab" aria-controls="item3" aria-selected="true">メッセージ一覧</a>
+                        <a class="nav-link" id="item3-tab" data-toggle="tab" href="#item3" role="tab" aria-controls="item3" aria-selected="true">メッセージ送信者</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="item4-tab" data-toggle="tab" href="#item4" role="tab" aria-controls="item4" aria-selected="true">メッセージ一覧</a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -97,7 +100,7 @@
                         </table>
                     </div>
 
-                    {{-- タブ3つ目(メッセージ管理) --}}
+                    {{-- タブ3つ目(メッセージ送信者) --}}
                     <div class="tab-pane" id="item3" role="tabpanel" aria-labelledby="item3-tab">
                         <table class="table table-striped table-bordered datatable table-sm" id="user_sender_list">
                             <thead class="thead-dark">
@@ -111,11 +114,26 @@
                             </thead>
                         </table>
                     </div>
+
+                    {{-- タブ4つ目(メッセージ管理) --}}
+                    <div class="tab-pane" id="item4" role="tabpanel" aria-labelledby="item4-tab">
+                        <table class="table table-striped table-bordered datatable table-sm" id="user_message_list">
+                            <thead class="thead-dark">
+                                <tr role="row">
+                                    <th>履歴ID</th>
+                                    <th>送信者名</th>
+                                    <th>内容</th>
+                                    <th>更新日時</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                     
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">閉じる</button>
+                <button class="btn btn-secondary" type="button" id="user_show_close" data-dismiss="modal">閉じる</button>
             </div>
             {{-- ユーザIDの値保持に利用 --}}
             <span id="user_id" data-id=""></span>
@@ -124,5 +142,4 @@
     </div>
     <!-- /.modal-dialog-->
 </div>
-{{-- 詳細Modal読み込み --}}
-@include('admin.users.messageShow')
+
