@@ -130,6 +130,22 @@ const userSlice = createSlice({
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
         },
+        // ログインuserの詳細表示をした際に保持するstate
+        loggedInUser: {
+            id: '',                     // ID
+            users_photo_name: '',       // 画像名
+            users_photo_path: '',       // 画像パス
+            name: '',                   // ニックネーム
+            prefecture: '',             // 都道府県
+            birthday: '',               // 生年月日
+            gender: '',                 // 性別
+            email: '',                  // メールアドレス
+            comment: '',                // コメント
+            status: '',                 // 会員フラグ
+            delete_flg: '',             // 削除フラグ
+            created_at: '',             // 記事の作成日
+            updated_at: '',             // 記事の更新日
+        },
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -147,14 +163,21 @@ const userSlice = createSlice({
         selectUser(state, action) {
             state.selectedUser = action.payload
         },
+        loginUser(state, action) {
+            state.loggedInUser = action.payload
+        },
     },
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {
         // Apiが成功したときの処理を記載
         builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
-            // ブラウザのlocalStorageにTokenとIDを保存
+            // ブラウザのlocalStorageにTokenとIDとログインユーザ情報を保存
             localStorage.setItem("localToken", action.payload.token)
             localStorage.setItem("loginId", action.payload.id)
+            return {
+                ...state,
+                loggedInUser: action.payload.user //apiから取得したログインユーザの情報をstateのloggedInUserに格納
+            }
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
@@ -194,10 +217,11 @@ const userSlice = createSlice({
     },
 })
 
-export const { editUsername, editPassword, editUser, selectUser } = userSlice.actions
+export const { editUsername, editPassword, editUser, selectUser, loginUser } = userSlice.actions
 
 export const selectAuthen = (state) => state.user.authen
 export const selectSelectedUser = (state) => state.user.selectedUser
+export const selectLoggedInUser = (state) => state.user.loggedInUser
 export const selectEditedUser = (state) => state.user.editedUser
 export const selectUsers = (state) => state.user.users
 

@@ -22,7 +22,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-            return new JsonResponse(['token' => $token, 'id' => $user->id], 200);
+            return new JsonResponse(['token' => $token, 'id' => $user->id, 'user' => $user], 200);
         }
 
     }

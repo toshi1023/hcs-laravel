@@ -83,7 +83,8 @@ const MenuDrawer = (props) => {
         await dispatch(fetchCredStart());
         
         history.push('/login');
-        // localStorageのTokenを削除(ログアウト処理)
+        // localStorageのTokenとIDを削除(ログアウト処理)
+        localStorage.removeItem("loginId");
         localStorage.removeItem("localToken");
         // ロード終了
         if(!localStorage.getItem('localToken')) {

@@ -17,7 +17,8 @@ import styled from "styled-components";
 import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import { selectLoggedInUser, loginUser } from "../users/userSlice";
 import {
     fetchCredStart,
     fetchCredEnd,
@@ -87,7 +88,12 @@ function HcsAppBar() {
     };
     // アカウントメニューをクローズ
     const handleProfileClose = () => {
-        history.push("/users/1");
+        // selectedUserのstateを更新するReducerにdispatch
+        const loggedInUser = useSelector(selectLoggedInUser);
+        dispatch(
+            selectUser(loggedInUser)
+        );
+        history.push(`/users/${localStorage.getItem('loginId')}`);
         setAnchorEl(null);
         handleMobileMenuClose();
     };

@@ -64,21 +64,7 @@ export default function UserList(props) {
     const handleSetUser = value => {
         // selectedUserのstateを更新するReducerにdispatch
         dispatch(
-            selectUser({
-                // id: value.id,
-                // users_photo_name: value.users_photo_name,
-                // users_photo_path: value.users_photo_path,
-                // name: value.name,
-                // prefecture: value.prefecture,
-                // birthday: value.birthday,
-                // gender: value.gender,
-                // email: value.email,
-                // status: value.status,
-                // delete_flg: value.delete_flg,
-                // created_at: value.created_at,
-                // updated_at: value.updated_at
-                value
-            })
+            selectUser({ value })
         );
         // ユーザの詳細ページへリダイレクト
         history.push(`/users/${value.id}`);
