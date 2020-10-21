@@ -14,6 +14,7 @@ import {
 } from '../app/appSlice';
 import {
     fetchAsyncLogin,
+    fetchAsyncGetProf,
 } from './userSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -86,11 +87,10 @@ export default function Login() {
                                 const login = await dispatch(fetchAsyncLogin(values));
                                 
                                 if (fetchAsyncLogin.fulfilled.match(login)) {
-                                // ログインユーザのプロフィールを取得
-                                // await dispatch(fetchAsyncGetMyProf());
-                                // ログインユーザのマイページに遷移
-                                    // history.push(`/user/${mypage.id}`)
-                                    history.push('/user/1')
+                                    // ログインユーザのプロフィールを取得
+                                    await dispatch(fetchAsyncGetProf(login.payload.id));
+                                    // ログインユーザのマイページに遷移
+                                    history.push(`/user/${login.payload.id}`)
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
                                     

@@ -9,7 +9,7 @@ Route::post('/login', 'Api\LoginController@login');
 // 認証が必要でないルートを設定
 Route::group(['middleware' => ['api'], 'prefix'], function() {
     Route::resource('api_articles' , 'Api\ArticleController', ['only' => ['index']]);
-    Route::resource('api_users' , 'Api\UserController', ['only' => ['index']]);
+    Route::resource('api_users' , 'Api\UserController', ['only' => ['index', 'show']]);
     Route::resource('api_messages' , 'Api\MessageController', ['only' => ['index']]);
 
     // 記事の都道府県検索
@@ -19,7 +19,7 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
 // 認証が必要なルートを設定
 Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
     Route::resource('api_articles' , 'Api\ArticleController', ['except' => ['index']]);
-    Route::resource('api_users' , 'Api\UserController', ['except' => ['index']]);
+    Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show']]);
     // Route::resource('api_messages' , 'Api\MessageController');
 });
 

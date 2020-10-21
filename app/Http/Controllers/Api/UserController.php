@@ -86,13 +86,13 @@ class UserController extends Controller
       // return $pdf->download('download.pdf');
     }
 
-    public function show($user)
+    public function show($api_user)
     {
-      $user = $this->database->getShow($user);
+      $user = $this->database->getShow($api_user);
 
-      return view('users.show', [
-        'user' => $user,
-      ]);
+      return response()->json([
+        'user' => $user, 
+      ],200, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function edit($user)

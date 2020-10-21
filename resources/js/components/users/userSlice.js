@@ -20,6 +20,15 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
     return res.data
 })
 /**
+ * Loginユーザの取得用非同期関数
+ */
+export const fetchAsyncGetProf = createAsyncThunk('prof/get', async(id) =>{
+    // axios: 引数1: URL, 引数2: 渡すデータ, 引数3: メタ情報
+    const res = await axios.get(`${apiUrl}/${id}`, {})
+    // Apiからの返り値
+    return res.data
+})
+/**
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('users/index', async() => {
@@ -34,7 +43,7 @@ export const fetchAsyncCreate = createAsyncThunk('users/create', async(user) => 
     const res = await axios.post(apiUrl, user, {
         headers: {
             'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
+            // Authorization: `Bearer ${token}`,
         },
     })
     return res.data
@@ -47,7 +56,7 @@ export const fetchAsyncUpdate = createAsyncThunk('users/edit', async(user) => {
     const res = await axios.put(`${apiUrl}/${user.id}`, user, {
         headers: {
             'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
+            // Authorization: `Bearer ${token}`,
         },
     })
     return res.data
@@ -61,7 +70,7 @@ export const fetchAsyncDelete = createAsyncThunk('users/delete', async(id) => {
     await axios.delete(`${apiUrl}/${id}/`, {
         headers: {
             'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
+            // Authorization: `Bearer ${token}`,
         },
     })
     return id
@@ -171,13 +180,12 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         // Apiが成功したときの処理を記載
         builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
-            // ブラウザのlocalStorageにTokenとIDとログインユーザ情報を保存
+            // ブラウザのlocalStorageにTokenとIDを保存
             localStorage.setItem("localToken", action.payload.token)
             localStorage.setItem("loginId", action.payload.id)
-            return {
-                ...state,
-                loggedInUser: action.payload.user //apiから取得したログインユーザの情報をstateのloggedInUserに格納
-            }
+        })
+        builder.addCase(fetchAsyncGetProf.fulfilled, (state, action) => {
+            state.loggedInUser = action.payload;
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {

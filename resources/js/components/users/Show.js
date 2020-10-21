@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSelectedUser } from "./userSlice";
+import { selectSelectedUser, selectLoggedInUser, fetchAsyncGetProf } from "./userSlice";
+import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
 import Grid from "@material-ui/core/Grid";
@@ -54,9 +55,33 @@ function UserShow(props) {
     const theme = useTheme();
     // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
     const selectedUsers = useSelector(selectSelectedUser);
-    const dispatch = useDispatch();
-    
-    console.log(selectedUsers.value)
+    const logginedUsers = useSelector(selectLoggedInUser);
+    const loginId = localStorage.getItem('loginId')
+    const dispatch = useDispatch()
+    const user = null
+    console.log(logginedUsers)
+     // ブラウザが起動した際に最初に処理される
+    useEffect(() => {
+        const fetchBootLoader = async () => {
+            // Loading開始
+            await dispatch(fetchCredStart())
+            // ログイン情報を取得
+            dispatch(
+                fetchAsyncGetProf(loginId)
+            );
+            // URLのパラメータからどちらのstateを利用するか設定
+            if (props.match.params.id == loginId) {
+                user = logginedUsers
+            } else {
+                user = selectedUsers
+            }
+            // ロード終了
+            await dispatch(fetchCredEnd());
+        };
+        // fetchBootLoader関数を実行
+        fetchBootLoader();
+    }, [dispatch]);
+
     return (
         <Grid container className={classes.gridContainer} justify="center">
             <Grid item xs={12} sm={6}>

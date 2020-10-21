@@ -18,7 +18,7 @@ import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoggedInUser, loginUser } from "../users/userSlice";
+import { selectLoggedInUser, selectUser, fetchAsyncGetProf, fetchAsyncGet } from "../users/userSlice";
 import {
     fetchCredStart,
     fetchCredEnd,
@@ -66,11 +66,13 @@ function HcsAppBar() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [loginUser, setLoginUser] = React.useState(null);
     const history = useHistory();
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const dispatch = useDispatch();
-
+    const loggedInUser = useSelector(selectLoggedInUser);
+    
     // アカウントメニューを表示
     const handleProfileMenuOpen = event => {
         setAnchorEl(event.currentTarget);
@@ -89,9 +91,8 @@ function HcsAppBar() {
     // アカウントメニューをクローズ
     const handleProfileClose = () => {
         // selectedUserのstateを更新するReducerにdispatch
-        const loggedInUser = useSelector(selectLoggedInUser);
         dispatch(
-            selectUser(loggedInUser)
+            fetchAsyncGetProf(localStorage.getItem('loginId'))
         );
         history.push(`/users/${localStorage.getItem('loginId')}`);
         setAnchorEl(null);
