@@ -33,19 +33,6 @@ class Controller extends BaseController
         return $image_name;
     }
 
-    
-    /**
-     * パスワードのバリデーションメソッド
-     * 引数：保存するデータ
-     */
-    public function passwordValidation($request)
-    {
-        $request->validate([
-            'password' => ['required', 'min:6', 'confirmed'],
-            'password_confirmation' => ['required', 'min:6'],
-        ]);
-    }
-
     /**
      * 経度・緯度のバリデーションメソッド
      * 引数：保存するデータ

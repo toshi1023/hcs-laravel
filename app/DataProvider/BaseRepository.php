@@ -168,7 +168,7 @@ class BaseRepository
 
     /**
      * 指定ID検索
-     * 引数1:テーブル名, 引数2:ID
+     * 引数1:モデルのインスタンス名, 引数2:ID
      */
     public function getFind($model, $id) {
         return $model::query()->where('id', '=', $id)->first();
@@ -178,8 +178,8 @@ class BaseRepository
      * 指定ID検索(boolean)
      * 引数1:テーブル名, 引数2:検索条件(配列)
      */
-    public function getExist($model, $conditions) {
-        return $this->getWhereQuery($model, $conditions)->exists();
+    public function getExist($table, $conditions) {
+        return $this->getWhereQuery($table, $conditions)->exists();
     }
 
 

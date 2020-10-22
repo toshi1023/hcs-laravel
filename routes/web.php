@@ -25,7 +25,7 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         Route::resource('users', 'UserController');
         
         // 記事関連のルート
-        Route::resource('articles', 'ArticleController');
+        Route::resource('articles', 'ArticleController')->middleware('dataFilter');
         
         // ニュース関連のルート
         Route::resource('news', 'NewsController');

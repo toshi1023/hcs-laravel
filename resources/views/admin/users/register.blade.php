@@ -70,7 +70,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-4 col-form-label" for="name">パスワード<span class="text-danger">※</span></label>
                                                         <div class="col-md-8">
-                                                            <input class="form-control required-text" type="password" id="password" name="password" maxlength="50" placeholder="パスワード" value="{{ $register_mode === 'create' ? old('password') : $data->password }}">
+                                                            <input class="form-control required-text" type="password" id="password" name="password" maxlength="50" placeholder="パスワード" value="">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -116,7 +116,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <input type="hidden" name="id" id="id" value="{{ $register_mode === 'edit' ? $data->id : null }}" />
-                                                    {{-- <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" /> --}}
+                                                    <input type="hidden" id="register_mode" name="register_mode" value="{{ $register_mode }}" />
                                                     @include('admin.layouts.components.button.register', ['register_mode' => $register_mode])
                                                     @include('admin.layouts.components.button.cancel', ['url' => "/hcs-admin/users"])
                                                 </div>

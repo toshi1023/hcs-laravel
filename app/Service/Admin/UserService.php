@@ -12,7 +12,7 @@ class UserService
 
   protected $UserService;
   // 保存対象の除外リスト
-  protected $except = ['password_confirmation', 'image_flg', 'delete_flg_on', 'img_delete'];
+  protected $except = ['password_confirmation', 'image_flg', 'delete_flg_on', 'img_delete', 'register_mode'];
   
   /* DBリポジトリのインスタンス化 */
   public function __construct(UserDatabaseInterface $service)

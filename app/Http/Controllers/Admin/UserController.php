@@ -64,8 +64,6 @@ class UserController extends Controller
     {
       DB::beginTransaction();
 
-      // パスワードをバリデーションチェック
-      $this->passwordValidation($request);
       // パスワードのハッシュ処理
       $request['password'] = Hash::make($request['password']);
 
@@ -173,8 +171,6 @@ class UserController extends Controller
 
       // パスワードのハッシュ処理
       if(!is_null($request['password'])) {
-        // バリデーションチェック
-        $this->passwordValidation($request);
         // ハッシュ処理
         $request['password'] = Hash::make($request['password']);
       }

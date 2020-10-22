@@ -86,11 +86,13 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             $data['id'] = $this->model->id;
             
             /* イメージの保存メソッド */
+            // テーブル名を変数に代入
+            $table = 'article_images';
             // モデルをインスタンス化
-            $model = $this->getModel('article_images');
-
+            $model = $this->getModel($table);
+            
             // Updateかどうか判別
-            if(!is_null($data['image_id']) && $this->getExist($model, $data['image_id'])) {
+            if(!is_null($data['image_id']) && $this->getExist($table, ['id' => $data['image_id']])) {
                 // 更新対象のデータを取得
                 $model = $this->getFind($model, $data['image_id']);
             }
@@ -99,7 +101,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             if (is_null($filename)) {
                 $filename = 'NoImage';
             }
-
+            
             // 画像をアップロード(フロントはユーザネーム、管理画面はメールアドレスをフォルダ名に設定)
             $file = key_exists('upload_image', $data) ? $data['upload_image'] : null;
             $file_upload = $this->fileSave($file, \Auth::user()->name ? \Auth::user()->name : \Auth::user()->email);
@@ -109,7 +111,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             $model->article_id = $data['id'];
             $model->user_id = $data['user_id'];
             $model->save();
-            
+
             return true;
 
         } catch (\Exception $e) {

@@ -30,8 +30,6 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
      */
     public function save($data, $filename = null)
     {
-        // dd($data['upload_image']);
-        // dd($_FILES['upload_image']);
         try{
             // Updateかどうか判別
             if ($data['id']) {
@@ -44,7 +42,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             }
            
             // 画像をアップロード
-            $file_upload = $this->fileStore($data['upload_image'], $data['name']);
+            $file_upload = $this->fileSave($data['upload_image'], $data['name']);
             
             // データを保存
             $this->model->users_photo_name = $filename;

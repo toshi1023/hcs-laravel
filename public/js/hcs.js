@@ -180,12 +180,14 @@ $(function(){
 
       // 強制削除の画像以外で画像ファイルがアップロードされていないことが条件
       if($('#image').val() === "" && $('#image_flg').val() === "") {
-          $preview.append($('<img>').attr({
-              src: outImage,
-              width: "250px",
-              height: "200px",
-              class: "preview",
-          }));
+        // 画像ファイルと既存のプレビューを削除
+        $preview.empty();
+        $preview.append($('<img>').attr({
+            src: outImage,
+            width: "250px",
+            height: "200px",
+            class: "preview",
+        }));
       }
   })
 

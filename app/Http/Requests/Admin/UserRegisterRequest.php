@@ -24,6 +24,17 @@ class UserRegisterRequest extends FormRequest
      */
     public function rules()
     {
+        // dd(request());
+        if(request()->register_mode == 'edit' && request()->password == null && request()->password_confirmation == null) {
+            return [
+                // ユーザのバリデーションチェック
+                'name'                  => ['required', 'max:50', Rule::unique('users')->ignore($this->id, 'id')->where('delete_flg', '=', 0)],
+                'prefecture'            => ['required'],
+                'email'                 => ['required', 'email', 'max:100', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
+                'birthday'              => ['required', 'date'],
+                'upload_image'          => 'image|mimes:jpeg,png,jpg,gif|max:1024',
+            ];
+        }
         return [
             // ユーザのバリデーションチェック
             'name'                  => ['required', 'max:50', Rule::unique('users')->ignore($this->id, 'id')->where('delete_flg', '=', 0)],

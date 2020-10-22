@@ -61,13 +61,6 @@ class ArticleController extends Controller
   {
     DB::beginTransaction();
     
-    // 緯度・経度を分割
-    $map = explode(',', $request->map);
-
-    // 緯度・経度を配列に追加
-    $request['latitude'] = $map[0];
-    $request['longitude'] = $map[1];
-
     // アップロードファイルのファイル名を設定
     $filename = null;
     if ($_FILES['upload_image']['name']){
@@ -129,19 +122,9 @@ class ArticleController extends Controller
 
     DB::beginTransaction();
 
-    // 緯度・経度を分割
-    $map = explode(',', $request->map);
-
-    // 緯度・経度を配列に追加
-    $request['latitude'] = $map[0];
-    $request['longitude'] = $map[1];
-
-    // 緯度・経度のバリデーション
-    $this->mapValidation($request);
-
     // ファイル名の設定
     $filename = $_FILES['upload_image']['name'];
-    
+    // dd($request);
     if ($this->database->save($request, $filename)) {
       DB::commit();
       return redirect()->route('hcs-admin.articles.index')->with('info_message', '記事を保存しました');
