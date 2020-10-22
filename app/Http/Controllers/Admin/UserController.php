@@ -28,10 +28,13 @@ class UserController extends Controller
      */
     public function index()
     {
-      // dd($this->database->getFriendsQuery(1)->get());
       return view('admin.users.index',[]);
     }
     
+    /**
+     * 一覧ページ用のテーブルデータ取得
+     * 引数：検索ワード
+     */
     public function apiIndex(Request $request)
     {
       // 検索条件のセット
@@ -59,7 +62,10 @@ class UserController extends Controller
       ]);
     }
 
-    /* ユーザ保存メソッド */
+    /**
+     * 新規保存
+     * 引数：保存データ
+     */
     public function store(UserRegisterRequest $request)
     {
       DB::beginTransaction();
@@ -83,22 +89,23 @@ class UserController extends Controller
       }
     }
 
-    public function pdf()
-    {
-      echo "test";
-      // 全ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex()->get();
-      $pdf = \PDF::loadView('/layouts/pdf_template');
+    // public function pdf()
+    // {
+    //   echo "test";
+    //   // 全ユーザデータを更新日時順にソートして取得
+    //   $users = $this->database->getIndex()->get();
+    //   $pdf = \PDF::loadView('/layouts/pdf_template');
 
-      // ブラウザ上で開く
-      return $pdf->inline('thisis.pdf');
+    //   // ブラウザ上で開く
+    //   return $pdf->inline('thisis.pdf');
 
-      // ダウンロードする場合
-      // return $pdf->download('download.pdf');
-    }
+    //   // ダウンロードする場合
+    //   // return $pdf->download('download.pdf');
+    // }
 
     /**
      * 詳細モーダル情報の取得
+     * 引数：ユーザID
      */
     public function show($user)
     {
@@ -129,6 +136,7 @@ class UserController extends Controller
 
     /**
      * メッセージ詳細モーダル情報の取得
+     * 引数1：ユーザID, 引数2：送信者ID
      */
     public function messageShow($user, $sender)
     {
@@ -142,6 +150,7 @@ class UserController extends Controller
 
     /**
      * メッセージ情報の取得
+     * 引数1：ユーザID, 引数2：送信者ID
      */
     public function apiMessagesIndex($user, $sender) {
       // ユーザのメッセージ情報を取得
@@ -149,7 +158,8 @@ class UserController extends Controller
     }
 
     /**
-     * 編集ページ
+     * 編集
+     * 引数：ユーザID
      */
     public function edit($user)
     {
@@ -164,8 +174,9 @@ class UserController extends Controller
 
     /**
      * 更新処理
+     * 引数1：保存データ, 引数2：ユーザID
      */
-    public function update(UserRegisterRequest $request, $admin)
+    public function update(UserRegisterRequest $request, $user)
     {
       DB::beginTransaction();
 

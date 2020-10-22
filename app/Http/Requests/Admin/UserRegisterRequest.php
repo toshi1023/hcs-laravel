@@ -24,7 +24,6 @@ class UserRegisterRequest extends FormRequest
      */
     public function rules()
     {
-        // dd(request());
         if(request()->register_mode == 'edit' && request()->password == null && request()->password_confirmation == null) {
             return [
                 // ユーザのバリデーションチェック

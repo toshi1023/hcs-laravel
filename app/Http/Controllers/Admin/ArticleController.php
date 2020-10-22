@@ -24,12 +24,18 @@ class ArticleController extends Controller
     $this->database = $database;
   }
 
+  /**
+   * 一覧ページ
+   */
   public function index()
   {   
-    // dd($this->database->getIndex()->get());
       return view('admin.articles.index', []);
   }
 
+  /**
+   * 一覧ページ用のテーブルデータ取得
+   * 引数：検索ワード
+   */
   public function apiIndex(Request $request)
     {
       // 検索条件のセット
@@ -45,7 +51,9 @@ class ArticleController extends Controller
 
     }
 
-  /* 記事作成メソッド */
+  /**
+   * 作成ページ
+   */
   public function create()
   {
     $prefectures = $this->database->getCreate('prefectures');
@@ -56,7 +64,10 @@ class ArticleController extends Controller
     ]);
   }
 
-  /* 記事保存メソッド */
+  /**
+   * 新規保存
+   * 引数：保存データ
+   */
   public function store(ArticleRegisterRequest $request)
   {
     DB::beginTransaction();
@@ -79,7 +90,10 @@ class ArticleController extends Controller
     
   }
 
-  // 記事の詳細ページを設定
+  /**
+   * 詳細モーダル情報の取得
+   * 引数：記事ID
+   */
   public function show($article)
   {
     // 詳細ページに表示する値を取得
@@ -93,6 +107,10 @@ class ArticleController extends Controller
     ];
   }
 
+  /**
+   * いいね情報の取得
+   * 引数1：保存データ, 引数2：記事ID
+   */
   public function apiLike(Request $request, $article)
   {
     // 検索条件のセット
@@ -104,7 +122,10 @@ class ArticleController extends Controller
     return Datatables::eloquent($data['like_list'])->make(true);
   }
 
-  // 記事の編集機能を設定
+  /**
+   * 編集
+   * 引数：記事ID
+   */
   public function edit($article)
   {
     $data = $this->database->getEdit($article);
@@ -116,7 +137,10 @@ class ArticleController extends Controller
     ]);
   }
 
-  // 記事の変更を反映
+  /**
+   * 更新処理
+   * 引数1：保存データ, 引数2：記事ID
+   */
   public function update(ArticleRegisterRequest $request, $article)
   {
 

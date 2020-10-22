@@ -21,6 +21,9 @@ class NewsController extends Controller
       $this->database = $database;
     }
 
+    /**
+     * 一覧ページ
+     */
     public function index()
     {
       // 種別のリスト
@@ -39,6 +42,11 @@ class NewsController extends Controller
         'status_list' => $status,
       ]);
     }
+
+    /**
+     * 一覧ページ用のテーブルデータ取得
+     * 引数：検索ワード
+     */
     public function apiIndex(Request $request)
     {
       // 検索条件のセット
@@ -54,6 +62,9 @@ class NewsController extends Controller
 
     }
 
+    /**
+     * 作成ページ
+     */
     public function create()
     {
       return view('admin.news.register', [
@@ -62,6 +73,10 @@ class NewsController extends Controller
     }
 
     /* お知らせ保存メソッド */
+    /**
+     * 新規保存
+     * 引数：保存データ
+     */
     public function store(NewsRegisterRequest $request)
     {
       
@@ -76,6 +91,10 @@ class NewsController extends Controller
       }
     }
 
+    /**
+     * 詳細モーダル情報の取得
+     * 引数：ニュースID
+     */
     public function show($news)
     {
       $news = $this->database->getShow($news);
@@ -86,6 +105,10 @@ class NewsController extends Controller
       ];
     }
 
+    /**
+     * 編集
+     * 引数：ニュースID
+     */
     public function edit($news)
     {
       $data = $this->database->getEdit($news);
@@ -96,7 +119,11 @@ class NewsController extends Controller
       ]);
     }
 
-    public function update(NewsRegisterRequest $request, $admin)
+    /**
+     * 更新処理
+     * 引数1：保存データ, 引数2：ニュースID
+     */
+    public function update(NewsRegisterRequest $request, $news)
     {
       DB::beginTransaction();
 

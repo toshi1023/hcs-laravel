@@ -24,6 +24,9 @@ class AdminController extends Controller
       $this->database = $database;
     }
 
+    /**
+     * 一覧ページ
+     */
     public function index()
     {
 
@@ -31,6 +34,10 @@ class AdminController extends Controller
 
     }
     
+    /**
+     * 一覧ページ用のテーブルデータ取得
+     * 引数：検索ワード
+     */
     public function apiIndex(Request $request)
     {
       // 検索条件のセット
@@ -45,6 +52,9 @@ class AdminController extends Controller
 
     }
 
+    /**
+     * 作成ページ
+     */
     public function create()
     {
       return view('admin.admins.register', [
@@ -52,7 +62,10 @@ class AdminController extends Controller
       ]);
     }
 
-    /* ユーザ保存メソッド */
+    /**
+     * 新規保存
+     * 引数：保存データ
+     */
     public function store(AdminRegisterRequest $request)
     {
       DB::beginTransaction();
@@ -85,15 +98,19 @@ class AdminController extends Controller
       // return $pdf->download('download.pdf');
     }
 
-    public function show($user)
+    /**
+     * 詳細モーダル情報の取得
+     * 引数：管理者ID
+     */
+    public function show($admin)
     {
-      $user = $this->database->getShow($user);
-
-      return view('admin.users.show', [
-        'user' => $user,
-      ]);
+      
     }
 
+    /**
+     * 編集
+     * 引数：管理者ID
+     */
     public function edit($admin)
     {
       $data = $this->database->getEdit($admin);
@@ -104,6 +121,10 @@ class AdminController extends Controller
       ]);
     }
 
+    /**
+     * 更新処理
+     * 引数1：保存データ, 引数2：管理者ID
+     */
     public function update(AdminRegisterRequest $request, $admin)
     {
       DB::beginTransaction();
