@@ -90,11 +90,8 @@ function HcsAppBar() {
     };
     // アカウントメニューをクローズ
     const handleProfileClose = () => {
-        // selectedUserのstateを更新するReducerにdispatch
-        dispatch(
-            fetchAsyncGetProf(localStorage.getItem('loginId'))
-        );
-        history.push(`/users/${localStorage.getItem('loginId')}`);
+        dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
+        history.push(`/users/${localStorage.getItem('loginId')}/profile`);
         setAnchorEl(null);
         handleMobileMenuClose();
     };

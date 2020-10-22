@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSelectedUser, selectLoggedInUser, fetchAsyncGetProf } from "./userSlice";
+import { selectLoggedInUser, fetchAsyncGetProf } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -50,11 +50,29 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function UserShow(props) {
+function Profile(props) {
     const classes = useStyles();
     const theme = useTheme();
-    // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
-    const selectedUsers = useSelector(selectSelectedUser);
+    // stateで管理するユーザ詳細データを使用できるようにローカルのloginUser定数に格納
+    const loginUser = useSelector(selectLoggedInUser);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        // 非同期の関数を定義
+        const fetchUserProf = async () => {
+            // Loading開始
+            await dispatch(fetchCredStart())
+            // ログイン情報を取得
+            const resultReg = await dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
+            if (fetchAsyncGetProf.fulfilled.match(resultReg)) {
+                // ロード終了
+                await dispatch(fetchCredEnd());       
+            }
+        }
+        // 上で定義した非同期の関数を実行
+        fetchUserProf()
+        // dispatchをuseEffectの第2引数に定義する必要がある
+    }, [dispatch])
 
     return (
         <Grid container className={classes.gridContainer} justify="center">
@@ -63,7 +81,7 @@ function UserShow(props) {
                     <Grid item xs={8} sm={6}>
                         <CardMedia
                             className={classes.cover}
-                            image={selectedUsers.value.users_photo_path}
+                            image={loginUser.user.users_photo_path}
                             title="NoImage"
                         />
                     </Grid>
@@ -71,7 +89,7 @@ function UserShow(props) {
                         <div className={classes.details}>
                             <CardContent className={classes.content}>
                                 <div className={styles.note}>
-                                    <h1>{selectedUsers.value.name}</h1>
+                                    <h1>{loginUser.user.name}</h1>
                                     <List className={classes.list}>
                                     <ListItem>
                                         <ListItemAvatar>
@@ -79,7 +97,7 @@ function UserShow(props) {
                                             <RoomIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="都道府県" secondary={selectedUsers.value.prefecture} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="都道府県" secondary={loginUser.value.prefecture} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -88,7 +106,7 @@ function UserShow(props) {
                                             <EventIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="生年月日" secondary={selectedUsers.value.birthday} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="生年月日" secondary={loginUser.value.birthday} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -97,7 +115,7 @@ function UserShow(props) {
                                             <SupervisorAccountIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="性別" secondary={selectedUsers.value.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="性別" secondary={loginUser.value.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -106,7 +124,7 @@ function UserShow(props) {
                                             <CommentIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="自己紹介" secondary={selectedUsers.value.comment} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="自己紹介" secondary={loginUser.value.comment} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     </List>
                                 </div>
@@ -119,4 +137,4 @@ function UserShow(props) {
     );
 }
 
-export default withRouter(UserShow);
+export default withRouter(Profile);

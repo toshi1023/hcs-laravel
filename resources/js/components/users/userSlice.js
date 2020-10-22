@@ -172,9 +172,6 @@ const userSlice = createSlice({
         selectUser(state, action) {
             state.selectedUser = action.payload
         },
-        loginUser(state, action) {
-            state.loggedInUser = action.payload
-        },
     },
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {
@@ -185,7 +182,10 @@ const userSlice = createSlice({
             localStorage.setItem("loginId", action.payload.id)
         })
         builder.addCase(fetchAsyncGetProf.fulfilled, (state, action) => {
-            state.loggedInUser = action.payload;
+            return {
+                ...state,
+                loggedInUser: action.payload,
+            }
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
@@ -225,7 +225,7 @@ const userSlice = createSlice({
     },
 })
 
-export const { editUsername, editPassword, editUser, selectUser, loginUser } = userSlice.actions
+export const { editUsername, editPassword, editUser, selectUser } = userSlice.actions
 
 export const selectAuthen = (state) => state.user.authen
 export const selectSelectedUser = (state) => state.user.selectedUser

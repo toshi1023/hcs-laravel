@@ -30,7 +30,7 @@ export default function User() {
 
     useEffect(() => {
         // 非同期の関数を定義
-        const fetchUserProf = async () => {
+        const fetchUser = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
@@ -39,22 +39,16 @@ export default function User() {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
-            // ロード終了
-            await dispatch(fetchCredEnd());  
         }
         // 上で定義した非同期の関数を実行
-        fetchUserProf()
+        fetchUser()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
 
     // ユーザ一覧を生成
     const renderUsers = () => {
         return (
-            // <List dense className={classes.root}>
-            //     {_.map(users, value => {
-                    <UserList user={users} />
-            //     })}
-            // </List>
+            <UserList user={users} />
         )
     }
     

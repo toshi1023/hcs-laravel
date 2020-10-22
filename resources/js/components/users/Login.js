@@ -93,7 +93,6 @@ export default function Login() {
                                     history.push(`/user/${login.payload.id}`)
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
-                                    
                                 }
                                 
                             }}
