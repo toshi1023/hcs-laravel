@@ -72,6 +72,9 @@ class ArticleService
     //  自身の記事テーブルの値を取得
     $data['article'] = $this->ArticleService->getBaseData()->where('articles.id', '=' , $id)->first();
 
+    // 緯度・経度を連結
+    $data['map'] = $data['article']->latitude.', '.$data['article']->longitude;
+    
     // 都道府県データをすべて取得
     $data['prefectures'] = $this->ArticleService->getQuery('prefectures')->get();
 

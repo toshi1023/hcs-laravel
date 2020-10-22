@@ -59,7 +59,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-4 col-form-label" for="map">緯度・経度<span class="text-danger">※</span></label>
                                                         <div class="col-md-5">
-                                                            <input class="form-control required-text" type="text" id="map" name="map" maxlength="50" placeholder="緯度・経度" value="{{ $register_mode === 'create' ? old('map') : $data->map }}" data-title="緯度・経度">
+                                                            <input class="form-control required-text" type="text" id="map" name="map" maxlength="50" placeholder="緯度・経度" value="{{ $register_mode === 'create' ? old('map') : $map }}" data-title="緯度・経度">
                                                         </div>
                                                         <div class="col-md-2">
                                                             <a href="{{ config('const.bing_url') }}" type="button" class="btn btn-primary" target="_blank" data-toggle="tooltip" title="Mapを参照" width="100"><i class="fas fa-map-marked-alt"></i></a>

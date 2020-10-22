@@ -133,6 +133,7 @@ class ArticleController extends Controller
     return view('admin.articles.register', [
       'register_mode' => 'edit',
       'data' => $data['article'],
+      'map'  => $data['map'],
       'prefectures' => $data['prefectures'],
     ]);
   }
