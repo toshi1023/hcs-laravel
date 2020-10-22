@@ -42,33 +42,33 @@ class ArticleController extends Controller
   }
 
   /* 記事保存メソッド */
-  public function store(Request $request)
-  {
-    DB::beginTransaction();
+  // public function store(Request $request)
+  // {
+  //   DB::beginTransaction();
 
-    $filename = null;
+  //   $filename = null;
 
-    if ($_FILES['article_photo']['name']){
-      // ファイル名を変数に代入
-      $filename = $_FILES['article_photo']['name'];
-    }
+  //   if ($_FILES['article_photo']['name']){
+  //     // ファイル名を変数に代入
+  //     $filename = $_FILES['article_photo']['name'];
+  //   }
 
-    if ($this->database->articleSave($request, $filename)) {
-      DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を作成しました');
-    } else {
-      DB::rollBack();
-      $this->messages->add('', '記事の作成に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
-    }
+  //   if ($this->database->articleSave($request, $filename)) {
+  //     DB::commit();
+  //     return redirect()->route('articles.index')->with('message', '記事を作成しました');
+  //   } else {
+  //     DB::rollBack();
+  //     $this->messages->add('', '記事の作成に失敗しました。管理者に問い合わせてください');
+  //     return redirect()->route('articles.index')->withErrors($this->messages);
+  //   }
     
-  }
+  // }
 
   // 記事の詳細ページを設定
-  public function show($article)
+  public function show($id)
   {
     // 詳細ページに表示する値を取得
-    $article = $this->database->getShow($article);
+    $article = $this->database->getShow($id);
 
     return view('articles.show', [
       'article' => $article,
@@ -76,9 +76,9 @@ class ArticleController extends Controller
   }
 
   // 記事の編集機能を設定
-  public function edit($article)
+  public function edit($id)
   {
-    $data = $this->database->getEdit($article);
+    $data = $this->database->getEdit($id);
 
     return view('articles.edit', [
       'article' => $data['article'],
@@ -87,34 +87,34 @@ class ArticleController extends Controller
   }
 
   // 記事の変更を反映
-  public function update(Request $request, $article)
-  {
-    $article = $this->database->getEdit($article)['article'];
+  // public function update(Request $request, $article)
+  // {
+  //   $article = $this->database->getEdit($article)['article'];
 
-    DB::beginTransaction();
+  //   DB::beginTransaction();
 
-    if ($this->database->articleSave($request, null, $article)) {
-      DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を保存しました');
-    } else {
-      DB::rollBack();
-      $this->messages->add('', '記事の保存に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
-    }
-  }
+  //   if ($this->database->articleSave($request, null, $article)) {
+  //     DB::commit();
+  //     return redirect()->route('articles.index')->with('message', '記事を保存しました');
+  //   } else {
+  //     DB::rollBack();
+  //     $this->messages->add('', '記事の保存に失敗しました。管理者に問い合わせてください');
+  //     return redirect()->route('articles.index')->withErrors($this->messages);
+  //   }
+  // }
 
   // 記事を削除
-  public function destroy($article)
-  {
-    DB::beginTransaction();
+  // public function destroy($article)
+  // {
+  //   DB::beginTransaction();
 
-    if ($this->database->articleDestroy($article)) {
-      DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を削除しました');
-    } else {
-      DB::rollBack();
-      $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
-    }
-  }
+  //   if ($this->database->articleDestroy($article)) {
+  //     DB::commit();
+  //     return redirect()->route('articles.index')->with('message', '記事を削除しました');
+  //   } else {
+  //     DB::rollBack();
+  //     $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
+  //     return redirect()->route('articles.index')->withErrors($this->messages);
+  //   }
+  // }
 }

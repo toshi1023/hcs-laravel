@@ -42,25 +42,25 @@ class UserController extends Controller
     }
 
     /* ユーザ保存メソッド */
-    public function store(Request $request)
-    {
-      $filename = null;
+    // public function store(Request $request)
+    // {
+    //   $filename = null;
 
-      if ($_FILES['prof_photo']['name']){
-        // ファイル名を変数に代入
-        $filename = $_FILES['prof_photo']['name'];
-      }
+    //   if ($_FILES['prof_photo']['name']){
+    //     // ファイル名を変数に代入
+    //     $filename = $_FILES['prof_photo']['name'];
+    //   }
       
-      DB::beginTransaction();
-      if ($this->database->userSave($request, $filename)){
-        DB::commit();
-        return redirect()->route('home')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
-      } else {
-        DB::rollBack();
-        $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
-        return redirect()->route('home')->withErrors($this->messages);
-      }
-    }
+    //   DB::beginTransaction();
+    //   if ($this->database->userSave($request, $filename)){
+    //     DB::commit();
+    //     return redirect()->route('home')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
+    //   } else {
+    //     DB::rollBack();
+    //     $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
+    //     return redirect()->route('home')->withErrors($this->messages);
+    //   }
+    // }
 
     public function pdf()
     {
@@ -76,18 +76,18 @@ class UserController extends Controller
       // return $pdf->download('download.pdf');
     }
 
-    public function show($user)
+    public function show($id)
     {
-      $user = $this->database->getShow($user);
+      $user = $this->database->getShow($id);
 
       return view('users.show', [
         'user' => $user,
       ]);
     }
 
-    public function edit($user)
+    public function edit($id)
     {
-      $data = $this->database->getEdit($user);
+      $data = $this->database->getEdit($id);
 
       return view('users.edit', [
         'user' => $data['user'],
@@ -95,27 +95,27 @@ class UserController extends Controller
       ]);
     }
 
-    public function update(Request $request, $user)
-    {
-      $user = $this->database->getEdit($user)['user'];
+    // public function update(Request $request, $user)
+    // {
+    //   $user = $this->database->getEdit($user)['user'];
       
-      $filename = null;
+    //   $filename = null;
 
-      if ($_FILES['prof_photo']['name']){
-        // ファイル名を変数に代入
-        $filename = $_FILES['prof_photo']['name'];
-      }
+    //   if ($_FILES['prof_photo']['name']){
+    //     // ファイル名を変数に代入
+    //     $filename = $_FILES['prof_photo']['name'];
+    //   }
 
-      DB::beginTransaction();
+    //   DB::beginTransaction();
 
-      if ($this->database->userSave($request, $filename, $user)) {
-        DB::commit();
-        return redirect()->route('users.show', ['user' => $user])->with('message', 'プロフィールの変更を保存しました');
-      } else {
-        DB::rollBack();
-        $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');
+    //   if ($this->database->userSave($request, $filename, $user)) {
+    //     DB::commit();
+    //     return redirect()->route('users.show', ['user' => $user])->with('message', 'プロフィールの変更を保存しました');
+    //   } else {
+    //     DB::rollBack();
+    //     $this->messages->add('', 'プロフィールの変更に失敗しました。管理者に問い合わせてください');
         
-        return redirect()->route('users.edit', ['user' => $user])->withErrors($this->messages);
-      }
-    }
+    //     return redirect()->route('users.edit', ['user' => $user])->withErrors($this->messages);
+    //   }
+    // }
 }

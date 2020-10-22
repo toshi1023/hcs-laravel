@@ -52,6 +52,9 @@ function setDetailView(data, button) {
 
         // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
         let url = `https://www.google.com/maps?q=${data.article.latitude},${data.article.longitude}`;
+
+        // いいね数を変数に代入
+        let likes_counts = data.article.likes_counts;
         
         $('#detail_title').html(data.article.title);
         $('#detail_name').html(data.article.name);
@@ -64,11 +67,16 @@ function setDetailView(data, button) {
 
         $('#article_id').data('id', data.article.id);              // 各タグで共有
 
+        // いいね数の表示制御
+        if(data.article.likes_counts == null) {
+            likes_counts = 0;
+        }
+
         // いいねのボタン制御
         if(data.like_flg) {
-            $('#detail_like').append(`<button class="btn btn-danger btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+            $('#detail_like').append(`<button class="btn btn-danger btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${likes_counts}</span>`);
         } else {
-            $('#detail_like').append(`<button class="btn btn-secondary btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${data.article.likes_counts}</span>`);
+            $('#detail_like').append(`<button class="btn btn-secondary btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${likes_counts}</span>`);
         }
         
         $('#detail_modal').modal('show');

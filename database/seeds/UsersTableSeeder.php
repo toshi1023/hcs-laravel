@@ -34,7 +34,7 @@ class UsersTableSeeder extends Seeder
                 'name' => 'test'.$i,
                 'prefecture' => $faker->prefecture,
                 'birthday' => '1993-1-'.$i,
-                'gender' => 1,
+                'gender' => $faker->numberBetween(0, 1), // 0~1の間で乱数,
                 'email' => 'test'.$i.'@xxx.co.jp',
                 'password' => Hash::make("test"),
                 'comment'  => 'こんにちはtest'.$i.'です！これからよろしく！',

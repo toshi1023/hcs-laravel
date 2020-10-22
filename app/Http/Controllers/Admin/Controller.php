@@ -33,15 +33,4 @@ class Controller extends BaseController
         return $image_name;
     }
 
-    /**
-     * 経度・緯度のバリデーションメソッド
-     * 引数：保存するデータ
-     */
-    public function mapValidation($request)
-    {
-        $request->validate([
-            'latitude' => ['numeric'],
-            'longitude' => ['numeric'],
-        ]);
-    }
 }

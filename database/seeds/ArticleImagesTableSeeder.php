@@ -23,5 +23,17 @@ class ArticleImagesTableSeeder extends Seeder
             'article_id'         => 2,
             'user_id'            => 1,
         ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 3,
+            'user_id'            => 2,
+        ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 4,
+            'user_id'            => 3,
+        ]);
     }
 }

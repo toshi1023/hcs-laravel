@@ -63,8 +63,8 @@ class ArticleController extends Controller
     
     // アップロードファイルのファイル名を設定
     $filename = null;
-    if ($_FILES['upload_image']['name']){
-      $filename = $_FILES['upload_image']['name'];
+    if ($request->hasFile('upload_image')){
+      $filename = $this->getFilename($request->file('upload_image'));
     }
 
     // 記事の保存
@@ -123,8 +123,10 @@ class ArticleController extends Controller
     DB::beginTransaction();
 
     // ファイル名の設定
-    $filename = $_FILES['upload_image']['name'];
-    // dd($request);
+    if ($request->hasFile('upload_image')){
+      $filename = $this->getFilename($request->file('upload_image'));
+    }
+
     if ($this->database->save($request, $filename)) {
       DB::commit();
       return redirect()->route('hcs-admin.articles.index')->with('info_message', '記事を保存しました');
