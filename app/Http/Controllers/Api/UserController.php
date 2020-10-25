@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Http\JsonResponse;
 use App\Service\Web\UserService;
 
 class UserController extends Controller
@@ -54,22 +54,33 @@ class UserController extends Controller
     /* ユーザ保存メソッド */
     public function store(Request $request)
     {
+      // DB::beginTransaction();
+
       $filename = null;
 
-      if ($_FILES['prof_photo']['name']){
-        // ファイル名を変数に代入
-        $filename = $_FILES['prof_photo']['name'];
-      }
+      // // // パスワードのハッシュ処理
+      // $request['password'] = Hash::make($request['password']);
+
+      // if ($request->file('upload_image')){
+      //   $filename = $this->getFilename($request->file('upload_image'));
+      // }
       
-      DB::beginTransaction();
-      if ($this->database->userSave($request, $filename)){
-        DB::commit();
-        return redirect()->route('home')->with('message', 'ユーザ登録に成功しました。ログインページからログインしてください');
-      } else {
-        DB::rollBack();
-        $this->messages->add('', 'ユーザ登録に失敗しました。管理者に問い合わせてください');
-        return redirect()->route('home')->withErrors($this->messages);
-      }
+      // if ($this->database->save($request, $filename)){
+      //   DB::commit();
+      //   return response()->json([
+      //     'messages' => 'Success!', 
+      //   ],200, [], JSON_UNESCAPED_UNICODE);
+      // } else {
+      //   DB::rollBack();
+      //   // 作成失敗時はエラーメッセージを返す
+      //   return new JsonResponse([
+      //     'message' => 'Create Failed'
+      //   ], 401);
+      // }
+      $data = $this->database->save($request, $filename);
+      return new JsonResponse([
+        'request' => $data['name']
+      ], 401);
     }
 
     public function pdf()

@@ -28,7 +28,7 @@ class Controller extends BaseController
      */
     public function index()
     {
-        return view('admin.layouts.app', []);
+        return view('layouts.app', []);
     }
 
     /**
@@ -36,7 +36,7 @@ class Controller extends BaseController
      */
     public function create()
     {
-        return view('admin.layouts.app', []);
+        return view('layouts.app', []);
     }
 
     /**
@@ -44,7 +44,7 @@ class Controller extends BaseController
      */
     public function show($id)
     {
-        return view('admin.layouts.app', []);
+        return view('layouts.app', []);
     }
 
     /**
@@ -52,7 +52,7 @@ class Controller extends BaseController
      */
     public function edit($id)
     {
-        return view('admin.layouts.app', []);
+        return view('layouts.app', []);
     }
     
 }

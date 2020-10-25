@@ -81,12 +81,13 @@ function App() {
             <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
             <Route exact path="/articles" render={props => <Article {...props} />} />
             <Route exact path="/users" render={props => <User {...props} />} />
-            <Route path="/users/:id" render={props => <UserShow {...props} />} />
-            <Route path="/users/:id/profile" render={props => <Profile {...props} />} />
             <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
+            <Route exact path="/users/:id" render={props => <UserShow {...props} />} />
+            <Route exact path="/users/:id/profile" render={props => <Profile {...props} />} />
             <Route exact path="/messages" render={props => <Message {...props} />} />
           </Switch>
           {loading ? <LoadItem /> : null}
+          <input type="hidden" id="loginId" />
         </BrowserRouter>
       </div>
     </>

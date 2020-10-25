@@ -1,4 +1,5 @@
 import React, {useMemo, useEffect, useState} from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import {useDropzone} from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
@@ -91,6 +92,7 @@ const thumbsContainer = {
 export default function ProfileDropzone(props) {
   const classes = useStyles();
   const [files, setFiles] = useState([]);
+  const dispatch = useDispatch();
 
   const {
     getRootProps,
@@ -108,7 +110,7 @@ export default function ProfileDropzone(props) {
         })));
       }    
     });
-
+    
   const style = useMemo(() => ({
     ...baseStyle,
     ...(isDragActive ? activeStyle : {}),
@@ -169,6 +171,11 @@ export default function ProfileDropzone(props) {
                         <aside style={thumbsContainer}>
                             {thumbs}
                         </aside>
+                        <input
+                          type="file"
+                          id="imageInput"
+                          hidden={true} // 非表示を設定
+                        />
                     </div>
                 </div>
             </Grid>

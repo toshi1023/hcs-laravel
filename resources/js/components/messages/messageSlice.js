@@ -9,7 +9,10 @@ const token = localStorage.localToken
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('messages/index', async(conditions) => {
-    const res = await axios.get(`${apiUrl}?query=${conditions}`, {})
+    const res = await axios.get(`${apiUrl}?query=${conditions}`, {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+    })
     return res.data
 })
 

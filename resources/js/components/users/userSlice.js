@@ -43,7 +43,7 @@ export const fetchAsyncCreate = createAsyncThunk('users/create', async(user) => 
     const res = await axios.post(apiUrl, user, {
         headers: {
             'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
     })
     return res.data
@@ -115,7 +115,7 @@ const userSlice = createSlice({
             name: '',                   // ニックネーム
             prefecture: '',             // 都道府県
             birthday: '',               // 生年月日
-            gender: '',                 // 性別
+            gender: false,                 // 性別
             email: '',                  // メールアドレス
             comment: '',                // コメント
             status: '',                 // 会員フラグ
@@ -180,6 +180,7 @@ const userSlice = createSlice({
             // ブラウザのlocalStorageにTokenとIDを保存
             localStorage.setItem("localToken", action.payload.token)
             localStorage.setItem("loginId", action.payload.id)
+            localStorage.setItem("loginPhoto", action.payload.login_user_photo)
         })
         builder.addCase(fetchAsyncGetProf.fulfilled, (state, action) => {
             return {

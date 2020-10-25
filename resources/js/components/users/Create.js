@@ -13,6 +13,7 @@ import {
     editUser, 
     selectEditedUser
 } from './userSlice';
+import { selectMessage } from '../messages/messageSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -66,65 +67,63 @@ const Title = styled.h1`
 
 export default function UserCreate() {
   const classes = useStyles();
-
-  // ユーザデータ編集のデータを使用できるようにローカルのarticles定数に格納
+  // ユーザデータ編集のデータを使用できるようにローカルのeditedUser定数に格納
   const editedUser = useSelector(selectEditedUser)
   const dispatch = useDispatch()
+   // stateの初期設定
+  const [state, setState] = React.useState({
+      id: editedUser.id,
+      email: editedUser.email,
+      password: editedUser.password,
+      name: editedUser.name,
+      birthday: editedUser.birthday,
+      gender: editedUser.gender,
+      image: editedUser.image,
+  });
 
-//   useEffect(() => {
-//       // 非同期の関数を定義
-//       const fetchUserProf = async () => {
-//           // ユーザ作成とログイン情報を取得
-//           await dispatch(fetchAsyncCreate())
-//           // await dispatch(fetchAsyncProf())
-//       }
-//       // 上で定義した非同期の関数を実行
-//       fetchUserProf()
-//       // dispatchをuseEffectの第2引数に定義する必要がある
-//   }, [dispatch])
-
-  // stateのeditUserの値を変えるアクションをdispatch
-  const handleInputChange = (e) => {
-    editUser.id === 0 ? dispatch(editUser({ 
-                            id: 0,
-                            email: e.target.value,
-                            password: e.target.value,
-                            nickName: e.target.value,
-                            birthday: e.target.value,
-                            gender: e.target.value,
-                            image: e.target.value,
-                        }))
-                        : dispatch(editUser({ 
-                            id: editedUser.id,
-                            email: e.target.value,
-                            password: e.target.value,
-                            nickName: e.target.value,
-                            birthday: e.target.value,
-                            gender: e.target.value,
-                            image: e.target.value,
-                        }))
+  /**
+   * 値のセット
+   */
+  const setEmail = (e) => {
+    setState({
+        ...state,
+        email: e.target.value,
+    })
   }
-
+  const setPassword = (e) => {
+    setState({
+        ...state,
+        password: e.target.value,
+    })
+  }
+  const setName = (e) => {
+    setState({
+        ...state,
+        name: e.target.value,
+    })
+  }
   const setBirthday = () => {
       let year = document.getElementById("selectYear").value
       let month = document.getElementById("selectMonth").value
       let day = document.getElementById("selectDay").value
-
+      setState({...state, birthday: `${year}-${month}-${day}`})
       return `${year}-${month}-${day}`
+  }
+  const setGender = (e) => {
+    setState({
+        ...state,
+        gender: document.getElementById("genderSwitch").checked,
+    })
   }
 
     // 作成(stateのeditedUserの値をApiで送信)
     const createClicked = () => {
-        let birthday = setBirthday()
-        console.log(birthday)
-        dispatch(fetchAsyncCreate(editedUser))
+        dispatch(fetchAsyncCreate(state))
         dispatch(editUser({ id: 0, title: '' }))
     }
 
     // 更新(stateのeditedUserの値をApiで送信)
     const updateClicked = () => {
-        let birthday = setBirthday()
-        console.log(birthday)
         dispatch(fetchAsyncUpdate(editedUser))
         dispatch(editUser({ id: 0, title: '' }))
     }
@@ -155,6 +154,7 @@ export default function UserCreate() {
                                                 }
                                                 className={classes.formFont}
                                                 required
+                                                onChange={setEmail}
                                             />
                                         </FormControl>
                                     </div>
@@ -169,6 +169,7 @@ export default function UserCreate() {
                                                 type="password"
                                                 className={classes.formFont}
                                                 required
+                                                onChange={setPassword}
                                             />
                                         </FormControl>
                                     </div>
@@ -182,19 +183,23 @@ export default function UserCreate() {
                                                 }
                                                 className={classes.formFont}
                                                 required
+                                                onChange={setName}
                                             />
                                         </FormControl>
                                     </div>
-                                    <div>
+                                    <div onBlur={setBirthday}>
                                         <FormControl className={classes.margin}>
                                             <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
                                             {dateSelects()}
                                         </FormControl>
                                     </div>
-                                    <div>
+                                    <div onClick={setGender}>
                                         <FormControl className={classes.margin}>
                                             <FormLabel style={{fontSize: 15}} display="block">性別</FormLabel>
-                                            <SwitchType switchLabel={{true: '男性', false: '女性'}} />
+                                            <SwitchType 
+                                                switchLabel={{true: '男性', false: '女性'}} 
+                                                checked={state.gender}
+                                            />
                                         </FormControl>
                                     </div>
                                 </CardContent>
@@ -218,7 +223,7 @@ export default function UserCreate() {
                                         <FormControl>
                                             {
                                                 // 作成と編集でボタン表記と処理を切り分け
-                                                editUser.id === 0 ? (
+                                                editedUser.id === "" ? (
                                                     <Button variant="contained" color="primary" className={classes.button} onClick={createClicked}>作成する</Button>
                                                 ) : (
                                                     <Button variant="contained" color="primary" className={classes.button} onClick={updateClicked}>更新する</Button>
