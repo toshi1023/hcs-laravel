@@ -22,6 +22,7 @@ import Home from './components/home/Home';
 import Article from './components/articles/Index';
 import User from './components/users/Index';
 import UserShow from './components/users/Show';
+import UserEdit from './components/users/Edit';
 import Profile from './components/users/Profile';
 import UserCreate from './components/users/Create';
 import Message from './components/messages/Message';
@@ -84,6 +85,7 @@ function App() {
             <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
             <Route exact path="/users/:id" render={props => <UserShow {...props} />} />
             <Route exact path="/users/:id/profile" render={props => <Profile {...props} />} />
+            <Route exact path="/users/:id/edit" render={props => <UserEdit {...props} />} />
             <Route exact path="/messages" render={props => <Message {...props} />} />
           </Switch>
           {loading ? <LoadItem /> : null}

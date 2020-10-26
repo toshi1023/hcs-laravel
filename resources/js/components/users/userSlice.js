@@ -167,7 +167,7 @@ const userSlice = createSlice({
             state.authen.password = action.payload
         },
         editUser(state, action) {
-            state.editUser = action.payload
+            state.editedUser = action.payload
         },
         selectUser(state, action) {
             state.selectedUser = action.payload

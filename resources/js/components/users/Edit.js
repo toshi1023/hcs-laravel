@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSelectedUser, editUser } from "./userSlice";
+import { selectEditedUser } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import ProfileDropzone from '../parts/userParts/dropzone';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
-import Grid from "@material-ui/core/Grid";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
-    Card, CardContent, CardMedia, Typography, List, ListItem, 
-    ListItemText, ListItemAvatar, Avatar, Divider, Button
+    Card, CardContent, CardMedia, Typography, List, ListItem, Grid,
+    ListItemText, ListItemAvatar, Avatar, Divider, Modal, Backdrop, Fade
  } from "@material-ui/core";
  import EventIcon from '@material-ui/icons/Event';
  import CommentIcon from '@material-ui/icons/Comment';
+ import CloseIcon from '@material-ui/icons/Close';
 import RoomIcon from '@material-ui/icons/Room';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 
 const useStyles = makeStyles(theme => ({
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     },
     cover: {
         marginLeft: theme.spacing(2),
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(5),
         marginButtom: theme.spacing(2),
         height: 280
     },
@@ -51,52 +51,89 @@ const useStyles = makeStyles(theme => ({
     userName: {
         fontSize: "15px"
     },
-    button: {
-        marginLeft: theme.spacing(2),
-        marginTop: theme.spacing(2),
-        height: 40,
-        width: 100,
-        fontSize: 15
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    },
+    closeIcon: {
+        marginLeft: 'auto',
     },
 }));
 
-function UserShow(props) {
+function UserEdit(props) {
     const classes = useStyles();
     const theme = useTheme();
-    const history = useHistory();
-    const dispatch = useDispatch();
-    // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
-    const selectedUsers = useSelector(selectSelectedUser);
-    
-    // 編集データの管理用stateを更新
-    const handleEditUser = value => {
-        // editedUserのstateを更新するReducerにdispatch
-        dispatch(
-            editUser({ value })
-        );
-        // ユーザの編集ページへリダイレクト
-        history.push(`/users/${value.id}/edit`);
+    // Modal設定
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => {
+        setOpen(true);
     };
-
+    const handleClose = () => {
+        setOpen(false);
+    };
+    // stateで管理する編集用のユーザデータを使用できるようにローカルのeditedUsers定数に格納
+    const editedUsers = useSelector(selectEditedUser);
+    
     return (
         <Grid container className={classes.gridContainer} justify="center">
+            {/* 
+                画像の編集用モーダル 
+            */}
+            <div>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                    timeout: 500,
+                    }}
+                >
+                    <Fade in={open}>
+                    <Grid container justify="center">
+                        <Grid item xs={12} sm={6} md={6} lg={6}>
+                        <div className={classes.paper}>
+                            <Grid container>
+                                <h2>画像の編集</h2>
+                                <CloseIcon className={classes.closeIcon} onClick={handleClose} />
+                            </Grid>
+                            {/* ドラッグ&ドロップ */}
+                            <Grid container justify="center">
+                                <Grid item xs={12} sm={8}>
+                                    <ProfileDropzone /> 
+                                </Grid>
+                            </Grid>
+                        </div>
+                        </Grid>
+                    </Grid>
+                    </Fade>
+                </Modal>
+            </div>
             <Grid item xs={12} sm={6}>
                 <Card className={classes.root}>
                     <Grid item xs={8} sm={6}>
-                        <Button variant="contained" color="primary" className={classes.button} onClick={() => handleEditUser(selectedUsers.value)}>
-                            編集
-                        </Button>
                         <CardMedia
                             className={classes.cover}
-                            image={selectedUsers.value.users_photo_path}
-                            title={selectedUsers.value.users_photo_name}
+                            image={editedUsers.value.users_photo_path}
+                            title={editedUsers.value.users_photo_name}
+                            onClick={handleOpen}
                         />
                     </Grid>
                     <Grid item xs={8} sm={6}>
                         <div className={classes.details}>
                             <CardContent className={classes.content}>
                                 <div className={styles.note}>
-                                    <h1>{selectedUsers.value.name}</h1>
+                                    <h1>{editedUsers.name}</h1>
                                     <List className={classes.list}>
                                     <ListItem>
                                         <ListItemAvatar>
@@ -104,7 +141,7 @@ function UserShow(props) {
                                             <RoomIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="都道府県" secondary={selectedUsers.value.prefecture} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="都道府県" secondary={editedUsers.value.prefecture} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -113,7 +150,7 @@ function UserShow(props) {
                                             <EventIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="生年月日" secondary={selectedUsers.value.birthday} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="生年月日" secondary={editedUsers.value.birthday} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -122,7 +159,7 @@ function UserShow(props) {
                                             <SupervisorAccountIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="性別" secondary={selectedUsers.value.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="性別" secondary={editedUsers.value.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -131,7 +168,7 @@ function UserShow(props) {
                                             <CommentIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="自己紹介" secondary={selectedUsers.value.comment} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="自己紹介" secondary={editedUsers.value.comment} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     </List>
                                 </div>
@@ -144,4 +181,4 @@ function UserShow(props) {
     );
 }
 
-export default withRouter(UserShow);
+export default withRouter(UserEdit);
