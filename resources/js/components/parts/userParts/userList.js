@@ -14,7 +14,6 @@ import {
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
-// import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const useStyles = makeStyles(theme => ({
     root: {

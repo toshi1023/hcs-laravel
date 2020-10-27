@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet } from './articleSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
-import PrefectureSelects from '../parts/articleParts/prefectureSearch';
+import PrefectureSelects from '../parts/common/prefectureSearch';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';

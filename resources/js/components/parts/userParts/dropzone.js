@@ -12,8 +12,12 @@ const useStyles = makeStyles((theme) => ({
         paddinfTop: theme.spacing(10),
         paddingBottom: theme.spacing(10),
     },
-    delete: {
+    update: {
         marginLeft: theme.spacing(4),
+        fontSize: 15,
+    },
+    delete: {
+        marginLeft: theme.spacing(2),
         fontSize: 15,
     },
     fileLabel: {
@@ -180,13 +184,10 @@ export default function ProfileDropzone(props) {
                 </div>
             </Grid>
         </Grid>
+          <Button variant="contained" color="primary" className={classes.update} onClick={handleDelete}>更新</Button>
+          <Button variant="contained" color="secondary" className={classes.delete} onClick={handleDelete}>削除</Button>
         <Grid container>
-            <Grid item xs={4}>
-                <Button variant="contained" color="secondary" className={classes.delete} onClick={handleDelete}>削除</Button>
-            </Grid>
-        </Grid>
-        <Grid container>
-            <Grid item xs={4}>
+            <Grid item xs={8}>
                 <aside>
                     <h4 className={classes.fileLabel}>Files</h4>
                     {filename}

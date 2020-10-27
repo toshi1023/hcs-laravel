@@ -90,11 +90,10 @@ export default function Login() {
                                     // ログインユーザのプロフィールを取得
                                     await dispatch(fetchAsyncGetProf(login.payload.id));
                                     // ログインユーザのマイページに遷移
-                                    history.push(`/user/${login.payload.id}/profile`)
+                                    history.push(`/`)
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
                                 }
-                                
                             }}
                             validationSchema={Yup.object().shape({
                                 name: Yup.string().required("IDはの入力は必須です"),

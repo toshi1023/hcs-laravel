@@ -1,8 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const loginUrl = 'http://localhost/api/login'
-const apiUrl = 'http://localhost/api/api_users'
+// const loginUrl = 'http://localhost/api/login'
+// const apiUrl = 'http://localhost/api/api_users'
+const loginUrl = 'http://hcs-laravel/api/login'
+const apiUrl = 'http://hcs-laravel/api/api_users'
+const prefectureUrl = 'http://hcs-laravel/api/api_prefectures'
 const token = localStorage.localToken
 
 /**
@@ -23,8 +26,17 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
  * Loginユーザの取得用非同期関数
  */
 export const fetchAsyncGetProf = createAsyncThunk('prof/get', async(id) =>{
-    // axios: 引数1: URL, 引数2: 渡すデータ, 引数3: メタ情報
+    // axios: 引数1: URL, 引数2: メタ情報
     const res = await axios.get(`${apiUrl}/${id}`, {})
+    // Apiからの返り値
+    return res.data
+})
+/**
+ * 都道府県データの取得用非同期関数
+ */
+export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', async() =>{
+    // axios: 引数1:  引数2: メタ情報
+    const res = await axios.get(prefectureUrl, {})
     // Apiからの返り値
     return res.data
 })
@@ -88,6 +100,10 @@ const userSlice = createSlice({
         authen: {
             name: '',
             password: '',
+        },
+        // prefectures: 都道府県データを管理
+        prefectures: {
+
         },
         // users: ユーザデータは複数ある前提のため配列
         users: [
@@ -167,7 +183,7 @@ const userSlice = createSlice({
             state.authen.password = action.payload
         },
         editUser(state, action) {
-            state.editUser = action.payload
+            state.editedUser = action.payload
         },
         selectUser(state, action) {
             state.selectedUser = action.payload
@@ -186,6 +202,12 @@ const userSlice = createSlice({
             return {
                 ...state,
                 loggedInUser: action.payload,
+            }
+        })
+        builder.addCase(fetchAsyncGetPrefectures.fulfilled, (state, action) => {
+            return {
+                ...state,
+                prefectures: action.payload,
             }
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
@@ -229,6 +251,7 @@ const userSlice = createSlice({
 export const { editUsername, editPassword, editUser, selectUser } = userSlice.actions
 
 export const selectAuthen = (state) => state.user.authen
+export const selectPrefectures = (state) => state.user.prefectures
 export const selectSelectedUser = (state) => state.user.selectedUser
 export const selectLoggedInUser = (state) => state.user.loggedInUser
 export const selectEditedUser = (state) => state.user.editedUser

@@ -78,7 +78,6 @@ export default function UserCreate() {
       name: editedUser.name,
       birthday: editedUser.birthday,
       gender: editedUser.gender,
-      image: editedUser.image,
   });
 
   /**

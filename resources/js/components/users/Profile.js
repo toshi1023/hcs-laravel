@@ -10,6 +10,7 @@ import {
     Card, CardContent, CardMedia, Typography, List, ListItem, 
     ListItemText, ListItemAvatar, Avatar, Divider
  } from "@material-ui/core";
+ import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
  import EventIcon from '@material-ui/icons/Event';
  import CommentIcon from '@material-ui/icons/Comment';
 import RoomIcon from '@material-ui/icons/Room';
@@ -89,8 +90,16 @@ function Profile(props) {
                         <div className={classes.details}>
                             <CardContent className={classes.content}>
                                 <div className={styles.note}>
-                                    <h1>{loginUser.user.name}</h1>
                                     <List className={classes.list}>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                        <Avatar>
+                                            <EmojiEmotionsIcon />
+                                        </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary="ニックネーム" secondary={loginUser.user.name} classes={{secondary:classes.listItemText}} />
+                                    </ListItem>
+                                    <Divider variant="inset" component="li" />
                                     <ListItem>
                                         <ListItemAvatar>
                                         <Avatar>

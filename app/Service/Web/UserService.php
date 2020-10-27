@@ -111,4 +111,13 @@ class UserService
     return $this->UserService->fileDelete($request);
   }
 
+  /**
+   * 都道府県情報の取得
+   * 引数：テーブル名
+   */
+  public function getPrefecturesQuery($table)
+  {
+    return $this->UserService->getQuery($table)->get();
+  }
+
 }

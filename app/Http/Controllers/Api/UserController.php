@@ -37,7 +37,7 @@ class UserController extends Controller
       // 認証失敗時はエラーメッセージを返す
       return new JsonResponse([
         'message' => 'Unauthenticated.'
-    ], 401);
+      ], 401);
 
     }
 
@@ -131,5 +131,19 @@ class UserController extends Controller
         
         return redirect()->route('users.edit', ['user' => $user])->withErrors($this->messages);
       }
+    }
+
+    public function getPrefectures()
+    {
+      $prefectures = $this->database->getPrefecturesQuery('prefectures');
+
+      return response()->json([
+        'prefectures' => $prefectures, 
+      ],200, [], JSON_UNESCAPED_UNICODE);
+
+      // 取得失敗時はエラーメッセージを返す
+      return new JsonResponse([
+        'message' => 'Unauthenticated.'
+      ], 500);
     }
 }
