@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectEditedUser, selectPrefectures, fetchAsyncGetPrefectures } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import PrefectureSelects from '../parts/common/prefectureSearch';
+import dateSelects from '../parts/common/dateSelects';
+import SwitchType from '../parts/switch';
 import ProfileDropzone from '../parts/userParts/dropzone';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -10,7 +12,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
     Card, CardContent, CardMedia, Typography, List, ListItem, Grid, Button,
     ListItemText, ListItemAvatar, Avatar, Divider, Modal, Backdrop, Fade,
-    Input, InputLabel, InputAdornment, FormControl,
+    Input, InputLabel, InputAdornment, FormControl, FormLabel,
  } from "@material-ui/core";
  import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
  import EventIcon from '@material-ui/icons/Event';
@@ -94,7 +96,7 @@ function UserEdit(props) {
         gender: editedUser.value.gender,
         comment: editedUser.value.comment,
     });
-
+    
     useEffect(() => {
         // 非同期の関数を定義
         const fetchPrefectures = async () => {
@@ -105,6 +107,8 @@ function UserEdit(props) {
             if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
                 // ユーザの登録している都道府県が選択されている状態でセット
                 document.getElementById("prefecture").value = editedUser.value.prefecture
+                // ユーザの登録している生年月日が選択されている状態でセット
+                // document.getElementById("selectYear").value = editedUser.value.birthday
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -144,6 +148,14 @@ function UserEdit(props) {
             ...state,
             comment: e.target.value,
         })
+    }
+    // 生年月日の取得
+    const setBirthday = () => {
+        let year = document.getElementById("selectYear").value
+        let month = document.getElementById("selectMonth").value
+        let day = document.getElementById("selectDay").value
+        setState({...state, birthday: `${year}-${month}-${day}`})
+        return `${year}-${month}-${day}`
     }
     // Modal設定
     const [open, setOpen] = React.useState(false);
@@ -250,18 +262,25 @@ function UserEdit(props) {
                                             <EventIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="生年月日" secondary={editedUser.value.birthday} classes={{secondary:classes.listItemText}} />
+                                        <FormControl className={classes.margin}>
+                                            <FormLabel style={{fontSize: 12}} display="block">生年月日</FormLabel>
+                                            {dateSelects()}
+                                        </FormControl>
                                     </ListItem>
-                                    <Divider variant="inset" component="li" />
                                     <ListItem>
                                         <ListItemAvatar>
                                         <Avatar>
                                             <SupervisorAccountIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="性別" secondary={editedUser.value.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
+                                        <FormControl className={classes.margin}>
+                                            <FormLabel style={{fontSize: 12}} display="block">性別</FormLabel>
+                                            <SwitchType 
+                                                switchLabel={{true: '男性', false: '女性'}} 
+                                                checked={state.gender}
+                                            />
+                                        </FormControl>
                                     </ListItem>
-                                    <Divider variant="inset" component="li" />
                                     <ListItem>
                                         <ListItemAvatar>
                                         <Avatar>
