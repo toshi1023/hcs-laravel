@@ -105,7 +105,6 @@ function UserEdit(props) {
             if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
                 // ユーザの登録している都道府県が選択されている状態でセット
                 document.getElementById("prefecture").value = editedUser.value.prefecture
-                document.getElementById("prefecture").native = true
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -238,7 +237,10 @@ function UserEdit(props) {
                                         </ListItemAvatar>
                                         <FormControl className={classes.margin}>
                                             <div onBlur={setPrefecture}>
-                                                <PrefectureSelects values={prefectures.prefectures} labelFlg={false} />
+                                                <PrefectureSelects 
+                                                    values={prefectures.prefectures} 
+                                                    labelFlg={editedUser.value.prefecture ? false : undefined} 
+                                                />
                                             </div>
                                         </FormControl>
                                     </ListItem>
