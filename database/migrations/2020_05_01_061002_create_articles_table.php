@@ -14,14 +14,14 @@ class CreateArticlesTable extends Migration
     public function up()
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('prefecture');
-            $table->string('latitude', 50)->nullable();
-            $table->string('longitude', 50)->nullable();
-            $table->string('title', 40);
-            $table->text('content');
-            $table->boolean('type')->unsigned()->default(false);        // 0: 全員, 1: 会員
-            $table->boolean('delete_flg')->unsigned()->default(0);      // 0: noフラグ, 1: 削除
+            $table->increments('id')->comment('ID');
+            $table->string('prefecture')->comment('都道府県');
+            $table->string('latitude', 50)->nullable()->comment('緯度');
+            $table->string('longitude', 50)->nullable()->comment('経度');
+            $table->string('title', 40)->comment('タイトル');
+            $table->text('content')->comment('内容');
+            $table->boolean('type')->unsigned()->default(false)->comment('公開タイプ');        // 0: 全員, 1: 会員
+            $table->boolean('delete_flg')->unsigned()->default(0)->comment('削除フラグ');      // 0: noフラグ, 1: 削除
             // $table->integer('likes_count');
             $table->timestamps();
         });

@@ -14,9 +14,9 @@ class CreatePrefecturesTable extends Migration
     public function up()
     {
         Schema::create('prefectures', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->boolean('delete_flg')->default(false);              // 0: noフラグ, 1: 削除
+            $table->increments('id')->comment('ID');
+            $table->string('name')->comment('都道府県名');
+            $table->boolean('delete_flg')->default(false)->comment('削除フラグ');              // 0: noフラグ, 1: 削除
 
             $table->timestamps();
         });

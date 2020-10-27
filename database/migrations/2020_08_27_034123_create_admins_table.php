@@ -14,12 +14,12 @@ class CreateAdminsTable extends Migration
     public function up()
     {
         Schema::create('admins', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('email')->unique();                                  // ID
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('delete_flg')->default(false);          // 0: noフラグ, 1: 削除
-            $table->timestamp('login_time')->nullable();
+            $table->increments('id')->comment('ID');
+            $table->string('email')->unique()->comment('メールアドレス');
+            $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス（確認）');
+            $table->string('password')->comment('パスワード');
+            $table->boolean('delete_flg')->default(false)->comment('削除フラグ');          // 0: noフラグ, 1: 削除
+            $table->timestamp('login_time')->nullable()->comment('最終ログイン日時');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -14,21 +14,21 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('users_photo_name')->nullable();
-            $table->string('users_photo_path')->nullable();
-            $table->string('name')->unique();
-            $table->string('prefecture');                               // お気に入り都道府県
-            $table->date('birthday');
-            $table->boolean('gender')->default(false);                  // 0: 女性, 1: 男性
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->text('comment')->nullable();                        // 自己紹介文
-            $table->boolean('status')->default(false);                  // アカウント停止フラグ
-            $table->text('memo')->nullable();                           // 備考
-            $table->boolean('delete_flg')->default(false);              // 0: noフラグ, 1: 削除
-            $table->timestamp('login_time')->nullable();
+            $table->increments('id')->comment('ID');
+            $table->string('users_photo_name')->nullable()->comment('画像名');
+            $table->string('users_photo_path')->nullable()->comment('画像パス');
+            $table->string('name')->unique()->comment('ニックネーム');
+            $table->string('prefecture')->comment('都道府県');                                      // お気に入り都道府県
+            $table->date('birthday')->comment('生年月日');
+            $table->boolean('gender')->default(false)->comment('性別');                             // 0: 女性, 1: 男性
+            $table->string('email')->unique()->comment('メールアドレス');
+            $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス（確認）');
+            $table->string('password')->comment('パスワード');
+            $table->text('comment')->nullable()->comment('自己紹介文');                             // 自己紹介文
+            $table->boolean('status')->default(false)->comment('アカウント停止フラグ');              // アカウント停止フラグ
+            $table->text('memo')->nullable()->comment('備考');                                      // 備考
+            $table->boolean('delete_flg')->default(false)->comment('削除フラグ');                   // 0: noフラグ, 1: 削除
+            $table->timestamp('login_time')->nullable()->comment('最終ログイン日時');
             $table->rememberToken();
             $table->timestamps();
         });

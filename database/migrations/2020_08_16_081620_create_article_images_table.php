@@ -18,12 +18,12 @@ class CreateArticleImagesTable extends Migration
          * ※Json形式で格納予定
          */
         Schema::create('article_images', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('articles_photo_name')->nullable();               // 画像名
-            $table->string('articles_photo_path')->nullable();               // 画像パス
-            $table->integer('article_id')->unsigned();
-            $table->integer('user_id')->unsigned();
-            $table->boolean('delete_flg')->default(false);      // 0: noフラグ, 1: 削除
+            $table->increments('id')->comment('ID');
+            $table->string('articles_photo_name')->nullable()->comment('画像名');      // 画像名
+            $table->string('articles_photo_path')->nullable()->comment('画像パス');    // 画像パス
+            $table->integer('article_id')->unsigned()->comment('記事ID');
+            $table->integer('user_id')->unsigned()->comment('ユーザID');
+            $table->boolean('delete_flg')->default(false)->comment('削除フラグ');      // 0: noフラグ, 1: 削除
 
             // 外部キー制約
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

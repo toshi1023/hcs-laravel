@@ -14,10 +14,10 @@ class CreateLikesTable extends Migration
     public function up()
     {
         Schema::create('likes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('article_id')->unsigned();
-            $table->integer('user_id')->unsigned();
-            $table->boolean('delete_flg')->default(false);      // 0: noフラグ, 1: 削除
+            $table->increments('id')->comment('ID');
+            $table->integer('article_id')->unsigned()->comment('記事ID');
+            $table->integer('user_id')->unsigned()->comment('ユーザID');
+            $table->boolean('delete_flg')->default(false)->comment('削除フラグ');      // 0: noフラグ, 1: 削除
 
             $table->timestamps();
 
