@@ -73,7 +73,7 @@ function Profile(props) {
         fetchUserProf()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
-
+    
     return (
         <Grid container className={classes.gridContainer} justify="center">
             <Grid item xs={12} sm={6}>
@@ -97,7 +97,7 @@ function Profile(props) {
                                             <RoomIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="都道府県" secondary={loginUser.value.prefecture} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="都道府県" secondary={loginUser.user.prefecture} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -106,7 +106,7 @@ function Profile(props) {
                                             <EventIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="生年月日" secondary={loginUser.value.birthday} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="生年月日" secondary={loginUser.user.birthday} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -115,7 +115,7 @@ function Profile(props) {
                                             <SupervisorAccountIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="性別" secondary={loginUser.value.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="性別" secondary={loginUser.user.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -124,7 +124,7 @@ function Profile(props) {
                                             <CommentIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="自己紹介" secondary={loginUser.value.comment} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="自己紹介" secondary={loginUser.user.comment} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     </List>
                                 </div>

@@ -90,7 +90,7 @@ export default function Login() {
                                     // ログインユーザのプロフィールを取得
                                     await dispatch(fetchAsyncGetProf(login.payload.id));
                                     // ログインユーザのマイページに遷移
-                                    history.push(`/user/${login.payload.id}`)
+                                    history.push(`/user/${login.payload.id}/profile`)
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
                                 }

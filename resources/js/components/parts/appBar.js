@@ -1,11 +1,13 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import {
     AppBar,
     Toolbar,
     IconButton,
     Typography,
     Badge,
+    Avatar,
     MenuItem,
     Menu
 } from "@material-ui/core";
@@ -23,6 +25,38 @@ import {
     fetchCredStart,
     fetchCredEnd,
 } from '../app/appSlice';
+
+/**
+ * ログインユーザのバッヂアイコン(material-ui転載)
+ */
+const StyledBadge = withStyles((theme) => ({
+    badge: {
+      backgroundColor: "#44b700",
+      color: "#44b700",
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      "&::after": {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius: "50%",
+        animation: "$ripple 1.2s infinite ease-in-out",
+        border: "1px solid currentColor",
+        content: '""',
+      },
+    },
+    "@keyframes ripple": {
+      "0%": {
+        transform: "scale(.8)",
+        opacity: 1,
+      },
+      "100%": {
+        transform: "scale(2.4)",
+        opacity: 0,
+      },
+    },
+}))(Badge);
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -258,9 +292,27 @@ function HcsAppBar() {
                                     <NotificationsIcon fontSize="large" />
                                 </Badge>
                             </IconButton>
+                            <IconButton
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                <StyledBadge
+                                    overlap="circle"
+                                    anchorOrigin={{
+                                        vertical: "bottom",
+                                        horizontal: "right",
+                                    }}
+                                    variant="dot"
+                                >
+                                    <Avatar alt="who?" src={localStorage.getItem('loginPhoto')} />{" "}
+                                </StyledBadge>
+                            </IconButton>
                         </div>
-                        : ''
-                    }
+                        : 
                         <IconButton
                             edge="end"
                             aria-label="account of current user"
@@ -271,6 +323,7 @@ function HcsAppBar() {
                         >
                             <AccountCircle fontSize="large" />
                         </IconButton>
+                    }
                     </div>
                     <div className={classes.sectionMobile}>
                         <IconButton

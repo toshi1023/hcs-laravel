@@ -38,7 +38,7 @@ export default function Message() {
         fetchMessages()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
-
+    console.log(messages)
     return (
         <>
             <Grid container className={classes.gridContainer} justify="center">

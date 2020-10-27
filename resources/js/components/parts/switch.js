@@ -5,8 +5,8 @@ import Switch from '@material-ui/core/Switch';
 
 export default function SwitchType(props) {
   const [state, setState] = React.useState({
-    checked: true,
-    checkedB: true,
+    checked: false,
+    checkedB: false,
   });
 
   const handleChange = (event) => {
@@ -27,6 +27,7 @@ export default function SwitchType(props) {
       <FormControlLabel
         control={
           <Switch
+            id="genderSwitch"
             checked={state.checkedB}
             onChange={handleChange}
             name="checkedB"

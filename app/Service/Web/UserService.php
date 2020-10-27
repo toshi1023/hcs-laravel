@@ -19,6 +19,28 @@ class UserService
   }
 
   /**
+   * 保存データを配列化にするメソッド
+   * 引数：保存データ
+   */
+  public function getArray($data)
+  {
+    // id
+    $data->id ? $data['id'] = $data->id : '';
+    // name
+    $data->name ? $data['name'] = $data->name : '';
+    // password
+    $data->password ? $data['password'] = $data->password : '';
+    // email
+    $data->email ? $data['email'] = $data->email : '';
+    // birthday
+    $data->birthday ? $data['birthday'] = $data->birthday : '';
+    // gender
+    $data->gender ? $data['gender'] = $data->gender : '';
+
+    return $data;
+  }
+
+  /**
    * Indexページ用データを取得するメソッド
    * 引数：検索用テーブル
    */
@@ -62,11 +84,13 @@ class UserService
   
   /* *
    * 新規ユーザ保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+   * 第一引数:登録データ, 第二引数:ファイル名
    * */
-  public function userSave($data, $filename, $updateData = null)
+  public function save($data, $filename)
   {
-    return $this->UserService->save($data, $filename, $updateData);
+    // $data = $this->getArray($data);
+    // return $this->UserService->save($data, $filename);
+    return  $this->getArray($data);
   }
 
   /*
