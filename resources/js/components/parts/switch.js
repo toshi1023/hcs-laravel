@@ -6,7 +6,7 @@ import Switch from '@material-ui/core/Switch';
 export default function SwitchType(props) {
   const [state, setState] = React.useState({
     checked: false,
-    checkedB: false,
+    checkedB: props.value,
   });
 
   const handleChange = (event) => {

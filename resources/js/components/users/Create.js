@@ -198,6 +198,7 @@ export default function UserCreate() {
                                             <SwitchType 
                                                 switchLabel={{true: '男性', false: '女性'}} 
                                                 checked={state.gender}
+                                                value={false}
                                             />
                                         </FormControl>
                                     </div>

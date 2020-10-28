@@ -10,9 +10,9 @@ import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
-    Card, CardContent, CardMedia, Typography, List, ListItem, Grid, Button,
-    ListItemText, ListItemAvatar, Avatar, Divider, Modal, Backdrop, Fade,
-    Input, InputLabel, InputAdornment, FormControl, FormLabel, Fab
+    Card, CardContent, CardMedia, List, ListItem, Grid, Button, TextField,
+    ListItemText, ListItemAvatar, Avatar, Modal, Backdrop, Fade,
+    Input, InputLabel, InputAdornment, FormControl, FormLabel, Fab,
  } from "@material-ui/core";
  import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
  import EventIcon from '@material-ui/icons/Event';
@@ -48,7 +48,8 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(2),
         marginTop: theme.spacing(5),
         marginButtom: theme.spacing(2),
-        height: 280
+        height: 280,
+        width: 350,
     },
     gridContainer: {
         paddingTop: "10px",
@@ -62,7 +63,7 @@ const useStyles = makeStyles(theme => ({
         width: 350,
     },
     formFont: {
-        fontSize: 14,
+        fontSize: 13,
     },
     modal: {
         display: 'flex',
@@ -210,12 +211,12 @@ function UserEdit(props) {
             <Grid item xs={12} sm={6}>
                 <Card className={classes.root}>
                     <Grid container  spacing={2}>
-                        <Grid item xs={8} sm={12}>
+                        <Grid item xs={12} sm={12}>
                             <Fab color="primary" aria-label="add">
                                 <SaveIcon style={{ fontSize: 'large' }} />
                             </Fab>
                         </Grid>
-                        <Grid item xs={8} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <CardMedia
                                 className={classes.cover}
                                 image={editedUser.value.users_photo_path}
@@ -223,7 +224,7 @@ function UserEdit(props) {
                                 onClick={handleOpen}
                             />
                         </Grid>
-                        <Grid item xs={8} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <div className={classes.details}>
                                 <CardContent className={classes.content}>
                                     <div className={styles.note}>
@@ -286,6 +287,7 @@ function UserEdit(props) {
                                                 <SwitchType 
                                                     switchLabel={{true: '男性', false: '女性'}} 
                                                     checked={state.gender}
+                                                    value={state.gender}
                                                 />
                                             </FormControl>
                                         </ListItem>
@@ -295,7 +297,25 @@ function UserEdit(props) {
                                                 <CommentIcon />
                                             </Avatar>
                                             </ListItemAvatar>
-                                            <ListItemText primary="自己紹介" secondary={editedUser.value.comment} classes={{secondary:classes.listItemText}} />
+                                            <FormControl className={classes.margin}>
+                                                <TextField
+                                                    id="comment"
+                                                    label="自己紹介"
+                                                    multiline
+                                                    rows={3}
+                                                    defaultValue={editedUser.value.comment}
+                                                    InputLabelProps={{
+                                                        classes: {
+                                                            root: classes.formFont,
+                                                        }
+                                                    }}
+                                                    InputProps={{
+                                                        classes: {
+                                                          input: classes.formFont,
+                                                        },
+                                                    }}
+                                                />
+                                            </FormControl>
                                         </ListItem>
                                         </List>
                                     </div>
