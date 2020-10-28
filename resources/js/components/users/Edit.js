@@ -12,10 +12,11 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
     Card, CardContent, CardMedia, Typography, List, ListItem, Grid, Button,
     ListItemText, ListItemAvatar, Avatar, Divider, Modal, Backdrop, Fade,
-    Input, InputLabel, InputAdornment, FormControl, FormLabel,
+    Input, InputLabel, InputAdornment, FormControl, FormLabel, Fab
  } from "@material-ui/core";
  import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
  import EventIcon from '@material-ui/icons/Event';
+ import SaveIcon from '@material-ui/icons/Save';
  import CommentIcon from '@material-ui/icons/Comment';
  import CancelIcon from '@material-ui/icons/Cancel';
 import RoomIcon from '@material-ui/icons/Room';
@@ -186,7 +187,7 @@ function UserEdit(props) {
                 >
                     <Fade in={open}>
                     <Grid container justify="center">
-                        <Grid item xs={12} sm={6} md={6} lg={6}>
+                        <Grid item xs={12} sm={6}>
                         <div className={classes.paper}>
                             <Grid container>
                                 <h2>画像の編集</h2>
@@ -208,92 +209,99 @@ function UserEdit(props) {
             </div>
             <Grid item xs={12} sm={6}>
                 <Card className={classes.root}>
-                    <Grid item xs={8} sm={6}>
-                        <CardMedia
-                            className={classes.cover}
-                            image={editedUser.value.users_photo_path}
-                            title={editedUser.value.users_photo_name}
-                            onClick={handleOpen}
-                        />
-                    </Grid>
-                    <Grid item xs={8} sm={6}>
-                        <div className={classes.details}>
-                            <CardContent className={classes.content}>
-                                <div className={styles.note}>
-                                    <List className={classes.list}>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                        <Avatar>
-                                            <EmojiEmotionsIcon />
-                                        </Avatar>
-                                        </ListItemAvatar>
-                                        <FormControl className={classes.margin}>
-                                            <InputLabel htmlFor="userName" className={classes.formFont}>ニックネーム</InputLabel>
-                                            <Input
-                                                id="userName"
-                                                startAdornment={
-                                                    <InputAdornment position="start" />
-                                                }
-                                                className={classes.formFont}
-                                                value={editedUser.value.name}
-                                                required
-                                                onChange={setName}
-                                            />
-                                        </FormControl>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                        <Avatar>
-                                            <RoomIcon />
-                                        </Avatar>
-                                        </ListItemAvatar>
-                                        <FormControl className={classes.margin}>
-                                            <div onBlur={setPrefecture}>
-                                                <PrefectureSelects 
-                                                    values={prefectures.prefectures} 
-                                                    labelFlg={editedUser.value.prefecture ? false : undefined} 
-                                                    fontSize={12}
+                    <Grid container  spacing={2}>
+                        <Grid item xs={8} sm={12}>
+                            <Fab color="primary" aria-label="add">
+                                <SaveIcon style={{ fontSize: 'large' }} />
+                            </Fab>
+                        </Grid>
+                        <Grid item xs={8} sm={6}>
+                            <CardMedia
+                                className={classes.cover}
+                                image={editedUser.value.users_photo_path}
+                                title={editedUser.value.users_photo_name}
+                                onClick={handleOpen}
+                            />
+                        </Grid>
+                        <Grid item xs={8} sm={6}>
+                            <div className={classes.details}>
+                                <CardContent className={classes.content}>
+                                    <div className={styles.note}>
+                                        <List className={classes.list}>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                            <Avatar>
+                                                <EmojiEmotionsIcon />
+                                            </Avatar>
+                                            </ListItemAvatar>
+                                            <FormControl className={classes.margin}>
+                                                <InputLabel htmlFor="userName" className={classes.formFont}>ニックネーム</InputLabel>
+                                                <Input
+                                                    id="userName"
+                                                    startAdornment={
+                                                        <InputAdornment position="start" />
+                                                    }
+                                                    className={classes.formFont}
+                                                    value={editedUser.value.name}
+                                                    required
+                                                    onChange={setName}
                                                 />
-                                            </div>
-                                        </FormControl>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                        <Avatar>
-                                            <EventIcon />
-                                        </Avatar>
-                                        </ListItemAvatar>
-                                        <FormControl className={classes.margin}>
-                                            <FormLabel style={{fontSize: 12}} display="block">生年月日</FormLabel>
-                                            {dateSelects()}
-                                        </FormControl>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                        <Avatar>
-                                            <SupervisorAccountIcon />
-                                        </Avatar>
-                                        </ListItemAvatar>
-                                        <FormControl className={classes.margin}>
-                                            <FormLabel style={{fontSize: 12}} display="block">性別</FormLabel>
-                                            <SwitchType 
-                                                switchLabel={{true: '男性', false: '女性'}} 
-                                                checked={state.gender}
-                                            />
-                                        </FormControl>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                        <Avatar>
-                                            <CommentIcon />
-                                        </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary="自己紹介" secondary={editedUser.value.comment} classes={{secondary:classes.listItemText}} />
-                                    </ListItem>
-                                    </List>
-                                </div>
-                            </CardContent>
-                        </div>
+                                            </FormControl>
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                            <Avatar>
+                                                <RoomIcon />
+                                            </Avatar>
+                                            </ListItemAvatar>
+                                            <FormControl className={classes.margin}>
+                                                <div onBlur={setPrefecture}>
+                                                    <PrefectureSelects 
+                                                        values={prefectures.prefectures} 
+                                                        labelFlg={editedUser.value.prefecture ? false : undefined} 
+                                                        fontSize={13}
+                                                    />
+                                                </div>
+                                            </FormControl>
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                            <Avatar>
+                                                <EventIcon />
+                                            </Avatar>
+                                            </ListItemAvatar>
+                                            <FormControl className={classes.margin}>
+                                                <FormLabel style={{fontSize: 11}} display="block">生年月日</FormLabel>
+                                                {dateSelects({fontSize:13})}
+                                            </FormControl>
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                            <Avatar>
+                                                <SupervisorAccountIcon />
+                                            </Avatar>
+                                            </ListItemAvatar>
+                                            <FormControl className={classes.margin}>
+                                                <FormLabel style={{fontSize: 11}} display="block">性別</FormLabel>
+                                                <SwitchType 
+                                                    switchLabel={{true: '男性', false: '女性'}} 
+                                                    checked={state.gender}
+                                                />
+                                            </FormControl>
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                            <Avatar>
+                                                <CommentIcon />
+                                            </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary="自己紹介" secondary={editedUser.value.comment} classes={{secondary:classes.listItemText}} />
+                                        </ListItem>
+                                        </List>
+                                    </div>
+                                </CardContent>
+                            </div>
+                        </Grid>
                     </Grid>
                 </Card>
             </Grid>

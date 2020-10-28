@@ -10,13 +10,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     paddingLeft: 5,
   },
-  selectLabel: {
-    paddingLeft: 15,
-    fontSize: 15
-  },
   selectBox: {
     width: 70,
-    fontSize: 15,
     paddingLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
@@ -155,8 +150,8 @@ export default function dateSelects(props) {
           <Grid item xs={12} sm={4}>
             <Select
               native
-              // value={state.year}
               onChange={handleChangeYear}
+              style={{ fontSize: props.fontSize }}
               className={classes.selectBox}
               id='selectYear'
             >
@@ -168,8 +163,8 @@ export default function dateSelects(props) {
           <Grid item xs={12} sm={4}>
             <Select
               native
-              // value={state.month}
               onChange={handleChangeMonth}
+              style={{ fontSize: props.fontSize }}
               className={classes.selectBox}
               id='selectMonth'
             >
@@ -181,8 +176,8 @@ export default function dateSelects(props) {
           <Grid item xs={12} sm={4}>
             <Select
               native
-              // value={state.day}
               onChange={handleChangeDay}
+              style={{ fontSize: props.fontSize }}
               className={classes.selectBox}
               id='selectDay'
             >

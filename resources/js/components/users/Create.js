@@ -189,7 +189,7 @@ export default function UserCreate() {
                                     <div onBlur={setBirthday}>
                                         <FormControl className={classes.margin}>
                                             <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
-                                            {dateSelects()}
+                                            {dateSelects({fontSize:15})}
                                         </FormControl>
                                     </div>
                                     <div onClick={setGender}>
