@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
         fontSize: "15px"
     },
     button: {
-        marginLeft: '0 0 0 auto',
+        marginLeft: 'auto',
     },
 }));
 
@@ -81,19 +81,19 @@ function UserShow(props) {
             <Grid item xs={12} sm={6}>
                 <Card className={classes.root}>
                     <Grid container  spacing={2}>
-                        <Grid item xs={8} sm={12}>
+                        <Grid item xs={12} sm={12}>
                             <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUsers.value)}>
                                 <EditIcon />
                             </Fab>
                         </Grid>
-                        <Grid item xs={8} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <CardMedia
                                 className={classes.cover}
                                 image={selectedUsers.value.users_photo_path}
                                 title={selectedUsers.value.users_photo_name}
                             />
                         </Grid>
-                        <Grid item xs={8} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <div className={classes.details}>
                                 <CardContent className={classes.content}>
                                     <div className={styles.note}>
