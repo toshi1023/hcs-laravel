@@ -11,11 +11,9 @@ const useStyles = makeStyles((theme) => ({
   },
   selectLabel: {
     paddingLeft: 15,
-    fontSize: 15
   },
   selectBox: {
     width: 120,
-    fontSize: 15,
     paddingLeft: theme.spacing(2),
   },
   selectEmpty: {
@@ -55,12 +53,13 @@ export default function PrefectureSelects(props) {
       <FormControl className={classes.formControl}>
         {
           // ラベルの表示有無を設定
-          labelFlg ? <InputLabel htmlFor="prefecture" className={classes.selectLabel}>都道府県</InputLabel> : ''
+          labelFlg ? <InputLabel htmlFor="prefecture" style={{ fontSize: props.fontSize }} className={classes.selectLabel}>都道府県</InputLabel> : ''
         }
         <Select
           native
           value={state.prefecture}
           onChange={handleChange}
+          style={{ fontSize: props.fontSize }} 
           className={classes.selectBox}
           id="prefecture"
         >

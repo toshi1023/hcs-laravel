@@ -78,7 +78,7 @@ function Article() {
     return (
         <>
             <div onBlur={getSearchPrefecture}>
-                <PrefectureSelects values={articles.prefectures} />
+                <PrefectureSelects values={articles.prefectures} fontSize={15} />
             </div>
             <Grid container className={classes.gridContainer} justify="center">
                 {renderArticles()}

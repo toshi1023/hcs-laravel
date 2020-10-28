@@ -252,6 +252,7 @@ function UserEdit(props) {
                                                 <PrefectureSelects 
                                                     values={prefectures.prefectures} 
                                                     labelFlg={editedUser.value.prefecture ? false : undefined} 
+                                                    fontSize={12}
                                                 />
                                             </div>
                                         </FormControl>
