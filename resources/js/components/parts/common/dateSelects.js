@@ -53,7 +53,7 @@ export default function dateSelects(props) {
   // (年)1950年から今年までのoption要素を生成
   const selectYear = () => {
       let yearValue = []
-      for(var i = state.year; i >= 1950; i--) {
+      for(var i = date.getFullYear(); i >= 1950; i--) {
         yearValue.push(i)
       }
       return yearValue
