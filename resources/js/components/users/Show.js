@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
     Card, CardContent, CardMedia, Typography, List, ListItem, 
-    ListItemText, ListItemAvatar, Avatar, Divider, Fab
+    ListItemText, ListItemAvatar, Avatar, Divider, Fab, Tooltip
  } from "@material-ui/core";
  import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
  import EventIcon from '@material-ui/icons/Event';
@@ -57,6 +57,9 @@ const useStyles = makeStyles(theme => ({
     button: {
         marginLeft: 'auto',
     },
+    tooltip: {
+        fontSize: 14,
+    },
 }));
 
 function UserShow(props) {
@@ -79,22 +82,24 @@ function UserShow(props) {
 
     return (
         <Grid container className={classes.gridContainer} justify="center">
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12} md={6}>
                 <Card className={classes.root}>
                     <Grid container  spacing={2}>
                         <Grid item xs={12} sm={12}>
-                            <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUsers.value)}>
-                                <EditIcon />
-                            </Fab>
+                            <Tooltip title="編集" classes={{tooltip: classes.tooltip}}>
+                                <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUsers.value)}>
+                                    <EditIcon />
+                                </Fab>
+                            </Tooltip>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12} md={6}>
                             <CardMedia
                                 className={classes.cover}
                                 image={selectedUsers.value.users_photo_path}
                                 title={selectedUsers.value.users_photo_name}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12} md={6}>
                             <div className={classes.details}>
                                 <CardContent className={classes.content}>
                                     <div className={styles.note}>

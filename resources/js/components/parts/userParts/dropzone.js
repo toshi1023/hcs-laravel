@@ -163,7 +163,7 @@ export default function ProfileDropzone(props) {
   const handleDelete = () => {
     setFiles([])
   }
-
+  
   return (
       <>
         <Grid container>
@@ -184,7 +184,12 @@ export default function ProfileDropzone(props) {
                 </div>
             </Grid>
         </Grid>
-          <Button variant="contained" color="primary" className={classes.update} onClick={handleDelete}>更新</Button>
+        {
+          // ユーザの新規作成の時は表示しない
+          location.pathname == '/users/create' 
+          ? ''
+          : <Button variant="contained" color="primary" className={classes.update} onClick={handleDelete}>更新</Button>
+        }
           <Button variant="contained" color="secondary" className={classes.delete} onClick={handleDelete}>削除</Button>
         <Grid container>
             <Grid item xs={8}>

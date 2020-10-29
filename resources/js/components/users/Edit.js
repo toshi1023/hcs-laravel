@@ -11,7 +11,7 @@ import _ from "lodash";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
     Card, CardContent, CardMedia, List, ListItem, Grid, Button, TextField,
-    ListItemText, ListItemAvatar, Avatar, Modal, Backdrop, Fade,
+    ListItemAvatar, Avatar, Modal, Backdrop, Fade, Tooltip,
     Input, InputLabel, InputAdornment, FormControl, FormLabel, Fab,
  } from "@material-ui/core";
  import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
@@ -79,6 +79,9 @@ const useStyles = makeStyles(theme => ({
     },
     closeIcon: {
         marginLeft: 'auto',
+    },
+    tooltip: {
+        fontSize: 14,
     },
 }));
 
@@ -197,7 +200,7 @@ function UserEdit(props) {
                 >
                     <Fade in={open}>
                     <Grid container justify="center">
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12} md={6}>
                         <div className={classes.paper}>
                             <Grid container>
                                 <h2>画像の編集</h2>
@@ -207,7 +210,7 @@ function UserEdit(props) {
                             </Grid>
                             {/* ドラッグ&ドロップ */}
                             <Grid container justify="center">
-                                <Grid item xs={12} sm={8}>
+                                <Grid item xs={12} sm={12} md={8}>
                                     <ProfileDropzone /> 
                                 </Grid>
                             </Grid>
@@ -217,15 +220,17 @@ function UserEdit(props) {
                     </Fade>
                 </Modal>
             </div>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12} md={6}>
                 <Card className={classes.root}>
                     <Grid container  spacing={2}>
                         <Grid item xs={12} sm={12}>
-                            <Fab color="primary" aria-label="add">
-                                <SaveIcon style={{ fontSize: 'large' }} />
-                            </Fab>
+                            <Tooltip title="保存" classes={{tooltip: classes.tooltip}}>
+                                <Fab color="primary" aria-label="add">
+                                    <SaveIcon style={{ fontSize: 'large' }} />
+                                </Fab>
+                            </Tooltip>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12} md={6}>
                             <CardMedia
                                 className={classes.cover}
                                 image={editedUser.value.users_photo_path}
@@ -233,7 +238,7 @@ function UserEdit(props) {
                                 onClick={handleOpen}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12} md={6}>
                             <div className={classes.details}>
                                 <CardContent className={classes.content}>
                                     <div className={styles.note}>

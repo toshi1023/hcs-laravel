@@ -158,9 +158,10 @@ function HcsAppBar() {
             setAnchorEl(null);
             handleMobileMenuClose();
             history.push('/login');
-            // localStorageのTokenとIDを削除(ログアウト処理)
+            // localStorageのTokenとID、Photoを削除(ログアウト処理)
             localStorage.removeItem("loginId");
             localStorage.removeItem("localToken");
+            localStorage.removeItem("loginPhoto");
             // ロード終了
             if(!localStorage.getItem('localToken')) {
                 await dispatch(fetchCredEnd());
