@@ -201,8 +201,8 @@ function UserEdit(props) {
                         <div className={classes.paper}>
                             <Grid container>
                                 <h2>画像の編集</h2>
-                                <Button className={classes.closeIcon}>
-                                    <CancelIcon onClick={handleClose} />
+                                <Button className={classes.closeIcon} onClick={handleClose}>
+                                    <CancelIcon />
                                 </Button>
                             </Grid>
                             {/* ドラッグ&ドロップ */}

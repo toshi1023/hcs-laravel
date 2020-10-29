@@ -29,12 +29,18 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
                                  'receivers.users_photo_path as receiver_photo',
                                  'senders.gender as sender_gender', 
                              )
-                             ->where('messages.delete_flg', '=', 0);
-        
+                             ->where(function($query) use($conditions){
+                                $query->where('messages.delete_flg', '=', 0)
+                                      ->orWhere('messages.user_id_sender', '=', $conditions['messages.user_id_sender'])
+                                      ->orWhere('messages.user_id_receiver', '=', $conditions['messages.user_id_receiver']);
+                            });
+                            //  ->where('messages.delete_flg', '=', 0);
+
         // 検索条件が設定されている場合は検索を実行
         if(!is_null($conditions)) {
             $query = $this->getWhereQuery(null, $conditions, $query);
         }
+        dd($query->toSql());
         return $query;
     }
 
