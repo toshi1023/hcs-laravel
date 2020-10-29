@@ -221,14 +221,7 @@ export default function UserCreate() {
                                 <CardContent>
                                     <div>
                                         <FormControl>
-                                            {
-                                                // 作成と編集でボタン表記と処理を切り分け
-                                                editedUser.id === "" ? (
-                                                    <Button variant="contained" color="primary" className={classes.button} onClick={createClicked}>作成する</Button>
-                                                ) : (
-                                                    <Button variant="contained" color="primary" className={classes.button} onClick={updateClicked}>更新する</Button>
-                                                )
-                                            }
+                                            <Button variant="contained" color="primary" className={classes.button} onClick={createClicked}>作成する</Button>
                                         </FormControl>
                                     </div>
                                 </CardContent>

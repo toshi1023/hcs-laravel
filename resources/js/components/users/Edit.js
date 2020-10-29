@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(2),
         marginTop: theme.spacing(5),
         marginButtom: theme.spacing(2),
-        height: 280,
+        height: 300,
         width: 350,
         border: '2px #DDDDDD dashed',
     },
