@@ -4,7 +4,7 @@ import {Input, InputLabel, InputAdornment, FormControl, Button, Grid, Card, Card
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import styled from "styled-components";
 import { Link, useHistory } from 'react-router-dom';
-import SwitchType from '../parts/switch';
+import SwitchType from '../parts/common/switch';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import { useDispatch } from 'react-redux';

@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader,CardContent} from '@material-ui/core';
 import styled from "styled-components";
 import ProfileDropzone from '../parts/userParts/dropzone';
-import SwitchType from '../parts/switch';
+import SwitchType from '../parts/common/switch';
 import dateSelects from '../parts/common/dateSelects';
 import {
     fetchAsyncCreate, 

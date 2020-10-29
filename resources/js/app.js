@@ -23,7 +23,7 @@ import UserEdit from './components/users/Edit';
 import Profile from './components/users/Profile';
 import UserCreate from './components/users/Create';
 import Message from './components/messages/Message';
-import HcsAppBar from './components/parts/appBar';
+import HcsAppBar from './components/parts/common/appBar';
 import LoadItem from './components/parts/common/loadItem';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';

@@ -20,11 +20,11 @@ import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoggedInUser, selectUser, fetchAsyncGetProf, fetchAsyncGet } from "../users/userSlice";
+import { selectLoggedInUser, selectUser, fetchAsyncGetProf, fetchAsyncGet } from "../../users/userSlice";
 import {
     fetchCredStart,
     fetchCredEnd,
-} from '../app/appSlice';
+} from '../../app/appSlice';
 
 /**
  * ログインユーザのバッヂアイコン(material-ui転載)

@@ -4,7 +4,7 @@ import { selectEditedUser, selectPrefectures, fetchAsyncGetPrefectures } from ".
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import dateSelects from '../parts/common/dateSelects';
-import SwitchType from '../parts/switch';
+import SwitchType from '../parts/common/switch';
 import ProfileDropzone from '../parts/userParts/dropzone';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -50,6 +50,7 @@ const useStyles = makeStyles(theme => ({
         marginButtom: theme.spacing(2),
         height: 280,
         width: 350,
+        border: '2px #DDDDDD dashed',
     },
     gridContainer: {
         paddingTop: "10px",
@@ -95,6 +96,9 @@ function UserEdit(props) {
         email: editedUser.value.email,
         name: editedUser.value.name,
         birthday: editedUser.value.birthday,
+        birthdayYear: editedUser.value.birthday.substr(0, 4),   // 生年月日を年の値だけ取得
+        birthdayMonth: editedUser.value.birthday.substr(5, 2),  // 生年月日を月の値だけ取得
+        birthdayDay: editedUser.value.birthday.substr(8, 2),    // 生年月日を日の値だけ取得
         gender: editedUser.value.gender,
         comment: editedUser.value.comment,
     });
@@ -110,7 +114,7 @@ function UserEdit(props) {
                 // ユーザの登録している都道府県が選択されている状態でセット
                 document.getElementById("prefecture").value = editedUser.value.prefecture
                 // ユーザの登録している生年月日が選択されている状態でセット
-                // document.getElementById("selectYear").value = editedUser.value.birthday
+                setBirthday(true)
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -152,12 +156,17 @@ function UserEdit(props) {
         })
     }
     // 生年月日の取得
-    const setBirthday = () => {
+    const setBirthday = (flg) => {
+        if(state.birthdayYear && state.birthdayMonth && state.birthdayDay && flg) {
+            document.getElementById("selectYear").value = state.birthdayYear
+            document.getElementById("selectMonth").value = state.birthdayMonth
+            document.getElementById("selectDay").value = state.birthdayDay
+        }
         let year = document.getElementById("selectYear").value
         let month = document.getElementById("selectMonth").value
         let day = document.getElementById("selectDay").value
         setState({...state, birthday: `${year}-${month}-${day}`})
-        return `${year}-${month}-${day}`
+        console.log(state)
     }
     // Modal設定
     const [open, setOpen] = React.useState(false);
@@ -271,7 +280,7 @@ function UserEdit(props) {
                                                 <EventIcon />
                                             </Avatar>
                                             </ListItemAvatar>
-                                            <FormControl className={classes.margin}>
+                                            <FormControl className={classes.margin} onBlur={() => setBirthday(false)}>
                                                 <FormLabel style={{fontSize: 11}} display="block">生年月日</FormLabel>
                                                 {dateSelects({fontSize:13})}
                                             </FormControl>

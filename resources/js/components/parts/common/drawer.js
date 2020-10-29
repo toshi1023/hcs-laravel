@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import {
     fetchCredStart,
     fetchCredEnd,
-} from '../app/appSlice';
+} from '../../app/appSlice';
 
 const useStyles = makeStyles({
   list: {

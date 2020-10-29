@@ -53,7 +53,7 @@ export default function dateSelects(props) {
   // (年)1950年から今年までのoption要素を生成
   const selectYear = () => {
       let yearValue = []
-      for(var i = 1950; i <= state.year; i++) {
+      for(var i = state.year; i >= 1950; i--) {
         yearValue.push(i)
       }
       return yearValue
@@ -62,8 +62,11 @@ export default function dateSelects(props) {
   // (月)1月から12月までのoption要素を生成
   const selectMonth = () => {
     let monthValue = []
+    let number = null
     for(var j = 1; j <= 12; j++ ) {
-      monthValue.push(j)
+      // 数値の足りない桁を0で埋める
+      number = ('00' + j).slice( -2 )
+      monthValue.push(number)
     }
     return monthValue
   }
@@ -74,11 +77,14 @@ export default function dateSelects(props) {
     // 今月の値を取得
     let thisMonth = state.month
     let dayValue = []
+    let number = null
 
     // 2月の場合
     if(thisMonth == 2) {
-      for(var k = 1; k <= 28; k++ ) { 
-        dayValue.push(k)
+      for(var k = 1; k <= 29; k++ ) { 
+        // 数値の足りない桁を0で埋める
+        number = ('00' + k).slice( -2 )
+        dayValue.push(number)
       }
       return dayValue
     }
@@ -86,13 +92,15 @@ export default function dateSelects(props) {
     if(thisMonth < 8) {
       if(thisMonth % 2 == 0) {
         for(var k = 1; k <= 30; k++ ) { 
-          dayValue.push(k)
+          number = ('00' + k).slice( -2 )
+          dayValue.push(number)
         }
         return dayValue
       }
       if(thisMonth % 2 != 0) {
         for(var k = 1; k <= 31; k++ ) { 
-          dayValue.push(k)
+          number = ('00' + k).slice( -2 )
+          dayValue.push(number)
         }
         return dayValue
       }
@@ -101,13 +109,15 @@ export default function dateSelects(props) {
     if(thisMonth >= 8) {
       if(thisMonth % 2 == 0) {
         for(var k = 1; k <= 31; k++ ) { 
-          dayValue.push(k)
+          number = ('00' + k).slice( -2 )
+          dayValue.push(number)
         }
         return dayValue
       }
       if(thisMonth % 2 != 0) {
         for(var k = 1; k <= 30; k++ ) { 
-          dayValue.push(k)
+          number = ('00' + k).slice( -2 )
+          dayValue.push(number)
         }
         return dayValue
       }
