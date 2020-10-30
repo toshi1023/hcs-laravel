@@ -47,11 +47,18 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
                               ->where('user_id_sender', '=', $conditions['messages.user_id'])
                               ->where('delete_flg', '=', 0);
 
-        $query = $this->model->select('*', 'user_id_receiver as user_id')
+        $queryA = $this->model->select('*', 'user_id_receiver as user_id')
                              ->where('user_id_sender', '=', $conditions['messages.user_id'])
                              ->where('delete_flg', '=', 0)
                              ->union($subQuery)
                              ->orderBy('updated_at', 'desc');
+
+        $query = $this->model->selectRaw('distinct(messangers.user_id) AS user_id')
+                             ->addSelect(\DB::raw('max(messangers.updated_at) AS latest'))
+                             ->from(\DB::raw('('.$queryA->toSql().') AS messangers'))
+                             ->union($queryA)
+                             ->groupByRaw('messangers.user_id');
+
         return $query;
     }
 
@@ -62,12 +69,15 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
         // 送受信のユーザ情報をSQLに変換して取得
         $subQuery = $this->getMessangerQuery($conditions)->toSql();
         // usersテーブルの値も結合して取得
-        $query = $this->model->selectRaw('distinct(messangers.user_id)')
-                             ->addSelect(\DB::raw('max(messangers.updated_at)'))
-                             ->addSelect('messangers.id', 'messangers.content', 'users.name', 'users.users_photo_name', 'users.users_photo_path')
-                             ->from(\DB::raw('('.$subQuery.') AS messangers'))
-                             ->leftjoin('users', 'users.id', '=', 'messangers.user_id')
-                             ->groupByRaw('messangers.user_id');
+        $query = $this->model->addSelect('messangersA.user_id', 'messangersA.content', 'users.name', 'users.users_photo_name', 'users.users_photo_path')
+                             ->from(\DB::raw('('.$subQuery.') AS messangersA'))
+                             ->leftjoin('users', 'users.id', '=', 'messangersA.user_id');
+        // $query = $this->model->selectRaw('distinct(messangers.user_id)')
+        //                      ->addSelect(\DB::raw('max(messangers.updated_at)'))
+        //                      ->addSelect('messangers.id', 'messangers.content', 'users.name', 'users.users_photo_name', 'users.users_photo_path')
+        //                      ->from(\DB::raw('('.$subQuery.') AS messangers'))
+        //                      ->leftjoin('users', 'users.id', '=', 'messangers.user_id')
+        //                      ->groupByRaw('messangers.user_id');
 
         return $query;
 
