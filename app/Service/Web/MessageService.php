@@ -26,7 +26,7 @@ class MessageService
   {
     if(is_null($table)) {
       // ログインユーザのメッセージを全て取得
-      return $messages = $this->MessageService->getBaseData($conditions)->get();
+      return $messages = $this->MessageService->getIndexQuery($conditions)->get();
 
     }
     // 指定したテーブルのデータをソートして取得

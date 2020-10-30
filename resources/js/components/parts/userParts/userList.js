@@ -12,6 +12,7 @@ import {
     IconButton
 } from "@material-ui/core";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import ReplyIcon from '@material-ui/icons/Reply';
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
 
@@ -40,13 +41,14 @@ const useStyles = makeStyles(theme => ({
 export default function UserList(props) {
     const classes = useStyles();
     const [checked, setChecked] = React.useState([1]);
+    const [reply, setReply] = React.useState([1]);
     // selectedUserのstateを変数に代入
     const selectedUsers = useSelector(selectSelectedUser);
     const dispatch = useDispatch();
     // ページ遷移の関数をセット
     const history = useHistory();
 
-    const handleToggle = value => () => {
+    const handleToggleAdd = value => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
 
@@ -58,6 +60,19 @@ export default function UserList(props) {
 
         setChecked(newChecked);
     };
+
+    const handleToggleReply = (value) => () => {
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+    
+        if (currentIndex === -1) {
+          newChecked.push(value);
+        } else {
+          newChecked.splice(currentIndex, 1);
+        }
+    
+        setReply(newChecked);
+      };
 
     // 詳細データの管理用stateを更新
     const handleSetUser = value => {
@@ -99,11 +114,21 @@ export default function UserList(props) {
                             />
                             <ListItemSecondaryAction>
                                 <IconButton
+                                    style={{ backgroundColor: "#d0ddf5", marginRight: 5 }}
+                                >
+                                    <ReplyIcon
+                                        edge="end"
+                                        onChange={handleToggleReply(value.id)}
+                                        inputProps={{ 'aria-labelledby': value.id }}
+                                        className={classes.icon}
+                                    />
+                                </IconButton>
+                                <IconButton
                                     style={{ backgroundColor: "#d0ddf5" }}
                                 >
                                     <PersonAddIcon
                                         edge="end"
-                                        onChange={handleToggle(value.id)}
+                                        onChange={handleToggleAdd(value.id)}
                                         inputProps={{
                                             "aria-labelledby": value.id
                                         }}

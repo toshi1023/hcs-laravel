@@ -24,11 +24,10 @@ class MessageController extends Controller
     {   
         // 検索条件のセット
         $conditions = [];
-        if ($request->input('query')) { $conditions['messages.user_id_receiver'] = $request->input('query'); }
-        if ($request->input('query')) { $conditions['messages.user_id_sender'] = $request->input('query'); }
-        // dd($conditions);
+        if ($request->input('query')) { $conditions['messages.user_id'] = $request->input('query'); }
+        
         $messages = $this->database->getIndex(null, $conditions);
-        dd($messages);
+
         return response()->json([
             'messages' => $messages,
         ],200, [], JSON_UNESCAPED_UNICODE);
