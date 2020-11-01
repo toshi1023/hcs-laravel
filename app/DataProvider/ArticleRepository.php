@@ -47,6 +47,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         if(!is_null($conditions)) {
             $query = $this->getWhereQuery(null, $conditions, $query);
         }
+        
         return $query;
     }
 

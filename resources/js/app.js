@@ -17,6 +17,7 @@ import ReactDOM from 'react-dom';
 import Login from './components/users/Login';
 import Home from './components/home/Home';
 import Article from './components/articles/Index';
+import MyArticle from './components/articles/MyArticle';
 import User from './components/users/Index';
 import UserShow from './components/users/Show';
 import UserEdit from './components/users/Edit';
@@ -78,10 +79,11 @@ function App() {
             <Route exact path="/login" render={props => <Login {...props} />} />
             <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
             <Route exact path="/articles" render={props => <Article {...props} />} />
+            <Route exact path="/articles/mypage" render={props => <MyArticle {...props} />} />
             <Route exact path="/users" render={props => <User {...props} />} />
             <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
             <Route exact path="/users/:id" render={props => <UserShow {...props} />} />
-            <Route exact path="/users/:id/profile" render={props => <Profile {...props} />} />
+            <Route exact path="/users/:id/mypage" render={props => <Profile {...props} />} />
             <Route exact path="/users/:id/edit" render={props => <UserEdit {...props} />} />
             <Route exact path="/messages" render={props => <Message {...props} />} />
           </Switch>

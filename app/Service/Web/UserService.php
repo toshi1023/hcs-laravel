@@ -42,13 +42,16 @@ class UserService
 
   /**
    * Indexページ用データを取得するメソッド
-   * 引数：検索用テーブル
+   * 引数1：テーブル名, 引数2：検索条件
    */
-  public function getIndex($table=null)
+  public function getIndex($table=null, $conditions=null)
   {
-    // 全ユーザデータを更新日時順にソートして取得
-    // dd($this->UserService->getQuery([], ['articles' => 'user_id'])->get());
-    return $this->UserService->getQuery($table)->get();
+    if(is_null($table)) {
+      // ユーザ情報の取得
+      return $this->UserService->getBaseData($conditions)->get();
+    }
+    // 指定したテーブルのデータをソートして取得
+    return $this->UserService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
 
   }
 

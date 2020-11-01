@@ -19,14 +19,46 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserSearch() {
   const classes = useStyles();
+  const [state, setState] = React.useState({
+    userName: null,
+  })
+
+  const handleChange = (event) => {
+    setState({
+      ...state,
+      userName: event.target.value,
+    })
+  }
+
+  // 検索条件をもとに記事の絞り込み
+  const getSearchUser = () => {
+    // 非同期の関数を定義
+    const fetchUserSearch = async () => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+        // ユーザ名の入力情報をセット
+        let user = document.getElementById("userSearch").value
+        console.log(document.getElementById("userSearch").value)
+        // 記事一覧を取得
+        const resultSearch = await dispatch(fetchAsyncGet(user))
+        if (fetchAsyncGet.fulfilled.match(resultSearch)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());  
+    }
+    // 上で定義した非同期の関数を実行
+    fetchUserSearch()
+  }
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <div>
         <TextField
-          id="standard-textarea"
+          id="userSearch"
           label="Search"
-          placeholder="UserSearch"
+          placeholder="ユーザ名で検索"
           multiline
           // SearchIconをフィールドに埋め込み
           InputProps={{
@@ -45,6 +77,7 @@ export default function UserSearch() {
           InputLabelProps={{
               style: {fontSize: 15}
           }}
+          onChange={handleChange}
         />
       </div>
     </form>

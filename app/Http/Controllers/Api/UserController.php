@@ -24,12 +24,13 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-      // return response()->json([
-      //   'request' => $request,
-      // ],200, [], JSON_UNESCAPED_UNICODE);
-      // 全ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex();
+      /// 検索条件のセット
+      $conditions = [];
+      if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
 
+      // 全ユーザデータを更新日時順にソートして取得
+      $users = $this->database->getIndex(null, $conditions);
+      // dd($users);
       return response()->json([
         'users' => $users, 
       ],200, [], JSON_UNESCAPED_UNICODE);

@@ -131,7 +131,7 @@ function HcsAppBar() {
     };
     // My記事メニューをクローズ
     const handleMyArticleClose = () => {
-        // history.push("");
+        history.push("/articles/mypage");
         setAnchorEl(null);
         handleMobileMenuClose();
     };

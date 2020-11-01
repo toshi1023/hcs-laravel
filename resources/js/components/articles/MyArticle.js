@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     
   }));
 
-function Article() {
+function MyArticle() {
     const classes = useStyles();
 
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
@@ -29,7 +29,7 @@ function Article() {
             // Loading開始
             await dispatch(fetchCredStart())
             // 記事一覧を取得
-            const resultReg = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
+            const resultReg = await dispatch(fetchAsyncGet({prefecture: '', id: localStorage.getItem('loginId')}))
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
@@ -55,7 +55,7 @@ function Article() {
                 prefecture = ''
             }
             // 記事一覧を取得
-            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, id: ''}))
+            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, id: localStorage.getItem('loginId')}))
             if (fetchAsyncGet.fulfilled.match(resultSearch)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
@@ -87,4 +87,4 @@ function Article() {
     );
 }
 
-export default Article;
+export default MyArticle;

@@ -121,12 +121,6 @@ export default function UserCreate() {
         dispatch(editUser({ id: 0, title: '' }))
     }
 
-    // 更新(stateのeditedUserの値をApiで送信)
-    const updateClicked = () => {
-        dispatch(fetchAsyncUpdate(editedUser))
-        dispatch(editUser({ id: 0, title: '' }))
-    }
-
   return (
     <>
         <div className={classes.root}>

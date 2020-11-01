@@ -12,6 +12,7 @@ import {
     IconButton
 } from "@material-ui/core";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import HowToRegIcon from '@material-ui/icons/HowToReg';
 import ReplyIcon from '@material-ui/icons/Reply';
 import _ from "lodash";
 import { useHistory } from "react-router-dom";
@@ -32,15 +33,20 @@ const useStyles = makeStyles(theme => ({
         width: theme.spacing(7),
         height: theme.spacing(7)
     },
-    icon: {
+    addIcon: {
         color: "blue",
         fontSize: 30
-    }
+    },
+    successIcon: {
+        color: "green",
+        fontSize: 30
+    },
 }));
 
 export default function UserList(props) {
     const classes = useStyles();
     const [checked, setChecked] = React.useState([1]);
+    const [add, setAdd] = React.useState(false);
     const [reply, setReply] = React.useState([1]);
     // selectedUserのstateを変数に代入
     const selectedUsers = useSelector(selectSelectedUser);
@@ -73,6 +79,14 @@ export default function UserList(props) {
     
         setReply(newChecked);
       };
+
+    const handleAdd = () => {
+        if(add) {
+            setAdd(false)
+        } else {
+            setAdd(true)
+        }
+    }
 
     // 詳細データの管理用stateを更新
     const handleSetUser = value => {
@@ -120,20 +134,34 @@ export default function UserList(props) {
                                         edge="end"
                                         onChange={handleToggleReply(value.id)}
                                         inputProps={{ 'aria-labelledby': value.id }}
-                                        className={classes.icon}
+                                        className={classes.addIcon}
                                     />
                                 </IconButton>
                                 <IconButton
-                                    style={{ backgroundColor: "#d0ddf5" }}
+                                    style={
+                                        add ? { backgroundColor: "#CCFFCC" } : { backgroundColor: "#d0ddf5" }
+                                    }
+                                    onClick={handleAdd}
                                 >
-                                    <PersonAddIcon
-                                        edge="end"
-                                        onChange={handleToggleAdd(value.id)}
-                                        inputProps={{
-                                            "aria-labelledby": value.id
-                                        }}
-                                        className={classes.icon}
-                                    />
+                                    {
+                                        add ? 
+                                        <HowToRegIcon 
+                                            edge="end"
+                                            onChange={handleToggleAdd(value.id)}
+                                            inputProps={{
+                                                "aria-labelledby": value.id
+                                            }}
+                                            className={classes.successIcon}
+                                        /> : 
+                                        <PersonAddIcon
+                                            edge="end"
+                                            onChange={handleToggleAdd(value.id)}
+                                            inputProps={{
+                                                "aria-labelledby": value.id
+                                            }}
+                                            className={classes.addIcon}
+                                        />
+                                    }
                                 </IconButton>
                             </ListItemSecondaryAction>
                         </ListItem>
