@@ -10,10 +10,10 @@ import {
     Card, CardContent, CardMedia, Typography, List, ListItem, 
     ListItemText, ListItemAvatar, Avatar, Divider, Fab, Tooltip
  } from "@material-ui/core";
- import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
- import EventIcon from '@material-ui/icons/Event';
- import EditIcon from '@material-ui/icons/Edit';
- import CommentIcon from '@material-ui/icons/Comment';
+import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
+import EventIcon from '@material-ui/icons/Event';
+import EditIcon from '@material-ui/icons/Edit';
+import CommentIcon from '@material-ui/icons/Comment';
 import RoomIcon from '@material-ui/icons/Room';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { useHistory } from "react-router-dom";

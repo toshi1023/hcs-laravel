@@ -100,12 +100,10 @@ function HcsAppBar() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const [loginUser, setLoginUser] = React.useState(null);
     const history = useHistory();
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const dispatch = useDispatch();
-    const loggedInUser = useSelector(selectLoggedInUser);
     
     // アカウントメニューを表示
     const handleProfileMenuOpen = event => {
@@ -169,6 +167,7 @@ function HcsAppBar() {
         }
     };
 
+    // スマホサイズの時に表示されるメニューをオープン
     const handleMobileMenuOpen = event => {
         setMobileMoreAnchorEl(event.currentTarget);
     };

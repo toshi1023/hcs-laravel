@@ -1,14 +1,17 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, Avatar, IconButton, Typography, Box} 
+import {Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, Avatar, IconButton, Typography, Box, Menu, MenuItem} 
 from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ReplyIcon from '@material-ui/icons/Reply';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DateFormat from '../common/dateFormat';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
   headerTitleNameWoman: {
     fontSize: 20,
     color: 'red'
+  },
+  menuItem: {
+    fontSize: 15,
   },
   bottomFont: {
     paddingLeft: 10,
@@ -71,11 +77,40 @@ export default function ArticleCard(props) {
     return <Typography className={classes.headerTitleNameWoman}>{props.article.name}</Typography>
   }
 
+  // 記事の削除処理
+  const deleteArticle = () => {
+    if (confirm('この記事を削除しますか？')) {
+      // 記事の削除処理
+
+      return;
+    }
+    return;
+  }
+
+  // 操作ボタンのクリック時
+  const handleButton = () => {
+    return (
+      <PopupState variant="popover" popupId="demo-popup-menu">
+        {(popupState) => (
+          <React.Fragment>
+            <IconButton aria-label="settings" {...bindTrigger(popupState)}>
+              <MoreVertIcon style={{ fontSize: 20 }} />
+            </IconButton>
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem className={classes.menuItem} onClick={popupState.close}><EditIcon style={{ marginRight: 5, color: 'blue' }} />編集</MenuItem>
+              <MenuItem className={classes.menuItem} onClick={popupState.close, deleteArticle}><DeleteForeverIcon style={{ marginRight: 5, color: 'red' }} />削除</MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+      </PopupState>
+    );
+  }
+
   return (
     <Card className={classes.root}>
       <CardHeader
         avatar={
-        //   プロフィール画像の予定
+        //   プロフィール画像
           <Avatar 
             aria-label="article" 
             className={classes.large} 
@@ -84,9 +119,10 @@ export default function ArticleCard(props) {
           />
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon style={{ fontSize: 20 }} />
-          </IconButton>
+          // ログインユーザが生成した記事以外は表示しないように設定
+          props.article.user_id == localStorage.getItem('loginId') ? 
+            handleButton()
+          : ''
         }
         title={nickNameDesign()}
         subheader={<Typography className={classes.subHeader}>{DateFormat(props.article.updated_at)}</Typography>}

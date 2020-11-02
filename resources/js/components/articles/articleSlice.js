@@ -1,20 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost/api/api_articles'
-// const apiUrl = 'http://hcs-laravel/api/api_articles'
+// const apiUrl = 'http://localhost/api/api_articles'
+const apiUrl = 'http://hcs-laravel/api/api_articles'
 const token = localStorage.localToken
 
 /**
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions) => {
-    console.log(conditions)
-    // if (conditions.id != undefined) {
-        const res = await axios.get(`${apiUrl}?queryPrefecture=${conditions.prefecture}&queryId=${conditions.id}`)
-    // } else {
-        // const res = await axios.get(`${apiUrl}?queryPrefecture=${conditions}`)
-    // }
+    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+    const res = await axios.get(`${apiUrl}?queryPrefecture=${conditions.prefecture}&queryId=${conditions.id}`)
+    
     return res.data
 })
 
