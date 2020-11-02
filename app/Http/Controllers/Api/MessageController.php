@@ -27,7 +27,7 @@ class MessageController extends Controller
         if ($request->input('query')) { $conditions['messages.user_id'] = $request->input('query'); }
         
         $messages = $this->database->getIndex(null, $conditions);
-        dd($messages);
+        // dd($messages);
         return response()->json([
             'messages' => $messages,
         ],200, [], JSON_UNESCAPED_UNICODE);
