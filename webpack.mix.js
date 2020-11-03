@@ -12,4 +12,23 @@ const mix = require('laravel-mix');
  */
 
 mix.react('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/sass/app.scss', 'public/css')
+    // CSS Modules を有効にするために以下を追加
+    .webpackConfig({
+        module: {
+          rules: [
+            {
+              test: /\.css$/,
+              loaders: [
+                {
+                  loader: 'css-loader',
+                  options: {
+                    modules: true,
+                    localIdentName: '[local]_[hash:base64:8]',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });

@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const apiUrl = 'http://localhost/api/api_articles'
-const apiUrl = 'http://hcs-laravel/api/api_articles'
+const apiUrl = 'http://localhost/api/api_articles'
+// const apiUrl = 'http://hcs-laravel/api/api_articles'
 const token = localStorage.localToken
 
 /**
@@ -32,7 +32,7 @@ export const fetchAsyncCreate = createAsyncThunk('articles/create', async(articl
  * データの更新
  */
 export const fetchAsyncUpdate = createAsyncThunk('articles/edit', async(article) => {
-    const res = await axios.put(`${apiUrl}/${task.id}`, article, {
+    const res = await axios.put(`${apiUrl}/${id}`, article, {
         headers: {
             'Content-Type': 'application/json',
             // Authorization: `JWT ${token}`,
