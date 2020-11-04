@@ -143,14 +143,20 @@ export default function ArticleCard(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {/* 'いいね'ボタンのデザイン */}
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon style={{ fontSize: 20 }} />
-        </IconButton>
-        {/* 'シェア'ボタンのデザイン */}
-        <IconButton aria-label="share">
-          <ShareIcon style={{ fontSize: 20 }} />
-        </IconButton>
+        {
+          localStorage.getItem('localToken') ? 
+          <div>
+            {/* 'いいね'ボタンのデザイン */}
+            <IconButton aria-label="add to favorites">
+              <FavoriteIcon style={{ fontSize: 20 }} />
+            </IconButton>
+            {/* シェア'ボタンのデザイン */}
+            <IconButton aria-label="share">
+              <ShareIcon style={{ fontSize: 20 }} />
+            </IconButton>
+          </div>
+          : ''
+        }
         <Typography className={classes.bottomFont}>{props.article.prefecture}</Typography>
         {/* 拡張ボタンの設定 */}
         <IconButton
@@ -175,9 +181,13 @@ export default function ArticleCard(props) {
           </CardContent>
         </Box>
         <Typography className={classes.bottomFont}>コメント： 3 件
+        {
+          localStorage.getItem('localToken') ? 
           <IconButton aria-label="reply">
             <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
           </IconButton>
+          : ''
+        }
         </Typography>
       </Collapse>
       {/* // 拡張のデザイン */}

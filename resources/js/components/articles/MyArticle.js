@@ -5,15 +5,26 @@ import { selectArticles, fetchAsyncGet } from './articleSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import _ from 'lodash';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Avatar, Fab, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import EditIcon from '@material-ui/icons/Edit';
+import styles from './myArticle.module.css';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
       paddingTop: '10px',
       paddingBottom: '20px'
     },
-    
+    large: {
+        width: theme.spacing(7),
+        height: theme.spacing(7),
+    },
+    tooltip: {
+        fontSize: 14,
+    },
+    button: {
+        marginLeft: 'auto',
+    },
   }));
 
 function MyArticle() {
@@ -81,6 +92,21 @@ function MyArticle() {
                 <PrefectureSelects values={articles.prefectures} fontSize={15} />
             </div>
             <Grid container className={classes.gridContainer} justify="center">
+                <Grid item xs={12} sm={7}>
+                    <div className={styles.field}>
+                        <Avatar 
+                            aria-label="article" 
+                            className={classes.large} 
+                            style={{ fontSize: 15 }}
+                            src={localStorage.getItem('loginPhoto')}
+                        />
+                        <Tooltip title="新規投稿" classes={{tooltip: classes.tooltip}}>
+                            <Fab color="primary" aria-label="add" className={classes.button}>
+                                <EditIcon />
+                            </Fab>
+                        </Tooltip>
+                    </div>
+                </Grid>
                 {renderArticles()}
             </Grid>
         </>
