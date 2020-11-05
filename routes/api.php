@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 /********** 認証管理(login) **********/
 Route::post('/login', 'Api\LoginController@login');
 
-/**
- * 認証が必要でないルート
- */
+/*************************************************
+ *  API(認証不要)
+ *************************************************/
 Route::group(['middleware' => ['api'], 'prefix'], function() {
 
     /********** 記事管理(articles) **********/
@@ -24,9 +24,9 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
 });
 
 
-/**
- * 認証が必要なルート
- */
+/*************************************************
+ *  API(認証必須)
+ *************************************************/
 Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
 
     /********** 記事管理(articles) **********/
