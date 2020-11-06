@@ -7,13 +7,14 @@ import styled from "styled-components";
 import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/common/switch';
 import dateSelects from '../parts/common/dateSelects';
+import PrefectureSelects from '../parts/common/prefectureSearch';
+import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import {
     fetchAsyncCreate, 
-    fetchAsyncUpdate, 
-    editUser, 
-    selectEditedUser
+    selectEditedUser,
+    selectPrefectures, 
+    fetchAsyncGetPrefectures
 } from './userSlice';
-import { selectMessage } from '../messages/messageSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,6 +70,7 @@ export default function UserCreate() {
   const classes = useStyles();
   // ユーザデータ編集のデータを使用できるようにローカルのeditedUser定数に格納
   const editedUser = useSelector(selectEditedUser)
+  const prefectures = useSelector(selectPrefectures);
   const dispatch = useDispatch()
    // stateの初期設定
   const [state, setState] = React.useState({
@@ -77,8 +79,26 @@ export default function UserCreate() {
       password: editedUser.password,
       name: editedUser.name,
       birthday: editedUser.birthday,
+      prefecture: editedUser.prefecture,
       gender: editedUser.gender,
   });
+
+  useEffect(() => {
+    // 非同期の関数を定義
+    const fetchPrefectures = async () => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+        // 都道府県一覧を取得
+        const resultReg = await dispatch(fetchAsyncGetPrefectures())
+        if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+    }
+    // 上で定義した非同期の関数を実行
+    fetchPrefectures()
+    
+  }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
 
   /**
    * 値のセット
@@ -108,7 +128,13 @@ export default function UserCreate() {
       setState({...state, birthday: `${year}-${month}-${day}`})
       return `${year}-${month}-${day}`
   }
-  const setGender = (e) => {
+  const setPrefecture = () => {
+    setState({
+        ...state,
+        prefecture: document.getElementById("prefecture").value,
+    })
+  }
+  const setGender = () => {
     setState({
         ...state,
         gender: document.getElementById("genderSwitch").checked,
@@ -116,9 +142,10 @@ export default function UserCreate() {
   }
 
     // 作成(stateのeditedUserの値をApiで送信)
-    const createClicked = () => {
-        dispatch(fetchAsyncCreate(state))
-        dispatch(editUser({ id: 0, title: '' }))
+    async function createClicked() {
+        const result = await dispatch(fetchAsyncCreate(state))
+        // dispatch(editUser({ id: 0, title: '' }))
+        console.log(result)
     }
 
   return (
@@ -184,6 +211,11 @@ export default function UserCreate() {
                                         <FormControl className={classes.margin}>
                                             <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
                                             {dateSelects({fontSize:15})}
+                                        </FormControl>
+                                    </div>
+                                    <div onBlur={setPrefecture}>
+                                        <FormControl className={classes.margin}>
+                                            <PrefectureSelects values={prefectures.prefectures} fontSize={15} />
                                         </FormControl>
                                     </div>
                                     <div onClick={setGender}>

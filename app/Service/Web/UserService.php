@@ -19,28 +19,6 @@ class UserService
   }
 
   /**
-   * 保存データを配列化にするメソッド
-   * 引数：保存データ
-   */
-  public function getArray($data)
-  {
-    // id
-    $data->id ? $data['id'] = $data->id : '';
-    // name
-    $data->name ? $data['name'] = $data->name : '';
-    // password
-    $data->password ? $data['password'] = $data->password : '';
-    // email
-    $data->email ? $data['email'] = $data->email : '';
-    // birthday
-    $data->birthday ? $data['birthday'] = $data->birthday : '';
-    // gender
-    $data->gender ? $data['gender'] = $data->gender : '';
-
-    return $data;
-  }
-
-  /**
    * Indexページ用データを取得するメソッド
    * 引数1：テーブル名, 引数2：検索条件
    */
@@ -91,9 +69,7 @@ class UserService
    * */
   public function save($data, $filename)
   {
-    // $data = $this->getArray($data);
-    // return $this->UserService->save($data, $filename);
-    return  $this->getArray($data);
+    return $this->UserService->save($data, $filename);
   }
 
   /*

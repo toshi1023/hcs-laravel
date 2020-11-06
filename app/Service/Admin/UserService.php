@@ -71,8 +71,11 @@ class UserService
   public function save($data, $filename)
   {
     // 除外処理
+    if(is_null($data->id)) {
+      $this->except[] = 'id';
+    }
     $data = $data->except($this->except);
-
+    
     return $this->UserService->save($data, $filename);
   }
 

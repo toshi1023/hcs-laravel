@@ -111,7 +111,7 @@ function UserEdit(props) {
         const fetchPrefectures = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
-            // 記事一覧を取得
+            // 都道府県一覧を取得
             const resultReg = await dispatch(fetchAsyncGetPrefectures())
             if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
                 // ユーザの登録している都道府県が選択されている状態でセット
