@@ -104,7 +104,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             }
             
             // 画像をアップロード(フロントはユーザネーム、管理画面はメールアドレスをフォルダ名に設定)
-            $file = key_exists('upload_image', $data) ? $data['upload_image'] : null;
+            $file = request()->file('upload_image') ? request()->file('upload_image') : null;
             $file_upload = $this->fileSave($file, \Auth::user()->name ? \Auth::user()->name : \Auth::user()->email);
 
             $model->articles_photo_name = $filename;

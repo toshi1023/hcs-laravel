@@ -32,7 +32,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     {
         try{
             // Updateかどうか判別
-            if ($data['id']) {
+            if (key_exists('id', $data) && !is_null($data['id'])) {
                 $this->model = $this->getFind($this->model, $data['id']);
             }
 
@@ -42,7 +42,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             }
 
             // 画像をアップロード
-            $file = key_exists('upload_image', $data) ? $data['upload_image'] : null;
+            $file = request()->file('upload_image') ? request()->file('upload_image') : null;
             $file_upload = $this->fileSave($file, $data['name']);
             
             // データを保存

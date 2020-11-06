@@ -15,7 +15,8 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
     Route::resource('api_articles' , 'Api\ArticleController', ['only' => ['index']]);
     
     /********** ユーザ管理(users) **********/
-    Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);
+    // Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);
+    Route::resource('api_users' ,           'Api\UserController');
     
     /********** 都道府県管理(prefectures) **********/
     Route::get('api_prefectures',     'Api\UserController@getPrefectures')->name('api_prefectures');
@@ -33,7 +34,7 @@ Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
     Route::resource('api_articles' , 'Api\ArticleController', ['except' => ['index']]);
 
     /********** ユーザ管理(users) **********/
-    Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show']]);
+    // Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show']]);
 
     /********** メッセージ管理(messages) **********/
     // Route::resource('api_messages' , 'Api\MessageController', ['except' => ['index']]);

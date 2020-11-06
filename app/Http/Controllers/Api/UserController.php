@@ -55,33 +55,38 @@ class UserController extends Controller
     /* ユーザ保存メソッド */
     public function store(Request $request)
     {
-      // DB::beginTransaction();
+      DB::beginTransaction();
 
+      // dd($request);
+      // ファイル名の生成
       $filename = null;
+      if ($request->file('upload_image')){
+        $filename = $this->getFilename($request->file('upload_image'));
+      }
 
-      // // // パスワードのハッシュ処理
-      // $request['password'] = Hash::make($request['password']);
+      // 登録データを配列化
+      // $data = json_decode(file_get_contents('php://input'), true);
+      $data = $request->input();
 
-      // if ($request->file('upload_image')){
-      //   $filename = $this->getFilename($request->file('upload_image'));
-      // }
-      
-      // if ($this->database->save($request, $filename)){
-      //   DB::commit();
-      //   return response()->json([
-      //     'messages' => 'Success!', 
-      //   ],200, [], JSON_UNESCAPED_UNICODE);
-      // } else {
-      //   DB::rollBack();
-      //   // 作成失敗時はエラーメッセージを返す
-      //   return new JsonResponse([
-      //     'message' => 'Create Failed'
-      //   ], 401);
-      // }
-      $data = $this->database->save($request, $filename);
-      return new JsonResponse([
-        'request' => $data['name']
-      ], 401);
+      // パスワードのハッシュ処理
+      $data['password'] = Hash::make($data['password']);
+      // dd($data);
+      if ($this->database->save($data, $filename)){
+        DB::commit();
+        return response()->json([
+          'info_message' => 'ユーザの作成に成功しました!', 
+        ],200, [], JSON_UNESCAPED_UNICODE);
+      } else {
+        DB::rollBack();
+        // 作成失敗時はエラーメッセージを返す
+        return new JsonResponse([
+          'error_message' => 'ユーザの作成に失敗しました!'
+        ], 401);
+      }
+      // $data = $this->database->save($request, $filename);
+      // return new JsonResponse([
+      //   'data' => $data
+      // ], 401);
     }
 
     public function pdf()
