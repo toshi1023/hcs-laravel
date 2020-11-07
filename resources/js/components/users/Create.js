@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader,CardContent} from '@material-ui/core';
 import styled from "styled-components";
@@ -8,12 +8,14 @@ import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/common/switch';
 import dateSelects from '../parts/common/dateSelects';
 import PrefectureSelects from '../parts/common/prefectureSearch';
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import SnackMessages from '../parts/common/snackMessages';
+import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages } from '../app/appSlice';
 import {
     fetchAsyncCreate, 
+    fetchAsyncGetPrefectures,
+    fetchAsyncLogin,
     selectEditedUser,
-    selectPrefectures, 
-    fetchAsyncGetPrefectures
+    selectPrefectures,
 } from './userSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(4),
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        width: 350,
+        width: 300,
     },
     header: {
         textAlign: 'center',
@@ -68,10 +70,11 @@ const Title = styled.h1`
 
 export default function UserCreate() {
   const classes = useStyles();
+  const history = useHistory();
+  const dispatch = useDispatch()
   // ユーザデータ編集のデータを使用できるようにローカルのeditedUser定数に格納
   const editedUser = useSelector(selectEditedUser)
-  const prefectures = useSelector(selectPrefectures);
-  const dispatch = useDispatch()
+  const prefectures = useSelector(selectPrefectures)
    // stateの初期設定
   const [state, setState] = React.useState({
       id: editedUser.id,
@@ -140,12 +143,26 @@ export default function UserCreate() {
         gender: document.getElementById("genderSwitch").checked,
     })
   }
-
+  
     // 作成(stateのeditedUserの値をApiで送信)
     async function createClicked() {
+        // ロード開始
+        await dispatch(fetchCredStart());
         const result = await dispatch(fetchAsyncCreate(state))
-        // dispatch(editUser({ id: 0, title: '' }))
-        console.log(result)
+        if (fetchAsyncCreate.fulfilled.match(result)) {
+            // ログイン処理
+            await dispatch(fetchAsyncLogin(result.payload))
+            // infoメッセージの表示
+            result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+            // Topページに遷移
+            history.push(`/`)
+            // ロード終了
+            await dispatch(fetchCredEnd())
+            return;
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+        return;
     }
 
   return (
