@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -70,6 +70,7 @@ const Title = styled.h1`
 
 export default function UserCreate() {
   const classes = useStyles();
+  const childRef = useRef();
   const history = useHistory();
   const dispatch = useDispatch()
   // ユーザデータ編集のデータを使用できるようにローカルのeditedUser定数に格納
@@ -143,26 +144,31 @@ export default function UserCreate() {
         gender: document.getElementById("genderSwitch").checked,
     })
   }
+
+  const doAction = () => {
+      childRef.current.onSubmit()
+  }
   
     // 作成(stateのeditedUserの値をApiで送信)
     async function createClicked() {
         // ロード開始
-        await dispatch(fetchCredStart());
-        const result = await dispatch(fetchAsyncCreate(state))
-        if (fetchAsyncCreate.fulfilled.match(result)) {
-            // ログイン処理
-            await dispatch(fetchAsyncLogin(result.payload))
-            // infoメッセージの表示
-            result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-            // Topページに遷移
-            history.push(`/`)
-            // ロード終了
-            await dispatch(fetchCredEnd())
-            return;
-        }
-        // ロード終了
-        await dispatch(fetchCredEnd());
-        return;
+        // await dispatch(fetchCredStart());
+        // const result = await dispatch(fetchAsyncCreate(state))
+        // if (fetchAsyncCreate.fulfilled.match(result)) {
+        //     // ログイン処理
+        //     await dispatch(fetchAsyncLogin(result.payload))
+        //     // infoメッセージの表示
+        //     result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+        //     // Topページに遷移
+        //     history.push(`/`)
+        //     // ロード終了
+        //     await dispatch(fetchCredEnd())
+        //     return;
+        // }
+        // // ロード終了
+        // await dispatch(fetchCredEnd());
+        // return;
+        doAction()
     }
 
   return (
@@ -256,7 +262,7 @@ export default function UserCreate() {
                                     </div>
 
                                     {/* ドラッグ&ドロップ */}
-                                    <ProfileDropzone />
+                                    <ProfileDropzone ref={childRef} />
 
                                 </CardContent>
                             </Grid>

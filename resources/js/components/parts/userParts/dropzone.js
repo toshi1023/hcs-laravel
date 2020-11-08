@@ -1,9 +1,10 @@
-import React, {useMemo, useEffect, useState} from 'react';
+import React, {useMemo, useEffect, useState, forwardRef, useImperativeHandle} from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import {useDropzone} from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import { fetchAsyncImage } from '../../users/userSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -93,7 +94,7 @@ const thumbsContainer = {
     height: '100%'
   };
 
-export default function ProfileDropzone(props) {
+function ProfileDropzone(props, ref) {
   const classes = useStyles();
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
@@ -163,7 +164,30 @@ export default function ProfileDropzone(props) {
   const handleDelete = () => {
     setFiles([])
   }
-  
+
+  /**
+   * 画像の保存処理
+   */
+  useImperativeHandle(ref, () => ({
+    async onSubmit() {
+      let formData = new FormData();
+      acceptedFiles.map(file => {
+        formData.append('upload_image', file, file.name)
+      })
+
+      const data = {
+        upload_image: formData.getAll('upload_image'),
+        id: 2,
+      }
+      console.log(data)
+      await dispatch(fetchAsyncImage(data))
+      
+      // await dispatch(fetchAsyncCreate(values))
+      // response = await axios.post("送り先URL", params);
+      // console.log(response);
+    }
+  }))
+
   return (
       <>
         <Grid container>
@@ -175,11 +199,6 @@ export default function ProfileDropzone(props) {
                         <aside style={thumbsContainer}>
                             {thumbs}
                         </aside>
-                        <input
-                          type="file"
-                          id="imageInput"
-                          hidden={true} // 非表示を設定
-                        />
                     </div>
                 </div>
             </Grid>
@@ -202,3 +221,7 @@ export default function ProfileDropzone(props) {
       </>
   );
 }
+
+// コンポーネントを forwardRef でラップ
+ProfileDropzone = forwardRef(ProfileDropzone)
+export default ProfileDropzone
