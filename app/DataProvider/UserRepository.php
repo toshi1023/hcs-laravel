@@ -41,9 +41,12 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                 $filename = 'NoImage';
             }
 
+            // フォルダ名の設定
+            key_exists('name', $data) ? $foldername = $data['name'] : $foldername = $this->model->name;
+            
             // 画像をアップロード
             $file = request()->file('upload_image') ? request()->file('upload_image') : null;
-            $file_upload = $this->fileSave($file, $data['name']);
+            $file_upload = $this->fileSave($file, $foldername);
             
             // データを保存
             $this->model->users_photo_name = $filename;

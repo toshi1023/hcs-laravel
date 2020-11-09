@@ -56,7 +56,6 @@ export const fetchAsyncCreate = createAsyncThunk('users/create', async(user) => 
     const res = await axios.post(apiUrl, user, {
         headers: {
             'Content-Type': 'application/json',
-            'content-type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
         },
     })
@@ -79,8 +78,8 @@ export const fetchAsyncUpdate = createAsyncThunk('users/edit', async(user) => {
 /**
  * 画像データの保存
  */
-export const fetchAsyncImage = createAsyncThunk('users/image', async(user) => {
-    const res = await axios.post(`${apiUrl}/${user.id}`, user, {
+export const fetchAsyncImage = createAsyncThunk('users/image', async(data) => {
+    const res = await axios.post(`${apiUrl}/${data.getAll('id')}`, data, {
         headers: {
             'X-HTTP-Method-Override': 'PUT',
             'Content-Type': 'multipart/form-data',

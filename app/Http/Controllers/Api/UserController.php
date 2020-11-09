@@ -63,7 +63,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-      dd($request->all());
       DB::beginTransaction();
 
       // ファイル名の生成
@@ -74,7 +73,7 @@ class UserController extends Controller
 
       // 登録データを配列化
       $data = $request->input();
-
+      // dd($data);
       // パスワードのハッシュ処理
       $data['password'] = Hash::make($data['password']);
       
@@ -82,6 +81,7 @@ class UserController extends Controller
         DB::commit();
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました!', 
+          'id'           => \Auth::user()->id,
           'name'         => $request->input('name'),
           'password'     => $request->input('password'),
         ],200, [], JSON_UNESCAPED_UNICODE);
@@ -98,6 +98,7 @@ class UserController extends Controller
       //   'info_message' => 'ユーザの作成に成功しました!',
       //     'name'         => $request->input('name'),
       //     'password'     => $request->input('password'),
+      //     'id'           => \Auth::user()->id,
       // ], 200);
       // return new JsonResponse([
       //   'error_message' => 'ユーザの作成に失敗しました!管理者に問い合わせてください',
@@ -148,7 +149,6 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-      dd($request->file());
       DB::beginTransaction();
 
       // ファイル名の生成
@@ -156,12 +156,14 @@ class UserController extends Controller
       if ($request->file('upload_image')){
         $filename = $this->getFilename($request->file('upload_image'));
       }
-
+      
       // 登録データを配列化
       $data = $request->input();
 
       // パスワードのハッシュ処理
-      $data['password'] = Hash::make($data['password']);
+      if(key_exists('password', $data)) {
+        $data['password'] = Hash::make($data['password']);
+      }
       
       if ($this->database->save($data, $filename)){
         DB::commit();

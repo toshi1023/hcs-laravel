@@ -78,7 +78,6 @@ export default function UserCreate() {
   const prefectures = useSelector(selectPrefectures)
    // stateの初期設定
   const [state, setState] = React.useState({
-      id: editedUser.id,
       email: editedUser.email,
       password: editedUser.password,
       name: editedUser.name,
@@ -145,30 +144,31 @@ export default function UserCreate() {
     })
   }
 
-  const doAction = () => {
-      childRef.current.onSubmit()
+  const doAction = (id) => {
+      childRef.current.onSubmit(id)
   }
   
     // 作成(stateのeditedUserの値をApiで送信)
     async function createClicked() {
         // ロード開始
-        // await dispatch(fetchCredStart());
-        // const result = await dispatch(fetchAsyncCreate(state))
-        // if (fetchAsyncCreate.fulfilled.match(result)) {
-        //     // ログイン処理
-        //     await dispatch(fetchAsyncLogin(result.payload))
-        //     // infoメッセージの表示
-        //     result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-        //     // Topページに遷移
-        //     history.push(`/`)
-        //     // ロード終了
-        //     await dispatch(fetchCredEnd())
-        //     return;
-        // }
-        // // ロード終了
-        // await dispatch(fetchCredEnd());
-        // return;
-        doAction()
+        await dispatch(fetchCredStart());
+        const result = await dispatch(fetchAsyncCreate(state))
+        if (fetchAsyncCreate.fulfilled.match(result)) {
+            // 画像の保存
+            doAction(result.payload.id)
+            // ログイン処理
+            await dispatch(fetchAsyncLogin(result.payload))
+            // infoメッセージの表示
+            result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+            // Topページに遷移
+            history.push(`/`)
+            // ロード終了
+            await dispatch(fetchCredEnd())
+            return;
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+        return;
     }
 
   return (

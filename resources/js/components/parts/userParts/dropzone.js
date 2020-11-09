@@ -169,22 +169,18 @@ function ProfileDropzone(props, ref) {
    * 画像の保存処理
    */
   useImperativeHandle(ref, () => ({
-    async onSubmit() {
+    async onSubmit(id) {
       let formData = new FormData();
       acceptedFiles.map(file => {
+        // 保存するイメージファイルをセット
         formData.append('upload_image', file, file.name)
       })
-
-      const data = {
-        upload_image: formData.getAll('upload_image'),
-        id: 2,
-      }
-      console.log(data)
-      await dispatch(fetchAsyncImage(data))
+      // 編集用ユーザIDをセット
+      formData.append('id', id)
+      // 画像の保存処理
+      await dispatch(fetchAsyncImage(formData))
       
-      // await dispatch(fetchAsyncCreate(values))
-      // response = await axios.post("送り先URL", params);
-      // console.log(response);
+      return;
     }
   }))
 
