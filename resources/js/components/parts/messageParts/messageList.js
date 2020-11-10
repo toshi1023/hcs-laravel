@@ -75,7 +75,7 @@ export default function MessageList(props) {
                   src={value.sender_photo}
                   className={classes.avatar}
                 />
-                <p className={classes.sender_name} style={{color: (value.sender_gender == 1 ? 'blue' : 'red')}}>{value.sender_name}</p>
+                <p className={classes.name} style={{color: (value.gender == 1 ? 'blue' : 'red')}}>{value.name}</p>
               </ListItemAvatar>
               <div style={{ width: '70%', whiteSpace: 'nowrap' }}>
                 <ListItemText 

@@ -77,11 +77,11 @@ class UserController extends Controller
       // パスワードのハッシュ処理
       $data['password'] = Hash::make($data['password']);
       
-      if ($this->database->save($data, $filename)){
+      if ($this->database->save($data, $filename)[0]){
         DB::commit();
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました!', 
-          'id'           => \Auth::user()->id,
+          'id'           => $this->database->save($data, $filename)[1],
           'name'         => $request->input('name'),
           'password'     => $request->input('password'),
         ],200, [], JSON_UNESCAPED_UNICODE);
@@ -165,7 +165,7 @@ class UserController extends Controller
         $data['password'] = Hash::make($data['password']);
       }
       
-      if ($this->database->save($data, $filename)){
+      if ($this->database->save($data, $filename)[0]){
         DB::commit();
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました!', 

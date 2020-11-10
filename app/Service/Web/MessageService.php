@@ -26,8 +26,8 @@ class MessageService
   {
     if(is_null($table)) {
       // ログインユーザのメッセージを全て取得
-      // return $this->MessageService->getIndexQuery($conditions)->get();
-      return $this->MessageService->getBaseData($conditions)->get();
+      return $this->MessageService->getIndexQuery($conditions)->get();
+      // return $this->MessageService->getBaseData($conditions)->get();
     }
     // 指定したテーブルのデータをソートして取得
     return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();

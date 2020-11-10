@@ -39,7 +39,7 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
     }
 
     /**
-     * ログインユーザに紐づくメッセージの送受信ユーザを取得
+     * ログインユーザに紐づくメッセージの送受信ユーザをすべて取得
      */
     public function getMessangerQuery($conditions=null) {
         // messagesテーブルの値をUnion結合して取得
@@ -62,24 +62,25 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
     public function getIndexQuery($conditions=null) {
         // 送受信のユーザ情報を取得
         $subQuery = $this->getMessangerQuery($conditions);
+        
         // usersテーブルの値も結合して取得
         $query = $this->model->selectRaw('distinct(messangers.user_id)')
                              ->addSelect(\DB::raw('max(messangers.id) AS messangers_id'))
-                             ->addSelect('users.name', 'users.users_photo_name', 'users.users_photo_path')
-                             ->from(\DB::raw('('.$subQuery->toSql().') AS messangers'))
+                             ->addSelect('users.name', 'users.users_photo_name', 'users.users_photo_path', 'users.gender')
+                             ->fromSub($subQuery, 'messangers')
                              ->leftJoin('users', 'users.id', '=', 'messangers.user_id')
                              ->groupByRaw('messangers.user_id');
-
+                             
         // messagesテーブルの内容と結合してログインユーザのメッセージ一覧情報を取得
         $query = $this->model->select('*')
                             //  ->rightJoin(\DB::raw('('.$query->toSql().') AS messangers'), 'messages.id', '=', 'messangers.messangers_id');
                              ->rightJoinSub($query, 'messangers', 'messages.id', '=', 'messangers.messangers_id');
-        
+                             
         return $query;
 
         // 完成形のSQL(ユーザIDが2の場合)
         // SELECT * FROM `messages` RIGHT JOIN (SELECT DISTINCT(messangers.user_id), MAX(messangers.id) AS messangers_id, 
-        // `users`.`name`, `users`.`users_photo_name`, `users`.`users_photo_path` 
+        // `users`.`name`, `users`.`users_photo_name`, `users`.`users_photo_path`, `users`.`gender` 
         // FROM ((SELECT *, `user_id_receiver` AS `user_id` FROM `messages` WHERE `user_id_sender` = 2 AND `delete_flg` = 0) 
         // UNION (SELECT *, `user_id_sender` AS `user_id` FROM `messages` WHERE `user_id_receiver` = 2 AND `delete_flg` = 0) 
         // ORDER BY `updated_at` DESC) AS messangers LEFT JOIN `users` ON `users`.`id` = `messangers`.`user_id` 
