@@ -73,7 +73,6 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
                              
         // messagesテーブルの内容と結合してログインユーザのメッセージ一覧情報を取得
         $query = $this->model->select('*')
-                            //  ->rightJoin(\DB::raw('('.$query->toSql().') AS messangers'), 'messages.id', '=', 'messangers.messangers_id');
                              ->rightJoinSub($query, 'messangers', 'messages.id', '=', 'messangers.messangers_id');
                              
         return $query;

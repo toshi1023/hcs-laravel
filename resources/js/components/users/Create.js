@@ -155,7 +155,8 @@ export default function UserCreate() {
         const result = await dispatch(fetchAsyncCreate(state))
         if (fetchAsyncCreate.fulfilled.match(result)) {
             // 画像の保存
-            doAction(result.payload.id)
+            // doAction(result.payload.id)
+            console.log(result)
             // ログイン処理
             await dispatch(fetchAsyncLogin(result.payload))
             // infoメッセージの表示

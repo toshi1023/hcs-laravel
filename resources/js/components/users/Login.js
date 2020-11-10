@@ -7,10 +7,13 @@ import { Link, useHistory } from 'react-router-dom';
 import SwitchType from '../parts/common/switch';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
+import SnackMessages from '../parts/common/snackMessages';
 import { useDispatch } from 'react-redux';
 import {
     fetchCredStart,
     fetchCredEnd,
+    fetchGetInfoMessages, 
+    fetchGetErrorMessages
 } from '../app/appSlice';
 import {
     fetchAsyncLogin,
@@ -63,6 +66,8 @@ export default function Login() {
   const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
+  // stateの初期設定
+  const [open, setOpen] = React.useState(false);
 
   return (
     <>
@@ -75,6 +80,7 @@ export default function Login() {
                     className={classes.header}
                 />
                 <Grid item xs={12} md={12}>
+                    <SnackMessages errorOpen={open} />
                     <CardContent>
                         <Link to="/users/create" style={{fontSize: 13, width: 150}}>新規会員登録はこちら</Link>
                         <Formik
@@ -85,7 +91,15 @@ export default function Login() {
                                 await dispatch(fetchCredStart());
                                 
                                 const login = await dispatch(fetchAsyncLogin(values));
-                                
+
+                                if(login.payload.status == 401) {
+                                    // エラーメッセージを表示
+                                    login.payload.error_message ? dispatch(fetchGetErrorMessages(login)) : ''
+                                    setOpen(true)
+                                    // ロード終了
+                                    await dispatch(fetchCredEnd());
+                                    return;
+                                }
                                 if (fetchAsyncLogin.fulfilled.match(login)) {
                                     // ログインユーザのプロフィールを取得
                                     await dispatch(fetchAsyncGetProf(login.payload.id));
@@ -93,7 +107,7 @@ export default function Login() {
                                     history.push(`/`)
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
-                                }
+                                } 
                             }}
                             validationSchema={Yup.object().shape({
                                 name: Yup.string().required("IDはの入力は必須です"),

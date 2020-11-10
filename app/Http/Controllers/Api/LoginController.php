@@ -27,7 +27,19 @@ class LoginController extends Controller
                 'id' => $user->id, 
                 'login_user_photo' => $user->users_photo_path
             ], 200);
+            // return new JsonResponse([
+            //     'token' => $token, 
+            //     'id' => $user->id, 
+            //     'login_user_photo' => $user->users_photo_path
+            // ], 200);
         }
+        return response()->json([
+            'error_message' => 'IDもしくはパスワードが間違っています',
+            'status'        => 401,
+        ], 401);
+        // return new JsonResponse([
+        //     'error_message' => 'IDもしくはパスワードが間違っています'
+        // ], 401);
 
     }
 

@@ -42,7 +42,7 @@ export default function SnackMessages(props) {
       setInfoOpen(false);
       setErrorOpen(false);
     };
-    
+
     return (
       <div className={classes.root}>
         {

@@ -15,13 +15,20 @@ const token = localStorage.localToken
 // auth: 認証に関わる情報(authen)を渡す引数
 export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
     // axios: 引数1: URL, 引数2: 渡すデータ, 引数3: メタ情報
-    const res = await axios.post(loginUrl, auth, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    // Apiからの返り値
-    return res.data
+    try {
+        const res = await axios.post(loginUrl, auth, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        // Apiからの返り値
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 /**
  * Loginユーザの取得用非同期関数
@@ -208,7 +215,11 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         // Apiが成功したときの処理を記載
         builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
-            // ブラウザのlocalStorageにTokenとIDを保存
+            // 認証に失敗した場合はリターン
+            if (action.payload.status == 401) {
+                return;
+            }
+            // 認証に成功した場合は、ブラウザのlocalStorageにTokenとIDを保存
             localStorage.setItem("localToken", action.payload.token)
             localStorage.setItem("loginId", action.payload.id)
             localStorage.setItem("loginPhoto", action.payload.login_user_photo)
