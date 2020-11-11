@@ -12,7 +12,6 @@ import { useDispatch } from 'react-redux';
 import {
     fetchCredStart,
     fetchCredEnd,
-    fetchGetInfoMessages, 
     fetchGetErrorMessages
 } from '../app/appSlice';
 import {
@@ -89,9 +88,9 @@ export default function Login() {
                             onSubmit={async (values) => {
                                 // ロード開始
                                 await dispatch(fetchCredStart());
-                                
+                                // ログイン実行
                                 const login = await dispatch(fetchAsyncLogin(values));
-
+                                // ログインに失敗した場合
                                 if(login.payload.status == 401) {
                                     // エラーメッセージを表示
                                     login.payload.error_message ? dispatch(fetchGetErrorMessages(login)) : ''
@@ -101,6 +100,7 @@ export default function Login() {
                                     await dispatch(fetchCredEnd());
                                     return;
                                 }
+                                // ログインに成功した場合
                                 if (fetchAsyncLogin.fulfilled.match(login)) {
                                     // ログインユーザのプロフィールを取得
                                     await dispatch(fetchAsyncGetProf(login.payload.id));
