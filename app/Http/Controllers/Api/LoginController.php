@@ -34,7 +34,7 @@ class LoginController extends Controller
             // ], 200);
         }
         return response()->json([
-            'error_message' => 'IDもしくはパスワードが間違っています',
+            'error_message' => 'IDもしくはパスワードが正しくありません',
             'status'        => 401,
         ], 401);
         // return new JsonResponse([

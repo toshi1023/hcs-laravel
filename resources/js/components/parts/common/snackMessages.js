@@ -23,24 +23,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SnackMessages(props) {
     const classes = useStyles();
-    const [infoOpen, setInfoOpen] = React.useState(false);
-    const [errorOpen, setErrorOpen] = React.useState(false);
     const dispatch = useDispatch()
     // infoメッセージの格納
     const infoMessages = useSelector(selectInfo)
     // errorメッセージの格納
     const errorMessages = useSelector(selectError)
     // snackBarの表示制御
-    useEffect(() => {
-      props.infoOpen ? setInfoOpen(true) : ''
-      props.errorOpen ? setErrorOpen(true) : ''
-    }, [dispatch])
     const handleClose = () => {
       // infoメッセージとerrorメッセージのリセット
       dispatch(fetchGetInfoMessages(''))
       dispatch(fetchGetErrorMessages(''))
-      setInfoOpen(false);
-      setErrorOpen(false);
     };
 
     return (
@@ -48,7 +40,7 @@ export default function SnackMessages(props) {
         {
           // infoメッセージの表示制御
           infoMessages.payload ? 
-            <Snackbar open={infoOpen} onClose={handleClose} autoHideDuration={6000}>
+            <Snackbar open={props.infoOpen} onClose={handleClose} autoHideDuration={6000}>
               <Alert onClose={handleClose} severity="success">
                 <span className={classes.message}>{infoMessages.payload.info_message}</span>
               </Alert>
@@ -58,7 +50,7 @@ export default function SnackMessages(props) {
         {
           // errorメッセージの表示制御
           errorMessages.payload ? 
-            <Snackbar open={errorOpen} onClose={handleClose} autoHideDuration={6000}>
+            <Snackbar open={props.errorOpen} onClose={handleClose} autoHideDuration={6000}>
               <Alert onClose={handleClose} severity="error">
                 <span className={classes.message}>{errorMessages.payload.error_message}</span>
               </Alert>

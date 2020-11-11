@@ -67,7 +67,7 @@ export default function Login() {
   const classes = useStyles();
   const dispatch = useDispatch();
   // stateの初期設定
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   return (
     <>
@@ -95,7 +95,8 @@ export default function Login() {
                                 if(login.payload.status == 401) {
                                     // エラーメッセージを表示
                                     login.payload.error_message ? dispatch(fetchGetErrorMessages(login)) : ''
-                                    setOpen(true)
+                                    // 常時SnackMessagesがtrueになるようstateを設定
+                                    !open ? setOpen(true) : ''
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
                                     return;
@@ -103,7 +104,7 @@ export default function Login() {
                                 if (fetchAsyncLogin.fulfilled.match(login)) {
                                     // ログインユーザのプロフィールを取得
                                     await dispatch(fetchAsyncGetProf(login.payload.id));
-                                    // ログインユーザのマイページに遷移
+                                    // Topページに遷移
                                     history.push(`/`)
                                     // ロード終了
                                     await dispatch(fetchCredEnd());
