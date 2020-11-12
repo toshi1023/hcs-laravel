@@ -23,14 +23,15 @@ const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: theme.spacing(10),
         marginBottom: theme.spacing(10),
-        minWidth: 400,
+        minWidth: 300,
         margin: `${theme.spacing(1)}px auto`,
     },
     margin: {
-        marginLeft: theme.spacing(4),
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
-        width: 300,
+        minWidth: 300,
     },
     header: {
         textAlign: 'center',

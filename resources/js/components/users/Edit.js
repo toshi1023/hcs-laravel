@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectEditedUser, selectPrefectures, fetchAsyncGetPrefectures } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import PrefectureSelects from '../parts/common/prefectureSearch';
-import dateSelects from '../parts/common/dateSelects';
+import DateSelects from '../parts/common/dateSelects';
 import SwitchType from '../parts/common/switch';
 import ProfileDropzone from '../parts/userParts/dropzone';
 import styles from '../parts/userParts/userParts.module.css';
@@ -287,7 +287,7 @@ function UserEdit(props) {
                                             </ListItemAvatar>
                                             <FormControl className={classes.margin} onBlur={() => setBirthday(false)}>
                                                 <FormLabel style={{fontSize: 11}} display="block">生年月日</FormLabel>
-                                                {dateSelects({fontSize:13})}
+                                                <DateSelects fontSize={13} />
                                             </FormControl>
                                         </ListItem>
                                         <ListItem>

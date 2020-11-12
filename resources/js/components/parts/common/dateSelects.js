@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function dateSelects(props) {
+export default function DateSelects(props) {
   const classes = useStyles();
   // 現在の年月日を取得
   let date = new Date()

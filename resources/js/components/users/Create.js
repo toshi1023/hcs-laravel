@@ -6,8 +6,10 @@ import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid,
 import styled from "styled-components";
 import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/common/switch';
-import dateSelects from '../parts/common/dateSelects';
+import DateSelects from '../parts/common/dateSelects';
 import PrefectureSelects from '../parts/common/prefectureSearch';
+import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
+import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import SnackMessages from '../parts/common/snackMessages';
 import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages } from '../app/appSlice';
 import {
@@ -21,16 +23,17 @@ import {
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        minWidth: 300,
     },
     card: {
         marginTop: theme.spacing(10),
         marginBottom: theme.spacing(10),
-        minWidth: 400,
+        minWidth: 300,
         margin: `${theme.spacing(1)}px auto`,
     },
     margin: {
-        marginLeft: theme.spacing(4),
-        marginRight: theme.spacing(4),
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
         width: 300,
@@ -175,7 +178,7 @@ export default function UserCreate() {
     <>
         <div className={classes.root}>
             <Grid container justify="center">
-                <Grid item xs={12} sm={8} md={8} lg={8}>
+                <Grid item xs={12} sm={7} md={7} lg={7}>
                     <Card className={classes.card}>
                         <CardHeader 
                             title={
@@ -187,70 +190,132 @@ export default function UserCreate() {
                             <Grid item sm={12} md={8} lg={6}>
                                 <CardContent>
                                     <Link to="/login" style={{fontSize: 13, width: 150}}>ログインはこちら</Link>
-                                    <div>
-                                        <FormControl className={classes.margin}>
-                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>メールアドレス</InputLabel>
-                                            <Input
-                                                id="input-with-icon-adornment"
-                                                startAdornment={
-                                                    <InputAdornment position="start" />
-                                                }
-                                                className={classes.formFont}
-                                                required
-                                                onChange={setEmail}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div>
-                                        <FormControl className={classes.margin}>
-                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
-                                            <Input
-                                                id="input-with-icon-adornment"
-                                                startAdornment={
-                                                    <InputAdornment position="start" />
-                                                }
-                                                type="password"
-                                                className={classes.formFont}
-                                                required
-                                                onChange={setPassword}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div>
-                                        <FormControl className={classes.margin}>
-                                            <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ニックネーム</InputLabel>
-                                            <Input
-                                                id="input-with-icon-adornment"
-                                                startAdornment={
-                                                    <InputAdornment position="start" />
-                                                }
-                                                className={classes.formFont}
-                                                required
-                                                onChange={setName}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div onBlur={setBirthday}>
-                                        <FormControl className={classes.margin}>
-                                            <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
-                                            {dateSelects({fontSize:15})}
-                                        </FormControl>
-                                    </div>
-                                    <div onBlur={setPrefecture}>
-                                        <FormControl className={classes.margin}>
-                                            <PrefectureSelects values={prefectures.prefectures} fontSize={15} />
-                                        </FormControl>
-                                    </div>
-                                    <div onClick={setGender}>
-                                        <FormControl className={classes.margin}>
-                                            <FormLabel style={{fontSize: 15}} display="block">性別</FormLabel>
-                                            <SwitchType 
-                                                switchLabel={{true: '男性', false: '女性'}} 
-                                                checked={state.gender}
-                                                value={false}
-                                            />
-                                        </FormControl>
-                                    </div>
+                                    <Formik
+                                        initialErrors={{ name: "required" }}
+                                        initialValues={{ 
+                                            email: "",
+                                            password: "",
+                                            name: "",
+                                            birthday: "",
+                                            prefecture: "",
+                                            gender: false,
+                                        }}
+                                        onSubmit={async (values) => {
+                                            // ロード開始
+                                            await dispatch(fetchCredStart());
+                                            // ログイン実行
+                                            const login = await dispatch(fetchAsyncLogin(values));
+                                            // ログインに失敗した場合
+                                            if(login.payload.status == 401) {
+                                                // エラーメッセージを表示
+                                                login.payload.error_message ? dispatch(fetchGetErrorMessages(login)) : ''
+                                                // 常時SnackMessagesがtrueになるようstateを設定
+                                                !open ? setOpen(true) : ''
+                                                // ロード終了
+                                                await dispatch(fetchCredEnd());
+                                                return;
+                                            }
+                                            // ログインに成功した場合
+                                            if (fetchAsyncLogin.fulfilled.match(login)) {
+                                                // ログインユーザのプロフィールを取得
+                                                await dispatch(fetchAsyncGetProf(login.payload.id));
+                                                // Topページに遷移
+                                                history.push(`/`)
+                                                // ロード終了
+                                                await dispatch(fetchCredEnd());
+                                            } 
+                                        }}
+                                        validationSchema={Yup.object().shape({
+                                            name: Yup.string().required("IDはの入力は必須です"),
+                                            password: Yup.string().required("パスワードの入力は必須です"),
+                                        })}
+                                        >
+                                        {({
+                                            handleSubmit,
+                                            handleChange,
+                                            handleBlur,
+                                            values,
+                                            errors,
+                                            touched,
+                                            isValid,
+                                    }) => (
+                                        <Form onSubmit={handleSubmit}>
+                                            <div>
+                                                <FormControl className={classes.margin}>
+                                                    <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>メールアドレス</InputLabel>
+                                                    <Input
+                                                        id="input-with-icon-adornment"
+                                                        startAdornment={
+                                                            <InputAdornment position="start" />
+                                                        }
+                                                        className={classes.formFont}
+                                                        required
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.email}
+                                                        // onChange={setEmail}
+                                                    />
+                                                </FormControl>
+                                            </div>
+                                            <div>
+                                                <FormControl className={classes.margin}>
+                                                    <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
+                                                    <Input
+                                                        id="input-with-icon-adornment"
+                                                        startAdornment={
+                                                            <InputAdornment position="start" />
+                                                        }
+                                                        type="password"
+                                                        className={classes.formFont}
+                                                        required
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.password}
+                                                        // onChange={setPassword}
+                                                    />
+                                                </FormControl>
+                                            </div>
+                                            <div>
+                                                <FormControl className={classes.margin}>
+                                                    <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ニックネーム</InputLabel>
+                                                    <Input
+                                                        id="input-with-icon-adornment"
+                                                        startAdornment={
+                                                            <InputAdornment position="start" />
+                                                        }
+                                                        className={classes.formFont}
+                                                        required
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.name}
+                                                        // onChange={setName}
+                                                    />
+                                                </FormControl>
+                                            </div>
+                                            <div onBlur={setBirthday}>
+                                                <FormControl className={classes.margin}>
+                                                    <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
+                                                    <DateSelects fontSize={15} />
+                                                </FormControl>
+                                            </div>
+                                            <div onBlur={setPrefecture}>
+                                                <FormControl className={classes.margin}>
+                                                    <PrefectureSelects values={prefectures.prefectures} fontSize={15} />
+                                                </FormControl>
+                                            </div>
+                                            <div onClick={setGender}>
+                                                <FormControl className={classes.margin}>
+                                                    <FormLabel style={{fontSize: 15}} display="block">性別</FormLabel>
+                                                    <SwitchType 
+                                                        switchLabel={{true: '男性', false: '女性'}} 
+                                                        checked={state.gender}
+                                                        value={values.gender}
+                                                    />
+                                                </FormControl>
+                                            </div>
+                                        </Form>
+                                    )}
+                                    </Formik>
                                 </CardContent>
                             </Grid>
                             <Grid item sm={12} md={12} lg={6}>
