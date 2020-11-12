@@ -45,12 +45,12 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 20
     },
     error: {
-        marginLeft: theme.spacing(4),
+        marginLeft: theme.spacing(3),
         fontSize: 13,
         color: 'red',
     },
     button: {
-        marginLeft: theme.spacing(4),
+        marginLeft: theme.spacing(3),
         marginTop: theme.spacing(3),
         height: 40,
         width: 100,
