@@ -28,11 +28,11 @@ class NewsController extends Controller
         $conditions = [];
         $conditions['status'] = 1;
         // 会員限定のニュースを取得するときに検索条件をセット
-        if ($request->input('query')) { $conditions['member_flg'] = $request->input('query'); }
-
+        if ((int)$request->input('query') == 0 && $request->input('query') != 'undefined') { $conditions['member_flg'] = $request->input('query'); }
+        
         // ニュースデータの取得
         $news = $this->database->getIndex($conditions);
-
+        
         return response()->json([
             'news' => $news,
         ],200, [], JSON_UNESCAPED_UNICODE);
@@ -47,11 +47,10 @@ class NewsController extends Controller
         $conditions = [];
         $conditions['status'] = 1;
         // 会員限定のニュースを取得するときに検索条件をセット
-        if ($request->input('query')) { $conditions['member_flg'] = $request->input('query'); }
-
+        if ((int)$request->input('query') == 0 && $request->input('query') != 'undefined') { $conditions['member_flg'] = $request->input('query'); }
+        
         // ニュースデータの取得
         $news = $this->database->getShow($conditions);
-
         return response()->json([
             'news' => $news,
         ],200, [], JSON_UNESCAPED_UNICODE);

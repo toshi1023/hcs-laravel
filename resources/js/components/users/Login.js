@@ -114,8 +114,8 @@ export default function Login() {
                             validationSchema={Yup.object().shape({
                                 name: Yup.string().required("IDはの入力は必須です"),
                                 password: Yup.string()
-                                             .required("パスワードの入力は必須です")
-                                             .min(6, '6文字以上を入れてください'),
+                                             .required("パスワードの入力は必須です"),
+                                            //  .min(6, '6文字以上を入れてください'),
                             })}
                             >
                             {({
