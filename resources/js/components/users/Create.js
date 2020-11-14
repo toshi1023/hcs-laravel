@@ -86,12 +86,16 @@ export default function UserCreate() {
     const prefectures = useSelector(selectPrefectures)
     // stateの初期設定
     const [state, setState] = React.useState({
+        // 保存対象の値
         email: editedUser.email,
         password: editedUser.password,
         name: editedUser.name,
         birthday: editedUser.birthday,
         prefecture: editedUser.prefecture,
         gender: editedUser.gender,
+        // 生年月日と都道府県チェック
+        birthdayCheck: true,
+        prefectureCheck: true,
     });
 
     useEffect(() => {
@@ -114,35 +118,48 @@ export default function UserCreate() {
     /**
      * 値のセット
      */
-    const setEmail = (email) => {
+    const setEmail = (value) => {
         setState({
             ...state,
-            email: email,
+            email: value,
         })
     }
-    const setPassword = (password) => {
+    const setPassword = (value) => {
         setState({
             ...state,
-            password: password,
+            password: value,
         })
     }
-    const setName = (name) => {
+    const setName = (value) => {
         setState({
             ...state,
-            name: name,
+            name: value,
         })
     }
     const setBirthday = () => {
-        let year = document.getElementById("selectYear").value
-        let month = document.getElementById("selectMonth").value
-        let day = document.getElementById("selectDay").value
+        // let year = document.getElementById("selectYear").value
+        // let month = document.getElementById("selectMonth").value
+        // let day = document.getElementById("selectDay").value
+        let year = Number(document.getElementById("selectYear").value) ? Number(document.getElementById("selectYear").value) : document.getElementById("selectYear").value
+        let month = Number(document.getElementById("selectMonth").value) ? Number(document.getElementById("selectMonth").value) : document.getElementById("selectMonth").value
+        let day = Number(document.getElementById("selectDay").value) ? Number(document.getElementById("selectDay").value) : document.getElementById("selectDay").value
+        
+        // 年月日を選択した場合
+        if(typeof(year) != 'string' && typeof(month) != 'string' && typeof(day) != 'string') {
+            setState({...state, 
+                birthday: `${year}-${month}-${day}`,
+                birthdayCheck: false,
+            })
+            return;
+        }
         setState({...state, birthday: `${year}-${month}-${day}`})
-        return `${year}-${month}-${day}`
+        return;
     }
     const setPrefecture = () => {
         setState({
             ...state,
             prefecture: document.getElementById("prefecture").value,
+            prefectureCheck: false,
         })
     }
     const setGender = () => {
@@ -158,6 +175,8 @@ export default function UserCreate() {
   
     // 作成(stateのeditedUserの値をApiで送信)
     async function createClicked() {
+        // ロード開始
+        await dispatch(fetchCredStart())
         const result = await dispatch(fetchAsyncCreate(state))
         if (fetchAsyncCreate.fulfilled.match(result)) {
             // 画像の保存
@@ -168,8 +187,12 @@ export default function UserCreate() {
             result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
             // Topページに遷移
             history.push(`/`)
+            // ロード終了
+            await dispatch(fetchCredEnd()); 
             return;
         }
+        // ロード終了
+        await dispatch(fetchCredEnd()); 
         return;
     }
 
@@ -191,42 +214,29 @@ export default function UserCreate() {
                                 email: "",
                                 password: "",
                                 name: "",
-                                birthday: "",
-                                prefecture: "",
-                                gender: false,
                             }}
                             onSubmit={async (values) => {
-                                // ロード開始
-                                await dispatch(fetchCredStart())
-                                // 入力値のセット
-                                setEmail(values.email)
-                                setPassword(values.password)
-                                setName(values.name)
                                 // ユーザ登録処理
                                 createClicked()
-                                // ロード終了
-                                await dispatch(fetchCredEnd()); 
                             }}
                             validationSchema={Yup.object().shape({
                                 email: Yup.string()
-                                            .required("メールアドレスの入力は必須です")
-                                            .email('メールアドレスの形式で入力してください'),
+                                          .required("メールアドレスの入力は必須です")
+                                          .email('メールアドレスの形式で入力してください'),
                                 password: Yup.string()
-                                                .required("パスワードの入力は必須です")
-                                                .min(6, '6文字以上を入れてください'),
+                                             .required("パスワードの入力は必須です")
+                                             .min(6, '6文字以上を入れてください'),
                                 name: Yup.string().required("ニックネームはの入力は必須です"),
-                                birthday: Yup.string().required("生年月日の設定は必須です"),
-                                prefecture: Yup.string().required("都道府県の設定は必須です"),
                             })}
-                            >
-                            {({
-                                handleSubmit,
-                                handleChange,
-                                handleBlur,
-                                values,
-                                errors,
-                                touched,
-                                isValid,
+                        >
+                        {({
+                            handleSubmit,
+                            handleChange,
+                            handleBlur,
+                            values,
+                            errors,
+                            touched,
+                            isValid,
                         }) => (
                             <Form onSubmit={handleSubmit}>
                             <Grid container>
@@ -234,119 +244,94 @@ export default function UserCreate() {
                                     <CardContent>
                                         <Link to="/login" style={{fontSize: 13, width: 150}}>ログインはこちら</Link>
                                         
-                                                <div>
-                                                    <FormControl className={classes.margin}>
-                                                        <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>メールアドレス</InputLabel>
-                                                        <Input
-                                                            id="input-with-icon-adornment"
-                                                            startAdornment={
-                                                                <InputAdornment position="start" />
-                                                            }
-                                                            className={classes.formFont}
-                                                            name="email"
-                                                            required
-                                                            onChange={handleChange}
-                                                            onBlur={handleBlur}
-                                                            value={values.email}
-                                                            // onChange={setEmail}
-                                                        />
-                                                    </FormControl>
-                                                    {touched.email && errors.email ? (
-                                                        <div className={classes.error}>{errors.email}</div>
-                                                    ) : null}
-                                                </div>
-                                                <div>
-                                                    <FormControl className={classes.margin}>
-                                                        <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>パスワード</InputLabel>
-                                                        <Input
-                                                            id="input-with-icon-adornment"
-                                                            startAdornment={
-                                                                <InputAdornment position="start" />
-                                                            }
-                                                            type="password"
-                                                            className={classes.formFont}
-                                                            name="password"
-                                                            required
-                                                            onChange={handleChange}
-                                                            onBlur={handleBlur}
-                                                            value={values.password}
-                                                            // onChange={setPassword}
-                                                        />
-                                                    </FormControl>
-                                                    {touched.password && errors.password ? (
-                                                        <div className={classes.error}>{errors.password}</div>
-                                                    ) : null}
-                                                </div>
-                                                <div>
-                                                    <FormControl className={classes.margin}>
-                                                        <InputLabel htmlFor="input-with-icon-adornment" className={classes.formFont}>ニックネーム</InputLabel>
-                                                        <Input
-                                                            id="input-with-icon-adornment"
-                                                            startAdornment={
-                                                                <InputAdornment position="start" />
-                                                            }
-                                                            className={classes.formFont}
-                                                            name="name"
-                                                            required
-                                                            onChange={handleChange}
-                                                            onBlur={handleBlur}
-                                                            value={values.name}
-                                                            // onChange={setName}
-                                                        />
-                                                    </FormControl>
-                                                    {touched.name && errors.name ? (
-                                                        <div className={classes.error}>{errors.name}</div>
-                                                    ) : null}
-                                                </div>
-                                                <div onBlur={setBirthday}>
-                                                    <FormControl className={classes.margin}>
-                                                        <FormLabel style={{fontSize: 15}} name="birthday" display="block">生年月日</FormLabel>
-                                                        <DateSelects fontSize={15} />
-                                                        <Input
-                                                            id="input-with-icon-adornment"
-                                                            startAdornment={
-                                                                <InputAdornment position="start" />
-                                                            }
-                                                            className={classes.formFont}
-                                                            name="birthday"
-                                                            required
-                                                            value={state.birthday}
-                                                            hidden={true}
-                                                        />
-                                                    </FormControl>
-                                                    {touched.birthday && errors.birthday ? (
-                                                        <div className={classes.error}>{errors.birthday}</div>
-                                                    ) : null}
-                                                </div>
-                                                <div onBlur={setPrefecture}>
-                                                    <FormControl className={classes.margin}>
-                                                        <PrefectureSelects values={prefectures.prefectures} name="prefecture" fontSize={15} />
-                                                        <Input
-                                                            id="input-with-icon-adornment"
-                                                            startAdornment={
-                                                                <InputAdornment position="start" />
-                                                            }
-                                                            className={classes.formFont}
-                                                            name="birthday"
-                                                            required
-                                                            value={state.prefecture}
-                                                            hidden={true}
-                                                        />
-                                                    </FormControl>
-                                                    {touched.prefecture && errors.prefecture ? (
-                                                        <div className={classes.error}>{errors.prefecture}</div>
-                                                    ) : null}
-                                                </div>
-                                                <div onClick={setGender}>
-                                                    <FormControl className={classes.margin}>
-                                                        <FormLabel style={{fontSize: 15}} name="gender" display="block">性別</FormLabel>
-                                                        <SwitchType 
-                                                            switchLabel={{true: '男性', false: '女性'}} 
-                                                            checked={state.gender}
-                                                            value={values.gender}
-                                                        />
-                                                    </FormControl>
-                                                </div>
+                                            <div onBlur={() => {setEmail(document.getElementById("email").value)}}>
+                                                <FormControl className={classes.margin}>
+                                                    <InputLabel htmlFor="email" className={classes.formFont}>メールアドレス</InputLabel>
+                                                    <Input
+                                                        id="email"
+                                                        name="email"
+                                                        startAdornment={
+                                                            <InputAdornment position="start" />
+                                                        }
+                                                        className={classes.formFont}
+                                                        required
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.email}
+                                                    />
+                                                </FormControl>
+                                                {touched.email && errors.email ? (
+                                                    <div className={classes.error}>{errors.email}</div>
+                                                ) : null}
+                                            </div>
+                                            <div onBlur={() => {setPassword(document.getElementById("password").value)}}>
+                                                <FormControl className={classes.margin}>
+                                                    <InputLabel htmlFor="password" className={classes.formFont}>パスワード</InputLabel>
+                                                    <Input
+                                                        id="password"
+                                                        name="password"
+                                                        startAdornment={
+                                                            <InputAdornment position="start" />
+                                                        }
+                                                        type="password"
+                                                        className={classes.formFont}
+                                                        required
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.password}
+                                                    />
+                                                </FormControl>
+                                                {touched.password && errors.password ? (
+                                                    <div className={classes.error}>{errors.password}</div>
+                                                ) : null}
+                                            </div>
+                                            <div onBlur={() => {setName(document.getElementById("name").value)}}>
+                                                <FormControl className={classes.margin}>
+                                                    <InputLabel htmlFor="name" className={classes.formFont}>ニックネーム</InputLabel>
+                                                    <Input
+                                                        id="name"
+                                                        name="name"
+                                                        startAdornment={
+                                                            <InputAdornment position="start" />
+                                                        }
+                                                        className={classes.formFont}
+                                                        required
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.name}
+                                                    />
+                                                </FormControl>
+                                                {touched.name && errors.name ? (
+                                                    <div className={classes.error}>{errors.name}</div>
+                                                ) : null}
+                                            </div>
+                                            <div onBlur={setBirthday}>
+                                                <FormControl className={classes.margin}>
+                                                    <FormLabel style={{fontSize: 15}} display="block">生年月日</FormLabel>
+                                                    <DateSelects fontSize={15} />
+                                                </FormControl>
+                                                {touched.birthday && errors.birthday ? (
+                                                    <div className={classes.error}>{errors.birthday}</div>
+                                                ) : null}
+                                            </div>
+                                            <div onBlur={setPrefecture}>
+                                                <FormControl className={classes.margin}>
+                                                    <PrefectureSelects values={prefectures.prefectures} name="prefecture" fontSize={15} />
+                                                </FormControl>
+                                                {touched.prefecture && errors.prefecture ? (
+                                                    <div className={classes.error}>{errors.prefecture}</div>
+                                                ) : null}
+                                            </div>
+                                            <div onClick={setGender}>
+                                                <FormControl className={classes.margin}>
+                                                    <FormLabel style={{fontSize: 15}} name="gender" display="block">性別</FormLabel>
+                                                    <SwitchType 
+                                                        switchLabel={{true: '男性', false: '女性'}} 
+                                                        checked={state.gender}
+                                                        value={values.gender}
+                                                    />
+                                                </FormControl>
+                                            </div>
                                             
                                     </CardContent>
                                 </Grid>
@@ -354,7 +339,7 @@ export default function UserCreate() {
                                     <CardContent>
                                         <div>
                                             <FormControl className={classes.margin}>
-                                                <InputLabel htmlFor="input-with-icon-adornment" style={{fontSize: 15}}>プロフィール画像</InputLabel>
+                                                <InputLabel htmlFor="profileImage" style={{fontSize: 15}}>プロフィール画像</InputLabel>
                                             </FormControl>
                                         </div>
 
@@ -367,7 +352,15 @@ export default function UserCreate() {
                                     <CardContent>
                                         <div>
                                             <FormControl>
-                                                <Button variant="contained" color="primary" className={classes.button} disabled={!isValid}>作成する</Button>
+                                                <Button 
+                                                    variant="contained" 
+                                                    color="primary" 
+                                                    className={classes.button} 
+                                                    disabled={!isValid || state.birthdayCheck || state.prefectureCheck} 
+                                                    type="submit"
+                                                >
+                                                    作成する
+                                                </Button>
                                             </FormControl>
                                         </div>
                                     </CardContent>
