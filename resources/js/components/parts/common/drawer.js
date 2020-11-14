@@ -117,7 +117,7 @@ const MenuDrawer = (props) => {
       <Divider />
       <List>
         {['公式ニュース'].map((text, index) => (
-          <ListItem button key={text} onClick={() => history.push('/')}>
+          <ListItem button key={text} onClick={() => history.push('/news')}>
             <ListItemIcon><InfoIcon /></ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>

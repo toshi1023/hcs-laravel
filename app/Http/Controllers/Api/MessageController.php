@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use App\Service\Web\MessageService;
-use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
@@ -27,7 +26,7 @@ class MessageController extends Controller
         if ($request->input('query')) { $conditions['messages.user_id'] = $request->input('query'); }
         
         $messages = $this->database->getIndex(null, $conditions);
-        // dd($messages);
+
         return response()->json([
             'messages' => $messages,
         ],200, [], JSON_UNESCAPED_UNICODE);

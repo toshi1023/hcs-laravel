@@ -23,7 +23,8 @@ import UserShow from './components/users/Show';
 import UserEdit from './components/users/Edit';
 import Profile from './components/users/Profile';
 import UserCreate from './components/users/Create';
-import Message from './components/messages/Message';
+import Message from './components/messages/Index';
+import News from './components/news/Index';
 import HcsAppBar from './components/parts/common/appBar';
 import LoadItem from './components/parts/common/loadItem';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
@@ -86,6 +87,7 @@ function App() {
             <Route exact path="/users/:id/mypage" render={props => <Profile {...props} />} />
             <Route exact path="/users/:id/edit" render={props => <UserEdit {...props} />} />
             <Route exact path="/messages" render={props => <Message {...props} />} />
+            <Route exact path="/news" render={props => <News {...props} />} />
           </Switch>
           {loading ? <LoadItem /> : null}
           <input type="hidden" id="loginId" />

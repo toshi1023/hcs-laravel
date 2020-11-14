@@ -100,6 +100,9 @@ Route::namespace('Web')->group(function(){
     Route::get('/messages/{id}/edit',   'MessageController@edit')->name('messages.edit');
     Route::get('/messages/{id}',        'MessageController@show')->name('messages.show');
 
+    /******************** ニュース管理(news) ********************/
+    Route::get('/news',             'NewsController@index')->name('news.index');
+
     /********** 認証管理(logout) **********/
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 });

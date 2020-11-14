@@ -137,14 +137,11 @@ export default function UserCreate() {
         })
     }
     const setBirthday = () => {
-        // let year = document.getElementById("selectYear").value
-        // let month = document.getElementById("selectMonth").value
-        // let day = document.getElementById("selectDay").value
         let year = Number(document.getElementById("selectYear").value) ? Number(document.getElementById("selectYear").value) : document.getElementById("selectYear").value
         let month = Number(document.getElementById("selectMonth").value) ? Number(document.getElementById("selectMonth").value) : document.getElementById("selectMonth").value
         let day = Number(document.getElementById("selectDay").value) ? Number(document.getElementById("selectDay").value) : document.getElementById("selectDay").value
         
-        // 年月日を選択した場合
+        // 年月日を正しく選択した場合
         if(typeof(year) != 'string' && typeof(month) != 'string' && typeof(day) != 'string') {
             setState({...state, 
                 birthday: `${year}-${month}-${day}`,

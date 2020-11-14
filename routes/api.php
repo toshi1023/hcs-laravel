@@ -21,6 +21,9 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
     /********** 都道府県管理(prefectures) **********/
     Route::get('api_prefectures',     'Api\UserController@getPrefectures')->name('api_prefectures');
 
+    /********** ニュース管理(news) **********/
+    Route::get('api_news',     'Api\NewsController@index')->name('api_news');
+
     Route::resource('api_messages' , 'Api\MessageController', ['only' => ['index']]);
 });
 

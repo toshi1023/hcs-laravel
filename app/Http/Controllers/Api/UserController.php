@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-      /// 検索条件のセット
+      // 検索条件のセット
       $conditions = [];
       if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
 
