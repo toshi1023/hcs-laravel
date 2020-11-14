@@ -23,6 +23,15 @@ class NewsService
    */
   public function getIndex($conditions=null)
   {
-    return $this->NewsService->getBaseData($conditions)->get();
+    return $this->NewsService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
+  }
+
+  /**
+   * Showページ用データ取得メソッド
+   * 引数：検索条件
+   */
+  public function getShow($conditions=null)
+  {
+    return $this->NewsService->getBaseData($conditions)->orderBy('updated_at', 'desc')->first();
   }
 }

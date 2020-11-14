@@ -19,6 +19,9 @@ class NewsController extends Controller
         $this->database = $database;
     }
 
+    /**
+     * ニュース一覧
+     */
     public function index(Request $request)
     {   
         // 検索条件のセット
@@ -29,6 +32,25 @@ class NewsController extends Controller
 
         // ニュースデータの取得
         $news = $this->database->getIndex($conditions);
+
+        return response()->json([
+            'news' => $news,
+        ],200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * ニュース詳細
+     */
+    public function show(Request $request)
+    {   
+        // 検索条件のセット
+        $conditions = [];
+        $conditions['status'] = 1;
+        // 会員限定のニュースを取得するときに検索条件をセット
+        if ($request->input('query')) { $conditions['member_flg'] = $request->input('query'); }
+
+        // ニュースデータの取得
+        $news = $this->database->getShow($conditions);
 
         return response()->json([
             'news' => $news,

@@ -7,7 +7,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
-import { selectNewsList, fetchAsyncGet } from './newsSlice';
+import { selectNewsList, fetchAsyncGet, selectNews, selectSelectedNews } from './newsSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 export default function News() {
     const classes = useStyles()
     const news = useSelector(selectNewsList)
+    const selectedNews = useSelector(selectSelectedNews)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -36,22 +37,28 @@ export default function News() {
             localStorage.getItem('loginId') ? resultReg = await dispatch(fetchAsyncGet()) : resultReg = await dispatch(fetchAsyncGet(0))
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // ロード終了
-                await dispatch(fetchCredEnd());       
+                await dispatch(fetchCredEnd())    
             }
             // ロード終了
-            await dispatch(fetchCredEnd());  
+            await dispatch(fetchCredEnd())
         }
         // 上で定義した非同期の関数を実行
         fetchNews()
     }, [dispatch])
-    
+
+    const handleSetNews = value => {
+        dispatch(
+            selectNews({ value })
+        )
+    }
+
     return (
         <Grid container>
             <Grid item sm={8}>
                 <div>
                     <Grid container justify="center">
                         <Grid item sm={6}>
-                            <NewsCard />
+                            <NewsCard news={selectedNews} />
                         </Grid>
                     </Grid>
                 </div>
@@ -62,7 +69,11 @@ export default function News() {
                     <List component="nav" aria-label="main mailbox folders">
                         {_.map(news.news, value => {
                             return (
-                                <ListItem key={value.id} button>
+                                <ListItem 
+                                    key={value.id} 
+                                    onClick={() => handleSetNews(value)}
+                                    button
+                                >
                                     <ListItemIcon>
                                         <MailIcon />
                                     </ListItemIcon>

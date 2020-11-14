@@ -23,6 +23,7 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
 
     /********** ニュース管理(news) **********/
     Route::get('api_news',     'Api\NewsController@index')->name('api_news');
+    Route::get('api_news/show',     'Api\NewsController@show')->name('api_news.show');
 
     Route::resource('api_messages' , 'Api\MessageController', ['only' => ['index']]);
 });

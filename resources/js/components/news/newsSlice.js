@@ -18,6 +18,17 @@ export const fetchAsyncGet = createAsyncThunk('news/index', async(conditions) =>
 })
 
 /**
+ * 詳細データの取得
+ */
+export const fetchAsyncGetShow = createAsyncThunk('news/show', async(conditions) => {
+    const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+    })
+    return res.data
+})
+
+/**
  * Slice(store)の設定
  */
 const newsSlice = createSlice({
@@ -60,6 +71,12 @@ const newsSlice = createSlice({
             return {
                 ...state,
                 news: action.payload,
+            }
+        })
+        builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
+            return {
+                ...state,
+                selectedNews: action.payload,
             }
         })
     },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -7,6 +7,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
+import { fetchAsyncGetShow, selectSelectedNews } from '../../news/newsSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  avatar: {
+  avatarOfficial: {
+    backgroundColor: 'green',
+  },
+  avatarWarning: {
     backgroundColor: red[500],
   },
   subHeaderTitle: {
@@ -41,38 +47,59 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NewsCard() {
-  const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
-  return (
-    <Card className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar} style={{ fontSize: 15 }}>
-            警告
-          </Avatar>
+export default function NewsCard(props) {
+    const classes = useStyles();
+    const selectedNews = useSelector(selectSelectedNews)
+    const dispatch = useDispatch()
+    let typeFlg = props.news.value != undefined ? props.news.value.type : (selectedNews.news != undefined ? selectedNews.news.type : '')
+    // 最新ニュースを初期表示
+    useEffect(() => {
+        // 非同期の関数を定義
+        const fetchNewsShow = async () => {
+            // Loading開始
+            await dispatch(fetchCredStart())
+            // ログイン有無で取得条件を変更
+            let resultReg;
+            localStorage.getItem('loginId') ? resultReg = await dispatch(fetchAsyncGetShow()) : resultReg = await dispatch(fetchAsyncGetShow(0))
+            if (fetchAsyncGetShow.fulfilled.match(resultReg)) {
+                // ロード終了
+                await dispatch(fetchCredEnd())       
+            }
+            // ロード終了
+            await dispatch(fetchCredEnd())
         }
-        title={<Typography className={classes.subHeaderTitle}>Shrimp and Chorizo Paella</Typography>}
-        subheader={<Typography className={classes.subHeaderDate}>September 14, 2016</Typography>}
-      />
-      <CardMedia
-        className={classes.media}
-        image=""
-        title="Paella dish"
-      />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-            <span className={classes.content}>
-                This impressive paella is a perfect party dish and a fun meal to cook together with your
-                guests. Add 1 cup of frozen peas along with the mussels, if you like.
-            </span>
-        </Typography>
-      </CardContent>
-    </Card>
-  );
+        // 上で定義した非同期の関数を実行
+        fetchNewsShow()
+    }, [dispatch])
+
+    return (
+        <Card className={classes.root}>
+        <CardHeader
+            avatar={
+                typeFlg == 1 ? 
+                    <Avatar aria-label="recipe" className={classes.avatarOfficial} style={{ fontSize: 15 }}>
+                        公式
+                    </Avatar>
+                : 
+                    <Avatar aria-label="recipe" className={classes.avatarWarning} style={{ fontSize: 15 }}>
+                        警告
+                    </Avatar>
+            }
+            title={<Typography className={classes.subHeaderTitle}>{props.news.value != undefined ? props.news.value.title : (selectedNews.news != undefined ? selectedNews.news.title : '')}</Typography>}
+            subheader={<Typography className={classes.subHeaderDate}>{props.news.value != undefined ? props.news.value.updated_at : (selectedNews.news != undefined ? selectedNews.news.updated_at : '')}</Typography>}
+        />
+        <CardMedia
+            className={classes.media}
+            image=""
+            title="Paella dish"
+        />
+        <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+                <span className={classes.content}>
+                    {props.news.value != undefined ? props.news.value.content : (selectedNews.news != undefined ? selectedNews.news.content : '')}
+                </span>
+            </Typography>
+        </CardContent>
+        </Card>
+    );
 }
