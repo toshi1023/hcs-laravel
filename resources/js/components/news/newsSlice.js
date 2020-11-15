@@ -18,9 +18,9 @@ export const fetchAsyncGet = createAsyncThunk('news/index', async(conditions) =>
 })
 
 /**
- * 詳細データの取得
+ * 詳細データ(初期表示用)の取得
  */
-export const fetchAsyncGetShow = createAsyncThunk('news/show', async(conditions) => {
+export const fetchAsyncGetShow = createAsyncThunk('news/initShow', async(conditions) => {
     const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,

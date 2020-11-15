@@ -94,9 +94,11 @@ export default function UserList(props) {
         dispatch(
             selectUser({ value })
         );
-        // ユーザの詳細ページへリダイレクト
-        history.push(`/users/${value.id}`);
-    };
+        // ユーザの詳細ページへリダイレクト(スマホのみ)
+        if(window.matchMedia('(max-width: 767px)').matches) {
+            history.push(`/users/${value.id}`);
+        }
+    }
     
     return (
         <List dense className={classes.root}>

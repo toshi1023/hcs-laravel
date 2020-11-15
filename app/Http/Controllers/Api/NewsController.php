@@ -39,9 +39,9 @@ class NewsController extends Controller
     }
 
     /**
-     * ニュース詳細
+     * ニュース詳細(初期表示用)
      */
-    public function show(Request $request)
+    public function initShow(Request $request)
     {   
         // 検索条件のセット
         $conditions = [];

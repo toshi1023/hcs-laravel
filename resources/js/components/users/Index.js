@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
-import { selectUsers, fetchAsyncGet } from './userSlice';
+import { selectUsers, selectSelectedUser, fetchAsyncGet, fetchAsyncGetShow } from './userSlice';
 import UserList from '../parts/userParts/userList';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
 import { TextField, InputAdornment, IconButton, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
+import UserShow from './Show';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: 500,
         // backgroundColor: theme.palette.background.paper,
         backgroundColor: '#f7fad1',
+    },
+    userShow: {
+        paddingTop: theme.spacing(4),
     },
     rootSearch: {
         '& .MuiTextField-root': {
@@ -40,6 +44,7 @@ export default function User() {
     const classes = useStyles();
     // stateで管理するユーザ一覧データを使用できるようにローカルのusers定数に格納
     const users = useSelector(selectUsers)
+    const selectedUser = useSelector(selectSelectedUser)
     const dispatch = useDispatch()
     const [state, setState] = React.useState({
         userName: null,
@@ -52,7 +57,8 @@ export default function User() {
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
             const resultReg = await dispatch(fetchAsyncGet(document.getElementById("userSearch").value))
-            if (fetchAsyncGet.fulfilled.match(resultReg)) {
+            const resultShow = await dispatch(fetchAsyncGetShow())
+            if (fetchAsyncGet.fulfilled.match(resultReg) && fetchAsyncGetShow.fulfilled.match(resultShow)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -88,6 +94,7 @@ export default function User() {
             await dispatch(fetchCredStart())
             // ユーザを取得
             const resultSearch = await dispatch(fetchAsyncGet(state.userName))
+            
             if (fetchAsyncGet.fulfilled.match(resultSearch)) {
                 setState({
                     ...state,
@@ -113,7 +120,16 @@ export default function User() {
     return (
         <>
             <Grid container className={classes.gridContainer} justify="center">
-                <Grid item xs={11} sm={6} md={6} lg={4}>
+                <Grid item sm={8}>
+                    <Grid container justify="center">
+                        <Grid item xs={12} sm={10}>
+                            <div className={classes.userShow}>
+                                <UserShow />
+                            </div>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={11} sm={4}>
                     <form className={classes.rootSearch} noValidate autoComplete="off">
                         <div>
                             <TextField

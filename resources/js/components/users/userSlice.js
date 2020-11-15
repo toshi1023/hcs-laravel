@@ -48,11 +48,23 @@ export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', asyn
     // Apiからの返り値
     return res.data
 })
+
 /**
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('users/index', async(conditions) => {
     const res = await axios.get(`${apiUrl}?query=${conditions}`)
+    return res.data
+})
+
+/**
+ * 詳細データ(初期表示用)の取得
+ */
+export const fetchAsyncGetShow = createAsyncThunk('users/initShow', async(conditions) => {
+    const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+    })
     return res.data
 })
 
@@ -248,6 +260,12 @@ const userSlice = createSlice({
             return {
                 ...state,
                 users: action.payload, //apiから取得した記事の情報をstateのusersに格納
+            }
+        })
+        builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
+            return {
+                ...state,
+                selectedUser: action.payload,
             }
         })
         builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {

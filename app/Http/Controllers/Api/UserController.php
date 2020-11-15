@@ -105,27 +105,33 @@ class UserController extends Controller
       // ], 200);
     }
 
-    public function pdf()
-    {
-      echo "test";
-      // 全ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex()->get();
-      $pdf = \PDF::loadView('/layouts/pdf_template');
-
-      // ブラウザ上で開く
-      return $pdf->inline('thisis.pdf');
-
-      // ダウンロードする場合
-      // return $pdf->download('download.pdf');
-    }
-
     /**
      * ユーザ詳細ページ
      */
     public function show($api_user)
     {
-      $user = $this->database->getShow($api_user);
+      // 検索条件のセット
+      $conditions = [];
+      $conditions['status'] = 0;
+        
+      $user = $this->database->getShow($conditions);
+      
+      return response()->json([
+        'user' => $user, 
+      ],200, [], JSON_UNESCAPED_UNICODE);
+    }
 
+    /**
+     * ユーザ詳細ページ(初期表示用)
+     */
+    public function initShow(Request $request)
+    {
+      // 検索条件のセット
+      $conditions = [];
+      $conditions['status'] = 0;
+        
+      $user = $this->database->getShow($conditions);
+      dd($user);
       return response()->json([
         'user' => $user, 
       ],200, [], JSON_UNESCAPED_UNICODE);
@@ -197,4 +203,5 @@ class UserController extends Controller
         'message' => 'Unauthenticated.'
       ], 500);
     }
+
 }

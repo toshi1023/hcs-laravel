@@ -12,20 +12,21 @@ Route::post('/login', 'Api\LoginController@login');
 Route::group(['middleware' => ['api'], 'prefix'], function() {
 
     /********** 記事管理(articles) **********/
-    Route::resource('api_articles' , 'Api\ArticleController', ['only' => ['index']]);
+    Route::resource('api_articles' ,    'Api\ArticleController', ['only' => ['index']]);
     
     /********** ユーザ管理(users) **********/
     // Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);
-    Route::resource('api_users' ,           'Api\UserController');
+    Route::resource('api_users',     'Api\UserController');
+    Route::get('api_users/show',     'Api\UserController@initShow')->name('api_users.initShow');
     
     /********** 都道府県管理(prefectures) **********/
-    Route::get('api_prefectures',     'Api\UserController@getPrefectures')->name('api_prefectures');
+    Route::get('api_prefectures',       'Api\UserController@getPrefectures')->name('api_prefectures');
 
     /********** ニュース管理(news) **********/
-    Route::get('api_news',     'Api\NewsController@index')->name('api_news');
-    Route::get('api_news/show',     'Api\NewsController@show')->name('api_news.show');
+    Route::get('api_news',              'Api\NewsController@index')->name('api_news');
+    Route::get('api_news/show',     'Api\NewsController@initShow')->name('api_news.initShow');
 
-    Route::resource('api_messages' , 'Api\MessageController', ['only' => ['index']]);
+    Route::resource('api_messages' ,    'Api\MessageController', ['only' => ['index']]);
 });
 
 

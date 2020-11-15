@@ -26,7 +26,7 @@ class UserService
   {
     if(is_null($table)) {
       // ユーザ情報の取得
-      return $this->UserService->getBaseData($conditions)->get();
+      return $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
     }
     // 指定したテーブルのデータをソートして取得
     return $this->UserService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
@@ -35,11 +35,11 @@ class UserService
 
   /* *
    * Showページ用データを取得するメソッド
-   * 引数: ユーザID
+   * 引数: 検索条件
    * */
-  public function getShow($id)
+  public function getShow($conditions=null)
   {
-    return $this->UserService->getWhereQuery('users', ['id' => $id])->first();
+    return $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->first();
   }
 
   /* *

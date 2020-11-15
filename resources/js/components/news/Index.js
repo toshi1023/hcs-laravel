@@ -19,6 +19,23 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 10,
         fontSize: 15
     },
+    sectionDesktop: {
+        display: "none",
+        [theme.breakpoints.up("md")]: {
+            display: "flex"
+        }
+    },
+    sectionMobile: {
+        display: "flex",
+        [theme.breakpoints.up("md")]: {
+            display: "none"
+        }
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 }));
 
 export default function News() {
@@ -45,7 +62,7 @@ export default function News() {
         // 上で定義した非同期の関数を実行
         fetchNews()
     }, [dispatch])
-
+    
     const handleSetNews = value => {
         dispatch(
             selectNews({ value })
@@ -55,13 +72,11 @@ export default function News() {
     return (
         <Grid container>
             <Grid item sm={8}>
-                <div>
-                    <Grid container justify="center">
-                        <Grid item sm={6}>
-                            <NewsCard news={selectedNews} />
-                        </Grid>
+                <Grid container justify="center">
+                    <Grid item xs={10} sm={6}>
+                        <NewsCard news={selectedNews} />
                     </Grid>
-                </div>
+                </Grid>
             </Grid>
             <Grid item xs={12} sm={4}>
                 <div className={classes.root}>
