@@ -25,7 +25,8 @@ class LoginController extends Controller
             return new JsonResponse([
                 'token' => $token, 
                 'id' => $user->id, 
-                'login_user_photo' => $user->users_photo_path
+                'login_user_photo' => $user->users_photo_path,
+                'info_message' => 'ログインに成功しました!'
             ], 200);
             // return new JsonResponse([
             //     'token' => $token, 

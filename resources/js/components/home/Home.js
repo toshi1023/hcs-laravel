@@ -22,6 +22,7 @@ function Home() {
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={8} sm={8}>
                     {
+                        // ユーザ作成 & ログイン完了時
                         infoMessages ? 
                             <SnackMessages infoOpen={true} />
                         :

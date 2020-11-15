@@ -90,7 +90,7 @@ function UserShow(props) {
         // ユーザの編集ページへリダイレクト
         history.push(`/users/${value.id}/edit`);
     };
-    console.log(selectedUser)
+    
     return (
         <>
             {
