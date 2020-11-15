@@ -177,7 +177,7 @@ function UserShow(props) {
                     <Grid container  spacing={2}>
                         <Grid item xs={12} sm={12}>
                             <Tooltip title="編集" classes={{tooltip: classes.tooltip}}>
-                                <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUser.value)}>
+                                <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUser.value ? selectedUser.value : selectedUser.user)}>
                                     <EditIcon />
                                 </Fab>
                             </Tooltip>
