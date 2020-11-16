@@ -92,7 +92,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+// PC版
 const Title = styled.h1`
+    font-family: "Cabin Sketch", cursive;
+`;
+// スマホ版
+const MobileTitle = styled.h3`
     font-family: "Cabin Sketch", cursive;
 `;
 
@@ -261,10 +266,15 @@ function HcsAppBar() {
                 <Toolbar>
                     <MenuDrawer />
                     <div className={classes.title}>
-                        <Typography>
+                        <Typography className={classes.sectionDesktop}>
                             <Title onClick={() => history.push("/")}>
                                 HitcHike Community Space
                             </Title>
+                        </Typography>
+                        <Typography className={classes.sectionMobile}>
+                            <MobileTitle onClick={() => history.push("/")}>
+                                HitcHike Community Space
+                            </MobileTitle>
                         </Typography>
                     </div>
                     <div className={classes.grow} />

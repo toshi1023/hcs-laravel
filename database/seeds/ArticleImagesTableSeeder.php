@@ -35,5 +35,41 @@ class ArticleImagesTableSeeder extends Seeder
             'article_id'         => 4,
             'user_id'            => 3,
         ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 5,
+            'user_id'            => 2,
+        ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 6,
+            'user_id'            => 5,
+        ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 7,
+            'user_id'            => 7,
+        ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 8,
+            'user_id'            => 4,
+        ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 9,
+            'user_id'            => 11,
+        ]);
+        \App\Model\ArticleImage::create([
+            'articles_photo_name' => 'NoImage',
+            'articles_photo_path' => env('AWS_NOIMAGE'),
+            'article_id'         => 10,
+            'user_id'            => 10,
+        ]);
     }
 }
