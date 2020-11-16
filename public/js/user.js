@@ -184,23 +184,23 @@ function setDetailView(data, button) {
                 {},
                 // 各列ごとの表示定義
                 [
-                    {data: 'friend_id'},
+                    {data: 'id'},
                     {
                         // 友達のイメージ画像を表示(モーダル形式)
                         data: function (p) {
                             
                             return `
-                                <a href="" data-toggle="modal" data-target="#friend_modal${p.friend_id}">
+                                <a href="" data-toggle="modal" data-target="#friend_modal${p.id}">
                                     <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
                                 </a>
         
-                                <div class="modal" id="friend_modal${p.friend_id}" tabindex="-1"
+                                <div class="modal" id="friend_modal${p.id}" tabindex="-1"
                                     role="dialog" aria-labelledby="label1" aria-hidden="true">
                                     <div class="modal-dialog modal-warning modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="label1">プロフィール画像</h5>
-                                                <button type="button" class="close" data-id="${p.friend_id}" aria-label="Close">
+                                                <button type="button" class="close" data-id="${p.id}" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
@@ -208,7 +208,7 @@ function setDetailView(data, button) {
                                             <img src="${p.users_photo_path}" id="image_modal_user" height="250" width="300">
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" id="friend_image_close" data-id="${p.friend_id}">Close</button>
+                                                <button type="button" class="btn btn-secondary" id="friend_image_close" data-id="${p.id}">Close</button>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@ function setDetailView(data, button) {
                             `;
                         }
                     },
-                    {data: 'friend_name'},
+                    {data: 'name'},
                     {data: 'prefecture'},
                     {
                         data: function (p) {
@@ -243,7 +243,7 @@ function setDetailView(data, button) {
                     {
                         data: function (p) {
                             // 編集
-                            return getListLink('remove', p.friend_id ,`users/${p.id}/friends/${p.friend_id}`, 'list-button');
+                            return getListLink('remove', p.id ,`users/${$('#user_id').data('id')}/friends/${p.id}`, 'list-button');
                         }
                     }
                 ],

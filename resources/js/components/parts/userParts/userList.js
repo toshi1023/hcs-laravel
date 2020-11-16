@@ -103,7 +103,6 @@ export default function UserList(props) {
     return (
         <List dense className={classes.root}>
             {_.map(props.user.users, value => {
-                //     const labelId = `user-list-${value.id}`;
                 
                 return (
                     <>
@@ -174,35 +173,3 @@ export default function UserList(props) {
         </List>
     );
 }
-
-// return (
-//   <>
-//     {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-//     <ListItem key={props.user.value.id} button onClick={() => handleSetUser(props.user.value)}>
-//       <ListItemAvatar>
-//         <Avatar
-//           alt={`Avatar n°${props.user.value.id}`}
-//           src={`${props.user.value.prof_photo_path}`}
-//           className={classes.avatar}
-//         />
-//       </ListItemAvatar>
-//       <ListItemText
-//         id={props.user.value.id}
-//         primary={`${props.user.value.name}`}
-//         classes={{primary: classes.list}}
-//         style={{color: (props.user.value.gender == 1 ? 'blue' : 'red')}}
-//       />
-//       <ListItemSecondaryAction>
-//         <IconButton style={{backgroundColor: '#d0ddf5'}}>
-//           <PersonAddIcon
-//             edge="end"
-//             onChange={handleToggle(props.user.value.id)}
-//             inputProps={{ 'aria-labelledby': props.user.value.id }}
-//             className={classes.icon}
-//           />
-//         </IconButton>
-//       </ListItemSecondaryAction>
-//     </ListItem>
-//     <hr />
-//   </>
-// );

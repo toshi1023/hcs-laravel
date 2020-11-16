@@ -99,4 +99,13 @@ class UserService
     return $this->UserService->getQuery($table)->get();
   }
 
+  /**
+   * フレンド情報の取得
+   * 引数：ユーザID
+   */
+  public function getFriendsQuery($user_id)
+  {
+    // 友達申請が承認された値のみ取得
+    return $this->UserService->getFriendsQuery($user_id, true)->get();
+  }
 }

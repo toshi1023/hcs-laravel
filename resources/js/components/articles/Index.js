@@ -2,25 +2,45 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet } from './articleSlice';
+import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
+import FriendList from '../parts/articleParts/friendList';
 import _ from 'lodash';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Paper, Tabs, Tab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import CommentIcon from '@material-ui/icons/Comment';
+import GroupIcon from '@material-ui/icons/Group';
+import styles from '../app/bodyTitle.module.css';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
-      paddingTop: '10px',
-      paddingBottom: '20px'
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
     },
-    
+    sectionDesktop: {
+        display: "none",
+        [theme.breakpoints.up("sm")]: {
+            display: "block"
+        }
+    },
+    sectionMobile: {
+        display: "block",
+        [theme.breakpoints.up("sm")]: {
+            display: "none"
+        }
+    },
   }));
 
 function Article() {
     const classes = useStyles();
-
+    // タブ用のstate
+    const [value, setValue] = React.useState(0);
+    const [articlePage, setArticlePage] = React.useState(false);
+    const [friendListPage, setFriendListPage] = React.useState(true);
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
     const articles = useSelector(selectArticles)
+    const friends = useSelector(selectUsers)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -30,7 +50,9 @@ function Article() {
             await dispatch(fetchCredStart())
             // 記事一覧を取得
             const resultReg = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
-            if (fetchAsyncGet.fulfilled.match(resultReg)) {
+            // 友達一覧を取得
+            const resultFriends = await dispatch(fetchAsyncGetFriends(localStorage.getItem('loginId')))
+            if (fetchAsyncGet.fulfilled.match(resultReg) && fetchAsyncGetFriends.fulfilled.match(resultFriends)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -66,23 +88,87 @@ function Article() {
         // 上で定義した非同期の関数を実行
         fetchArticleSearch()
     }
+
+    // タブ切り替え処理
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    // 記事一覧ページを表示(スマホ用)
+    const handleTabArticle = () => {
+        setArticlePage(false)
+        setFriendListPage(true)
+    }
+    // 友達一覧ページを表示(スマホ用)
+    const handleTabFriendList = () => {
+        setArticlePage(true)
+        setFriendListPage(false)
+    }
     
     // 記事一覧を生成
     const renderArticles = () => {
         return _.map(articles.articles, article => (
-            <Grid item xs={12} sm={7}>
-                <ArticleCard key={article.id} article={article} />
+            <Grid container className={classes.gridContainer} justify="center">
+                <Grid item xs={12} sm={6}>
+                    <ArticleCard key={article.id} article={article} />
+                </Grid>
             </Grid>
         ))
     }
+    
     return (
         <>
-            <div onBlur={getSearchPrefecture}>
-                <PrefectureSelects values={articles.prefectures} fontSize={15} />
+            {/* スマホ版 */}
+            <div className={classes.sectionMobile}>
+                <Paper square className={classes.root}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        variant="fullWidth"
+                        indicatorColor="secondary"
+                        textColor="secondary"
+                        aria-label="icon label tabs example"
+                    >
+                        <Tab icon={<CommentIcon />} label="記事一覧" onClick={handleTabArticle} />
+                        <Tab icon={<GroupIcon />} label="友達の記事を探す" onClick={handleTabFriendList} />
+                    </Tabs>
+                </Paper>
+                <div onBlur={getSearchPrefecture}>
+                    <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                </div>
+                <Grid container className={classes.gridContainer} justify="center">
+                    <Grid item xs={11} hidden={articlePage}>
+                        {renderArticles()}
+                    </Grid>
+                    <Grid item xs={11} hidden={friendListPage}>
+                        <h1 className={styles.friendList}>
+                            フレンドの記事を見る
+                        </h1>
+                        <br />
+                        <FriendList friend={friends} />
+                    </Grid>
+                </Grid>
             </div>
-            <Grid container className={classes.gridContainer} justify="center">
-                {renderArticles()}
-            </Grid>
+
+            {/* PC版 */}
+            <div className={classes.sectionDesktop}>
+                <div onBlur={getSearchPrefecture}>
+                    <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                </div>
+                <Grid container className={classes.gridContainer} justify="center">
+                    <Grid item xs={11} sm={8}>
+                        {renderArticles()}
+                    </Grid>
+                    <Grid item sm={4} className={classes.sectionDesktop}>
+                        <Grid item sm={9}>
+                            <h1 className={styles.friendList}>
+                                フレンドの記事を見る
+                            </h1>
+                        </Grid>
+                        <br />
+                        <FriendList friend={friends} />
+                    </Grid>
+                </Grid>
+            </div>
         </>
     );
 }

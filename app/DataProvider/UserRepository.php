@@ -92,17 +92,39 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
 
     /**
      * usersページのフレンド一覧データを取得
-     * 引数：ユーザID
+     * 引数1：ユーザID, 引数2：承認済みフラグ
      */
-    public function getFriendsQuery($user_id) {
-        return $this->model->leftjoin('friends', 'users.id', '=', 'friends.user_id')
-                           ->leftJoin('users as targets', 'friends.user_id_target', '=', 'targets.id')
-                           ->select('users.id', 'users.name as user_name', 'users.updated_at', 
-                                    'friends.id as friend_id', 'friends.user_id_target',
-                                    'friends.status', 'targets.users_photo_name', 'targets.users_photo_path',
-                                    'targets.name as friend_name', 'targets.prefecture'
-                                    )
-                           ->where('friends.user_id', '=', $user_id);
+    public function getFriendsQuery($user_id, $approval=false) {
+        // サブクエリ
+        $subQueryA = $this->model->select('id', 'user_id as target_id', 'status', 'updated_at')
+                                 ->from('friends')
+                                 ->where('user_id_target', '=', $user_id)
+                                 ->where('delete_flg', '=', 0);
+
+        $subQueryB = $this->model->select('id', 'user_id_target as target_id', 'status', 'updated_at')
+                                 ->from('friends')
+                                 ->where('user_id', '=', $user_id)
+                                 ->where('delete_flg', '=', 0)
+                                 ->union($subQueryA)
+                                 ->orderBy('updated_at', 'desc');
+
+        $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'myfriends.*')
+                             ->fromSub($subQueryB, 'myfriends')
+                             ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
+        
+        if($approval) {
+            // 友達申請が承認済みの値のみに絞る
+            $query = $query->where('myfriends.status', '=', 2);
+        }
+
+        return $query;
+
+        // 完成形のSQL(ユーザIDが1の場合)
+        // SELECT users.name, users.prefecture, users.gender, users.users_photo_name, users.users_photo_path, myfriends.*
+        // FROM ((SELECT id, `user_id_target` AS target_id, `status`, `updated_at` FROM `friends` WHERE `user_id` = 1 AND `delete_flg` = 0)
+        // UNION (SELECT id, `user_id` AS target_id, `status`, `updated_at` FROM `friends` WHERE `user_id_target` = 1 AND `delete_flg` = 0)) AS myfriends
+        // LEFT JOIN users ON myfriends.target_id = users.id
+        // WHERE myfriends.status = 2
     }
 
     /**

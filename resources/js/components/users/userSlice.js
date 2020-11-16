@@ -39,15 +39,6 @@ export const fetchAsyncGetProf = createAsyncThunk('prof/get', async(id) =>{
     // Apiからの返り値
     return res.data
 })
-/**
- * 都道府県データの取得用非同期関数
- */
-export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', async() =>{
-    // axios: 引数1:  引数2: メタ情報
-    const res = await axios.get(prefectureUrl, {})
-    // Apiからの返り値
-    return res.data
-})
 
 /**
  * 一覧データの取得
@@ -120,6 +111,24 @@ export const fetchAsyncDelete = createAsyncThunk('users/delete', async(id) => {
         },
     })
     return id
+})
+
+/**
+ * 都道府県データの取得用非同期関数
+ */
+export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', async() =>{
+    // axios: 引数1:  引数2: メタ情報
+    const res = await axios.get(prefectureUrl, {})
+    // Apiからの返り値
+    return res.data
+})
+
+/**
+ * 友達一覧データの取得
+ */
+export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(conditions) => {
+    const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`)
+    return res.data
 })
 
 
@@ -250,12 +259,6 @@ const userSlice = createSlice({
                 loggedInUser: action.payload,
             }
         })
-        builder.addCase(fetchAsyncGetPrefectures.fulfilled, (state, action) => {
-            return {
-                ...state,
-                prefectures: action.payload,
-            }
-        })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
@@ -295,6 +298,18 @@ const userSlice = createSlice({
                     created_at: '',             // 記事の作成日
                     updated_at: '',             // 記事の更新日
                 },
+            }
+        })
+        builder.addCase(fetchAsyncGetPrefectures.fulfilled, (state, action) => {
+            return {
+                ...state,
+                prefectures: action.payload,
+            }
+        })
+        builder.addCase(fetchAsyncGetFriends.fulfilled, (state, action) => {
+            return {
+                ...state,
+                users: action.payload,
             }
         })
     },

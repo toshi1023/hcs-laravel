@@ -58,24 +58,12 @@ function App() {
   const dispatch = useDispatch();
   let loading = useSelector(selectLoading);
   let selectedUsers = useSelector(selectSelectedUser);
-
-  // Loadingアイコンの制御
-  const handleLoading = async () => {
-
-    if(loading) {
-      await dispatch(fetchCredEnd())
-    } else {
-      await dispatch(fetchCredStart())
-    }
-    return;
-  }
-
+  
   return (
     <>
       <div className={classes.background}>
         <BrowserRouter>
           <HcsAppBar />
-          <button onClick={handleLoading} />
           <Switch>
             <Route exact path="/login" render={props => <Login {...props} />} />
             <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}

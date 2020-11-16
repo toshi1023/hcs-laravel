@@ -21,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionDesktop: {
         display: "none",
-        [theme.breakpoints.up("md")]: {
-            display: "flex"
+        [theme.breakpoints.up("sm")]: {
+            display: "block"
         }
     },
     sectionMobile: {
-        display: "flex",
-        [theme.breakpoints.up("md")]: {
+        display: "block",
+        [theme.breakpoints.up("sm")]: {
             display: "none"
         }
     },

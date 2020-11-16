@@ -108,7 +108,7 @@ class UserController extends Controller
     /**
      * ユーザ詳細ページ
      */
-    public function show($api_user)
+    public function show(Request $request)
     {
       // 検索条件のセット
       $conditions = [];
@@ -131,7 +131,7 @@ class UserController extends Controller
       $conditions['status'] = 0;
         
       $user = $this->database->getShow($conditions);
-      dd($user);
+
       return response()->json([
         'user' => $user, 
       ],200, [], JSON_UNESCAPED_UNICODE);
@@ -196,6 +196,24 @@ class UserController extends Controller
 
       return response()->json([
         'prefectures' => $prefectures, 
+      ],200, [], JSON_UNESCAPED_UNICODE);
+
+      // 取得失敗時はエラーメッセージを返す
+      return new JsonResponse([
+        'message' => 'Unauthenticated.'
+      ], 500);
+    }
+
+    /**
+     * フレンド情報の取得
+     */
+    public function friendsIndex(Request $request) 
+    {
+      // ユーザのフレンド情報を取得
+      $friends = $this->database->getFriendsQuery($request->input('query'));
+
+      return response()->json([
+        'friends' => $friends, 
       ],200, [], JSON_UNESCAPED_UNICODE);
 
       // 取得失敗時はエラーメッセージを返す

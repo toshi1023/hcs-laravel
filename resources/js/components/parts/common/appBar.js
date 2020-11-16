@@ -92,11 +92,11 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-// PC版
+// PC版タイトル
 const Title = styled.h1`
     font-family: "Cabin Sketch", cursive;
 `;
-// スマホ版
+// スマホ版タイトル
 const MobileTitle = styled.h3`
     font-family: "Cabin Sketch", cursive;
 `;
