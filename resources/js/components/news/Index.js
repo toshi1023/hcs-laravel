@@ -73,6 +73,7 @@ export default function News() {
     
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
+        console.log(newValue)
         setValue(newValue);
     };
     // ニュース一覧ページを表示(スマホ用)
@@ -91,6 +92,13 @@ export default function News() {
         dispatch(
             selectNews({ value })
         )
+        // 表示ページの切り替え(スマホのみ)
+        if(window.matchMedia('(max-width: 767px)').matches) {
+            // タブの切り替え
+            handleChange(null, 0)
+            // ニュース詳細ページの表示
+            handleTabNews()
+        }
     }
 
     return (
