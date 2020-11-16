@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import NewsCard from '../parts/newsParts/newsCard';
 import { makeStyles } from '@material-ui/core/styles';
-import { List, ListItem, ListItemIcon, ListItemText, Divider, Grid } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Divider, Grid, Paper, Tabs, Tab } from '@material-ui/core';
 import MailIcon from '@material-ui/icons/Mail';
 import DraftsIcon from '@material-ui/icons/Drafts';
+import InfoIcon from '@material-ui/icons/Info';
+import DnsIcon from '@material-ui/icons/Dns';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
@@ -14,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
+    },
+    topMargin: {
+        marginTop: theme.spacing(2),
     },
     list: {
         marginLeft: 10,
@@ -40,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function News() {
     const classes = useStyles()
+    const [value, setValue] = React.useState(1);
+    const [newsPage, setNewsPage] = React.useState(true);
+    const [newsListPage, setNewsListPage] = React.useState(false);
     const news = useSelector(selectNewsList)
     const selectedNews = useSelector(selectSelectedNews)
     const dispatch = useDispatch()
@@ -63,6 +71,22 @@ export default function News() {
         fetchNews()
     }, [dispatch])
     
+    // タブ切り替え処理
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    // ニュース一覧ページを表示(スマホ用)
+    const handleTabNewsList = () => {
+        setNewsPage(true)
+        setNewsListPage(false)
+    }
+    // ニュース詳細ページを表示(スマホ用)
+    const handleTabNews = () => {
+        setNewsPage(false)
+        setNewsListPage(true)
+    }
+
+    // 選択したニュースを詳細に表示
     const handleSetNews = value => {
         dispatch(
             selectNews({ value })
@@ -70,39 +94,91 @@ export default function News() {
     }
 
     return (
-        <Grid container>
-            <Grid item sm={8}>
-                <Grid container justify="center">
-                    <Grid item xs={10} sm={6}>
+        <>
+            <Grid container className={classes.sectionMobile}>
+                <Paper square className={classes.root}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        variant="fullWidth"
+                        indicatorColor="secondary"
+                        textColor="secondary"
+                        aria-label="icon label tabs example"
+                    >
+                        <Tab icon={<InfoIcon />} label="ニュース詳細" onClick={handleTabNews} />
+                        <Tab icon={<DnsIcon />} label="ニュース一覧" onClick={handleTabNewsList} />
+                    </Tabs>
+                </Paper>
+                <Grid container justify="center" hidden={newsPage}>
+                    <Grid item xs={11}>
                         <NewsCard news={selectedNews} />
                     </Grid>
                 </Grid>
+                <Grid item xs={12} hidden={newsListPage}>
+                    <div className={classes.root}>
+                    <div className={classes.topMargin}></div>
+                        <Divider />
+                        <List component="nav" aria-label="main mailbox folders">
+                            {_.map(news.news, value => {
+                                return (
+                                    <ListItem 
+                                        key={value.id} 
+                                        onClick={() => handleSetNews(value)}
+                                        button
+                                    >
+                                        <ListItemIcon>
+                                            <MailIcon />
+                                        </ListItemIcon>
+                                        <ListItemText 
+                                            primary={value.title}
+                                            classes={{ primary: classes.list }}
+                                        />
+                                    </ListItem>
+                                )
+                            })}
+                        </List>
+                        <Divider />
+                    </div>
+                </Grid>
             </Grid>
-            <Grid item xs={12} sm={4}>
-                <div className={classes.root}>
-                    <Divider />
-                    <List component="nav" aria-label="main mailbox folders">
-                        {_.map(news.news, value => {
-                            return (
-                                <ListItem 
-                                    key={value.id} 
-                                    onClick={() => handleSetNews(value)}
-                                    button
-                                >
-                                    <ListItemIcon>
-                                        <MailIcon />
-                                    </ListItemIcon>
-                                    <ListItemText 
-                                        primary={value.title}
-                                        classes={{ primary: classes.list }}
-                                    />
-                                </ListItem>
-                            )
-                        })}
-                    </List>
-                    <Divider />
-                </div>
-            </Grid>
-        </Grid>
+
+            <div className={classes.sectionDesktop}>
+                <Grid container>
+                    <Grid item sm={8}>
+                        <Grid container justify="center">
+                            <Grid item sm={6}>
+                                <NewsCard news={selectedNews} />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item sm={4}>
+                        <div className={classes.root}>
+                        <div className={classes.topMargin}></div>
+                            <Divider />
+                            <List component="nav" aria-label="main mailbox folders">
+                                {_.map(news.news, value => {
+                                    return (
+                                        <ListItem 
+                                            key={value.id} 
+                                            onClick={() => handleSetNews(value)}
+                                            button
+                                        >
+                                            <ListItemIcon>
+                                                <MailIcon />
+                                            </ListItemIcon>
+                                            <ListItemText 
+                                                primary={value.title}
+                                                classes={{ primary: classes.list }}
+                                            />
+                                        </ListItem>
+                                    )
+                                })}
+                            </List>
+                            <Divider />
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
+        </>
     );
 }

@@ -39,7 +39,7 @@ import store from "./store";
 const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: '#f0f1f3'
-  }
+  },
 }));
 
 /**
