@@ -8,7 +8,6 @@ import CommentIcon from '@material-ui/icons/Comment';
 import GroupIcon from '@material-ui/icons/Group';
 import MapIcon from '@material-ui/icons/Map';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import InfoIcon from '@material-ui/icons/Info';
 import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import { useDispatch } from 'react-redux';
@@ -67,14 +66,6 @@ const MenuDrawer = (props) => {
       onClick: () => history.push('/users')
     },
   ]
-  // ログインしているときはメッセージメニューを追加
-  localStorage.getItem('localToken') ? itemList.push(
-    {
-      text: 'メッセージ',
-      icon: <MailIcon />,
-      onClick: () => history.push('/messages')
-    })
-  : '';
 
   // Logout処理
   const handleLogout = async () => {

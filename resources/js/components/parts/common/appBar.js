@@ -15,6 +15,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import CreateIcon from '@material-ui/icons/Create';
 import styled from "styled-components";
 import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
@@ -132,15 +133,16 @@ function HcsAppBar() {
         setAnchorEl(null);
         handleMobileMenuClose();
     };
-    // My記事メニューをクローズ
-    const handleMyArticleClose = () => {
-        history.push("/articles/mypage");
-        setAnchorEl(null);
+
+    // メッセージアイコンクリック
+    const handleMessage = () => {
+        history.push("/messages");
         handleMobileMenuClose();
     };
 
-    const handleMessage = () => {
-        history.push("/messages");
+    // 記事作成アイコンクリック
+    const handleCreateArticle = () => {
+        history.push("/articles/mypage");
         handleMobileMenuClose();
     };
 
@@ -197,7 +199,6 @@ function HcsAppBar() {
                 localStorage.getItem('localToken') ? 
                 <div>
                     <MenuItem onClick={handleProfileClose}>プロフィール</MenuItem>
-                    <MenuItem onClick={handleMyArticleClose}>My記事</MenuItem>
                     <MenuItem onClick={handleMenuCloseLogout}>ログアウト</MenuItem>
                 </div>
                 :
@@ -222,11 +223,22 @@ function HcsAppBar() {
             {   // ログインしているか否かで表示内容を変更
                 localStorage.getItem('localToken') ? 
                 <div>
-                    <MenuItem>
+                    <MenuItem onClick={handleCreateArticle}>
                         <IconButton
-                            aria-label="show 4 new mails"
+                            aria-label="show new articles"
                             color="inherit"
-                            onClick={handleMessage}
+                            className={classes.badge}
+                        >
+                            <Badge color="secondary">
+                                <CreateIcon />
+                            </Badge>
+                        </IconButton>
+                        <p>記事作成</p>
+                    </MenuItem>
+                    <MenuItem onClick={handleMessage}>
+                        <IconButton
+                            aria-label="show new mails"
+                            color="inherit"
                         >
                             <Badge badgeContent={4} color="secondary">
                                 <MailIcon />
@@ -236,7 +248,7 @@ function HcsAppBar() {
                     </MenuItem>
                     <MenuItem>
                         <IconButton
-                            aria-label="show 11 new notifications"
+                            aria-label="show new notifications"
                             color="inherit"
                         >
                             <Badge badgeContent={11} color="secondary">
@@ -287,7 +299,17 @@ function HcsAppBar() {
                         localStorage.getItem('localToken') ? 
                         <div>
                             <IconButton
-                                aria-label="show 4 new mails"
+                                aria-label="show new articles"
+                                color="inherit"
+                                className={classes.badge}
+                                onClick={handleCreateArticle}
+                            >
+                                <Badge color="secondary">
+                                    <CreateIcon fontSize="large" />
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                aria-label="show new mails"
                                 color="inherit"
                                 className={classes.badge}
                                 onClick={handleMessage}
@@ -297,7 +319,7 @@ function HcsAppBar() {
                                 </Badge>
                             </IconButton>
                             <IconButton
-                                aria-label="show 11 new notifications"
+                                aria-label="show new notifications"
                                 color="inherit"
                                 className={classes.badge}
                             >

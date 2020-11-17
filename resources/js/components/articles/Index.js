@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     clearButton: {
         fontSize: 15,
         marginTop: theme.spacing(2),
+        marginLeft: theme.spacing(2),
     }
   }));
 

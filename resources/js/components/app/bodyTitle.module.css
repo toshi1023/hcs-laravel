@@ -7,7 +7,6 @@ h1.friendList {
     border: dashed 2px white;
     padding: 0.2em 0.5em;
     color: white;
-    
 }
   
 h1.friendList:after {
