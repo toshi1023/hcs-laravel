@@ -1,7 +1,7 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
-import { fetchAsyncGet, selectArticles } from '../../articles/articleSlice';
+import { fetchAsyncGet } from '../../articles/articleSlice';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -11,7 +11,6 @@ import {
     Avatar,
 } from "@material-ui/core";
 import _ from "lodash";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,22 +32,27 @@ const useStyles = makeStyles(theme => ({
 
 export default function FriendList(props) {
     const classes = useStyles();
-    // selectedUserのstateを変数に代入
-    const selectedUsers = useSelector(selectArticles);
     const dispatch = useDispatch();
-    // ページ遷移の関数をセット
-    const history = useHistory();
 
     // 選択したフレンドの記事を取得
     const handleFriendArticles = async value => {
         // Loading開始
         await dispatch(fetchCredStart())
+        // 都道府県情報をセット
+        let prefecture = document.getElementById("prefecture").value
+        if(prefecture == '全都道府県') {
+            prefecture = ''
+        }
         // selectArticlesのstateを更新するReducerにdispatch
         const resultSearch = await dispatch(
-            fetchAsyncGet({ prefecture: document.getElementById("prefecture").value, id: value.target_id })
+            fetchAsyncGet({ prefecture: prefecture, id: value.target_id })
         )
 
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
+            // タブ切り替え
+            props.handleChange(null, 0)
+            props.handleTabArticle()
+
             // ロード終了
             await dispatch(fetchCredEnd());
             return;     

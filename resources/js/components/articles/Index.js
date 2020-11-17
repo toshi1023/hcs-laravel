@@ -7,7 +7,7 @@ import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import FriendList from '../parts/articleParts/friendList';
 import _ from 'lodash';
-import { Grid, Paper, Tabs, Tab } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CommentIcon from '@material-ui/icons/Comment';
 import GroupIcon from '@material-ui/icons/Group';
@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
             display: "none"
         }
     },
+    clearButton: {
+        fontSize: 15,
+        marginTop: theme.spacing(2),
+    }
   }));
 
 function Article() {
@@ -89,6 +93,21 @@ function Article() {
         fetchArticleSearch()
     }
 
+    // 検索条件のクリア
+    const handleSearchClear = async () => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+        
+        // 記事一覧を取得
+        const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
+        if (fetchAsyncGet.fulfilled.match(resultSearch)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+    }
+
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -133,7 +152,16 @@ function Article() {
                     </Tabs>
                 </Paper>
                 <div onBlur={getSearchPrefecture}>
-                    <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                    <Grid container>
+                        <Grid item xs={5}>
+                            <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                        </Grid>
+                        <Grid item xs={5}>
+                            <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
+                                検索クリア
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </div>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item xs={11} hidden={articlePage}>
@@ -144,7 +172,7 @@ function Article() {
                             フレンドの記事を見る
                         </h1>
                         <br />
-                        <FriendList friend={friends} />
+                        <FriendList friend={friends} handleChange={handleChange} handleTabArticle={handleTabArticle} />
                     </Grid>
                 </Grid>
             </div>
@@ -152,7 +180,16 @@ function Article() {
             {/* PC版 */}
             <div className={classes.sectionDesktop}>
                 <div onBlur={getSearchPrefecture}>
-                    <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                    <Grid container>
+                        <Grid item md={1}>
+                            <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                        </Grid>
+                        <Grid item md={1}>
+                            <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
+                                検索クリア
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </div>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item xs={11} sm={8}>
