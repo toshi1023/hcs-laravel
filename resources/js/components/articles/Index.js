@@ -5,6 +5,7 @@ import { selectArticles, fetchAsyncGet } from './articleSlice';
 import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
+import MessageCard from '../parts/common/messageCard';
 import FriendList from '../parts/articleParts/friendList';
 import _ from 'lodash';
 import { Grid, Paper, Tabs, Tab, Button } from '@material-ui/core';
@@ -172,7 +173,11 @@ function Article() {
                             フレンドの記事を見る
                         </h1>
                         <br />
-                        <FriendList friend={friends} handleChange={handleChange} handleTabArticle={handleTabArticle} />
+                        {
+                            localStorage.getItem('loginId') ? 
+                                <FriendList friend={friends} handleChange={handleChange} handleTabArticle={handleTabArticle} />
+                            : <MessageCard />
+                        }  
                     </Grid>
                 </Grid>
             </div>
@@ -202,7 +207,11 @@ function Article() {
                             </h1>
                         </Grid>
                         <br />
-                        <FriendList friend={friends} />
+                        {
+                            localStorage.getItem('loginId') ? 
+                                <FriendList friend={friends} />
+                            : <MessageCard />
+                        }  
                     </Grid>
                 </Grid>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './loadItem.module.css';
+import styles from './commonParts.module.css';
 
 /**
  * Loading
