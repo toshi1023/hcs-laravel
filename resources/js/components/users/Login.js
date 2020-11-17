@@ -8,12 +8,12 @@ import SwitchType from '../parts/common/switch';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import SnackMessages from '../parts/common/snackMessages';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
     fetchCredStart,
     fetchCredEnd,
     fetchGetInfoMessages,
-    fetchGetErrorMessages
+    selectInfo,
 } from '../app/appSlice';
 import {
     fetchAsyncLogin,
@@ -66,6 +66,7 @@ const Title = styled.h1`
 export default function Login() {
   const history = useHistory();
   const classes = useStyles();
+  const infoMessages = useSelector(selectInfo)
   const dispatch = useDispatch();
   // stateの初期設定
   const [open, setOpen] = React.useState(true);
@@ -73,6 +74,13 @@ export default function Login() {
   return (
     <>
         <Grid container justify="center">
+            {
+                // ユーザ作成 & ログイン完了時
+                infoMessages ? 
+                    <SnackMessages infoOpen={true} />
+                :
+                    <SnackMessages errorOpen={true} />
+            }
             <Card className={classes.root}>
                 <CardHeader 
                     title={

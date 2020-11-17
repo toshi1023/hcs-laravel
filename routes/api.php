@@ -46,5 +46,3 @@ Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
     Route::resource('api_messages' , 'Api\MessageController', ['except' => ['index']]);
     // Route::resource('api_messages' , 'Api\MessageController');
 });
-
-

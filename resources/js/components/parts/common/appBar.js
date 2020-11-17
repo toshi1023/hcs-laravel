@@ -20,7 +20,7 @@ import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoggedInUser, selectUser, fetchAsyncGetProf, fetchAsyncGet } from "../../users/userSlice";
+import {  fetchAsyncGetProf } from "../../users/userSlice";
 import {
     fetchCredStart,
     fetchCredEnd,
@@ -160,11 +160,14 @@ function HcsAppBar() {
             // メニューを閉じた後にページ遷移
             setAnchorEl(null);
             handleMobileMenuClose();
-            history.push('/login');
+
             // localStorageのTokenとID、Photoを削除(ログアウト処理)
             localStorage.removeItem("loginId");
             localStorage.removeItem("localToken");
             localStorage.removeItem("loginPhoto");
+            // ログインページへリダイレクト
+            history.push('/login');
+            
             // ロード終了
             if(!localStorage.getItem('localToken')) {
                 await dispatch(fetchCredEnd());

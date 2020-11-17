@@ -34,7 +34,7 @@ class LoginController extends Controller
             //     'login_user_photo' => $user->users_photo_path
             // ], 200);
         }
-        return response()->json([
+        return new JsonResponse([
             'error_message' => 'IDもしくはパスワードが正しくありません',
             'status'        => 401,
         ], 401);
@@ -42,15 +42,5 @@ class LoginController extends Controller
         //     'error_message' => 'IDもしくはパスワードが間違っています'
         // ], 401);
 
-    }
-
-    /**
-     * Api通信でのログアウト処理を実行
-     */
-    public function logout(Request $request)
-    {
-        Auth::guard('api')->logout();
-
-        return ;
     }
 }

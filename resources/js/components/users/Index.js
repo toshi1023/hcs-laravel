@@ -9,6 +9,7 @@ import { TextField, InputAdornment, IconButton, Button } from '@material-ui/core
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
 import UserShow from './Show';
+import MessageCard from '../parts/common/messageCard';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -20,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: 500,
         // backgroundColor: theme.palette.background.paper,
         backgroundColor: '#f7fad1',
+    },
+    sectionDesktop: {
+        display: "none",
+        [theme.breakpoints.up("sm")]: {
+            display: "block"
+        }
     },
     userShow: {
         paddingTop: theme.spacing(4),
@@ -122,11 +129,20 @@ export default function User() {
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item sm={8}>
                     <Grid container justify="center">
-                        <Grid item xs={12} sm={10}>
-                            <div className={classes.userShow}>
-                                <UserShow />
-                            </div>
-                        </Grid>
+                        {
+                            localStorage.getItem('loginId') ? 
+                                <Grid item xs={12} sm={10}>
+                                    <div className={classes.userShow}>
+                                        <UserShow />
+                                    </div>
+                                </Grid>
+                            : 
+                                <Grid item sm={6} className={classes.sectionDesktop}>
+                                    <div className={classes.userShow}>
+                                        <MessageCard />
+                                    </div>
+                                </Grid>
+                        }
                     </Grid>
                 </Grid>
                 <Grid item xs={11} sm={4}>

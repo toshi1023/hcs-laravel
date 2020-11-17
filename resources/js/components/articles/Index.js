@@ -177,7 +177,7 @@ function Article() {
                             localStorage.getItem('loginId') ? 
                                 <FriendList friend={friends} handleChange={handleChange} handleTabArticle={handleTabArticle} />
                             : <MessageCard />
-                        }  
+                        }
                     </Grid>
                 </Grid>
             </div>
@@ -201,7 +201,7 @@ function Article() {
                         {renderArticles()}
                     </Grid>
                     <Grid item sm={4} className={classes.sectionDesktop}>
-                        <Grid item sm={9}>
+                        <Grid item sm={11}>
                             <h1 className={styles.friendList}>
                                 フレンドの記事を見る
                             </h1>

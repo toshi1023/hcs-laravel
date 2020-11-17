@@ -3,6 +3,7 @@ import { Card, CardContent, Avatar, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import styles from './commonParts.module.css';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     large: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MessageCard = () => {
     const classes = useStyles();
+    const history = useHistory();
 
     return (
         <>
@@ -57,7 +59,7 @@ const MessageCard = () => {
                             </span>
                         </div>
                         <div className={styles.buttonInner}>
-                            <Button variant="contained" color="primary" className={classes.button}>
+                            <Button variant="contained" color="primary" className={classes.button} onClick={() => history.push('/users/create')}>
                                 会員登録ページへ
                             </Button>
                         </div>
@@ -80,7 +82,7 @@ const MessageCard = () => {
                             </span>
                         </div>
                         <div className={styles.buttonInner}>
-                            <Button variant="contained" color="primary" className={classes.button}>
+                            <Button variant="contained" color="primary" className={classes.button} onClick={() => history.push('/users/create')}>
                                 会員登録ページへ
                             </Button>
                         </div>

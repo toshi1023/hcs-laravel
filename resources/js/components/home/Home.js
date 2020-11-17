@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import TopImageSlider from '../parts/homeParts/slick';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import SnackMessages from '../parts/common/snackMessages';
