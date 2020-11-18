@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const loginUrl = 'http://localhost/api/login'
-const apiUrl = 'http://localhost/api/api_users'
-const prefectureUrl = 'http://localhost/api/api_prefectures'
-// const loginUrl = 'http://hcs-laravel/api/login'
-// const apiUrl = 'http://hcs-laravel/api/api_users'
-// const prefectureUrl = 'http://hcs-laravel/api/api_prefectures'
+// const loginUrl = 'http://localhost/api/login'
+// const apiUrl = 'http://localhost/api/api_users'
+// const prefectureUrl = 'http://localhost/api/api_prefectures'
+const loginUrl = 'http://hcs-laravel/api/login'
+const apiUrl = 'http://hcs-laravel/api/api_users'
+const prefectureUrl = 'http://hcs-laravel/api/api_prefectures'
 const token = localStorage.localToken
 
 /**
@@ -144,10 +144,6 @@ const userSlice = createSlice({
         authen: {
             name: '',
             password: '',
-        },
-        // prefectures: 都道府県データを管理
-        prefectures: {
-
         },
         // users: ユーザデータは複数ある前提のため配列
         users: [

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectEditedUser, selectPrefectures, fetchAsyncGetPrefectures } from "./userSlice";
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import { selectEditedUser } from "./userSlice";
+import { fetchCredStart, fetchCredEnd } from '../app/appSlice';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import DateSelects from '../parts/common/dateSelects';
 import SwitchType from '../parts/common/switch';
@@ -91,7 +91,6 @@ function UserEdit(props) {
     const dispatch = useDispatch()
     // stateから値を取得
     const editedUser = useSelector(selectEditedUser);
-    const prefectures = useSelector(selectPrefectures);
     // ユーザ編集用stateの初期設定
     const [state, setState] = React.useState({
         id: editedUser.value.id,
@@ -111,16 +110,16 @@ function UserEdit(props) {
         const fetchPrefectures = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
-            // 都道府県一覧を取得
-            const resultReg = await dispatch(fetchAsyncGetPrefectures())
-            if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
+            // // 都道府県一覧を取得
+            // const resultReg = await dispatch(fetchAsyncGetPrefectures())
+            // if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
                 // ユーザの登録している都道府県が選択されている状態でセット
                 document.getElementById("prefecture").value = editedUser.value.prefecture
                 // ユーザの登録している生年月日が選択されている状態でセット
                 setBirthday(true)
                 // ロード終了
                 await dispatch(fetchCredEnd());       
-            }
+            // }
         }
         // 上で定義した非同期の関数を実行
         fetchPrefectures()
@@ -272,7 +271,6 @@ function UserEdit(props) {
                                             <FormControl className={classes.margin}>
                                                 <div onBlur={setPrefecture}>
                                                     <PrefectureSelects 
-                                                        values={prefectures.prefectures} 
                                                         labelFlg={editedUser.value.prefecture ? false : undefined} 
                                                         fontSize={13}
                                                     />

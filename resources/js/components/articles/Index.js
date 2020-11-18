@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchAsyncGetPrefectures } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet } from './articleSlice';
 import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
@@ -84,6 +84,7 @@ function Article() {
             await dispatch(fetchCredStart())
             // 都道府県情報をセット
             let prefecture = document.getElementById("prefecture").value
+            console.log(prefecture)
             if(prefecture == '全都道府県') {
                 prefecture = ''
             }
@@ -108,11 +109,14 @@ function Article() {
         // 記事一覧を取得
         const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
+            // 都道府県検索の値もクリア
+            await dispatch(fetchAsyncGetPrefectures())
+
             // ロード終了
-            await dispatch(fetchCredEnd());       
+            await dispatch(fetchCredEnd())  
         }
         // ロード終了
-        await dispatch(fetchCredEnd());
+        await dispatch(fetchCredEnd())
     }
 
     // タブ切り替え処理
@@ -161,7 +165,7 @@ function Article() {
                 <div onBlur={getSearchPrefecture}>
                     <Grid container>
                         <Grid item xs={5}>
-                            <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                            <PrefectureSelects fontSize={15} />
                         </Grid>
                         <Grid item xs={5}>
                             <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
@@ -193,7 +197,7 @@ function Article() {
                 <div onBlur={getSearchPrefecture}>
                     <Grid container>
                         <Grid item md={1}>
-                            <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                            <PrefectureSelects fontSize={15} />
                         </Grid>
                         <Grid item md={1}>
                             <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>

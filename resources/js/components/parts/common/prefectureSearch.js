@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectPrefectures, fetchAsyncGetPrefectures, fetchCredStart, fetchCredEnd } from '../../app/appSlice';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,9 +25,33 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrefectureSelects(props) {
   const classes = useStyles();
+  const prefectures = useSelector(selectPrefectures)
+  const dispatch = useDispatch()
+  
   const [state, setState] = React.useState({
     prefecture: null,
   })
+
+  useEffect(() => {
+    console.log('render')
+    // 非同期の関数を定義
+    const fetchPrefectures = async () => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+        // 都道府県一覧を取得
+        const resultReg = await dispatch(fetchAsyncGetPrefectures())
+
+        if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());  
+    }
+    // 上で定義した非同期の関数を実行
+    fetchPrefectures()
+  }, [dispatch])
+
   // ラベルの表示制御
   let labelFlg = true
   if(props.labelFlg != undefined && props.labelFlg == false) {
@@ -41,7 +67,7 @@ export default function PrefectureSelects(props) {
 
   // 都道府県データの格納
   const renderPrefectures = () => {
-    return _.map(props.values, prefecture => (
+    return _.map(prefectures.prefectures, prefecture => (
       <option key={prefecture.id} value={prefecture.name}>
         {prefecture.name}
       </option>
