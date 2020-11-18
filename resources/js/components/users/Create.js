@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,10 +14,8 @@ import SnackMessages from '../parts/common/snackMessages';
 import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages } from '../app/appSlice';
 import {
     fetchAsyncCreate, 
-    fetchAsyncGetPrefectures,
     fetchAsyncLogin,
     selectEditedUser,
-    selectPrefectures,
 } from './userSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +81,7 @@ export default function UserCreate() {
     const dispatch = useDispatch()
     // ユーザデータ編集のデータを使用できるようにローカルのeditedUser定数に格納
     const editedUser = useSelector(selectEditedUser)
-    const prefectures = useSelector(selectPrefectures)
+
     // stateの初期設定
     const [state, setState] = React.useState({
         // 保存対象の値
@@ -97,23 +95,6 @@ export default function UserCreate() {
         birthdayCheck: true,
         prefectureCheck: true,
     });
-
-    useEffect(() => {
-        // 非同期の関数を定義
-        const fetchPrefectures = async () => {
-            // Loading開始
-            await dispatch(fetchCredStart())
-            // 都道府県一覧を取得
-            const resultReg = await dispatch(fetchAsyncGetPrefectures())
-            if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
-                // ロード終了
-                await dispatch(fetchCredEnd());       
-            }
-        }
-        // 上で定義した非同期の関数を実行
-        fetchPrefectures()
-        
-    }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
 
     /**
      * 値のセット
@@ -313,7 +294,7 @@ export default function UserCreate() {
                                             </div>
                                             <div onBlur={setPrefecture}>
                                                 <FormControl className={classes.margin}>
-                                                    <PrefectureSelects values={prefectures.prefectures} name="prefecture" fontSize={15} />
+                                                    <PrefectureSelects name="prefecture" fontSize={15} />
                                                 </FormControl>
                                                 {touched.prefecture && errors.prefecture ? (
                                                     <div className={classes.error}>{errors.prefecture}</div>
