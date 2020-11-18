@@ -84,7 +84,7 @@ function Article() {
             await dispatch(fetchCredStart())
             // 都道府県情報をセット
             let prefecture = document.getElementById("prefecture").value
-            console.log(prefecture)
+
             if(prefecture == '全都道府県') {
                 prefecture = ''
             }
@@ -109,9 +109,6 @@ function Article() {
         // 記事一覧を取得
         const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
-            // 都道府県検索の値もクリア
-            await dispatch(fetchAsyncGetPrefectures())
-
             // ロード終了
             await dispatch(fetchCredEnd())  
         }
@@ -147,7 +144,7 @@ function Article() {
     
     return (
         <>
-            {/* スマホ版 */}
+            {/* タブ(スマホ版のみ) */}
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
                     <Tabs
@@ -162,18 +159,24 @@ function Article() {
                         <Tab icon={<GroupIcon />} label="友達の記事を探す" onClick={handleTabFriendList} />
                     </Tabs>
                 </Paper>
-                <div onBlur={getSearchPrefecture}>
-                    <Grid container>
-                        <Grid item xs={5}>
-                            <PrefectureSelects fontSize={15} />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
-                                検索クリア
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </div>
+            </div>
+
+            {/* 検索デザイン */}
+            <Grid container>
+                <Grid item xs={5} md={1}>
+                    <div onBlur={getSearchPrefecture}>
+                        <PrefectureSelects fontSize={15} />
+                    </div>
+                </Grid>
+                <Grid item xs={5} md={1}>
+                    <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
+                        検索クリア
+                    </Button>
+                </Grid>
+            </Grid>
+
+            {/* スマホ版 */}
+            <div className={classes.sectionMobile}>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item xs={11} hidden={articlePage}>
                         {renderArticles()}
@@ -194,18 +197,6 @@ function Article() {
 
             {/* PC版 */}
             <div className={classes.sectionDesktop}>
-                <div onBlur={getSearchPrefecture}>
-                    <Grid container>
-                        <Grid item md={1}>
-                            <PrefectureSelects fontSize={15} />
-                        </Grid>
-                        <Grid item md={1}>
-                            <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
-                                検索クリア
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </div>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item xs={11} sm={8}>
                         {renderArticles()}
