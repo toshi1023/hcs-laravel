@@ -29,11 +29,10 @@ export default function PrefectureSelects(props) {
   const dispatch = useDispatch()
   
   const [state, setState] = React.useState({
-    prefecture: null,
+    prefecture: '',
   })
 
   useEffect(() => {
-    console.log('render')
     // 非同期の関数を定義
     const fetchPrefectures = async () => {
         // Loading開始
@@ -83,13 +82,13 @@ export default function PrefectureSelects(props) {
         }
         <Select
           native
-          value={state.prefecture}
+          defaultValue={state.prefecture}
           onChange={handleChange}
           style={{ fontSize: props.fontSize }} 
           className={classes.selectBox}
           id="prefecture"
         >
-          <option aria-label="None" value="" selected disabled />
+          <option aria-label="None" value="" disabled />
           <option aria-label="None" value="全都道府県">全都道府県</option>
           {renderPrefectures()}
         </Select>

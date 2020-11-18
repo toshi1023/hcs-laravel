@@ -19,6 +19,29 @@ class ArticleService
   }
 
   /**
+   * Homeページ用データ取得メソッド
+   * ※5件のみ取得して返す
+   * 引数1：テーブル名, 引数2：検索条件
+   */
+  public function getHome($table=null, $conditions=null)
+  {
+    if(is_null($table)) {
+      // 記事を全て取得(Userモデルのテーブルも結合して取得)
+      $articles = $this->ArticleService->getBaseData($conditions)->limit(5)->orderBy('likes_counts', 'desc')->get();
+
+      // 会員限定公開をされていない記事のみ取得
+      $free_articles = $this->ArticleService->getBaseData($conditions)->where('type', '=', 0)->limit(5)->orderBy('likes_counts', 'desc')->get();
+
+      return [
+        'articles' => $articles, 
+        'free_articles' => $free_articles,
+      ];
+    }
+    // 指定したテーブルのデータをソートして取得
+    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
+  }
+
+  /**
    * Indexページ用データ取得メソッド
    * 引数1：テーブル名, 引数2：検索条件
    */
@@ -31,13 +54,9 @@ class ArticleService
       // 会員限定公開をされていない記事のみ取得
       $free_articles = $this->ArticleService->getBaseData($conditions)->where('type', '=', 0)->get();
 
-      // 都道府県取得
-      $prefectures = $this->ArticleService->getQuery('prefectures')->get();
-
       return [
         'articles' => $articles, 
         'free_articles' => $free_articles,
-        'prefectures' => $prefectures
       ];
     }
     // 指定したテーブルのデータをソートして取得

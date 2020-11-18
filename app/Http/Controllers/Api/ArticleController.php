@@ -21,6 +21,19 @@ class ArticleController extends Controller
     $this->database = $database;
   }
 
+  public function home(Request $request)
+  {
+      // 検索条件のセット
+      $conditions = [];
+    
+      $articles = $this->database->getHome(null, $conditions);
+
+      return response()->json([
+        'articles' => $articles['articles'], 
+        'free_articles' => $articles['free_articles'],
+      ],200, [], JSON_UNESCAPED_UNICODE);
+  }
+
   public function index(Request $request)
   {
       // 検索条件のセット
@@ -33,7 +46,6 @@ class ArticleController extends Controller
       return response()->json([
         'articles' => $articles['articles'], 
         'free_articles' => $articles['free_articles'],
-        'prefectures' => $articles['prefectures']
       ],200, [], JSON_UNESCAPED_UNICODE);
   }
 

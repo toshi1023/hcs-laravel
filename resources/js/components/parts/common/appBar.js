@@ -1,22 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
-import {
-    AppBar,
-    Toolbar,
-    IconButton,
-    Typography,
-    Badge,
-    Avatar,
-    MenuItem,
-    Menu
-} from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Typography, Badge, Avatar, MenuItem, Menu } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import CreateIcon from '@material-ui/icons/Create';
-import styled from "styled-components";
 import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
@@ -60,6 +50,14 @@ const StyledBadge = withStyles((theme) => ({
 }))(Badge);
 
 const useStyles = makeStyles(theme => ({
+    desktopTitle: {
+        fontFamily: 'Cabin Sketch, cursive',
+        fontSize: 30
+    },
+    mobileTitle: {
+        fontFamily: 'Cabin Sketch, cursive',
+        fontSize: 20
+    },
     appBar: {
         backgroundColor: "#1b2538"
     },
@@ -92,15 +90,6 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1)
     }
 }));
-
-// PC版タイトル
-const Title = styled.h1`
-    font-family: "Cabin Sketch", cursive;
-`;
-// スマホ版タイトル
-const MobileTitle = styled.h3`
-    font-family: "Cabin Sketch", cursive;
-`;
 
 function HcsAppBar() {
     const classes = useStyles();
@@ -282,14 +271,14 @@ function HcsAppBar() {
                     <MenuDrawer />
                     <div className={classes.title}>
                         <Typography className={classes.sectionDesktop}>
-                            <Title onClick={() => history.push("/")}>
+                            <span className={classes.desktopTitle} onClick={() => history.push("/")}>
                                 HitcHike Community Space
-                            </Title>
+                            </span>
                         </Typography>
                         <Typography className={classes.sectionMobile}>
-                            <MobileTitle onClick={() => history.push("/")}>
+                            <span className={classes.mobileTitle} onClick={() => history.push("/")}>
                                 HitcHike Community Space
-                            </MobileTitle>
+                            </span>
                         </Typography>
                     </div>
                     <div className={classes.grow} />

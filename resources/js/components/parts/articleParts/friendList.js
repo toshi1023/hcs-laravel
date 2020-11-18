@@ -65,7 +65,7 @@ export default function FriendList(props) {
     return (
         <List dense className={classes.root}>
             {_.map(props.friend.friends, value => {
-                
+        
                 return (
                     <>
                         {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}

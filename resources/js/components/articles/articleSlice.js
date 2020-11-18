@@ -6,6 +6,16 @@ const apiUrl = 'http://localhost/api/api_articles'
 const token = localStorage.localToken
 
 /**
+ * Home画面用データの取得
+ */
+export const fetchAsyncGetHome = createAsyncThunk('articles/home', async() => {
+    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+    const res = await axios.get(`${apiUrl}/home`)
+    
+    return res.data
+})
+
+/**
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions) => {
@@ -79,6 +89,7 @@ const articleSlice = createSlice({
                 type_name: '',              // 公開対象名
                 latitude: '',               // 緯度
                 longitude: '',              // 経度
+                likes_counts: '',           // いいね数
                 created_at: '',             // 記事の作成日
                 updated_at: '',             // 記事の更新日
             },
@@ -95,6 +106,7 @@ const articleSlice = createSlice({
             type: 0,                    // 公開対象
             latitude: '',               // 緯度
             longitude: '',              // 経度
+            likes_counts: '',           // いいね数
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
         },
@@ -113,6 +125,7 @@ const articleSlice = createSlice({
             type_name: '',              // 公開対象名
             latitude: '',               // 緯度
             longitude: '',              // 経度
+            likes_counts: '',           // いいね数
             delete_flg: '',             // 削除フラグ
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
@@ -130,6 +143,12 @@ const articleSlice = createSlice({
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {
         // Apiが成功したときの処理を記載
+        builder.addCase(fetchAsyncGetHome.fulfilled, (state, action) => {
+            return {
+                ...state,
+                articles: action.payload, //apiから取得した記事の情報をstateのarticlesに格納
+            }
+        })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,

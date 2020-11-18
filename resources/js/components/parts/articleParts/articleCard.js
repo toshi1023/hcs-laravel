@@ -69,6 +69,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     paddingTop: '56.25%', // 16:9
   },
+  likesCounts: {
+    color: 'red',
+    marginLeft: theme.spacing(1),
+  },
   expand: {
     transform: 'rotate(0deg)', // 拡張ボタンの矢印の向きを下向きに設定
     marginLeft: 'auto',        // 拡張ボタンを右端に配置
@@ -99,11 +103,11 @@ const useStyles = makeStyles((theme) => ({
 export default function ArticleCard(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
+  
   // 性別によって名前の色を色分け
   const nickNameDesign = () => {
     if(props.article.gender === 1) {
@@ -129,7 +133,7 @@ export default function ArticleCard(props) {
       </div>
     )
   }
-
+  
   // 記事の削除処理
   const deleteArticle = () => {
     if (confirm('この記事を削除しますか？')) {
@@ -296,6 +300,9 @@ export default function ArticleCard(props) {
                 {/* 'いいね'ボタンのデザイン */}
                 <IconButton aria-label="add to favorites">
                   <FavoriteIcon style={{ fontSize: 20 }} />
+                  <span className={classes.likesCounts}>
+                    {props.article.likes_counts}
+                  </span>
                 </IconButton>
                 {/* シェア'ボタンのデザイン */}
                 <IconButton aria-label="share">

@@ -14,10 +14,10 @@ class LikesTableSeeder extends Seeder
         // faker使う(引数には日本語を設定している)
         $faker = Faker\Factory::create('ja_JP');
 
-        // レコード20件分出力
-        for($i=0; $i < 20; $i++){
+        // レコード30件分出力
+        for($i=0; $i < 30; $i++){
             \App\Model\Like::create([
-                'article_id' => $faker->numberBetween(1, 4), // 1~4の間で乱数,
+                'article_id' => $faker->numberBetween(1, 10), // 1~10の間で乱数,
                 'user_id' => $faker->numberBetween(1, 15), // 1~15の間で乱数,
             ]);
         }

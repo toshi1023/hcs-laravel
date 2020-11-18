@@ -13,6 +13,7 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
 
     /********** 記事管理(articles) **********/
     Route::resource('api_articles' ,    'Api\ArticleController', ['only' => ['index']]);
+    Route::get('api_articles/home' ,    'Api\ArticleController@home')->name('api_articles.home');
     
     /********** ユーザ管理(users) **********/
     // Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);

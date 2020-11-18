@@ -140,31 +140,8 @@ function MyArticle() {
         ))
     }
     return (
-        // <>
-        //     <div onBlur={getSearchPrefecture}>
-        //         <PrefectureSelects values={articles.prefectures} fontSize={15} />
-        //     </div>
-        //     <Grid container className={classes.gridContainer} justify="center">
-        //         <Grid item xs={12} sm={7}>
-        //             <div className={styles.field}>
-        //                 <Avatar 
-        //                     aria-label="article" 
-        //                     className={classes.large} 
-        //                     style={{ fontSize: 15 }}
-        //                     src={localStorage.getItem('loginPhoto')}
-        //                 />
-        //                 <Tooltip title="新規投稿" classes={{tooltip: classes.tooltip}}>
-        //                     <Fab color="primary" aria-label="add" className={classes.button}>
-        //                         <EditIcon />
-        //                     </Fab>
-        //                 </Tooltip>
-        //             </div>
-        //         </Grid>
-        //         {renderArticles()}
-        //     </Grid>
-        // </>
         <>
-            {/* スマホ版 */}
+            {/* タブ(スマホ版のみ) */}
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.root}>
                     <Tabs
@@ -174,23 +151,29 @@ function MyArticle() {
                         indicatorColor="secondary"
                         textColor="secondary"
                         aria-label="icon label tabs example"
-                    >
+                        >
                         <Tab icon={<CommentIcon />} label="記事一覧" onClick={handleTabArticle} />
                         <Tab icon={<CreateIcon />} label="記事作成" onClick={handleTabCreate} />
                     </Tabs>
                 </Paper>
-                <div onBlur={getSearchPrefecture}>
-                    <Grid container>
-                        <Grid item xs={5}>
-                            <PrefectureSelects values={articles.prefectures} fontSize={15} />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
-                                検索クリア
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </div>
+            </div>
+
+            {/* 検索デザイン */}
+            <Grid container>
+                <Grid item xs={5} md={1}>
+                    <div onBlur={getSearchPrefecture}>
+                        <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                    </div>
+                </Grid>
+                <Grid item xs={5} md={1}>
+                    <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
+                        検索クリア
+                    </Button>
+                </Grid>
+            </Grid>
+
+            {/* スマホ版 */}
+            <div className={classes.sectionMobile}>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item xs={11} hidden={articlePage}>
                         {renderArticles()}
@@ -207,18 +190,6 @@ function MyArticle() {
 
             {/* PC版 */}
             <div className={classes.sectionDesktop}>
-                <div onBlur={getSearchPrefecture}>
-                    <Grid container>
-                        <Grid item md={1}>
-                            <PrefectureSelects values={articles.prefectures} fontSize={15} />
-                        </Grid>
-                        <Grid item md={1}>
-                            <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleSearchClear}>
-                                検索クリア
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </div>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item sm={8}>
                         {renderArticles()}
