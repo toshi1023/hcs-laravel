@@ -97,98 +97,84 @@ function UserShow(props) {
     
     return (
         <>
-            {
-                // スマホの場合はユーザ一覧画面に表示しない
-                window.location.pathname != '/users' ? 
-                    // ログインしていない場合はユーザ詳細情報を表示しない
-                    localStorage.getItem('loginId') ? 
-                        <div className={classes.topMargin}>
-                            <div className={classes.sectionMobile}>
-                                <Card className={classes.root}>
-                                    <Grid container  spacing={2}>
-                                        <Grid item xs={12} sm={12}>
-                                            <Tooltip title="編集" classes={{tooltip: classes.tooltip}}>
-                                                <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUser.value)}>
-                                                    <EditIcon />
-                                                </Fab>
-                                            </Tooltip>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} md={6}>
-                                            <CardMedia
-                                                className={classes.cover}
-                                                image={selectedUser.value ? selectedUser.value.users_photo_path : ''}
-                                                title={selectedUser.value ? selectedUser.value.users_photo_name : ''}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} md={6}>
-                                            <div className={classes.details}>
-                                                <CardContent className={classes.content}>
-                                                    <div className={styles.note}>
-                                                        <List className={classes.list}>
-                                                        <ListItem>
-                                                            <ListItemAvatar>
-                                                            <Avatar>
-                                                                <EmojiEmotionsIcon />
-                                                            </Avatar>
-                                                            </ListItemAvatar>
-                                                            <ListItemText primary="ニックネーム" secondary={selectedUser.value ? selectedUser.value.name : ''} classes={{secondary:classes.listItemText}} />
-                                                        </ListItem>
-                                                        <Divider variant="inset" component="li" />
-                                                        <ListItem>
-                                                            <ListItemAvatar>
-                                                            <Avatar>
-                                                                <RoomIcon />
-                                                            </Avatar>
-                                                            </ListItemAvatar>
-                                                            <ListItemText primary="都道府県" secondary={selectedUser.value ? selectedUser.value.prefecture : ''} classes={{secondary:classes.listItemText}} />
-                                                        </ListItem>
-                                                        <Divider variant="inset" component="li" />
-                                                        <ListItem>
-                                                            <ListItemAvatar>
-                                                            <Avatar>
-                                                                <EventIcon />
-                                                            </Avatar>
-                                                            </ListItemAvatar>
-                                                            <ListItemText primary="生年月日" secondary={selectedUser.value ? selectedUser.value.birthday : ''} classes={{secondary:classes.listItemText}} />
-                                                        </ListItem>
-                                                        <Divider variant="inset" component="li" />
-                                                        <ListItem>
-                                                            <ListItemAvatar>
-                                                            <Avatar>
-                                                                <SupervisorAccountIcon />
-                                                            </Avatar>
-                                                            </ListItemAvatar>
-                                                            <ListItemText primary="性別" secondary={selectedUser.value ? (selectedUser.value.gender == 1 ? '男性' : '女性') : '' } classes={{secondary:classes.listItemText}} />
-                                                        </ListItem>
-                                                        <Divider variant="inset" component="li" />
-                                                        <ListItem>
-                                                            <ListItemAvatar>
-                                                            <Avatar>
-                                                                <CommentIcon />
-                                                            </Avatar>
-                                                            </ListItemAvatar>
-                                                            <ListItemText primary="自己紹介" secondary={selectedUser.value ? selectedUser.value.comment : ''} classes={{secondary:classes.listItemText}} />
-                                                        </ListItem>
-                                                        </List>
-                                                    </div>
-                                                </CardContent>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                </Card>
-                            </div>
-                        </div>
-                    : 
-                        <div className={classes.topMargin}>
-                            <Grid container justify="center">
-                                <Grid item xs={11}>
-                                    <MessageCard />
-                                </Grid>
+            {/* <div className={classes.topMargin}>
+                <div className={classes.sectionMobile}>
+                    <Card className={classes.root}>
+                        <Grid container  spacing={2}>
+                            <Grid item xs={12} sm={12}>
+                                <Tooltip title="編集" classes={{tooltip: classes.tooltip}}>
+                                    <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUser.value)}>
+                                        <EditIcon />
+                                    </Fab>
+                                </Tooltip>
                             </Grid>
-                        </div>
-                : ''
-            }
-            <div className={classes.sectionDesktop}>
+                            <Grid item xs={12} sm={12} md={6}>
+                                <CardMedia
+                                    className={classes.cover}
+                                    image={selectedUser.value ? selectedUser.value.users_photo_path : ''}
+                                    title={selectedUser.value ? selectedUser.value.users_photo_name : ''}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6}>
+                                <div className={classes.details}>
+                                    <CardContent className={classes.content}>
+                                        <div className={styles.note}>
+                                            <List className={classes.list}>
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                <Avatar>
+                                                    <EmojiEmotionsIcon />
+                                                </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText primary="ニックネーム" secondary={selectedUser.value ? selectedUser.value.name : ''} classes={{secondary:classes.listItemText}} />
+                                            </ListItem>
+                                            <Divider variant="inset" component="li" />
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                <Avatar>
+                                                    <RoomIcon />
+                                                </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText primary="都道府県" secondary={selectedUser.value ? selectedUser.value.prefecture : ''} classes={{secondary:classes.listItemText}} />
+                                            </ListItem>
+                                            <Divider variant="inset" component="li" />
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                <Avatar>
+                                                    <EventIcon />
+                                                </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText primary="生年月日" secondary={selectedUser.value ? selectedUser.value.birthday : ''} classes={{secondary:classes.listItemText}} />
+                                            </ListItem>
+                                            <Divider variant="inset" component="li" />
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                <Avatar>
+                                                    <SupervisorAccountIcon />
+                                                </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText primary="性別" secondary={selectedUser.value ? (selectedUser.value.gender == 1 ? '男性' : '女性') : '' } classes={{secondary:classes.listItemText}} />
+                                            </ListItem>
+                                            <Divider variant="inset" component="li" />
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                <Avatar>
+                                                    <CommentIcon />
+                                                </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText primary="自己紹介" secondary={selectedUser.value ? selectedUser.value.comment : ''} classes={{secondary:classes.listItemText}} />
+                                            </ListItem>
+                                            </List>
+                                        </div>
+                                    </CardContent>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Card>
+                </div>
+            </div> */}
+
+            {/* <div className={classes.sectionDesktop}> */}
                 <Card className={classes.root}>
                     <Grid container  spacing={2}>
                         <Grid item xs={12} sm={12}>
@@ -261,7 +247,7 @@ function UserShow(props) {
                         </Grid>
                     </Grid>
                 </Card>
-            </div>
+            {/* </div> */}
         </>
     );
 }

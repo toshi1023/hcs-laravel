@@ -11,9 +11,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 200,
   },
-  topMargin: {
-    marginTop: theme.spacing(2),
-  },
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
@@ -77,7 +74,6 @@ export default function NewsCard(props) {
     return (
       <>
         <div className={classes.sectionMobile}>
-        <div className={classes.topMargin}></div>
           <Card className={classes.root}>
           <CardHeader
               avatar={

@@ -15,7 +15,6 @@ import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import ReplyIcon from '@material-ui/icons/Reply';
 import _ from "lodash";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,8 +50,6 @@ export default function UserList(props) {
     // selectedUserのstateを変数に代入
     const selectedUsers = useSelector(selectSelectedUser);
     const dispatch = useDispatch();
-    // ページ遷移の関数をセット
-    const history = useHistory();
 
     const handleToggleAdd = value => () => {
         const currentIndex = checked.indexOf(value);
@@ -94,9 +91,11 @@ export default function UserList(props) {
         dispatch(
             selectUser({ value })
         );
-        // ユーザの詳細ページへリダイレクト(スマホのみ)
+        // ユーザ詳細タブへ切り替え(スマホのみ)
         if(window.matchMedia('(max-width: 767px)').matches) {
-            history.push(`/users/${value.id}`);
+            // タブ切り替え
+            props.handleChange(null, 0)
+            props.handleTabUser()
         }
     }
     

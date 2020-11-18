@@ -161,97 +161,6 @@ export default function ArticleCard(props) {
 
   return (
     <>
-      {/* PC版 */}
-      <div className={classes.sectionDesktop}>
-        <Card className={classes.root}>
-          <CardHeader
-            avatar={
-            //   プロフィール画像
-              <Avatar 
-                aria-label="article" 
-                className={classes.large} 
-                style={{ fontSize: 15 }}
-                src={props.article.users_photo_path}
-              />
-            }
-            action={
-              // ログインユーザが生成した記事以外は表示しないように設定
-              props.article.user_id == localStorage.getItem('loginId') ? 
-                handleButton()
-              : ''
-            }
-            title={<Typography className={classes.headerTitle}>{props.article.title}</Typography>}
-            subheader={nickNameDesign()}
-          />
-          <CardMedia
-            className={classes.media}
-            image={props.article.articles_photo_path}
-            title={props.article.title}
-          />
-          <CardContent>
-            <Typography variant="body2" color="textSecondary">
-              {/* 文字列の省略設定(一定数を表示した後、...で省略) */}
-              <div style={{ width: '100%', whiteSpace: 'nowrap' }}>
-                <h2 className="overflow-ellipsis">
-                  {props.article.content}
-                </h2>
-              </div>
-            </Typography>
-            <Typography className={classes.subHeader}>{DateFormat(props.article.updated_at)}</Typography>
-          </CardContent>
-          <CardActions disableSpacing>
-            {
-              localStorage.getItem('localToken') ? 
-              <div>
-                {/* 'いいね'ボタンのデザイン */}
-                <IconButton aria-label="add to favorites">
-                  <FavoriteIcon style={{ fontSize: 20 }} />
-                </IconButton>
-                {/* シェア'ボタンのデザイン */}
-                <IconButton aria-label="share">
-                  <ShareIcon style={{ fontSize: 20 }} />
-                </IconButton>
-              </div>
-              : ''
-            }
-            <Typography className={classes.bottomFont}>{props.article.prefecture}</Typography>
-            {/* 拡張ボタンの設定 */}
-            <IconButton
-              className={clsx(classes.expand, {
-                [classes.expandOpen]: expanded,
-              })}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
-              <ExpandMoreIcon style={{ fontSize: 20 }} />
-            </IconButton>
-          </CardActions>
-          {/* 拡張のデザイン */}
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
-              <CardContent>
-                <Typography paragraph><h2>内容:</h2></Typography>
-                <Typography paragraph>
-                  <h3>{props.article.content}</h3>
-                </Typography>
-              </CardContent>
-            </Box>
-            <Typography className={classes.bottomFont}>コメント： 3 件
-            {
-              localStorage.getItem('localToken') ? 
-              <IconButton aria-label="reply">
-                <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-              </IconButton>
-              : ''
-            }
-            </Typography>
-          </Collapse>
-          {/* // 拡張のデザイン */}
-        </Card>
-      </div>
-
-
       {/* スマホ版 */}
       <div className={classes.sectionMobile}>
         <Card className={classes.mobileRoot}>
@@ -325,6 +234,96 @@ export default function ArticleCard(props) {
                 <Typography paragraph><h2>内容:</h2></Typography>
                 <Typography paragraph>
                   <span className={classes.mobileContent}>{props.article.content}</span>
+                </Typography>
+              </CardContent>
+            </Box>
+            <Typography className={classes.bottomFont}>コメント： 3 件
+            {
+              localStorage.getItem('localToken') ? 
+              <IconButton aria-label="reply">
+                <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+              </IconButton>
+              : ''
+            }
+            </Typography>
+          </Collapse>
+          {/* // 拡張のデザイン */}
+        </Card>
+      </div>
+
+      {/* PC版 */}
+      <div className={classes.sectionDesktop}>
+        <Card className={classes.root}>
+          <CardHeader
+            avatar={
+            //   プロフィール画像
+              <Avatar 
+                aria-label="article" 
+                className={classes.large} 
+                style={{ fontSize: 15 }}
+                src={props.article.users_photo_path}
+              />
+            }
+            action={
+              // ログインユーザが生成した記事以外は表示しないように設定
+              props.article.user_id == localStorage.getItem('loginId') ? 
+                handleButton()
+              : ''
+            }
+            title={<Typography className={classes.headerTitle}>{props.article.title}</Typography>}
+            subheader={nickNameDesign()}
+          />
+          <CardMedia
+            className={classes.media}
+            image={props.article.articles_photo_path}
+            title={props.article.title}
+          />
+          <CardContent>
+            <Typography variant="body2" color="textSecondary">
+              {/* 文字列の省略設定(一定数を表示した後、...で省略) */}
+              <div style={{ width: '100%', whiteSpace: 'nowrap' }}>
+                <h2 className="overflow-ellipsis">
+                  {props.article.content}
+                </h2>
+              </div>
+            </Typography>
+            <Typography className={classes.subHeader}>{DateFormat(props.article.updated_at)}</Typography>
+          </CardContent>
+          <CardActions disableSpacing>
+            {
+              localStorage.getItem('localToken') ? 
+              <div>
+                {/* 'いいね'ボタンのデザイン */}
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon style={{ fontSize: 20 }} />
+                </IconButton>
+                {/* シェア'ボタンのデザイン */}
+                <IconButton aria-label="share">
+                  <ShareIcon style={{ fontSize: 20 }} />
+                </IconButton>
+              </div>
+              : ''
+            }
+            <Typography className={classes.bottomFont}>{props.article.prefecture}</Typography>
+            {/* 拡張ボタンの設定 */}
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon style={{ fontSize: 20 }} />
+            </IconButton>
+          </CardActions>
+          {/* 拡張のデザイン */}
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+              <CardContent>
+                <Typography paragraph><h2>内容:</h2></Typography>
+                <Typography paragraph>
+                  <h3>{props.article.content}</h3>
                 </Typography>
               </CardContent>
             </Box>

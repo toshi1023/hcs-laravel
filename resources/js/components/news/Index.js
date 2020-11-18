@@ -12,13 +12,13 @@ import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import { selectNewsList, fetchAsyncGet, selectNews, selectSelectedNews } from './newsSlice';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    tab: {
         width: '100%',
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
     },
     topMargin: {
-        marginTop: theme.spacing(2),
+        marginTop: theme.spacing(4),
     },
     list: {
         marginLeft: 10,
@@ -103,8 +103,9 @@ export default function News() {
 
     return (
         <>
+            {/* スマホ版 */}
             <Grid container className={classes.sectionMobile}>
-                <Paper square className={classes.root}>
+                <Paper square className={classes.tab}>
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -117,14 +118,13 @@ export default function News() {
                         <Tab icon={<DnsIcon />} label="ニュース一覧" onClick={handleTabNewsList} />
                     </Tabs>
                 </Paper>
-                <Grid container justify="center" hidden={newsPage}>
+                <Grid container justify="center" hidden={newsPage} className={classes.topMargin}>
                     <Grid item xs={11}>
                         <NewsCard news={selectedNews} />
                     </Grid>
                 </Grid>
-                <Grid item xs={12} hidden={newsListPage}>
-                    <div className={classes.root}>
-                    <div className={classes.topMargin}></div>
+                <Grid item xs={12} hidden={newsListPage} className={classes.topMargin}>
+                    <div className={classes.tab}>
                         <Divider />
                         <List component="nav" aria-label="main mailbox folders">
                             {_.map(news.news, value => {
@@ -150,18 +150,18 @@ export default function News() {
                 </Grid>
             </Grid>
 
+            {/* PC版 */}
             <div className={classes.sectionDesktop}>
                 <Grid container>
-                    <Grid item sm={8}>
+                    <Grid item sm={8} className={classes.topMargin}>
                         <Grid container justify="center">
                             <Grid item sm={6}>
                                 <NewsCard news={selectedNews} />
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item sm={4}>
-                        <div className={classes.root}>
-                        <div className={classes.topMargin}></div>
+                    <Grid item sm={4} className={classes.topMargin}>
+                        <div className={classes.tab}>
                             <Divider />
                             <List component="nav" aria-label="main mailbox folders">
                                 {_.map(news.news, value => {

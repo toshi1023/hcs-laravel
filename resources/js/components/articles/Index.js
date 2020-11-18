@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(1),
     },
+    tab: {
+        width: '100%',
+        minWidth: 300,
+        backgroundColor: theme.palette.background.paper,
+    },
     sectionDesktop: {
         display: "none",
         [theme.breakpoints.up("sm")]: {
@@ -140,7 +145,7 @@ function Article() {
         <>
             {/* スマホ版 */}
             <div className={classes.sectionMobile}>
-                <Paper square className={classes.root}>
+                <Paper square className={classes.tab}>
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -211,7 +216,12 @@ function Article() {
                         {
                             localStorage.getItem('loginId') ? 
                                 <FriendList friend={friends} />
-                            : <MessageCard />
+                            : 
+                                <Grid container justify="center">
+                                    <Grid item sm={10}>
+                                        <MessageCard />
+                                    </Grid>
+                                </Grid>
                         }  
                     </Grid>
                 </Grid>
