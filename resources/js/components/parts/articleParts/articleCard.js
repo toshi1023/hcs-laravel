@@ -210,6 +210,9 @@ export default function ArticleCard(props) {
                 {/* 'いいね'ボタンのデザイン */}
                 <IconButton aria-label="add to favorites">
                   <FavoriteIcon style={{ fontSize: 20 }} />
+                  <span className={classes.likesCounts}>
+                    {props.article.likes_counts}
+                  </span>
                 </IconButton>
                 {/* シェア'ボタンのデザイン */}
                 <IconButton aria-label="share">
