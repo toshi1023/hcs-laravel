@@ -59,6 +59,14 @@ function Home() {
         ))
     }
 
+    // 記事一覧ページに遷移
+    const redirectArticles = () => {
+        // ページ最上部に戻る
+        window.scrollTo(0, 0)
+        // リダイレクト
+        history.push("/articles")
+    }
+
     return (
         <>
             <Grid container className={classes.gridContainer} justify="center">
@@ -77,7 +85,7 @@ function Home() {
                             </h1>
                             <br />
                             {renderArticles()}
-                            <Button variant="contained" className={classes.moreButton} onClick={() => history.push("/articles")}>
+                            <Button variant="contained" className={classes.moreButton} onClick={redirectArticles}>
                                 もっと記事を見に行く
                             </Button>
                         </Grid>

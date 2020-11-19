@@ -91,6 +91,8 @@ export default function UserList(props) {
         dispatch(
             selectUser({ value })
         );
+        // ページ最上部に戻る
+        window.scrollTo(0, 0)
         // ユーザ詳細タブへ切り替え(スマホのみ)
         if(window.matchMedia('(max-width: 767px)').matches) {
             // タブ切り替え
