@@ -1,17 +1,28 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SnackMessages from '../parts/common/snackMessages';
 import { selectInfo, fetchCredStart, fetchCredEnd } from '../app/appSlice';
 import { fetchAsyncGetHome, selectArticles } from '../articles/articleSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
+import { useHistory } from 'react-router-dom';
+import styles from '../app/bodyTitle.module.css';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
       paddingTop: '10px',
       paddingBottom: '20px'
-    }, 
+    },
+    moreButton: {
+        fontSize: 15,
+        width: '100%',
+        backgroundColor: '#1b2538',
+        '&:hover': {
+            backgroundColor: '#96bfe0',
+        },
+        color: 'white'
+    },
 }));
 
 function Home() {
@@ -19,6 +30,7 @@ function Home() {
     const infoMessages = useSelector(selectInfo)
     const articles = useSelector(selectArticles)
     const dispatch = useDispatch()
+    const history = useHistory();
 
     useEffect(() => {
         // 非同期の関数を定義
@@ -43,11 +55,7 @@ function Home() {
     // 記事一覧を生成
     const renderArticles = () => {
         return _.map(articles.articles, article => (
-            <Grid container className={classes.gridContainer} justify="center">
-                <Grid item xs={12} sm={6}>
-                    <ArticleCard key={article.id} article={article} />
-                </Grid>
-            </Grid>
+            <ArticleCard key={article.id} article={article} />    
         ))
     }
 
@@ -62,7 +70,18 @@ function Home() {
                         :
                             <SnackMessages errorOpen={true} />
                     }
-                    {renderArticles()}
+                    <Grid container className={classes.gridContainer} justify="center">
+                        <Grid item xs={12} sm={6}>
+                            <h1 className={styles.friendList}>
+                                人気記事を見る
+                            </h1>
+                            <br />
+                            {renderArticles()}
+                            <Button variant="contained" className={classes.moreButton} onClick={() => history.push("/articles")}>
+                                もっと記事を見に行く
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </>
