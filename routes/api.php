@@ -14,6 +14,8 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
     /********** 記事管理(articles) **********/
     Route::resource('api_articles' ,    'Api\ArticleController', ['only' => ['index']]);
     Route::get('api_articles/home' ,    'Api\ArticleController@home')->name('api_articles.home');
+    Route::get('api_articles/likes' ,    'Api\ArticleController@likes')->name('api_articles.likes.index');
+    Route::post('api_articles/likes' ,    'Api\ArticleController@likesUpdate')->name('api_articles.likes.update');
     
     /********** ユーザ管理(users) **********/
     // Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);
@@ -38,7 +40,7 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
 Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
 
     /********** 記事管理(articles) **********/
-    Route::resource('api_articles' , 'Api\ArticleController', ['except' => ['index']]);
+    Route::resource('api_articles' , 'Api\ArticleController', ['except' => ['index', 'create', 'edit', 'show']]);
 
     /********** ユーザ管理(users) **********/
     // Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show']]);

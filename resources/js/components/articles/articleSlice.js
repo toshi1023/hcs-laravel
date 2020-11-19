@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const apiUrl = 'http://localhost/api/api_articles'
-const apiUrl = 'http://hcs-laravel/api/api_articles'
+const apiUrl = 'http://localhost/api/api_articles'
+// const apiUrl = 'http://hcs-laravel/api/api_articles'
 const token = localStorage.localToken
 
 /**
@@ -16,7 +16,7 @@ export const fetchAsyncGetHome = createAsyncThunk('articles/home', async() => {
 })
 
 /**
- * 一覧データの取得
+ * 記事一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions) => {
     // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
@@ -26,7 +26,7 @@ export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions
 })
 
 /**
- * データ作成
+ * 記事データ作成
  */
 export const fetchAsyncCreate = createAsyncThunk('articles/create', async(article) => {
     const res = await axios.post(apiUrl, article, {
@@ -39,7 +39,7 @@ export const fetchAsyncCreate = createAsyncThunk('articles/create', async(articl
 })
 
 /**
- * データの更新
+ * 記事データの更新
  */
 export const fetchAsyncUpdate = createAsyncThunk('articles/edit', async(article) => {
     const res = await axios.put(`${apiUrl}/${id}`, article, {
@@ -52,7 +52,7 @@ export const fetchAsyncUpdate = createAsyncThunk('articles/edit', async(article)
 })
 
 /**
- * データの削除処理
+ * 記事データの削除処理
  */
 export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) => {
     // deleteの場合は第2引数で渡すデータはない
@@ -63,6 +63,31 @@ export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) =>
         },
     })
     return id
+})
+
+/**
+ * いいね一覧データの取得
+ */
+export const fetchAsyncGetLikes = createAsyncThunk('articles/likes/index', async(conditions) => {
+    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+    const res = await axios.get(`${apiUrl}/likes?queryArticleId=${conditions.article_id}&queryUserId=${conditions.user_id}`)
+    
+    return res.data
+}
+)
+/**
+ * いいねデータの更新
+ */
+export const fetchAsyncLikesUpdate = createAsyncThunk('articles/likes/update', async(conditions) => {
+    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+    const res = await axios.post(`${apiUrl}/likes`, conditions, {
+        headers: {
+            'Content-Type': 'application/json',
+            // Authorization: `JWT ${token}`,
+        },
+    })
+
+    return res.data
 })
 
 
@@ -89,7 +114,6 @@ const articleSlice = createSlice({
                 type_name: '',              // 公開対象名
                 latitude: '',               // 緯度
                 longitude: '',              // 経度
-                likes_counts: '',           // いいね数
                 created_at: '',             // 記事の作成日
                 updated_at: '',             // 記事の更新日
             },
@@ -106,7 +130,6 @@ const articleSlice = createSlice({
             type: 0,                    // 公開対象
             latitude: '',               // 緯度
             longitude: '',              // 経度
-            likes_counts: '',           // いいね数
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
         },
@@ -125,11 +148,24 @@ const articleSlice = createSlice({
             type_name: '',              // 公開対象名
             latitude: '',               // 緯度
             longitude: '',              // 経度
-            likes_counts: '',           // いいね数
             delete_flg: '',             // 削除フラグ
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
         },
+        likes: [
+            {
+                article_id: '',
+                user_id: '',
+                likes_counts: '',
+                like_flg: ''
+            }
+        ],
+        selectedLike: {
+            article_id: '',
+            user_id: '',
+            likes_counts: '',
+            like_flg: ''
+        }
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -139,6 +175,9 @@ const articleSlice = createSlice({
         selectArticle(state, action) {
             state.selectedArticle = action.payload
         },
+        selectLike(state, action) {
+            state.selectedLike = action.payload
+        }
     },
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {
@@ -198,6 +237,18 @@ const articleSlice = createSlice({
                 },
             }
         })
+        builder.addCase(fetchAsyncGetLikes.fulfilled, (state, action) => {
+            return {
+                ...state,
+                likes: action.payload, //apiから取得したいいねの情報をstateのlikesに格納
+            }
+        })
+        builder.addCase(fetchAsyncLikesUpdate.fulfilled, (state, action) => {
+            return {
+                ...state,
+                likes: action.payload, //apiから取得したいいねの情報をstateのlikesに格納
+            }
+        })
     },
 })
 
@@ -206,5 +257,6 @@ export const { editArticle, selectArticle } = articleSlice.actions
 export const selectSelectedArticle = (state) => state.article.selectedArticle
 export const selectEditedArticle = (state) => state.article.editedArticle
 export const selectArticles = (state) => state.article.articles
+export const selectLikes = (state) => state.article.likes
 
 export default articleSlice.reducer

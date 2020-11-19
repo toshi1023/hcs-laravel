@@ -21,6 +21,9 @@ class ArticleController extends Controller
     $this->database = $database;
   }
 
+  /**
+   * Homeページ用の記事取得メソッド
+   */
   public function home(Request $request)
   {
       // 検索条件のセット
@@ -34,6 +37,9 @@ class ArticleController extends Controller
       ],200, [], JSON_UNESCAPED_UNICODE);
   }
 
+  /**
+   * 記事の取得メソッド
+   */
   public function index(Request $request)
   {
       // 検索条件のセット
@@ -48,18 +54,10 @@ class ArticleController extends Controller
         'free_articles' => $articles['free_articles'],
       ],200, [], JSON_UNESCAPED_UNICODE);
   }
-
-  /* 記事作成メソッド */
-  public function create()
-  {
-    $prefectures = $this->database->getCreate('prefectures');
-
-    return view('articles/create', [
-        'prefectures' => $prefectures,
-    ]);
-  }
-
-  /* 記事保存メソッド */
+  
+  /**
+   * 記事保存メソッド
+   */
   public function store(Request $request)
   {
     DB::beginTransaction();
@@ -80,28 +78,6 @@ class ArticleController extends Controller
       return redirect()->route('articles.index')->withErrors($this->messages);
     }
     
-  }
-
-  // 記事の詳細ページを設定
-  public function show($article)
-  {
-    // 詳細ページに表示する値を取得
-    $article = $this->database->getShow($article);
-
-    return view('articles.show', [
-      'article' => $article,
-    ]);
-  }
-
-  // 記事の編集機能を設定
-  public function edit($article)
-  {
-    $data = $this->database->getEdit($article);
-
-    return view('articles.edit', [
-      'article' => $data['article'],
-      'prefectures' => $data['prefectures'],
-    ]);
   }
 
   // 記事の変更を反映
@@ -134,5 +110,54 @@ class ArticleController extends Controller
       $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
       return redirect()->route('articles.index')->withErrors($this->messages);
     }
+  }
+
+  /**
+   * 記事のいいね数を取得
+   */
+  public function likes(Request $request)
+  {
+    // 検索条件のセット
+    $conditions = [];
+    if ($request->input('queryArticleId')) { $conditions['article_id'] = $request->input('queryArticleId'); }
+    if ($request->input('queryUserId')) { $conditions['user_id'] = $request->input('queryUserId'); }
+    
+    // 記事のいいね数を取得
+    $data = $this->database->getLikes($conditions);
+
+    return response()->json([
+      'like_flg'        => $data['like_flg'],
+      'likes_counts'    => $data['likes_counts'],
+      'article_id'      => $request->input('queryArticleId'),
+      'user_id'         => $request->input('queryUserId')
+    ],200, [], JSON_UNESCAPED_UNICODE);
+  }
+
+  /**
+   * 記事のいいね数を更新
+   * 
+   */
+  public function likesUpdate(Request $request)
+  {
+    // 検索条件のセット
+    $conditions = [];
+    if ($request->input('article_id')) { $conditions['article_id'] = $request->input('article_id'); }
+    if ($request->input('user_id')) { $conditions['user_id'] = $request->input('user_id'); }
+    // 更新処理を実行
+    $likes = $this->database->getLikesUpdate($conditions);
+    // 更新に成功したとき
+    if($likes['result']) {
+      return response()->json([
+        'likes_flg' => $likes['like_flg'],
+        'likes_counts'     => $likes['data'],
+        'article_id'      => $request->input('article_id'),
+        'user_id'         => $request->input('user_id')
+      ],200, [], JSON_UNESCAPED_UNICODE);
+    }
+    // 更新に失敗したとき
+    return response()->json([
+      'error_message' => $likes['like_flg'],
+      'status'        => 500,
+    ],500, [], JSON_UNESCAPED_UNICODE);
   }
 }

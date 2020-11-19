@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, fetchAsyncGetPrefectures } from '../app/appSlice';
-import { selectArticles, fetchAsyncGet } from './articleSlice';
+import { fetchCredStart, fetchCredEnd } from '../app/appSlice';
+import { selectArticles, fetchAsyncGet, selectLikes, fetchAsyncGetLikes } from './articleSlice';
 import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
@@ -52,6 +52,7 @@ function Article() {
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
     const articles = useSelector(selectArticles)
     const friends = useSelector(selectUsers)
+    const likes = useSelector(selectLikes)
     const dispatch = useDispatch()
 
     useEffect(() => {
