@@ -131,13 +131,13 @@ function MyArticle() {
     
     // 記事一覧を生成
     const renderArticles = () => {
-        return _.map(articles.articles, article => (
+        return (
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={12} sm={6}>
-                    <ArticleCard key={article.id} article={article} />
+                    <ArticleCard article={articles.articles} />
                 </Grid>
             </Grid>
-        ))
+        )
     }
     return (
         <>

@@ -148,6 +148,44 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     }
 
     /**
+     * 記事のいいねデータを取得
+     * 引数：ユーザID
+     */
+    public function getLikes($user_id)
+    {
+        // Likeモデルをインスタンス化
+        $model = $this->getModel('likes');
+
+        // 記事ごとにいいね数をカウント
+        $subQueryA = $model->selectRaw('count(article_id) as likes_counts, article_id')
+                           ->where('delete_flg', '=', 0)
+                           ->groupByRaw('article_id');
+        
+        // ログインユーザのいいね有無を確認
+        $subQueryB = $model->select('user_id', 'article_id as likes_user_article_id')
+                           ->from('likes as likes_user')
+                           ->where('delete_flg', '=', 0)
+                           ->where('user_id', '=', $user_id);
+
+        // 記事に関するデータといいねデータを結合
+        $query = $model->select('articles.id as article_id', 'likes_user.user_id', 'likes_counts.likes_counts')
+                       ->fromSub($subQueryA, 'likes_counts')
+                       ->rightJoin('articles', 'articles.id', '=', 'likes_counts.article_id')
+                       ->leftJoinSub($subQueryB, 'likes_user', 'articles.id', '=', 'likes_user.likes_user_article_id')
+                       ->where('articles.delete_flg', '=', 0);
+        
+        return $query;
+
+        // 完成形のSQL(ユーザIDが2の場合)
+        // SELECT `articles`.`id` AS `article_id`, `articles`.`title`, `likes_user`.`user_id`, `likes_counts`.`likes_counts`
+        // FROM (SELECT COUNT(`article_id`) AS `likes_counts`, `article_id` FROM `likes` WHERE `delete_flg` = 0 GROUP BY `article_id`) AS `likes_counts` 
+        // RIGHT JOIN `articles` ON `articles`.`id` = `likes_counts`.`article_id` 
+        // LEFT OUTER JOIN (SELECT `user_id`, `article_id` AS `likes_user_article_id` 
+        // FROM `likes` WHERE `delete_flg` = 0 AND `user_id` = 2) AS `likes_user` 
+        // ON `articles`.`id` = `likes_user`.`likes_user_article_id`
+    }
+
+    /**
      * いいね数の更新処理
      * 引数：保存するデータ
      */

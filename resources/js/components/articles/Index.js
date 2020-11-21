@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd } from '../app/appSlice';
-import { selectArticles, fetchAsyncGet, selectLikes, fetchAsyncGetLikes } from './articleSlice';
+import { selectArticles, fetchAsyncGet, selectLikes } from './articleSlice';
 import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
@@ -52,7 +52,6 @@ function Article() {
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
     const articles = useSelector(selectArticles)
     const friends = useSelector(selectUsers)
-    const likes = useSelector(selectLikes)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -134,13 +133,13 @@ function Article() {
     
     // 記事一覧を生成
     const renderArticles = () => {
-        return _.map(articles.articles, article => (
+        return (
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={12} sm={6}>
-                    <ArticleCard key={article.id} article={article} />
+                    <ArticleCard article={articles.articles} />
                 </Grid>
             </Grid>
-        ))
+        )
     }
     
     return (

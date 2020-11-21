@@ -64,28 +64,6 @@ class ArticleController extends Controller
     
   // }
 
-  // 記事の詳細ページを設定
-  public function show($id)
-  {
-    // 詳細ページに表示する値を取得
-    $article = $this->database->getShow($id);
-
-    return view('articles.show', [
-      'article' => $article,
-    ]);
-  }
-
-  // 記事の編集機能を設定
-  public function edit($id)
-  {
-    $data = $this->database->getEdit($id);
-
-    return view('articles.edit', [
-      'article' => $data['article'],
-      'prefectures' => $data['prefectures'],
-    ]);
-  }
-
   // 記事の変更を反映
   // public function update(Request $request, $article)
   // {

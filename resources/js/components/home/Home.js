@@ -54,9 +54,9 @@ function Home() {
 
     // 記事一覧を生成
     const renderArticles = () => {
-        return _.map(articles.articles, article => (
-            <ArticleCard key={article.id} article={article} />    
-        ))
+        return (
+            <ArticleCard article={articles.articles} />
+        )
     }
 
     // 記事一覧ページに遷移

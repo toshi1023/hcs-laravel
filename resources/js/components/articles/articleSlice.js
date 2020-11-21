@@ -70,7 +70,7 @@ export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) =>
  */
 export const fetchAsyncGetLikes = createAsyncThunk('articles/likes/index', async(conditions) => {
     // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
-    const res = await axios.get(`${apiUrl}/likes?queryArticleId=${conditions.article_id}&queryUserId=${conditions.user_id}`)
+    const res = await axios.get(`${apiUrl}/likes?query=${conditions.user_id}`)
     
     return res.data
 }
@@ -78,7 +78,7 @@ export const fetchAsyncGetLikes = createAsyncThunk('articles/likes/index', async
 /**
  * いいねデータの更新
  */
-export const fetchAsyncLikesUpdate = createAsyncThunk('articles/likes/update', async(conditions) => {
+export const fetchAsyncUpdateLikes = createAsyncThunk('articles/likes/update', async(conditions) => {
     // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
     const res = await axios.post(`${apiUrl}/likes`, conditions, {
         headers: {
@@ -156,15 +156,13 @@ const articleSlice = createSlice({
             {
                 article_id: '',
                 user_id: '',
-                likes_counts: '',
-                like_flg: ''
+                likes_counts: ''
             }
         ],
         selectedLike: {
             article_id: '',
-            user_id: '',
-            likes_counts: '',
-            like_flg: ''
+            likes_flg: '',
+            likes_counts: ''
         }
     },
     // Reducer (actionの処理を記述)
@@ -243,10 +241,10 @@ const articleSlice = createSlice({
                 likes: action.payload, //apiから取得したいいねの情報をstateのlikesに格納
             }
         })
-        builder.addCase(fetchAsyncLikesUpdate.fulfilled, (state, action) => {
+        builder.addCase(fetchAsyncUpdateLikes.fulfilled, (state, action) => {
             return {
                 ...state,
-                likes: action.payload, //apiから取得したいいねの情報をstateのlikesに格納
+                selectedLike: action.payload, //apiから取得した更新後のいいねの情報をstateのselectedLikeに格納
             }
         })
     },
@@ -258,5 +256,6 @@ export const selectSelectedArticle = (state) => state.article.selectedArticle
 export const selectEditedArticle = (state) => state.article.editedArticle
 export const selectArticles = (state) => state.article.articles
 export const selectLikes = (state) => state.article.likes
+export const selectSelectedLike = (state) => state.article.selectedLike
 
 export default articleSlice.reducer

@@ -78,18 +78,12 @@ class ArticleService
    */
   public function getLikes($conditions=null)
   { 
-    // 記事IDのみの検索条件を変数に代入
-    $article_id = ['article_id' => $conditions['article_id']];
-    // 記事のいいね数をカウント
-    $likes_counts = $this->ArticleService->getQuery('likes', $article_id)->count();
-    // ログインユーザのいいね有無を確認
-    $like_flg = $this->ArticleService->getExist('likes', $conditions);
+    // 記事のいいね情報を取得
+    $data = $this->ArticleService->getLikes($conditions['user_id'])->get();
 
     return [
-      'likes_counts' => $likes_counts,
-      'like_flg'     => $like_flg
+      'data' => $data,
     ];
-
   }
 
   /* *

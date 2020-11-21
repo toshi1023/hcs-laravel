@@ -119,17 +119,13 @@ class ArticleController extends Controller
   {
     // 検索条件のセット
     $conditions = [];
-    if ($request->input('queryArticleId')) { $conditions['article_id'] = $request->input('queryArticleId'); }
-    if ($request->input('queryUserId')) { $conditions['user_id'] = $request->input('queryUserId'); }
+    if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }
     
     // 記事のいいね数を取得
     $data = $this->database->getLikes($conditions);
 
     return response()->json([
-      'like_flg'        => $data['like_flg'],
-      'likes_counts'    => $data['likes_counts'],
-      'article_id'      => $request->input('queryArticleId'),
-      'user_id'         => $request->input('queryUserId')
+      'likes' => $data
     ],200, [], JSON_UNESCAPED_UNICODE);
   }
 
@@ -148,10 +144,9 @@ class ArticleController extends Controller
     // 更新に成功したとき
     if($likes['result']) {
       return response()->json([
-        'likes_flg' => $likes['like_flg'],
-        'likes_counts'     => $likes['data'],
+        'likes_flg'       => $likes['like_flg'],
+        'likes_counts'    => $likes['data'],
         'article_id'      => $request->input('article_id'),
-        'user_id'         => $request->input('user_id')
       ],200, [], JSON_UNESCAPED_UNICODE);
     }
     // 更新に失敗したとき
