@@ -49,10 +49,10 @@ export default function FriendList(props) {
         )
 
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
-            // タブ切り替え
-            props.handleChange(null, 0)
-            props.handleTabArticle()
-
+            // タブ切り替え(スマホ版のみ)
+            props.handleChange ?  props.handleChange(null, 0) : ''
+            props.handleTabArticle ? props.handleTabArticle() : ''
+            
             // ロード終了
             await dispatch(fetchCredEnd());
             return;     

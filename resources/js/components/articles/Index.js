@@ -110,9 +110,10 @@ function Article() {
         const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
             // 都道府県をリセット
-            let elements = document.getElementById( "prefecture" ).options ;
-            elements[1].selected = true
-
+            document.getElementById( "prefecture" ).options[0].selected ? 
+                '' 
+            : 
+                document.getElementById( "prefecture" ).options[1].selected = true
             // ロード終了
             await dispatch(fetchCredEnd())  
         }
