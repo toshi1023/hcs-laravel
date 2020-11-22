@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSelectedUser, editUser, fetchAsyncGetShow } from "./userSlice";
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import { selectSelectedUser, editUser } from "./userSlice";
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { 
-    Card, CardContent, CardMedia, Typography, List, ListItem, 
+    Card, CardContent, CardMedia, List, ListItem, 
     ListItemText, ListItemAvatar, Avatar, Divider, Fab, Tooltip
  } from "@material-ui/core";
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';

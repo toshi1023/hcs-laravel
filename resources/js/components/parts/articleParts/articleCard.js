@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import ArticleCardExpand from './articleCardExpand';
 import { fetchCredStart, fetchCredEnd } from '../../app/appSlice';
-import { selectLikes, fetchAsyncGetLikes, selectSelectedLike, fetchAsyncUpdateLikes } from '../../articles/articleSlice';
+import { selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes } from '../../articles/articleSlice';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import _ from 'lodash';
-import {Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, Avatar, IconButton, Typography, Box, Menu, MenuItem} 
+import {Card, CardHeader, CardMedia, CardContent, Avatar, IconButton, Box, Typography, Menu, MenuItem} 
 from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ReplyIcon from '@material-ui/icons/Reply';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -56,10 +52,6 @@ const useStyles = makeStyles((theme) => ({
   menuItem: {
     fontSize: 15,
   },
-  bottomFont: {
-    paddingLeft: 10,
-    fontSize: 15
-  },
   subHeader: {
     fontSize: 15,
     color: '#808080'
@@ -73,22 +65,15 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     paddingTop: '56.25%', // 16:9
   },
-  likesCounts: {
-    color: 'red',
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginLeft: theme.spacing(1),
+  label: {
+    fontSize: 20
   },
-  expand: {
-    transform: 'rotate(0deg)', // 拡張ボタンの矢印の向きを下向きに設定
-    marginLeft: 'auto',        // 拡張ボタンを右端に配置
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
+  content: {
+    fontSize: 17
   },
-  expandOpen: {
-    // 180deg: 拡張時にボタンの矢印を180°反転させる
-    transform: 'rotate(180deg)',
+  bottomFont: {
+    paddingLeft: 10,
+    fontSize: 15
   },
   mobileHeaderTitle: {
     fontSize: 15,
@@ -101,6 +86,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
     color: 'red'
   },
+  mobileLabel: {
+    fontSize: 18,
+  },
   mobileContent: {
     fontSize: 15,
   },
@@ -108,14 +96,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ArticleCard(props) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false)
   const likes = useSelector(selectLikes)
-  const selectedLike = useSelector(selectSelectedLike)
   const dispatch = useDispatch()
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   useEffect(() => {
     // 非同期の関数を定義
@@ -242,85 +224,18 @@ export default function ArticleCard(props) {
               title={article.title}
             />
             <CardContent>
-              <Typography variant="body2" color="textSecondary">
-                {/* 文字列の省略設定(一定数を表示した後、...で省略) */}
-                <div style={{ flex: 1, overflow: 'hidden' }}>
-                  <h2 style={{ overflow: 'hidden',  whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                    <span className={classes.mobileContent}>{article.content}</span>
-                  </h2>
-                </div>
-              </Typography>
-              <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              {
-                localStorage.getItem('localToken') ? 
-                <div>
-                  {/* 'いいね'ボタンのデザイン */}
-                  <IconButton aria-label="add to favorites" onClick={() => likesUpdate(article.id)}>
-                    {
-                      // いいねボタンのアクティブフラグ
-                      likes.likes != undefined ? 
-                        (_.map(likes.likes, like => (
-                          like.find(element => element.article_id === article.id).user_id
-                        ))[0] == null ? 
-                          <FavoriteIcon style={{ fontSize: 20 }} />
-                        : <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
-                        )
-                      : ''
-                    }
-                  </IconButton>
-                  <span className={classes.likesCounts}>
-                    {
-                      // いいね数の取得・表示
-                      likes.likes != undefined ? 
-                        _.map(likes.likes, like => (
-                          like.find(element => element.article_id === article.id).likes_counts
-                        )) 
-                      : ''
-                    }
-                  </span>
-                  {/* シェア'ボタンのデザイン */}
-                  <IconButton aria-label="share">
-                    <ShareIcon style={{ fontSize: 20 }} />
-                  </IconButton>
-                </div>
-                : ''
-              }
-              <Typography className={classes.bottomFont}>{article.prefecture}</Typography>
-              {/* 拡張ボタンの設定 */}
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded,
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon style={{ fontSize: 20 }} />
-              </IconButton>
-            </CardActions>
-            {/* 拡張のデザイン */}
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
               <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
                 <CardContent>
-                  <Typography paragraph><h2>内容:</h2></Typography>
-                  <Typography paragraph>
+                <Typography paragraph><span className={classes.mobileLabel}>内容:</span></Typography>
+                <Typography paragraph>
                     <span className={classes.mobileContent}>{article.content}</span>
-                  </Typography>
+                </Typography>
                 </CardContent>
               </Box>
-              <Typography className={classes.bottomFont}>コメント： 3 件
-              {
-                localStorage.getItem('localToken') ? 
-                <IconButton aria-label="reply">
-                  <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                </IconButton>
-                : ''
-              }
-              </Typography>
-            </Collapse>
-            {/* // 拡張のデザイン */}
+              <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
+            </CardContent>
+            {/* 拡張のデザイン */}
+            <ArticleCardExpand article={article} likes={likes} />
           </Card>
         </div>
 
@@ -329,7 +244,7 @@ export default function ArticleCard(props) {
           <Card className={classes.root}>
             <CardHeader
               avatar={
-              //   プロフィール画像
+                // プロフィール画像
                 <Avatar 
                   aria-label="article" 
                   className={classes.large} 
@@ -352,84 +267,18 @@ export default function ArticleCard(props) {
               title={article.title}
             />
             <CardContent>
-              <Typography variant="body2" color="textSecondary">
-                {/* 文字列の省略設定(一定数を表示した後、...で省略) */}
-                <div style={{ width: '100%', whiteSpace: 'nowrap' }}>
-                  <h2 className="overflow-ellipsis">
-                    {article.content}
-                  </h2>
-                </div>
-              </Typography>
-              <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              {
-                localStorage.getItem('localToken') ? 
-                <div>
-                  {/* 'いいね'ボタンのデザイン */}
-                  <IconButton aria-label="add to favorites" onClick={() => likesUpdate(article.id)}>
-                    {
-                        likes.likes != undefined ? 
-                          (_.map(likes.likes, like => (
-                            like.find(element => element.article_id === article.id).user_id
-                          ))[0] == null ? 
-                            <FavoriteIcon style={{ fontSize: 20 }} />
-                          : <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
-                          )
-                        : ''
-                    }
-                  </IconButton>
-                  <span className={classes.likesCounts}>
-                    {
-                      // いいね数の取得・表示
-                      likes.likes != undefined ? 
-                        _.map(likes.likes, like => (
-                          like.find(element => element.article_id === article.id).likes_counts
-                        )) 
-                      : ''
-                    }
-                  </span>
-                  {/* シェア'ボタンのデザイン */}
-                  <IconButton aria-label="share">
-                    <ShareIcon style={{ fontSize: 20 }} />
-                  </IconButton>
-                </div>
-                : ''
-              }
-              <Typography className={classes.bottomFont}>{article.prefecture}</Typography>
-              {/* 拡張ボタンの設定 */}
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded,
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon style={{ fontSize: 20 }} />
-              </IconButton>
-            </CardActions>
-            {/* 拡張のデザイン */}
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
               <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
                 <CardContent>
-                  <Typography paragraph><h2>内容:</h2></Typography>
-                  <Typography paragraph>
-                    <h3>{article.content}</h3>
-                  </Typography>
+                <Typography paragraph><span className={classes.label}>内容:</span></Typography>
+                <Typography paragraph>
+                    <span className={classes.content}>{article.content}</span>
+                </Typography>
                 </CardContent>
               </Box>
-              <Typography className={classes.bottomFont}>コメント： 3 件
-              {
-                localStorage.getItem('localToken') ? 
-                <IconButton aria-label="reply">
-                  <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                </IconButton>
-                : ''
-              }
-              </Typography>
-            </Collapse>
-            {/* // 拡張のデザイン */}
+              <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
+            </CardContent>
+            {/* 拡張のデザイン */}
+            <ArticleCardExpand article={article} likes={likes} />
           </Card>
         </div>
       </>

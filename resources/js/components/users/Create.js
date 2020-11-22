@@ -147,6 +147,7 @@ export default function UserCreate() {
         })
     }
 
+    // 画像の保存処理(ProfileDropzoneコンポーネントで実施)
     const doAction = (id) => {
         childRef.current.onSubmit(id)
     }
