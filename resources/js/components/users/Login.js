@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 300,
         margin: `${theme.spacing(1)}px auto`,
     },
+    subTitle: {
+        fontFamily: 'Cabin Sketch, cursive',
+        fontSize: 25
+    },
     margin: {
         marginLeft: theme.spacing(3),
         marginRight: theme.spacing(3),
@@ -59,10 +63,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Title = styled.h1`
-  font-family: 'Cabin Sketch', cursive;
-`;
-
 export default function Login() {
   const history = useHistory();
   const classes = useStyles();
@@ -84,7 +84,7 @@ export default function Login() {
             <Card className={classes.root}>
                 <CardHeader 
                     title={
-                        <Title>Login</Title>
+                        <span className={classes.subTitle}>Login</span>
                     }
                     className={classes.header}
                 />

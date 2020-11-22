@@ -39,7 +39,7 @@ class UserService
    * */
   public function getShow($conditions=null)
   {
-    return $this->UserService->getBaseData($conditions)->first();
+    return $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->first();
   }
 
   /* *

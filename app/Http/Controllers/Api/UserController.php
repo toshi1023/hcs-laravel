@@ -130,6 +130,7 @@ class UserController extends Controller
       // 検索条件のセット
       $conditions = [];
       $conditions['status'] = 0;
+      if ($request->input('query')) { $conditions['id'] = $request->input('query'); }
         
       $user = $this->database->getShow($conditions);
 

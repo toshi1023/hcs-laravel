@@ -81,7 +81,7 @@ export default function User() {
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
             const resultReg = await dispatch(fetchAsyncGet(document.getElementById("userSearch").value))
-            const resultShow = await dispatch(fetchAsyncGetShow())
+            const resultShow = await dispatch(fetchAsyncGetShow(''))
             if (fetchAsyncGet.fulfilled.match(resultReg) && fetchAsyncGetShow.fulfilled.match(resultShow)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       

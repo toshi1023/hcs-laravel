@@ -2,30 +2,21 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet } from './articleSlice';
+import ArticleDropzone from '../parts/articleParts/dropzone';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import _ from 'lodash';
-import { Grid, Avatar, Fab, Tooltip, Paper, Tabs, Tab, Button } from '@material-ui/core';
+import { 
+        Grid, Paper, Tabs, Tab, Button, 
+        TextField, Input, InputLabel, InputAdornment, FormControl, FormLabel 
+    } 
+from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CreateIcon from '@material-ui/icons/Create';
 import CommentIcon from '@material-ui/icons/Comment';
 import styles from './myArticle.module.css';
 
 const useStyles = makeStyles((theme) => ({
-    gridContainer: {
-      paddingTop: '10px',
-      paddingBottom: '20px'
-    },
-    large: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
-    },
-    tooltip: {
-        fontSize: 14,
-    },
-    button: {
-        marginLeft: 'auto',
-    },
     sectionDesktop: {
         display: "none",
         [theme.breakpoints.up("sm")]: {
@@ -37,6 +28,37 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up("sm")]: {
             display: "none"
         }
+    },
+    tab: {
+        width: '100%',
+        minWidth: 300,
+        backgroundColor: theme.palette.background.paper,
+    },
+    gridContainer: {
+      paddingTop: '10px',
+      paddingBottom: '20px'
+    },
+    form: {
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
+    },
+    margin: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+    error: {
+        marginLeft: theme.spacing(3),
+        fontSize: 13,
+        color: 'red',
+    },
+    button: {
+        marginTop: theme.spacing(3),
+        height: 40,
+        width: 100,
+        fontSize: 15
+    },
+    button: {
+        marginLeft: 'auto',
     },
     clearButton: {
         fontSize: 15,
@@ -143,7 +165,7 @@ function MyArticle() {
         <>
             {/* タブ(スマホ版のみ) */}
             <div className={classes.sectionMobile}>
-                <Paper square className={classes.root}>
+                <Paper square className={classes.tab}>
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -183,7 +205,47 @@ function MyArticle() {
                             記事を作成する
                         </h1>
                         <br />
-                        
+                        <Paper elevation={3}>
+                            <Grid container justify="center" className={classes.form}>
+                                <Grid item xs={10}>
+                                    <FormControl className={classes.margin}>
+                                        <div className={classes.margin}>
+                                            <TextField
+                                                id="title"
+                                                name="title"
+                                                label="タイトル"
+                                                variant="outlined"
+                                                style = {{width: 250}}
+                                            />
+                                        </div>
+                                        <div className={classes.margin}>
+                                            <TextField
+                                                id="content"
+                                                name="content"
+                                                label="内容"
+                                                variant="outlined"
+                                                style = {{width: 250}}
+                                                multiline
+                                                rows={4}
+                                            />
+                                        </div>
+                                        <div className={classes.margin}>
+                                            <ArticleDropzone />
+                                        </div>
+                                        <div className={classes.margin}>
+                                            <Button 
+                                                variant="contained" 
+                                                color="primary" 
+                                                className={classes.button}
+                                                // type="submit"
+                                            >
+                                                投稿する
+                                            </Button>
+                                        </div>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                        </Paper>
                     </Grid>
                 </Grid>
             </div>
@@ -199,8 +261,52 @@ function MyArticle() {
                             <h1 className={styles.createArticle}>
                                 記事を作成する
                             </h1>
+                            <br />
+                            <Paper elevation={3}>
+                                <Grid container justify="center" className={classes.form}>
+                                    <Grid item sm={10}>
+                                        <FormControl>
+                                            <div className={classes.margin}>
+                                                <TextField
+                                                    id="title"
+                                                    name="title"
+                                                    label="タイトル"
+                                                    variant="outlined"
+                                                    style = {{width: 400}}
+                                                />
+                                            </div>
+                                            <div className={classes.margin}>
+                                                <TextField
+                                                    id="content"
+                                                    name="content"
+                                                    label="内容"
+                                                    variant="outlined"
+                                                    style = {{width: 400}}
+                                                    InputLabelProps={{
+                                                        fontSize: 30,
+                                                    }}
+                                                    multiline
+                                                    rows={4}
+                                                />
+                                            </div>
+                                            <div className={classes.margin}>
+                                                <ArticleDropzone />
+                                            </div>
+                                            <div className={classes.margin}>
+                                                <Button 
+                                                    variant="contained" 
+                                                    color="primary" 
+                                                    className={classes.button}
+                                                    // type="submit"
+                                                >
+                                                    投稿する
+                                                </Button>
+                                            </div>
+                                        </FormControl>
+                                    </Grid>
+                                </Grid>
+                            </Paper>
                         </Grid>
-                        <br />
                     </Grid>
                 </Grid>
             </div>

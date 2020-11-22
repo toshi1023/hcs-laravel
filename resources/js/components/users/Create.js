@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader,CardContent} from '@material-ui/core';
+import {Input, InputLabel, InputAdornment, FormControl, FormLabel, Button, Grid, Card, CardHeader, CardContent} from '@material-ui/core';
 import styled from "styled-components";
 import ProfileDropzone from '../parts/userParts/dropzone';
 import SwitchType from '../parts/common/switch';
@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         minWidth: 300,
+    },
+    subTitle: {
+        fontFamily: 'Cabin Sketch, cursive',
+        fontSize: 25
     },
     card: {
         marginTop: theme.spacing(10),
@@ -69,10 +73,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 15,
     }
 }));
-
-const Title = styled.h1`
-  font-family: 'Cabin Sketch', cursive;
-`;
 
 export default function UserCreate() {
     const classes = useStyles();
@@ -183,7 +183,7 @@ export default function UserCreate() {
                     <Card className={classes.card}>
                         <CardHeader 
                             title={
-                                <Title>New Create Account</Title>
+                                <span className={classes.subTitle}>New Create Account</span>
                             }
                             className={classes.header}
                         />
