@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip } from '@material-ui/core';
+import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip, TextField } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -54,6 +54,11 @@ const useStyles = makeStyles((theme) => ({
     },
     comment: {
         fontSize: 17,
+    },
+    commentField: {
+        fontSize: 17,
+        marginBottom: theme.spacing(1),
+        marginLeft: theme.spacing(2),
     },
     tooltip: {
         fontSize: 14,
@@ -133,9 +138,19 @@ function ArticleCardExpand (props) {
                 </Box>
                 {
                     localStorage.getItem('localToken') ? 
-                        <IconButton color="primary" aria-label="add">
-                            <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                        </IconButton>
+                        <div className={classes.commentField}>
+                            <IconButton color="primary" aria-label="add">
+                                <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+                            </IconButton>
+                            <TextField
+                                id="title"
+                                name="title"
+                                label="コメント"
+                                variant="outlined"
+                                style = {{marginLeft: 10, minWidth: 250, backgroundColor: 'white'}}
+                                multiline
+                            />
+                        </div>
                     : ''
                 }
                 </Collapse>
@@ -175,7 +190,7 @@ function ArticleCardExpand (props) {
                             }
                         </span>
                         {/* コメントボタンのデザイン(拡張機能あり) */}
-                        <Tooltip title="コメントする" classes={{tooltip: classes.tooltip}}>
+                        <Tooltip title="コメントを見る" classes={{tooltip: classes.tooltip}}>
                             <IconButton
                                 onClick={handleExpandedClick}
                                 aria-expanded={expanded}
@@ -208,11 +223,21 @@ function ArticleCardExpand (props) {
                 </Box>
                 {
                     localStorage.getItem('localToken') ? 
-                    <Tooltip title="投稿する" classes={{tooltip: classes.tooltip}}>
-                        <IconButton color="primary" aria-label="add">
-                            <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                        </IconButton>
-                    </Tooltip>
+                    <div className={classes.commentField}>
+                        <Tooltip title="投稿する" classes={{tooltip: classes.tooltip}}>
+                            <IconButton color="primary" aria-label="add">
+                                <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+                            </IconButton>
+                        </Tooltip>
+                        <TextField
+                            id="title"
+                            name="title"
+                            label="コメント"
+                            variant="outlined"
+                            style = {{marginLeft: 10, minWidth: 400, backgroundColor: 'white'}}
+                            multiline
+                        />
+                    </div>
                     : ''
                 }
                 </Collapse>
