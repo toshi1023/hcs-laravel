@@ -235,7 +235,7 @@ export default function ArticleCard(props) {
               <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
             </CardContent>
             {/* 拡張のデザイン */}
-            <ArticleCardExpand article={article} likes={likes} />
+            <ArticleCardExpand article={article} likes={likes} likesUpdate={likesUpdate} />
           </Card>
         </div>
 
@@ -278,7 +278,7 @@ export default function ArticleCard(props) {
               <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
             </CardContent>
             {/* 拡張のデザイン */}
-            <ArticleCardExpand article={article} likes={likes} />
+            <ArticleCardExpand article={article} likes={likes} likesUpdate={likesUpdate} />
           </Card>
         </div>
       </>

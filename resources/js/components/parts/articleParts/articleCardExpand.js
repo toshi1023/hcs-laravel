@@ -80,7 +80,7 @@ function ArticleCardExpand (props) {
                     localStorage.getItem('localToken') ? 
                     <div>
                         {/* 'いいね'ボタンのデザイン */}
-                        <IconButton aria-label="add to favorites" onClick={() => likesUpdate(props.article.id)}>
+                        <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
                             {
                             // いいねボタンのアクティブフラグ
                             props.likes.likes != undefined ? 
@@ -150,7 +150,7 @@ function ArticleCardExpand (props) {
                     <div>
                         {/* 'いいね'ボタンのデザイン */}
                         <Tooltip title="いいね！" classes={{tooltip: classes.tooltip}}>
-                            <IconButton aria-label="add to favorites" onClick={() => likesUpdate(props.article.id)}>
+                            <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
                                 {
                                 // いいねボタンのアクティブフラグ
                                 props.likes.likes != undefined ? 

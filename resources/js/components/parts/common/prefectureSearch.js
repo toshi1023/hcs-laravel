@@ -63,7 +63,7 @@ export default function PrefectureSelects(props) {
       prefecture: event.target.value,
     })
   }
-
+  
   // 都道府県データの格納
   const renderPrefectures = () => {
     return _.map(prefectures.prefectures, prefecture => (

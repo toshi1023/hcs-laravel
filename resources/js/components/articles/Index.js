@@ -109,6 +109,10 @@ function Article() {
         // 記事一覧を取得
         const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
+            // 都道府県をリセット
+            let elements = document.getElementById( "prefecture" ).options ;
+            elements[1].selected = true
+
             // ロード終了
             await dispatch(fetchCredEnd())  
         }
