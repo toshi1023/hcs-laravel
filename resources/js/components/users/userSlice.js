@@ -36,7 +36,7 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
  */
 export const fetchAsyncGetProf = createAsyncThunk('prof/get', async(id) =>{
     // axios: 引数1: URL, 引数2: メタ情報
-    const res = await axios.get(`${apiUrl}/${id}`, {})
+    const res = await axios.get(`${apiUrl}/${id}?query=${id}`, {})
     // Apiからの返り値
     return res.data
 })
@@ -253,7 +253,7 @@ const userSlice = createSlice({
         builder.addCase(fetchAsyncGetProf.fulfilled, (state, action) => {
             return {
                 ...state,
-                loggedInUser: action.payload,
+                selectedUser: action.payload,
             }
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {

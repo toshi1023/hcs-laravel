@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoggedInUser, fetchAsyncGetProf, editUser } from "./userSlice";
+import UserShow from './Show';
+import { selectSelectedUser, fetchAsyncGetProf } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -61,7 +62,7 @@ function Profile(props) {
     const theme = useTheme();
     const history = useHistory();
     // stateで管理するユーザ詳細データを使用できるようにローカルのloginUser定数に格納
-    const loginUser = useSelector(selectLoggedInUser);
+    const loginUser = useSelector(selectSelectedUser);
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -80,90 +81,11 @@ function Profile(props) {
         fetchUserProf()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
-
-    // 編集データの管理用stateを更新
-    const handleEditUser = value => {
-        // editedUserのstateを更新するReducerにdispatch
-        dispatch(
-            editUser({ value })
-        );
-        // ユーザの編集ページへリダイレクト
-        history.push(`/users/${value.id}/edit`);
-    };
     
     return (
         <Grid container className={classes.gridContainer} justify="center">
             <Grid item xs={12} sm={6}>
-                <Card className={classes.root}>
-                    <Grid container  spacing={2}>
-                        <Grid item xs={8} sm={12}>
-                            <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(loginUser.user)}>
-                                <EditIcon />
-                            </Fab>
-                        </Grid>
-                        <Grid item xs={8} sm={6}>
-                            <CardMedia
-                                className={classes.cover}
-                                image={loginUser.user.users_photo_path}
-                                title={loginUser.user.users_photo_name}
-                            />
-                        </Grid>
-                        <Grid item xs={8} sm={6}>
-                            <div className={classes.details}>
-                                <CardContent className={classes.content}>
-                                    <div className={styles.note}>
-                                        <List className={classes.list}>
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <EmojiEmotionsIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary="ニックネーム" secondary={loginUser.user.name} classes={{secondary:classes.listItemText}} />
-                                        </ListItem>
-                                        <Divider variant="inset" component="li" />
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <RoomIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary="都道府県" secondary={loginUser.user.prefecture} classes={{secondary:classes.listItemText}} />
-                                        </ListItem>
-                                        <Divider variant="inset" component="li" />
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <EventIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary="生年月日" secondary={loginUser.user.birthday} classes={{secondary:classes.listItemText}} />
-                                        </ListItem>
-                                        <Divider variant="inset" component="li" />
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <SupervisorAccountIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary="性別" secondary={loginUser.user.gender == 1 ? '男性' : '女性' } classes={{secondary:classes.listItemText}} />
-                                        </ListItem>
-                                        <Divider variant="inset" component="li" />
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <CommentIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary="自己紹介" secondary={loginUser.user.comment} classes={{secondary:classes.listItemText}} />
-                                        </ListItem>
-                                        </List>
-                                    </div>
-                                </CardContent>
-                            </div>
-                        </Grid>
-                    </Grid>
-                </Card>
+                <UserShow />
             </Grid>
         </Grid>
     );

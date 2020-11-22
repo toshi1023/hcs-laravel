@@ -118,7 +118,7 @@ function HcsAppBar() {
     // アカウントメニューをクローズ
     const handleProfileClose = () => {
         dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
-        history.push(`/users/${localStorage.getItem('loginId')}/profile`);
+        history.push('/users/mypage');
         setAnchorEl(null);
         handleMobileMenuClose();
     };

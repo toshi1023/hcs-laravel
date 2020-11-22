@@ -71,9 +71,8 @@ function App() {
             <Route exact path="/articles/mypage" render={props => <MyArticle {...props} />} />
             <Route exact path="/users" render={props => <User {...props} />} />
             <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
-            <Route exact path="/users/:id" render={props => <UserShow {...props} />} />
-            <Route exact path="/users/:id/mypage" render={props => <Profile {...props} />} />
-            <Route exact path="/users/:id/edit" render={props => <UserEdit {...props} />} />
+            <Route exact path="/users/mypage" render={props => <Profile {...props} />} />
+            <Route exact path="/users/mypage/edit" render={props => <UserEdit {...props} />} />
             <Route exact path="/messages" render={props => <Message {...props} />} />
             <Route exact path="/news" render={props => <News {...props} />} />
           </Switch>

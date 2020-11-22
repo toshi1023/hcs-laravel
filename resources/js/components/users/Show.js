@@ -91,9 +91,9 @@ function UserShow(props) {
             editUser({ value })
         );
         // ユーザの編集ページへリダイレクト
-        history.push(`/users/${value.id}/edit`);
+        history.push('/users/mypage/edit');
     };
-    
+    console.log(selectedUser)
     return (
         <>
             <Card className={classes.root}>
