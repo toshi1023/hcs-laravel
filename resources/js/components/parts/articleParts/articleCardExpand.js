@@ -1,4 +1,5 @@
 import React from 'react';
+import CommentList from './commentList';
 import { makeStyles } from '@material-ui/core/styles';
 import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip, TextField } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -75,7 +76,7 @@ function ArticleCardExpand (props) {
     const handleExpandedClick = () => {
         setExpanded(!expanded)
     }
-
+    
     return (
         <>
             {/* スマホ版 */}
@@ -140,10 +141,11 @@ function ArticleCardExpand (props) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#fff' }}>
                     <CardContent>
-                    <Typography paragraph><span className={classes.mobileLabel}>コメント:</span></Typography>
+                    {/* <Typography paragraph><span className={classes.mobileLabel}>コメント:</span></Typography>
                     <Typography paragraph>
                         <span className={classes.mobileComment}>コメント機能を搭載予定</span>
-                    </Typography>
+                    </Typography> */}
+                    <CommentList />
                     </CardContent>
                 </Box>
                 {
@@ -235,10 +237,11 @@ function ArticleCardExpand (props) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#fff' }}>
                     <CardContent>
-                    <Typography paragraph><span className={classes.label}>コメント:</span></Typography>
+                    {/* <Typography paragraph><span className={classes.label}>コメント:</span></Typography>
                     <Typography paragraph>
                         <span className={classes.comment}>コメント機能を搭載予定</span>
-                    </Typography>
+                    </Typography> */}
+                    <CommentList comments={props.comments} articleId={props.article.id} />
                     </CardContent>
                 </Box>
                 {
