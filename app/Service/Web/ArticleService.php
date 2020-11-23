@@ -65,11 +65,11 @@ class ArticleService
 
   /**
    * 記事保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+   * 第一引数:登録データ, 第二引数:ファイル名
    */
-  public function articleSave($data, $filename = null, $updateData = null)
+  public function articleSave($data, $filename = null)
   {
-    return $this->ArticleService->save($data, $filename, $updateData);
+    return $this->ArticleService->save($data, $filename);
   }
 
   /**
@@ -156,8 +156,11 @@ class ArticleService
    * 記事のコメント情報を取得するメソッド
    * 引数：検索条件
    */
-  public function getComments()
+  public function getComments($conditions=null)
   { 
+    if($conditions) {
+      return $this->ArticleService->getQuery('comments', $conditions)->orderBy('updated_at', 'desc')->first();
+    }
     // 記事のコメント情報を取得
     $data = $this->ArticleService->getComments()->get();
 
@@ -168,6 +171,16 @@ class ArticleService
       'data'    => $data,
       'counts'  => $counts
     ];
+  }
+
+  /* *
+   * コメントの更新を実行するメソッド
+   * 引数: データ(記事ID, ユーザID, コメントデータ)
+   * */
+  public function getCommentsUpdate($data)
+  {
+    // コメントテーブルにデータを保存
+    return $this->ArticleService->getSave($data, 'comments');
   }
 
 }

@@ -190,27 +190,18 @@ class BaseRepository
     public function getSave($data, $table=null, $transaction=true)
     {
         if ($transaction) \DB::beginTransaction();
-
         try {
             if($table) {
                 $model = $this->getModel($table);
             } else {
                 $model = $this->model;
             }
-
-            // 作成・更新日時を取得
-            // $now = Carbon::now();
         
             // Updateかどうか判別
-            if ($data['id'] && key_exists('id', $data)) {
+            if (key_exists('id', $data) && $data['id']) {
                 $model = $this->getFind($model, $data['id']);
-                // 更新日時を格納
-                // $model->updated_at = $now;
-            } else {
-                // 作成日時を格納
-                // $model->created_at = $now;
             }
-
+            
             // データを保存
             $model->fill($data);
             $model->save();
@@ -219,7 +210,7 @@ class BaseRepository
             if ($transaction) \DB::commit();
             
             // リターン
-            return true;
+            return $model;
         } catch (\Exception $e) {
             \Log::error('database save error:'.$e->getMessage());
             if ($transaction) \DB::rollBack();

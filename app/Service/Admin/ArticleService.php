@@ -85,7 +85,7 @@ class ArticleService
    * 記事 & 記事のイメージ保存用メソッド
    * 第一引数:登録データ, 第二引数:ファイル名
    */
-  public function save($data, $filename = null, $updateData = null)
+  public function save($data, $filename = null)
   {
     // 除外処理
     $data = $data->except($this->except);

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ArticleCardExpand from './articleCardExpand';
-import { fetchCredStart, fetchCredEnd } from '../../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages } from '../../app/appSlice';
 import { 
-  selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes, selectComments, selectCommentsCounts, fetchAsyncGetComments 
+  selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes, selectComments, selectCommentsCounts, 
+  fetchAsyncGetComments, fetchAsyncUpdateComments
 } from '../../articles/articleSlice';
 import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
@@ -198,6 +199,27 @@ export default function ArticleCard(props) {
     // ロード終了
     await dispatch(fetchCredEnd());  
   }
+
+  /**
+     * コメントの保存処理
+     */
+    const commentsUpdate = async (value) => {
+      // ロード開始
+      await dispatch(fetchCredStart())
+      const result = await dispatch(fetchAsyncUpdateComments(value))
+      if (fetchAsyncUpdateComments.fulfilled.match(result)) {
+          // infoメッセージの表示
+          result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+          // コメントを再取得
+          await dispatch(fetchAsyncGetComments())
+          // ロード終了
+          await dispatch(fetchCredEnd()); 
+          return;
+      }
+      // ロード終了
+      await dispatch(fetchCredEnd()); 
+      return;
+  }
   
   return (
     _.map(props.article, article => (
@@ -244,9 +266,10 @@ export default function ArticleCard(props) {
             <ArticleCardExpand 
               article={article} 
               likes={likes.data} 
-              likesUpdate={likesUpdate} 
+              likesUpdate={likesUpdate}
               comments={comments} 
-              commentsCounts={commentsCounts} 
+              commentsCounts={commentsCounts}
+              commentsUpdate={commentsUpdate} 
             />
           </Card>
         </div>
@@ -296,6 +319,7 @@ export default function ArticleCard(props) {
               likesUpdate={likesUpdate} 
               comments={comments} 
               commentsCounts={commentsCounts} 
+              commentsUpdate={commentsUpdate} 
             />
           </Card>
         </div>

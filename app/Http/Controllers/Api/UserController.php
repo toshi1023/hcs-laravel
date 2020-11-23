@@ -80,7 +80,7 @@ class UserController extends Controller
       if ($this->database->save($data, $filename)[0]){
         DB::commit();
         return response()->json([
-          'info_message' => 'ユーザの登録に成功しました!', 
+          'info_message' => 'ユーザの登録に成功しました', 
           'id'           => $this->database->save($data, $filename)[1],
           'name'         => $request->input('name'),
           'password'     => $request->input('password'),
@@ -89,8 +89,9 @@ class UserController extends Controller
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
         return new JsonResponse([
-          'error_message' => 'ユーザの登録に失敗しました!'
-        ], 200);
+          'error_message' => 'ユーザの登録に失敗しました',
+          'status'        => 500,
+        ], 500);
       }
 
       // $data = $this->database->save($request, $filename);

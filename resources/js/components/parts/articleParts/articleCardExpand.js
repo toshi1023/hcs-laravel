@@ -1,7 +1,7 @@
 import React from 'react';
 import CommentList from './commentList';
 import { makeStyles } from '@material-ui/core/styles';
-import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip, TextField } from '@material-ui/core';
+import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip, TextField, FormControl } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -69,12 +69,42 @@ const useStyles = makeStyles((theme) => ({
 function ArticleCardExpand (props) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false)
+    const [state, setState] = React.useState({
+        // 保存対象の値
+        article_id: props.article.id,
+        user_id: localStorage.getItem('loginId'),
+        comment: ''
+    })
     
     /**
      * 拡張ページの表示
      */
     const handleExpandedClick = () => {
         setExpanded(!expanded)
+    }
+
+    /**
+     * コメントの取得
+     */
+    const handleSetComment = (value) => {
+        setState({
+            ...state,
+            comment: value
+        })
+    }
+
+    /**
+     * コメントの保存処理実行
+     */
+    const onSubmit = () => {
+        // コメントの保存処理
+        props.commentsUpdate(state)
+        // 入力値の初期化
+        document.getElementById('comment').value = ''
+        setState({
+            ...state,
+            comment: ''
+        })
     }
     
     return (
@@ -141,27 +171,30 @@ function ArticleCardExpand (props) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#fff' }}>
                     <CardContent>
-                    {/* <Typography paragraph><span className={classes.mobileLabel}>コメント:</span></Typography>
-                    <Typography paragraph>
-                        <span className={classes.mobileComment}>コメント機能を搭載予定</span>
-                    </Typography> */}
-                    <CommentList />
+                        <CommentList comments={props.comments} articleId={props.article.id} />
                     </CardContent>
                 </Box>
                 {
                     localStorage.getItem('localToken') ? 
                         <div className={classes.commentField}>
-                            <IconButton color="primary" aria-label="add">
-                                <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                            </IconButton>
-                            <TextField
-                                id="title"
-                                name="title"
-                                label="コメント"
-                                variant="outlined"
-                                style = {{marginLeft: 10, minWidth: 250, backgroundColor: 'white'}}
-                                multiline
-                            />
+                            <FormControl>
+                                <IconButton 
+                                    color="primary" 
+                                    aria-label="add" 
+                                    onClick={onSubmit}
+                                >
+                                    <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+                                </IconButton>
+                                <TextField
+                                    id="comment"
+                                    name="comment"
+                                    label="コメント"
+                                    variant="outlined"
+                                    style={{marginLeft: 10, minWidth: 250, backgroundColor: 'white'}}
+                                    onChange={(e) => handleSetComment(e.target.value)}
+                                    multiline
+                                />
+                            </FormControl>
                         </div>
                     : ''
                 }
@@ -237,29 +270,32 @@ function ArticleCardExpand (props) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#fff' }}>
                     <CardContent>
-                    {/* <Typography paragraph><span className={classes.label}>コメント:</span></Typography>
-                    <Typography paragraph>
-                        <span className={classes.comment}>コメント機能を搭載予定</span>
-                    </Typography> */}
-                    <CommentList comments={props.comments} articleId={props.article.id} />
+                        <CommentList comments={props.comments} articleId={props.article.id} />
                     </CardContent>
                 </Box>
                 {
                     localStorage.getItem('localToken') ? 
                     <div className={classes.commentField}>
-                        <Tooltip title="投稿する" classes={{tooltip: classes.tooltip}}>
-                            <IconButton color="primary" aria-label="add">
-                                <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                            </IconButton>
-                        </Tooltip>
-                        <TextField
-                            id="title"
-                            name="title"
-                            label="コメント"
-                            variant="outlined"
-                            style = {{marginLeft: 10, minWidth: 400, backgroundColor: 'white'}}
-                            multiline
-                        />
+                        <FormControl>
+                            <Tooltip title="投稿する" classes={{tooltip: classes.tooltip}}>
+                                <IconButton 
+                                    color="primary" 
+                                    aria-label="add" 
+                                    onClick={() => props.commentsUpdate(state)}
+                                >
+                                    <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+                                </IconButton>
+                            </Tooltip>
+                            <TextField
+                                id="comment"
+                                name="comment"
+                                label="コメント"
+                                variant="outlined"
+                                style = {{marginLeft: 10, minWidth: 400, backgroundColor: 'white'}}
+                                onChange={(e) => handleSetComment(e.target.value)}
+                                multiline
+                            />
+                        </FormControl>
                     </div>
                     : ''
                 }

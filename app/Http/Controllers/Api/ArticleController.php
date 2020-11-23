@@ -87,7 +87,7 @@ class ArticleController extends Controller
 
     DB::beginTransaction();
 
-    if ($this->database->articleSave($request, null, $article)) {
+    if ($this->database->articleSave($request, null)) {
       DB::commit();
       return redirect()->route('articles.index')->with('message', '記事を保存しました');
     } else {
@@ -168,5 +168,35 @@ class ArticleController extends Controller
       'comments'          => $data['data'],
       'comments_counts'   => $data['counts']
     ], 200, [], JSON_UNESCAPED_UNICODE);
+  }
+
+  /**
+   * 記事のコメントを保存
+   */
+  public function commentsUpdate(Request $request)
+  {
+    DB::beginTransaction();
+
+    // 保存データを配列化
+    $data = $request->all();
+    
+    // 記事のコメントを保存
+    $comment = $this->database->getCommentsUpdate($data);
+    if($comment) {
+      // コメントデータの取得
+      $comment = $this->database->getComments(['id' => $comment->id]);
+      
+      DB::commit();
+      return response()->json([
+        'comment'       => $comment,
+        'info_message'  => 'コメントを投稿しました'
+      ], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    DB::rollback();
+    return response()->json([
+      'error_message'  => 'コメントの投稿に失敗しました',
+      'status'         => 500,
+    ], 500, [], JSON_UNESCAPED_UNICODE);
   }
 }

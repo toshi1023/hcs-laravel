@@ -98,6 +98,20 @@ export const fetchAsyncGetComments = createAsyncThunk('articles/comments/index',
     
     return res.data
 })
+/**
+ * コメントデータの保存
+ */
+export const fetchAsyncUpdateComments = createAsyncThunk('articles/comments/update', async(conditions) => {
+    // コメントの更新
+    const res = await axios.post(`${apiUrl}/comments`, conditions, {
+        headers: {
+            'Content-Type': 'application/json',
+            // Authorization: `JWT ${token}`,
+        },
+    })
+
+    return res.data
+})
 
 /**
  * Slice(store)の設定
@@ -277,6 +291,15 @@ const articleSlice = createSlice({
                 commentsCounts: action.payload.comments_counts, //apiから取得したコメント数の情報をstateのcommentsに格納
             }
         })
+        // builder.addCase(fetchAsyncUpdateComments.fulfilled, (state, action) => {
+        //     return {
+        //         ...state,
+        //         // 現在のcomments一覧の要素をcというテンポラリの変数に格納して、選択したidに一致するidには変更したデータを格納
+        //         comments: state.comments.map((c) => 
+        //             c.id === action.payload.id ? action.payload : c
+        //         ),
+        //     }
+        // })
     },
 })
 

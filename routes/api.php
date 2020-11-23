@@ -17,6 +17,7 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
     Route::get('api_articles/likes' ,     'Api\ArticleController@likes')->name('api_articles.likes.index');
     Route::post('api_articles/likes' ,    'Api\ArticleController@likesUpdate')->name('api_articles.likes.update');
     Route::get('api_articles/comments' ,  'Api\ArticleController@comments')->name('api_articles.comments.index');
+    Route::post('api_articles/comments' , 'Api\ArticleController@commentsUpdate')->name('api_articles.comments.update');
     
     /********** ユーザ管理(users) **********/
     // Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);
