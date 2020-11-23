@@ -12,10 +12,11 @@ Route::post('/login', 'Api\LoginController@login');
 Route::group(['middleware' => ['api'], 'prefix'], function() {
 
     /********** 記事管理(articles) **********/
-    Route::resource('api_articles' ,    'Api\ArticleController', ['only' => ['index']]);
-    Route::get('api_articles/home' ,    'Api\ArticleController@home')->name('api_articles.home');
-    Route::get('api_articles/likes' ,    'Api\ArticleController@likes')->name('api_articles.likes.index');
+    Route::resource('api_articles' ,      'Api\ArticleController', ['only' => ['index']]);
+    Route::get('api_articles/home' ,      'Api\ArticleController@home')->name('api_articles.home');
+    Route::get('api_articles/likes' ,     'Api\ArticleController@likes')->name('api_articles.likes.index');
     Route::post('api_articles/likes' ,    'Api\ArticleController@likesUpdate')->name('api_articles.likes.update');
+    Route::get('api_articles/comments' ,  'Api\ArticleController@comments')->name('api_articles.comments.index');
     
     /********** ユーザ管理(users) **********/
     // Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);

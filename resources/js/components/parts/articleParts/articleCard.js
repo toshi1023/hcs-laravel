@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ArticleCardExpand from './articleCardExpand';
 import { fetchCredStart, fetchCredEnd } from '../../app/appSlice';
-import { selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes } from '../../articles/articleSlice';
+import { 
+  selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes, selectComments, selectCommentsCounts, fetchAsyncGetComments 
+} from '../../articles/articleSlice';
 import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import {Card, CardHeader, CardMedia, CardContent, Avatar, IconButton, Box, Typography, Menu, MenuItem} 
@@ -97,17 +99,21 @@ const useStyles = makeStyles((theme) => ({
 export default function ArticleCard(props) {
   const classes = useStyles();
   const likes = useSelector(selectLikes)
+  const comments = useSelector(selectComments)
+  const commentsCounts = useSelector(selectCommentsCounts)
   const dispatch = useDispatch()
 
   useEffect(() => {
     // 非同期の関数を定義
-    const fetchArticleLikes = async () => {
+    const fetchArticleEnv = async () => {
       // Loading開始
       await dispatch(fetchCredStart())
       // いいね一覧を取得
       const resultReg = await dispatch(fetchAsyncGetLikes({user_id: localStorage.getItem('loginId')}))
+      // コメント一覧を取得
+      const resultCommnets = await dispatch(fetchAsyncGetComments())
       
-      if (fetchAsyncGetLikes.fulfilled.match(resultReg)) {
+      if (fetchAsyncGetLikes.fulfilled.match(resultReg) && fetchAsyncGetComments.fulfilled.match(resultCommnets)) {
         // ロード終了
         await dispatch(fetchCredEnd());       
       }
@@ -115,7 +121,7 @@ export default function ArticleCard(props) {
       await dispatch(fetchCredEnd());  
     }
     // 上で定義した非同期の関数を実行
-    fetchArticleLikes()
+    fetchArticleEnv()
     
   }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
   
@@ -235,7 +241,13 @@ export default function ArticleCard(props) {
               <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
             </CardContent>
             {/* 拡張のデザイン */}
-            <ArticleCardExpand article={article} likes={likes} likesUpdate={likesUpdate} />
+            <ArticleCardExpand 
+              article={article} 
+              likes={likes.data} 
+              likesUpdate={likesUpdate} 
+              comments={comments} 
+              commentsCounts={commentsCounts} 
+            />
           </Card>
         </div>
 
@@ -278,7 +290,13 @@ export default function ArticleCard(props) {
               <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
             </CardContent>
             {/* 拡張のデザイン */}
-            <ArticleCardExpand article={article} likes={likes} likesUpdate={likesUpdate} />
+            <ArticleCardExpand 
+              article={article} 
+              likes={likes.data} 
+              likesUpdate={likesUpdate} 
+              comments={comments} 
+              commentsCounts={commentsCounts} 
+            />
           </Card>
         </div>
       </>

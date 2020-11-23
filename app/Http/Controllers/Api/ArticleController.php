@@ -126,7 +126,7 @@ class ArticleController extends Controller
 
     return response()->json([
       'likes' => $data
-    ],200, [], JSON_UNESCAPED_UNICODE);
+    ], 200, [], JSON_UNESCAPED_UNICODE);
   }
 
   /**
@@ -147,12 +147,26 @@ class ArticleController extends Controller
         'likes_flg'       => $likes['like_flg'],
         'likes_counts'    => $likes['data'],
         'article_id'      => $request->input('article_id'),
-      ],200, [], JSON_UNESCAPED_UNICODE);
+      ], 200, [], JSON_UNESCAPED_UNICODE);
     }
     // 更新に失敗したとき
     return response()->json([
       'error_message' => $likes['like_flg'],
       'status'        => 500,
-    ],500, [], JSON_UNESCAPED_UNICODE);
+    ], 500, [], JSON_UNESCAPED_UNICODE);
+  }
+
+  /**
+   * 記事のコメントを取得
+   */
+  public function comments(Request $request)
+  {
+    // 記事のいいね数を取得
+    $data = $this->database->getComments();
+
+    return response()->json([
+      'comments'          => $data['data'],
+      'comments_counts'   => $data['counts']
+    ], 200, [], JSON_UNESCAPED_UNICODE);
   }
 }

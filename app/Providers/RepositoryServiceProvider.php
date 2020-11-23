@@ -7,7 +7,6 @@ use Illuminate\Support\ServiceProvider;
 use App\Model\Admin;
 use App\Model\User;
 use App\Model\Article;
-use App\Model\ArticleImage;
 use App\Model\Prefecture;
 use App\Model\News;
 use App\Model\Message;
@@ -36,7 +35,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {   
         // ArticleDatabaseInterfaceをArticleRepositoryのインスタンス化で解決
         $this->app->singleton(ArticleDatabaseInterface::class, function($app) {
-            return new ArticleRepository(new Article, new ArticleImage);
+            return new ArticleRepository(new Article);
         });
 
         // AdminDatabaseInterfaceをAdminRepositoryのインスタンス化で解決

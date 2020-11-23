@@ -73,6 +73,24 @@ class ArticleService
   }
 
   /**
+    * 記事削除用メソッド
+    * 引数:記事ID
+    * */
+    public function articleDestroy($id)
+    {
+      return $this->ArticleService->destroy('articles', $id);
+    }
+
+  /**
+   * ファイル削除用メソッド
+   * 引数:ファイルパス
+   */
+  public function fileDelete($request)
+  {
+    return $this->ArticleService->fileDelete($request);
+  }
+
+  /**
    * 記事のいいね情報を取得するメソッド
    * 引数：検索条件
    */
@@ -135,21 +153,21 @@ class ArticleService
   }
 
   /**
-    * 記事削除用メソッド
-    * 引数:記事ID
-    * */
-    public function articleDestroy($id)
-    {
-      return $this->ArticleService->destroy('articles', $id);
-    }
-
-  /**
-   * ファイル削除用メソッド
-   * 引数:ファイルパス
+   * 記事のコメント情報を取得するメソッド
+   * 引数：検索条件
    */
-  public function fileDelete($request)
-  {
-    return $this->ArticleService->fileDelete($request);
+  public function getComments()
+  { 
+    // 記事のコメント情報を取得
+    $data = $this->ArticleService->getComments()->get();
+
+    // 記事のコメント数を取得
+    $counts = $this->ArticleService->getCommentsCounts()->get();
+
+    return [
+      'data'    => $data,
+      'counts'  => $counts
+    ];
   }
 
 }

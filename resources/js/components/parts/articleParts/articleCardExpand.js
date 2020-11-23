@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 function ArticleCardExpand (props) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false)
-
+    
     /**
      * 拡張ページの表示
      */
@@ -87,25 +87,26 @@ function ArticleCardExpand (props) {
                         {/* 'いいね'ボタンのデザイン */}
                         <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
                             {
-                            // いいねボタンのアクティブフラグ
-                            props.likes.likes != undefined ? 
-                                (_.map(props.likes.likes, like => (
-                                like.find(element => element.article_id === props.article.id).user_id
-                                ))[0] == null ? 
-                                <FavoriteIcon style={{ fontSize: 17 }} />
-                                : <FavoriteIcon style={{ fontSize: 17, color: 'red' }} />
-                                )
-                            : ''
+                                // いいねボタンのアクティブフラグ
+                                props.likes.find(element => element.article_id === props.article.id) != undefined
+                                ? 
+                                    props.likes.find(element => element.article_id === props.article.id).user_id == null 
+                                    ? 
+                                        <FavoriteIcon style={{ fontSize: 20 }} />
+                                    : 
+                                        <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
+                                : 
+                                    ''
                             }
                         </IconButton>
                         <span className={classes.likesCounts}>
                             {
-                            // いいね数の取得・表示
-                            props.likes.likes != undefined ? 
-                                _.map(props.likes.likes, like => (
-                                like.find(element => element.article_id === props.article.id).likes_counts
-                                )) 
-                            : ''
+                                // いいね数の取得・表示
+                                props.likes.find(element => element.article_id === props.article.id) != undefined 
+                                ? 
+                                    props.likes.find(element => element.article_id === props.article.id).likes_counts
+                                : 
+                                    ''
                             }
                         </span>
                         {/* コメントボタンのデザイン(拡張機能あり) */}
@@ -116,7 +117,16 @@ function ArticleCardExpand (props) {
                         >
                             <CommentIcon style={{ fontSize: 17 }} />
                         </IconButton>
-                        <span className={classes.commentCounts}>3</span>
+                        <span className={classes.commentCounts}>
+                            {
+                                // コメント数の取得・表示
+                                props.commentsCounts.find(element => element.article_id === props.article.id) != undefined 
+                                ? 
+                                    props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
+                                : 
+                                    ''
+                                }
+                        </span>
                         {/* シェア'ボタンのデザイン */}
                         <IconButton aria-label="share">
                             <ShareIcon style={{ fontSize: 17 }} />
@@ -167,26 +177,27 @@ function ArticleCardExpand (props) {
                         <Tooltip title="いいね！" classes={{tooltip: classes.tooltip}}>
                             <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
                                 {
-                                // いいねボタンのアクティブフラグ
-                                props.likes.likes != undefined ? 
-                                    (_.map(props.likes.likes, like => (
-                                    like.find(element => element.article_id === props.article.id).user_id
-                                    ))[0] == null ? 
-                                    <FavoriteIcon style={{ fontSize: 20 }} />
-                                    : <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
-                                    )
-                                : ''
+                                    // いいねボタンのアクティブフラグ
+                                    props.likes.find(element => element.article_id === props.article.id) != undefined
+                                    ? 
+                                        props.likes.find(element => element.article_id === props.article.id).user_id == null 
+                                        ? 
+                                            <FavoriteIcon style={{ fontSize: 20 }} />
+                                        : 
+                                            <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
+                                    : 
+                                        ''
                                 }
                             </IconButton>
                         </Tooltip>
                         <span className={classes.likesCounts}>
                             {
-                            // いいね数の取得・表示
-                            props.likes.likes != undefined ? 
-                                _.map(props.likes.likes, like => (
-                                like.find(element => element.article_id === props.article.id).likes_counts
-                                )) 
-                            : ''
+                                // いいね数の取得・表示
+                                props.likes.find(element => element.article_id === props.article.id) != undefined 
+                                ? 
+                                    props.likes.find(element => element.article_id === props.article.id).likes_counts
+                                : 
+                                    ''
                             }
                         </span>
                         {/* コメントボタンのデザイン(拡張機能あり) */}
@@ -199,7 +210,16 @@ function ArticleCardExpand (props) {
                                 <CommentIcon style={{ fontSize: 20 }} />
                             </IconButton>
                         </Tooltip>
-                        <span className={classes.commentCounts}>3</span>
+                        <span className={classes.commentCounts}>
+                            {
+                                // コメント数の取得・表示
+                                props.commentsCounts.find(element => element.article_id === props.article.id) != undefined 
+                                ? 
+                                    props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
+                                : 
+                                    ''
+                            }
+                        </span>
                         {/* シェア'ボタンのデザイン */}
                         <Tooltip title="シェアする" classes={{tooltip: classes.tooltip}}>
                             <IconButton aria-label="share">

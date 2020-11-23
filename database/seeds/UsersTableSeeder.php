@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
             'birthday' => '1992-1-1',
             'gender' => 1,
             'email' => 'root@xxx.co.jp',
-            'password' => Hash::make("root"),
+            'password' => Hash::make("root1234"),
             'comment'  => 'こんにちはrootです！これから盛り上げていきましょう！',
         ]);
 
@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
                 'birthday' => '1993-1-'.$i,
                 'gender' => $faker->numberBetween(0, 1), // 0~1の間で乱数,
                 'email' => 'test'.$i.'@xxx.co.jp',
-                'password' => Hash::make("test"),
+                'password' => Hash::make("test1234"),
                 'comment'  => 'こんにちはtest'.$i.'です！これからよろしく！',
                 // 'user_agent' => $faker->userAgent,
             ]);

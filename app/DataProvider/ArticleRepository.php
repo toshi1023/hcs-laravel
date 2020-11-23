@@ -215,4 +215,37 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             return false;
         }
     }
+
+    /**
+     * 記事のコメント数を取得
+     */
+    public function getCommentsCounts()
+    {
+        // Commentモデルをインスタンス化
+        $model = $this->getModel('comments');
+
+        // 記事ごとのコメント数をカウント
+        $query = $model->selectRaw('count(id) as comments_counts, article_id')
+                          ->where('delete_flg', '=', 0)
+                          ->groupByRaw('article_id');
+
+        return $query;
+    }
+
+    /**
+     * 記事のコメントデータを取得
+     */
+    public function getComments()
+    {
+        // Commentモデルをインスタンス化
+        $model = $this->getModel('comments');
+        
+        // 記事ごとのコメントとユーザ情報を取得
+        $query = $model->select('comments.comment', 'comments.user_id', 'comments.article_id', 'users.users_photo_path', 'users.name as user_name')
+                          ->from('comments')
+                          ->leftJoin('users', 'comments.user_id', '=', 'users.id')
+                          ->where('comments.delete_flg', '=', 0);
+        
+        return $query;
+    }
 }

@@ -69,17 +69,16 @@ export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) =>
  * いいね一覧データの取得
  */
 export const fetchAsyncGetLikes = createAsyncThunk('articles/likes/index', async(conditions) => {
-    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+    // いいねの取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
     const res = await axios.get(`${apiUrl}/likes?query=${conditions.user_id}`)
     
     return res.data
-}
-)
+})
 /**
  * いいねデータの更新
  */
 export const fetchAsyncUpdateLikes = createAsyncThunk('articles/likes/update', async(conditions) => {
-    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+    // いいねの更新
     const res = await axios.post(`${apiUrl}/likes`, conditions, {
         headers: {
             'Content-Type': 'application/json',
@@ -90,6 +89,15 @@ export const fetchAsyncUpdateLikes = createAsyncThunk('articles/likes/update', a
     return res.data
 })
 
+/**
+ * コメント一覧データの取得
+ */
+export const fetchAsyncGetComments = createAsyncThunk('articles/comments/index', async() => {
+    // コメントの取得
+    const res = await axios.get(`${apiUrl}/comments`)
+    
+    return res.data
+})
 
 /**
  * Slice(store)の設定
@@ -154,16 +162,31 @@ const articleSlice = createSlice({
         },
         likes: [
             {
-                article_id: '',
-                user_id: '',
-                likes_counts: ''
+                article_id: '',         // 記事ID
+                user_id: '',            // ユーザID
+                likes_counts: ''        // いいね数
             }
         ],
         selectedLike: {
             article_id: '',
             likes_flg: '',
             likes_counts: ''
-        }
+        },
+        comments: [
+            {
+                article_id: '',         // 記事ID
+                user_id: '',            // ユーザID
+                comment: '',            // コメント
+                users_photo_path: '',   // ユーザのプロフィール画像
+                user_name: '',          // ユーザ名
+            }
+        ],
+        commentsCounts: [
+            {
+                article_id: '',         // 記事ID
+                comments_counts: '',    // コメント数
+            }
+        ],
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -238,13 +261,20 @@ const articleSlice = createSlice({
         builder.addCase(fetchAsyncGetLikes.fulfilled, (state, action) => {
             return {
                 ...state,
-                likes: action.payload, //apiから取得したいいねの情報をstateのlikesに格納
+                likes: action.payload.likes, //apiから取得したいいねの情報をstateのlikesに格納
             }
         })
         builder.addCase(fetchAsyncUpdateLikes.fulfilled, (state, action) => {
             return {
                 ...state,
                 selectedLike: action.payload, //apiから取得した更新後のいいねの情報をstateのselectedLikeに格納
+            }
+        })
+        builder.addCase(fetchAsyncGetComments.fulfilled, (state, action) => {
+            return {
+                ...state,
+                comments: action.payload.comments, //apiから取得したコメントの情報をstateのcommentsに格納
+                commentsCounts: action.payload.comments_counts, //apiから取得したコメント数の情報をstateのcommentsに格納
             }
         })
     },
@@ -257,5 +287,7 @@ export const selectEditedArticle = (state) => state.article.editedArticle
 export const selectArticles = (state) => state.article.articles
 export const selectLikes = (state) => state.article.likes
 export const selectSelectedLike = (state) => state.article.selectedLike
+export const selectComments = (state) => state.article.comments
+export const selectCommentsCounts = (state) => state.article.commentsCounts
 
 export default articleSlice.reducer
