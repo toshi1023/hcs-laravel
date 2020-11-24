@@ -75,7 +75,7 @@ function ArticleCardExpand (props) {
         user_id: localStorage.getItem('loginId'),
         comment: ''
     })
-    
+    // console.log(state)
     /**
      * 拡張ページの表示
      */

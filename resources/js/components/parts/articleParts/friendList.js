@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
-import { fetchAsyncGet } from '../../articles/articleSlice';
+import { fetchAsyncGet, searchUser } from '../../articles/articleSlice';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -45,13 +45,16 @@ export default function FriendList(props) {
         }
         // selectArticlesのstateを更新するReducerにdispatch
         const resultSearch = await dispatch(
-            fetchAsyncGet({ prefecture: prefecture, id: value.target_id })
+            fetchAsyncGet({ prefecture: prefecture, user_id: value.target_id })
         )
 
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
             // タブ切り替え(スマホ版のみ)
             props.handleChange ?  props.handleChange(null, 0) : ''
             props.handleTabArticle ? props.handleTabArticle() : ''
+
+            // 検索中のユーザIDをstoreのstateに格納
+            dispatch(searchUser(value.target_id))
             
             // ロード終了
             await dispatch(fetchCredEnd());

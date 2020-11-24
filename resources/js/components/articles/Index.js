@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd } from '../app/appSlice';
-import { selectArticles, fetchAsyncGet, selectLikes } from './articleSlice';
+import { selectArticles, fetchAsyncGet, selectLikes, selectSearchUser, searchUser } from './articleSlice';
 import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
@@ -52,6 +52,7 @@ function Article() {
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
     const articles = useSelector(selectArticles)
     const friends = useSelector(selectUsers)
+    const searchedUser = useSelector(selectSearchUser)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -60,7 +61,7 @@ function Article() {
             // Loading開始
             await dispatch(fetchCredStart())
             // 記事一覧を取得
-            const resultReg = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
+            const resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: ''}))
             // 友達一覧を取得
             const resultFriends = await dispatch(fetchAsyncGetFriends(localStorage.getItem('loginId')))
             if (fetchAsyncGet.fulfilled.match(resultReg) && fetchAsyncGetFriends.fulfilled.match(resultFriends)) {
@@ -89,7 +90,7 @@ function Article() {
                 prefecture = ''
             }
             // 記事一覧を取得
-            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, id: ''}))
+            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, user_id: searchedUser}))
             if (fetchAsyncGet.fulfilled.match(resultSearch)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
@@ -107,13 +108,16 @@ function Article() {
         await dispatch(fetchCredStart())
         
         // 記事一覧を取得
-        const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', id: ''}))
+        const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', user_id: ''}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
             // 都道府県をリセット
             document.getElementById( "prefecture" ).options[0].selected ? 
                 '' 
             : 
                 document.getElementById( "prefecture" ).options[1].selected = true
+            
+            // 検索対象ユーザの値を削除
+            dispatch(searchUser(''))
             // ロード終了
             await dispatch(fetchCredEnd())  
         }

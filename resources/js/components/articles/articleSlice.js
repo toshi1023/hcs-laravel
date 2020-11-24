@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost/api/api_articles'
-// const apiUrl = 'http://hcs-laravel/api/api_articles'
+// const apiUrl = 'http://localhost/api/api_articles'
+const apiUrl = 'http://hcs-laravel/api/api_articles'
 const token = localStorage.localToken
 
 /**
@@ -20,7 +20,7 @@ export const fetchAsyncGetHome = createAsyncThunk('articles/home', async() => {
  */
 export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions) => {
     // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
-    const res = await axios.get(`${apiUrl}?queryPrefecture=${conditions.prefecture}&queryId=${conditions.id}`)
+    const res = await axios.get(`${apiUrl}?queryPrefecture=${conditions.prefecture}&queryId=${conditions.user_id}`)
     
     return res.data
 })
@@ -201,6 +201,9 @@ const articleSlice = createSlice({
                 comments_counts: '',    // コメント数
             }
         ],
+        searchedUser: {
+            user_id: '',
+        }
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -212,6 +215,9 @@ const articleSlice = createSlice({
         },
         selectLike(state, action) {
             state.selectedLike = action.payload
+        },
+        searchUser(state, action) {
+            state.searchedUser = action.payload
         }
     },
     // 追加Reducer (Api通信の処理を記述)
@@ -291,19 +297,10 @@ const articleSlice = createSlice({
                 commentsCounts: action.payload.comments_counts, //apiから取得したコメント数の情報をstateのcommentsに格納
             }
         })
-        // builder.addCase(fetchAsyncUpdateComments.fulfilled, (state, action) => {
-        //     return {
-        //         ...state,
-        //         // 現在のcomments一覧の要素をcというテンポラリの変数に格納して、選択したidに一致するidには変更したデータを格納
-        //         comments: state.comments.map((c) => 
-        //             c.id === action.payload.id ? action.payload : c
-        //         ),
-        //     }
-        // })
     },
 })
 
-export const { editArticle, selectArticle } = articleSlice.actions
+export const { editArticle, selectArticle, searchUser } = articleSlice.actions
 
 export const selectSelectedArticle = (state) => state.article.selectedArticle
 export const selectEditedArticle = (state) => state.article.editedArticle
@@ -312,5 +309,6 @@ export const selectLikes = (state) => state.article.likes
 export const selectSelectedLike = (state) => state.article.selectedLike
 export const selectComments = (state) => state.article.comments
 export const selectCommentsCounts = (state) => state.article.commentsCounts
+export const selectSearchUser = (state) => state.article.searchedUser
 
 export default articleSlice.reducer
