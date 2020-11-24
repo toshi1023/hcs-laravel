@@ -79,7 +79,7 @@ function MyArticle() {
             // Loading開始
             await dispatch(fetchCredStart())
             // 記事一覧を取得
-            const resultReg = await dispatch(fetchAsyncGet({prefecture: '', id: localStorage.getItem('loginId')}))
+            const resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
@@ -105,7 +105,7 @@ function MyArticle() {
                 prefecture = ''
             }
             // 記事一覧を取得
-            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, id: localStorage.getItem('loginId')}))
+            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, user_id: localStorage.getItem('loginId')}))
             if (fetchAsyncGet.fulfilled.match(resultSearch)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
@@ -123,7 +123,7 @@ function MyArticle() {
         await dispatch(fetchCredStart())
         
         // 記事一覧を取得
-        const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', id: localStorage.getItem('loginId')}))
+        const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
             // 都道府県をリセット
             document.getElementById( "prefecture" ).options[0].selected ? 

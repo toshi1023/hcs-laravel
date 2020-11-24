@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, selectInfo } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet, selectLikes, selectSearchUser, searchUser } from './articleSlice';
 import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import MessageCard from '../parts/common/messageCard';
 import FriendList from '../parts/articleParts/friendList';
+import SnackMessages from '../parts/common/snackMessages';
 import _ from 'lodash';
 import { Grid, Paper, Tabs, Tab, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,10 +50,11 @@ function Article() {
     const [value, setValue] = React.useState(0);
     const [articlePage, setArticlePage] = React.useState(false);
     const [friendListPage, setFriendListPage] = React.useState(true);
-    // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
+    // stateで管理するデータを使用できるように定数に格納
     const articles = useSelector(selectArticles)
     const friends = useSelector(selectUsers)
     const searchedUser = useSelector(selectSearchUser)
+    const infoMessages = useSelector(selectInfo)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -153,6 +155,13 @@ function Article() {
     
     return (
         <>
+            {
+                // メッセージ表示
+                infoMessages ? 
+                    <SnackMessages infoOpen={true} />
+                :
+                    <SnackMessages errorOpen={true} />
+            }
             {/* タブ(スマホ版のみ) */}
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>

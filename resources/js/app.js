@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: '#f0f1f3'
   },
+  mainContents: {
+    // paddingTop: theme.spacing(10)
+  },
 }));
 
 /**
@@ -64,20 +67,22 @@ function App() {
       <div className={classes.background}>
         <BrowserRouter>
           <HcsAppBar />
-          <Switch>
-            <Route exact path="/login" render={props => <Login {...props} />} />
-            <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
-            <Route exact path="/articles" render={props => <Article {...props} />} />
-            <Route exact path="/articles/mypage" render={props => <MyArticle {...props} />} />
-            <Route exact path="/users" render={props => <User {...props} />} />
-            <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
-            <Route exact path="/users/mypage" render={props => <Profile {...props} />} />
-            <Route exact path="/users/mypage/edit" render={props => <UserEdit {...props} />} />
-            <Route exact path="/messages" render={props => <Message {...props} />} />
-            <Route exact path="/news" render={props => <News {...props} />} />
-          </Switch>
-          {loading ? <LoadItem /> : null}
-          <input type="hidden" id="loginId" />
+          <div className={classes.mainContents}>
+            <Switch>
+              <Route exact path="/login" render={props => <Login {...props} />} />
+              <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
+              <Route exact path="/articles" render={props => <Article {...props} />} />
+              <Route exact path="/articles/mypage" render={props => <MyArticle {...props} />} />
+              <Route exact path="/users" render={props => <User {...props} />} />
+              <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
+              <Route exact path="/users/mypage" render={props => <Profile {...props} />} />
+              <Route exact path="/users/mypage/edit" render={props => <UserEdit {...props} />} />
+              <Route exact path="/messages" render={props => <Message {...props} />} />
+              <Route exact path="/news" render={props => <News {...props} />} />
+            </Switch>
+            {loading ? <LoadItem /> : null}
+            <input type="hidden" id="loginId" />
+          </div>
         </BrowserRouter>
       </div>
     </>

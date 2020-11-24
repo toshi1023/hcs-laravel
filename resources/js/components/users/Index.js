@@ -28,15 +28,21 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
+        position: 'fixed',
+    },
+    mobileMainContent: {
+        paddingTop: theme.spacing(10),
     },
     sectionDesktop: {
         display: "none",
+        paddingTop: theme.spacing(10),
         [theme.breakpoints.up("sm")]: {
             display: "block"
         }
     },
     sectionMobile: {
         display: "block",
+        paddingTop: theme.spacing(7),
         [theme.breakpoints.up("sm")]: {
             display: "none"
         }
@@ -173,60 +179,62 @@ export default function User() {
                         <Tab icon={<GroupIcon />} label="ユーザ一覧" onClick={handleTabUserList} />
                     </Tabs>
                 </Paper>
-                <Grid container className={classes.gridContainer} justify="center">
-                    <Grid item xs={11} hidden={userPage}>
-                        <Grid container justify="center">
-                            {
-                                localStorage.getItem('loginId') ? 
-                                    <Grid item xs={12}>
-                                        <div className={classes.userShow}>
-                                            <UserShow />
-                                        </div>
-                                    </Grid>
-                                : 
-                                    <Grid item xs={12}>
-                                        <div className={classes.userShow}>
-                                            <MessageCard />
-                                        </div>
-                                    </Grid>
-                            }
+                <div className={classes.mobileMainContent}>
+                    <Grid container className={classes.gridContainer} justify="center">
+                        <Grid item xs={11} hidden={userPage}>
+                            <Grid container justify="center">
+                                {
+                                    localStorage.getItem('loginId') ? 
+                                        <Grid item xs={12}>
+                                            <div className={classes.userShow}>
+                                                <UserShow />
+                                            </div>
+                                        </Grid>
+                                    : 
+                                        <Grid item xs={12}>
+                                            <div className={classes.userShow}>
+                                                <MessageCard />
+                                            </div>
+                                        </Grid>
+                                }
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={11} hidden={userListPage}>
+                            <form className={classes.rootSearch} noValidate autoComplete="off">
+                                <div>
+                                    <TextField
+                                        id="userSearch"
+                                        label="Search"
+                                        placeholder="ユーザ名で検索"
+                                        multiline={false}
+                                        // SearchIconをフィールドに埋め込み
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment>
+                                                    <IconButton type="button" id="search" className={classes.iconButton} onClick={getSearchUser} aria-label="search">
+                                                        <SearchIcon />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                            // 入力値のフォントサイズを変更
+                                            classes: {
+                                                input: classes.text,
+                                            },
+                                        }}
+                                        InputLabelProps={{
+                                            style: {fontSize: 15}
+                                        }}
+                                        onChange={handleChangeName}
+                                    />
+                                    <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleDeleteName} >
+                                        クリア
+                                    </Button>
+                                </div>
+                            </form>
+                            {renderUsers()}
                         </Grid>
                     </Grid>
-                    <Grid item xs={11} hidden={userListPage}>
-                        <form className={classes.rootSearch} noValidate autoComplete="off">
-                            <div>
-                                <TextField
-                                    id="userSearch"
-                                    label="Search"
-                                    placeholder="ユーザ名で検索"
-                                    multiline={false}
-                                    // SearchIconをフィールドに埋め込み
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment>
-                                                <IconButton type="button" id="search" className={classes.iconButton} onClick={getSearchUser} aria-label="search">
-                                                    <SearchIcon />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ),
-                                        // 入力値のフォントサイズを変更
-                                        classes: {
-                                            input: classes.text,
-                                        },
-                                    }}
-                                    InputLabelProps={{
-                                        style: {fontSize: 15}
-                                    }}
-                                    onChange={handleChangeName}
-                                />
-                                <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleDeleteName} >
-                                    クリア
-                                </Button>
-                            </div>
-                        </form>
-                        {renderUsers()}
-                    </Grid>
-                </Grid>
+                </div>
             </div>
 
             {/* PC版 */}
