@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
+        position: 'fixed',
+        zIndex: 1,
     },
     topMargin: {
         marginTop: theme.spacing(4),
@@ -24,14 +26,20 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 10,
         fontSize: 15
     },
+    mobileMainContent: {
+        paddingTop: theme.spacing(10),
+        zIndex: 0,
+    },
     sectionDesktop: {
         display: "none",
+        paddingTop: theme.spacing(10),
         [theme.breakpoints.up("sm")]: {
             display: "block"
         }
     },
     sectionMobile: {
         display: "block",
+        paddingTop: theme.spacing(7),
         [theme.breakpoints.up("sm")]: {
             display: "none"
         }
@@ -119,12 +127,12 @@ export default function News() {
                     </Tabs>
                 </Paper>
                 <Grid container justify="center" hidden={newsPage} className={classes.topMargin}>
-                    <Grid item xs={11}>
+                    <Grid item xs={11} className={classes.mobileMainContent}>
                         <NewsCard news={selectedNews} />
                     </Grid>
                 </Grid>
                 <Grid item xs={12} hidden={newsListPage} className={classes.topMargin}>
-                    <div className={classes.tab}>
+                    <div className={classes.mobileMainContent}>
                         <Divider />
                         <List component="nav" aria-label="main mailbox folders">
                             {_.map(news.news, value => {

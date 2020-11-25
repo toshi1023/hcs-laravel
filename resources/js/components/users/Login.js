@@ -22,7 +22,7 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        marginTop: theme.spacing(10),
+        marginTop: theme.spacing(20),
         marginBottom: theme.spacing(10),
         minWidth: 300,
         margin: `${theme.spacing(1)}px auto`,

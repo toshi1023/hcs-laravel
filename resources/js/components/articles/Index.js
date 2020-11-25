@@ -24,18 +24,30 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
+        position: 'fixed',
+        zIndex: 1,
+    },
+    mobileMainContent: {
+        paddingTop: theme.spacing(10),
+        zIndex: 0,
     },
     sectionDesktop: {
         display: "none",
+        paddingTop: theme.spacing(10),
         [theme.breakpoints.up("sm")]: {
             display: "block"
         }
     },
     sectionMobile: {
         display: "block",
+        paddingTop: theme.spacing(7),
         [theme.breakpoints.up("sm")]: {
             display: "none"
         }
+    },
+    searchField: {
+        paddingTop: theme.spacing(10),
+        zIndex: 0,
     },
     clearButton: {
         fontSize: 15,
@@ -180,7 +192,7 @@ function Article() {
             </div>
 
             {/* 検索デザイン */}
-            <Grid container>
+            <Grid container className={classes.searchField}>
                 <Grid item xs={5} md={1}>
                     <div onBlur={getSearchPrefecture}>
                         <PrefectureSelects fontSize={15} />

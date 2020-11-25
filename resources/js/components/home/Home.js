@@ -11,8 +11,8 @@ import styles from '../app/bodyTitle.module.css';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
-      paddingTop: '10px',
-      paddingBottom: '20px'
+      paddingTop: theme.spacing(10),
+      paddingBottom: theme.spacing(5),
     },
     moreButton: {
         fontSize: 15,

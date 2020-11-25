@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         minWidth: 200,
         backgroundColor: "#f7fad1",
-        display: "flex"
+        display: "flex",
     },
     list: {
         width: '100%',
@@ -40,6 +40,10 @@ const useStyles = makeStyles(theme => ({
     details: {
         display: "flex",
         flexDirection: "column"
+    },
+    mainContent: {
+        paddingTop: theme.spacing(15),
+        zIndex: 0,
     },
     content: {
         flex: "1 0 auto",
@@ -219,7 +223,7 @@ function UserEdit(props) {
                     </Fade>
                 </Modal>
             </div>
-            <Grid item xs={12} sm={12} md={6}>
+            <Grid item xs={12} sm={12} md={6} className={classes.mainContent}>
                 <Card className={classes.root}>
                     <Grid container  spacing={2}>
                         <Grid item xs={12} sm={12}>

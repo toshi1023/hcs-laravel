@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         minWidth: 300,
+        paddingTop: theme.spacing(10),
     },
     subTitle: {
         fontFamily: 'Cabin Sketch, cursive',

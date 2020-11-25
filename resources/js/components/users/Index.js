@@ -29,9 +29,19 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
         position: 'fixed',
+        zIndex: 1,
+    },
+    mainContent: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'auto'
     },
     mobileMainContent: {
         paddingTop: theme.spacing(10),
+        zIndex: 0,
     },
     sectionDesktop: {
         display: "none",
@@ -242,20 +252,22 @@ export default function User() {
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item sm={8}>
                         <Grid container justify="center">
-                            {
-                                localStorage.getItem('loginId') ? 
-                                    <Grid item sm={10}>
-                                        <div className={classes.userShow}>
-                                            <UserShow />
-                                        </div>
-                                    </Grid>
-                                : 
-                                    <Grid item sm={6}>
-                                        <div className={classes.userShow}>
-                                            <MessageCard />
-                                        </div>
-                                    </Grid>
-                            }
+                            {/* <div className={classes.mainContent}> */}
+                                {
+                                    localStorage.getItem('loginId') ? 
+                                        <Grid item sm={10}>
+                                            <div className={classes.userShow}>
+                                                <UserShow />
+                                            </div>
+                                        </Grid>
+                                    : 
+                                        <Grid item sm={6}>
+                                            <div className={classes.userShow}>
+                                                <MessageCard />
+                                            </div>
+                                        </Grid>
+                                }
+                            {/* </div> */}
                         </Grid>
                     </Grid>
                     <Grid item sm={4}>
