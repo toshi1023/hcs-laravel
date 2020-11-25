@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     mobileMainContent: {
         paddingTop: theme.spacing(10),
+        backgroundColor: theme.palette.background.paper,
         zIndex: 0,
     },
     sectionDesktop: {

@@ -13,7 +13,7 @@
 </head>
 <body>
   <header>
-    <div id="app"></div>
+    <div id="app" class="reactPage"></div>
   </header>
   <main>
     @yield('content')

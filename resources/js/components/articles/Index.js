@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionDesktop: {
         display: "none",
-        paddingTop: theme.spacing(10),
         [theme.breakpoints.up("sm")]: {
             display: "block"
         }

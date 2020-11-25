@@ -13,14 +13,21 @@ import CommentIcon from '@material-ui/icons/Comment';
 import styles from './myArticle.module.css';
 
 const useStyles = makeStyles((theme) => ({
+    searchField: {
+        paddingTop: theme.spacing(10),
+        zIndex: 0,
+    },
     sectionDesktop: {
         display: "none",
+        paddingTop: theme.spacing(5),
         [theme.breakpoints.up("sm")]: {
             display: "block"
         }
     },
     sectionMobile: {
         display: "block",
+        paddingTop: theme.spacing(7),
+        zIndex: 0,
         [theme.breakpoints.up("sm")]: {
             display: "none"
         }
@@ -29,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
+        position: 'fixed',
+        zIndex: 1,
     },
     gridContainer: {
       paddingTop: '10px',
@@ -41,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     margin: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
+        zIndex: 0
     },
     error: {
         marginLeft: theme.spacing(3),
@@ -60,6 +70,9 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 15,
         marginTop: theme.spacing(2),
         marginLeft: theme.spacing(2),
+    },
+    input: {
+        zIndex: 0
     }
   }));
 
@@ -182,7 +195,7 @@ function MyArticle() {
             </div>
 
             {/* 検索デザイン */}
-            <Grid container>
+            <Grid container className={classes.searchField}>
                 <Grid item xs={5} md={1}>
                     <div onBlur={getSearchPrefecture}>
                         <PrefectureSelects values={articles.prefectures} fontSize={15} />
@@ -217,6 +230,9 @@ function MyArticle() {
                                                 label="タイトル"
                                                 variant="outlined"
                                                 style = {{width: 250}}
+                                                InputLabelProps={{
+                                                    className: classes.input,
+                                                }}
                                             />
                                         </div>
                                         <div className={classes.margin}>
@@ -228,6 +244,9 @@ function MyArticle() {
                                                 style = {{width: 250}}
                                                 multiline
                                                 rows={4}
+                                                InputLabelProps={{
+                                                    className: classes.input,
+                                                }}
                                             />
                                         </div>
                                         <div className={classes.margin}>
@@ -274,6 +293,9 @@ function MyArticle() {
                                                     label="タイトル"
                                                     variant="outlined"
                                                     style = {{width: 400}}
+                                                    InputLabelProps={{
+                                                        className: classes.input,
+                                                    }}
                                                 />
                                             </div>
                                             <div className={classes.margin}>
@@ -285,6 +307,7 @@ function MyArticle() {
                                                     style = {{width: 400}}
                                                     InputLabelProps={{
                                                         fontSize: 30,
+                                                        className: classes.input,
                                                     }}
                                                     multiline
                                                     rows={4}

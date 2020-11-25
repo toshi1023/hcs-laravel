@@ -4,6 +4,11 @@
 
 /* フロントエンドのローディングデザイン */
 
+div.reactPage {
+  background-color: #f0f1f3;
+  height: 100%;
+}
+
 /* articleCard.jsファイルにて設定 */
 h2 {
   width: 400px;

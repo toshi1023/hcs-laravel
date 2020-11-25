@@ -38,10 +38,10 @@ import store from "./store";
 
 const useStyles = makeStyles((theme) => ({
   background: {
-    backgroundColor: '#f0f1f3'
-  },
-  mainContents: {
-    // paddingTop: theme.spacing(10)
+    backgroundColor: '#f0f1f3',
+    height: '100%',
+    top: 0,
+    left: 0
   },
 }));
 
@@ -67,7 +67,6 @@ function App() {
       <div className={classes.background}>
         <BrowserRouter>
           <HcsAppBar />
-          <div className={classes.mainContents}>
             <Switch>
               <Route exact path="/login" render={props => <Login {...props} />} />
               <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
@@ -82,7 +81,6 @@ function App() {
             </Switch>
             {loading ? <LoadItem /> : null}
             <input type="hidden" id="loginId" />
-          </div>
         </BrowserRouter>
       </div>
     </>
