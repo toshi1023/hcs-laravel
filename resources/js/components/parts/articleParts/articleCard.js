@@ -224,6 +224,7 @@ export default function ArticleCard(props) {
   return (
     _.map(props.article, article => (
       <>
+        
         {/* スマホ版 */}
         <div className={classes.sectionMobile}>
           <Card className={classes.mobileRoot}>

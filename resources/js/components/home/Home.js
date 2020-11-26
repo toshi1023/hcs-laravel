@@ -42,7 +42,7 @@ function Home() {
     
             if (fetchAsyncGetHome.fulfilled.match(resultReg)) {
                 // ロード終了
-                await dispatch(fetchCredEnd());       
+                await dispatch(fetchCredEnd());
             }
             // ロード終了
             await dispatch(fetchCredEnd());  

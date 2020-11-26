@@ -79,7 +79,11 @@ function ArticleCardExpand (props) {
     /**
      * 拡張ページの表示
      */
-    const handleExpandedClick = () => {
+    const handleExpandedClick = (value) => {
+        setState({
+            ...state,
+            article_id: value
+        })
         setExpanded(!expanded)
     }
 
@@ -142,7 +146,7 @@ function ArticleCardExpand (props) {
                         </span>
                         {/* コメントボタンのデザイン(拡張機能あり) */}
                         <IconButton
-                            onClick={handleExpandedClick}
+                            onClick={() => handleExpandedClick(props.article.id)}
                             aria-expanded={expanded}
                             aria-label="comment"
                         >
@@ -238,7 +242,7 @@ function ArticleCardExpand (props) {
                         {/* コメントボタンのデザイン(拡張機能あり) */}
                         <Tooltip title="コメントを見る" classes={{tooltip: classes.tooltip}}>
                             <IconButton
-                                onClick={handleExpandedClick}
+                                onClick={() => handleExpandedClick(props.article.id)}
                                 aria-expanded={expanded}
                                 aria-label="comment"
                             >
@@ -281,7 +285,7 @@ function ArticleCardExpand (props) {
                                 <IconButton 
                                     color="primary" 
                                     aria-label="add" 
-                                    onClick={() => props.commentsUpdate(state)}
+                                    onClick={onSubmit}
                                 >
                                     <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
                                 </IconButton>

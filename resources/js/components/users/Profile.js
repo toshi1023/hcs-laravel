@@ -46,8 +46,8 @@ const useStyles = makeStyles(theme => ({
         height: 280
     },
     gridContainer: {
-        paddingTop: "10px",
-        paddingBottom: "20px"
+        paddingTop: theme.spacing(15),
+        paddingBottom: theme.spacing(5),
     },
     userName: {
         fontSize: "15px"
@@ -61,8 +61,6 @@ function Profile(props) {
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
-    // stateで管理するユーザ詳細データを使用できるようにローカルのloginUser定数に格納
-    const loginUser = useSelector(selectSelectedUser);
     const dispatch = useDispatch()
 
     useEffect(() => {

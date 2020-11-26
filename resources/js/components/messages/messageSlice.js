@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const apiUrl = 'http://localhost/api/api_messages'
-const apiUrl = 'http://hcs-laravel/api/api_messages'
+const apiUrl = 'http://localhost/api/api_messages'
+// const apiUrl = 'http://hcs-laravel/api/api_messages'
 const token = localStorage.localToken
 
 
