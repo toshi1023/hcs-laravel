@@ -14,7 +14,7 @@ import styles from './myArticle.module.css';
 
 const useStyles = makeStyles((theme) => ({
     searchField: {
-        paddingTop: theme.spacing(10),
+        paddingTop: theme.spacing(13),
         zIndex: 0,
     },
     sectionDesktop: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionMobile: {
         display: "block",
-        paddingTop: theme.spacing(7),
+        paddingTop: theme.spacing(3),
         zIndex: 0,
         [theme.breakpoints.up("sm")]: {
             display: "none"
@@ -36,12 +36,13 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         minWidth: 300,
         backgroundColor: theme.palette.background.paper,
+        paddingTop: theme.spacing(4),
         position: 'fixed',
         zIndex: 1,
     },
     gridContainer: {
-      paddingTop: '10px',
-      paddingBottom: '20px'
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(2),
     },
     form: {
         paddingTop: theme.spacing(3),
@@ -210,7 +211,7 @@ function MyArticle() {
 
             {/* スマホ版 */}
             <div className={classes.sectionMobile}>
-                <Grid container className={classes.gridContainer} justify="center">
+                <Grid container justify="center">
                     <Grid item xs={11} hidden={articlePage}>
                         {renderArticles()}
                     </Grid>
@@ -272,11 +273,11 @@ function MyArticle() {
 
             {/* PC版 */}
             <div className={classes.sectionDesktop}>
-                <Grid container className={classes.gridContainer} justify="center">
+                <Grid container justify="center">
                     <Grid item sm={8}>
                         {renderArticles()}
                     </Grid>
-                    <Grid item sm={4} className={classes.sectionDesktop}>
+                    <Grid item sm={4}>
                         <Grid item sm={11}>
                             <h1 className={styles.createArticle}>
                                 記事を作成する

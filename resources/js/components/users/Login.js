@@ -13,7 +13,8 @@ import {
     fetchCredStart,
     fetchCredEnd,
     fetchGetInfoMessages,
-    selectInfo,
+    fetchGetErrorMessages,
+    selectError,
 } from '../app/appSlice';
 import {
     fetchAsyncLogin,
@@ -66,20 +67,20 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const history = useHistory();
   const classes = useStyles();
-  const infoMessages = useSelector(selectInfo)
+  const errorMessages = useSelector(selectError)
   const dispatch = useDispatch();
   // stateの初期設定
   const [open, setOpen] = React.useState(true);
-
+    
   return (
     <>
         <Grid container justify="center">
             {
                 // ユーザ作成 & ログイン完了時
-                infoMessages ? 
-                    <SnackMessages infoOpen={true} />
-                :
+                errorMessages ? 
                     <SnackMessages errorOpen={true} />
+                :
+                    <SnackMessages infoOpen={true} />
             }
             <Card className={classes.root}>
                 <CardHeader 
