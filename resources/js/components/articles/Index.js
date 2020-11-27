@@ -194,7 +194,7 @@ function Article() {
             <Grid container className={classes.searchField}>
                 <Grid item xs={5} md={1}>
                     <div onBlur={getSearchPrefecture}>
-                        <PrefectureSelects fontSize={15} />
+                        <PrefectureSelects id="prefecture" fontSize={15} />
                     </div>
                 </Grid>
                 <Grid item xs={5} md={1}>

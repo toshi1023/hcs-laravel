@@ -93,7 +93,7 @@ function UserShow(props) {
         // ユーザの編集ページへリダイレクト
         history.push('/users/mypage/edit');
     };
-    console.log(selectedUser)
+
     return (
         <>
             <Card className={classes.root}>

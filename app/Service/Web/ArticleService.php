@@ -67,7 +67,7 @@ class ArticleService
    * 記事保存用メソッド
    * 第一引数:登録データ, 第二引数:ファイル名
    */
-  public function articleSave($data, $filename = null)
+  public function save($data, $filename = null)
   {
     return $this->ArticleService->save($data, $filename);
   }

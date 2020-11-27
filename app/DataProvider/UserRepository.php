@@ -55,11 +55,11 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             $this->model->save();
 
             // ユーザIDもリターン
-            return [true, $this->model->id];
+            return $this->model;
             
         } catch (\Exception $e) {
             \Log::error('database register error:'.$e->getMessage());
-            return [false, null];
+            return false;
         }
     } 
     

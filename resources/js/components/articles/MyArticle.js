@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
-import { selectArticles, fetchAsyncGet } from './articleSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, selectInfo } from '../app/appSlice';
+import { selectArticles, fetchAsyncGet, fetchAsyncCreate } from './articleSlice';
 import ArticleDropzone from '../parts/articleParts/dropzone';
 import ArticleCard from '../parts/articleParts/articleCard';
+import SwitchType from '../parts/common/switch';
 import PrefectureSelects from '../parts/common/prefectureSearch';
+import SnackMessages from '../parts/common/snackMessages';
+import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
+import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
 import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -79,13 +83,83 @@ const useStyles = makeStyles((theme) => ({
 
 function MyArticle() {
     const classes = useStyles();
+    const childRef = useRef();
     // タブ用のstate
     const [value, setValue] = React.useState(0);
     const [articlePage, setArticlePage] = React.useState(false);
     const [createPage, setCreatePage] = React.useState(true);
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
     const articles = useSelector(selectArticles)
+    const infoMessages = useSelector(selectInfo)
     const dispatch = useDispatch()
+    // stateの初期設定
+    const [state, setState] = React.useState({
+        // 保存対象の値
+        prefecture: '',
+        latitude: '',
+        longitude: '',
+        title: '',
+        content: '',
+        type: false,
+        user_id: localStorage.getItem('loginId')
+    });
+
+    /**
+     * 値のセット
+     */
+    const setPrefecture = () => {
+        setState({
+            ...state,
+            prefecture: document.getElementById("formPrefecture").value,
+            prefectureCheck: false,
+        })
+    }
+    const setTitle = (value) => {
+        setState({
+            ...state,
+            title: value,
+        })
+    }
+    const setContent = (value) => {
+        setState({
+            ...state,
+            content: value,
+        })
+    }
+    const setType = () => {
+        setState({
+            ...state,
+            type: document.getElementById("typeSwitch").checked,
+        })
+    }
+
+    // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+    const doAction = (id) => {
+        childRef.current.onSubmit(id)
+    }
+  
+    // 作成(stateの値をApiで送信)
+    async function createClicked() {
+        // ロード開始
+        await dispatch(fetchCredStart())
+        
+        const result = await dispatch(fetchAsyncCreate(state))
+
+        if (fetchAsyncCreate.fulfilled.match(result)) {
+            // 画像の保存
+            // doAction(result.payload.id)
+            // infoメッセージの表示
+            result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+            // 記事の再読み込み
+            dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
+            // ロード終了
+            await dispatch(fetchCredEnd()); 
+            return;
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd()); 
+        return;
+    }
 
     useEffect(() => {
         // 非同期の関数を定義
@@ -176,6 +250,7 @@ function MyArticle() {
             </Grid>
         )
     }
+
     return (
         <>
             {/* タブ(スマホ版のみ) */}
@@ -195,11 +270,19 @@ function MyArticle() {
                 </Paper>
             </div>
 
+            {
+                // メッセージ表示
+                infoMessages ? 
+                    <SnackMessages infoOpen={true} />
+                :
+                    <SnackMessages errorOpen={true} />
+            }
+
             {/* 検索デザイン */}
             <Grid container className={classes.searchField}>
                 <Grid item xs={5} md={1}>
                     <div onBlur={getSearchPrefecture}>
-                        <PrefectureSelects values={articles.prefectures} fontSize={15} />
+                        <PrefectureSelects id="prefecture" fontSize={15} />
                     </div>
                 </Grid>
                 <Grid item xs={5} md={1}>
@@ -223,47 +306,101 @@ function MyArticle() {
                         <Paper elevation={3}>
                             <Grid container justify="center" className={classes.form}>
                                 <Grid item xs={10}>
-                                    <FormControl className={classes.margin}>
-                                        <div className={classes.margin}>
-                                            <TextField
-                                                id="title"
-                                                name="title"
-                                                label="タイトル"
-                                                variant="outlined"
-                                                style = {{width: 250}}
-                                                InputLabelProps={{
-                                                    className: classes.input,
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={classes.margin}>
-                                            <TextField
-                                                id="content"
-                                                name="content"
-                                                label="内容"
-                                                variant="outlined"
-                                                style = {{width: 250}}
-                                                multiline
-                                                rows={4}
-                                                InputLabelProps={{
-                                                    className: classes.input,
-                                                }}
-                                            />
-                                        </div>
-                                        <div className={classes.margin}>
-                                            <ArticleDropzone />
-                                        </div>
-                                        <div className={classes.margin}>
-                                            <Button 
-                                                variant="contained" 
-                                                color="primary" 
-                                                className={classes.button}
-                                                // type="submit"
-                                            >
-                                                投稿する
-                                            </Button>
-                                        </div>
-                                    </FormControl>
+                                    <Formik
+                                        initialErrors={{ title: "required", content: "required" }}
+                                        initialValues={{ 
+                                            title: '',
+                                            content: '',
+                                        }}
+                                        onSubmit={async (values) => {
+                                            // ユーザ登録処理
+                                            createClicked()
+                                        }}
+                                        validationSchema={Yup.object().shape({
+                                            title: Yup.string()
+                                                    .required("タイトルの入力は必須です"),
+                                            content: Yup.string()
+                                                        .required("内容の入力は必須です"),
+                                        })}
+                                    >
+                                    {({
+                                        handleSubmit,
+                                        handleChange,
+                                        handleBlur,
+                                        values,
+                                        errors,
+                                        touched,
+                                        isValid,
+                                    }) => (
+                                        <Form onSubmit={handleSubmit}>
+                                            <FormControl className={classes.margin}>
+                                                <div className={classes.margin} onBlur={setPrefecture}>
+                                                    <PrefectureSelects id="formPrefecture" fontSize={15} />
+                                                </div>
+                                                <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("title").value)}}>
+                                                    <TextField
+                                                        id="title"
+                                                        name="title"
+                                                        label="タイトル"
+                                                        variant="outlined"
+                                                        style = {{width: 250}}
+                                                        InputLabelProps={{
+                                                            className: classes.input,
+                                                        }}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.title}
+                                                    />
+                                                    {touched.title && errors.title ? (
+                                                        <div className={classes.error}>{errors.title}</div>
+                                                    ) : null}
+                                                </div>
+                                                <div className={classes.margin} onBlur={() => {setContent(document.getElementById("content").value)}}>
+                                                    <TextField
+                                                        id="content"
+                                                        name="content"
+                                                        label="内容"
+                                                        variant="outlined"
+                                                        style = {{width: 250}}
+                                                        multiline
+                                                        rows={4}
+                                                        InputLabelProps={{
+                                                            className: classes.input,
+                                                        }}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.content}
+                                                    />
+                                                    {touched.content && errors.content ? (
+                                                        <div className={classes.error}>{errors.content}</div>
+                                                    ) : null}
+                                                </div>
+                                                <div className={classes.margin} onClick={setType}>
+                                                    <SwitchType 
+                                                        id="typeSwitch"
+                                                        switchLabel={{true: '会員限定', false: '全員'}} 
+                                                        checked={state.type}
+                                                        value={values.type}
+                                                    />
+                                                </div>
+                                                <div className={classes.margin}>
+                                                    <ArticleDropzone />
+                                                </div>
+                                                <div className={classes.margin}>
+                                                    <Button 
+                                                        variant="contained" 
+                                                        color="primary" 
+                                                        className={classes.button}
+                                                        disabled={!isValid} 
+                                                        type="submit"
+                                                    >
+                                                        投稿する
+                                                    </Button>
+                                                </div>
+                                            </FormControl>
+                                        </Form>
+                                    )}
+                                    </Formik>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -286,48 +423,102 @@ function MyArticle() {
                             <Paper elevation={3}>
                                 <Grid container justify="center" className={classes.form}>
                                     <Grid item sm={10}>
-                                        <FormControl>
-                                            <div className={classes.margin}>
-                                                <TextField
-                                                    id="title"
-                                                    name="title"
-                                                    label="タイトル"
-                                                    variant="outlined"
-                                                    style = {{width: 400}}
-                                                    InputLabelProps={{
-                                                        className: classes.input,
-                                                    }}
-                                                />
-                                            </div>
-                                            <div className={classes.margin}>
-                                                <TextField
-                                                    id="content"
-                                                    name="content"
-                                                    label="内容"
-                                                    variant="outlined"
-                                                    style = {{width: 400}}
-                                                    InputLabelProps={{
-                                                        fontSize: 30,
-                                                        className: classes.input,
-                                                    }}
-                                                    multiline
-                                                    rows={4}
-                                                />
-                                            </div>
-                                            <div className={classes.margin}>
-                                                <ArticleDropzone />
-                                            </div>
-                                            <div className={classes.margin}>
-                                                <Button 
-                                                    variant="contained" 
-                                                    color="primary" 
-                                                    className={classes.button}
-                                                    // type="submit"
-                                                >
-                                                    投稿する
-                                                </Button>
-                                            </div>
-                                        </FormControl>
+                                        <Formik
+                                            initialErrors={{ title: "required", content: "required" }}
+                                            initialValues={{ 
+                                                title: '',
+                                                content: '',
+                                            }}
+                                            onSubmit={async (values) => {
+                                                // ユーザ登録処理
+                                                createClicked()
+                                            }}
+                                            validationSchema={Yup.object().shape({
+                                                title: Yup.string()
+                                                        .required("タイトルの入力は必須です"),
+                                                content: Yup.string()
+                                                            .required("内容の入力は必須です"),
+                                            })}
+                                        >
+                                        {({
+                                            handleSubmit,
+                                            handleChange,
+                                            handleBlur,
+                                            values,
+                                            errors,
+                                            touched,
+                                            isValid,
+                                        }) => (
+                                            <Form onSubmit={handleSubmit}>
+                                                <FormControl>
+                                                    <div className={classes.margin}  onBlur={setPrefecture}>
+                                                        <PrefectureSelects id="formPrefecture" fontSize={15} />
+                                                    </div>
+                                                    <div className={classes.margin}  onBlur={() => {setTitle(document.getElementById("title").value)}}>
+                                                        <TextField
+                                                            id="title"
+                                                            name="title"
+                                                            label="タイトル"
+                                                            variant="outlined"
+                                                            style = {{width: 400}}
+                                                            InputLabelProps={{
+                                                                className: classes.input,
+                                                            }}
+                                                            onChange={handleChange}
+                                                            onBlur={handleBlur}
+                                                            value={values.title}
+                                                        />
+                                                        {touched.title && errors.title ? (
+                                                            <div className={classes.error}>{errors.title}</div>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className={classes.margin} onBlur={() => {setContent(document.getElementById("content").value)}}>
+                                                        <TextField
+                                                            id="content"
+                                                            name="content"
+                                                            label="内容"
+                                                            variant="outlined"
+                                                            style = {{width: 400}}
+                                                            InputLabelProps={{
+                                                                fontSize: 30,
+                                                                className: classes.input,
+                                                            }}
+                                                            multiline
+                                                            rows={4}
+                                                            onChange={handleChange}
+                                                            onBlur={handleBlur}
+                                                            value={values.content}
+                                                        />
+                                                        {touched.content && errors.content ? (
+                                                            <div className={classes.error}>{errors.content}</div>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className={classes.margin} onClick={setType}>
+                                                        <SwitchType 
+                                                            id="typeSwitch"
+                                                            switchLabel={{true: '会員限定', false: '全員'}} 
+                                                            checked={state.type}
+                                                            value={values.type}
+                                                        />
+                                                    </div>
+                                                    <div className={classes.margin}>
+                                                        <ArticleDropzone />
+                                                    </div>
+                                                    <div className={classes.margin}>
+                                                        <Button 
+                                                            variant="contained" 
+                                                            color="primary" 
+                                                            className={classes.button}
+                                                            disabled={!isValid} 
+                                                            type="submit"
+                                                        >
+                                                            投稿する
+                                                        </Button>
+                                                    </div>
+                                                </FormControl>
+                                            </Form>
+                                        )}
+                                        </Formik>
                                     </Grid>
                                 </Grid>
                             </Paper>

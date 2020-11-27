@@ -86,7 +86,7 @@ export default function PrefectureSelects(props) {
           onChange={handleChange}
           style={{ fontSize: props.fontSize }} 
           className={classes.selectBox}
-          id="prefecture"
+          id={props.id}
         >
           <option aria-label="None" value="" disabled />
           <option aria-label="None" value="全都道府県">全都道府県</option>

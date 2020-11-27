@@ -27,7 +27,7 @@ export default function SwitchType(props) {
       <FormControlLabel
         control={
           <Switch
-            id="genderSwitch"
+            id={props.id}
             checked={state.checkedB}
             onChange={handleChange}
             name="checkedB"

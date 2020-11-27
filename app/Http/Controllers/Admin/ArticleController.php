@@ -148,6 +148,7 @@ class ArticleController extends Controller
     DB::beginTransaction();
 
     // ファイル名の設定
+    $filename = null;
     if ($request->hasFile('upload_image')){
       $filename = $this->getFilename($request->file('upload_image'));
     }

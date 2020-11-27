@@ -4,7 +4,7 @@ import {useDropzone} from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { fetchAsyncImage } from '../../users/userSlice';
+import { fetchAsyncImage } from '../../articles/articleSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -170,12 +170,13 @@ function ArticleDropzone(props, ref) {
    */
   useImperativeHandle(ref, () => ({
     async onSubmit(id) {
+      console.log(acceptedFiles)
       let formData = new FormData();
       acceptedFiles.map(file => {
         // 保存するイメージファイルをセット
         formData.append('upload_image', file, file.name)
       })
-      // 編集用ユーザIDをセット
+      // 編集用記事IDをセット
       formData.append('id', id)
       // 画像の保存処理
       await dispatch(fetchAsyncImage(formData))

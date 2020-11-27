@@ -137,7 +137,7 @@ export default function UserCreate() {
     const setPrefecture = () => {
         setState({
             ...state,
-            prefecture: document.getElementById("prefecture").value,
+            prefecture: document.getElementById("formPrefecture").value,
             prefectureCheck: false,
         })
     }
@@ -296,7 +296,7 @@ export default function UserCreate() {
                                             </div>
                                             <div onBlur={setPrefecture}>
                                                 <FormControl className={classes.margin}>
-                                                    <PrefectureSelects name="prefecture" fontSize={15} />
+                                                    <PrefectureSelects name="prefecture" id="formPrefecture" fontSize={15} />
                                                 </FormControl>
                                                 {touched.prefecture && errors.prefecture ? (
                                                     <div className={classes.error}>{errors.prefecture}</div>
@@ -306,6 +306,7 @@ export default function UserCreate() {
                                                 <FormControl className={classes.margin}>
                                                     <FormLabel style={{fontSize: 15}} name="gender" display="block">性別</FormLabel>
                                                     <SwitchType 
+                                                        id="genderSwitch"
                                                         switchLabel={{true: '男性', false: '女性'}} 
                                                         checked={state.gender}
                                                         value={values.gender}

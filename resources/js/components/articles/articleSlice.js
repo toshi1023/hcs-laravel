@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost/api/api_articles'
-// const apiUrl = 'http://hcs-laravel/api/api_articles'
+// const apiUrl = 'http://localhost/api/api_articles'
+const apiUrl = 'http://hcs-laravel/api/api_articles'
 const token = localStorage.localToken
 
 /**
@@ -46,6 +46,20 @@ export const fetchAsyncUpdate = createAsyncThunk('articles/edit', async(article)
         headers: {
             'Content-Type': 'application/json',
             // Authorization: `JWT ${token}`,
+        },
+    })
+    return res.data
+})
+
+/**
+ * 画像データの保存
+ */
+export const fetchAsyncImage = createAsyncThunk('articles/image', async(data) => {
+    const res = await axios.post(apiUrl, data, {
+        headers: {
+            'X-HTTP-Method-Override': 'PUT',
+            'Content-Type': 'multipart/form-data',
+            // Authorization: `Bearer ${token}`,
         },
     })
     return res.data
@@ -141,7 +155,7 @@ const articleSlice = createSlice({
             },
         ],
         // articleの編集時に選択・保持するstate
-        editArticle: {
+        editedArticle: {
             user_id: 0,                 // ユーザid
             prefecture: '',             // 都道府県
             article_id: 0,              // 記事のid
@@ -235,12 +249,12 @@ const articleSlice = createSlice({
                 articles: action.payload, //apiから取得した記事の情報をstateのarticlesに格納
             }
         })
-        builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
-            return {
-                ...state,
-                articles: [action.payload, ...state.articles],
-            }
-        })
+        // builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
+        //     return {
+        //         ...state,
+        //         articles: [action.payload, ...state.articles],
+        //     }
+        // })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
             return {
                 ...state,

@@ -206,6 +206,7 @@ export default function ArticleCard(props) {
     const commentsUpdate = async (value) => {
       // ロード開始
       await dispatch(fetchCredStart())
+      
       const result = await dispatch(fetchAsyncUpdateComments(value))
       if (fetchAsyncUpdateComments.fulfilled.match(result)) {
           // infoメッセージの表示

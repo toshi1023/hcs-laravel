@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Service\Web\ArticleService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
 
 class ArticleController extends Controller
 {
@@ -62,22 +63,32 @@ class ArticleController extends Controller
   {
     DB::beginTransaction();
 
+    // ファイル名の生成
     $filename = null;
-
-    if ($_FILES['article_photo']['name']){
-      // ファイル名を変数に代入
-      $filename = $_FILES['article_photo']['name'];
+    if ($request->file('upload_image')){
+      $filename = $this->getFilename($request->file('upload_image'));
     }
 
-    if ($this->database->articleSave($request, $filename)) {
-      DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を作成しました');
-    } else {
-      DB::rollBack();
-      $this->messages->add('', '記事の作成に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
-    }
+    // 登録データを配列化
+    $data = $request->input();
+
+    // 記事の保存処理
+    $article = $this->database->save($data, $filename);
     
+    if ($article) {
+      DB::commit();
+        return response()->json([
+          'info_message' => '記事を投稿しました', 
+          'id'           => $article->id,
+        ],200, [], JSON_UNESCAPED_UNICODE);
+    } else {
+        DB::rollBack();
+        // 作成失敗時はエラーメッセージを返す
+        return new JsonResponse([
+          'error_message' => '記事の投稿に失敗しました',
+          'status'        => 500,
+        ], 500);
+    }  
   }
 
   // 記事の変更を反映
@@ -175,6 +186,14 @@ class ArticleController extends Controller
    */
   public function commentsUpdate(Request $request)
   {
+    // コメントが空欄だった場合
+    if(!$request->input('comment')) {
+      return response()->json([
+        'error_message'  => 'コメントが記載されていません',
+        'status'         => 200,
+      ], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
     DB::beginTransaction();
 
     // 保存データを配列化

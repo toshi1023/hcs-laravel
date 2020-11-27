@@ -76,14 +76,15 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         try {
             /* 記事の保存メソッド */
             // Updateかどうか判別
-            if ($data['id']) {
+            if (key_exists('id', $data) && !is_null($data['id'])) {
                 $this->model = $this->getFind($this->model, $data['id']);
             }
             
             // データを保存
             $this->model->fill($data);
             $this->model->save();
-            
+
+            $articleData = $this->model;            
             $data['id'] = $this->model->id;
             
             /* イメージの保存メソッド */
@@ -91,9 +92,11 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             $table = 'article_images';
             // モデルをインスタンス化
             $model = $this->getModel($table);
+            // フォルダ名の取得
+            $foldername = $this->getQuery('users', ['id' => $data['user_id']])->first()->name;
             
             // Updateかどうか判別
-            if(!is_null($data['image_id']) && $this->getExist($table, ['id' => $data['image_id']])) {
+            if(key_exists('image_id', $data) && $this->getExist($table, ['id' => $data['image_id']])) {
                 // 更新対象のデータを取得
                 $model = $this->getFind($model, $data['image_id']);
             }
@@ -103,9 +106,9 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                 $filename = 'NoImage';
             }
             
-            // 画像をアップロード(フロントはユーザネーム、管理画面はメールアドレスをフォルダ名に設定)
+            // 画像をアップロード
             $file = request()->file('upload_image') ? request()->file('upload_image') : null;
-            $file_upload = $this->fileSave($file, \Auth::user()->name ? \Auth::user()->name : \Auth::user()->email);
+            $file_upload = $this->fileSave($file, $foldername);
 
             $model->articles_photo_name = $filename;
             $model->articles_photo_path = $file_upload[1];
@@ -113,7 +116,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             $model->user_id = $data['user_id'];
             $model->save();
 
-            return true;
+            return $articleData;
 
         } catch (\Exception $e) {
             \Log::error('article save error:'.$e->getmessage());
