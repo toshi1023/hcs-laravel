@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Message() {
     const classes = useStyles()
     // タブ切り替え管理
-    const [value, setValue] = React.useState(1);
+    const [tab, setTab] = React.useState(1);
     const [messagePage, setMessagePage] = React.useState(true);
     const [messageListPage, setMessageListPage] = React.useState(false);
     // メッセージデータの取得
@@ -100,7 +100,7 @@ export default function Message() {
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
                     <Tabs
-                        value={value}
+                        value={tab}
                         onChange={handleChange}
                         variant="fullWidth"
                         indicatorColor="secondary"

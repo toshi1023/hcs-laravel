@@ -276,6 +276,7 @@ function UserEdit(props) {
                                                 <div onBlur={setPrefecture}>
                                                     <PrefectureSelects 
                                                         labelFlg={editedUser.value.prefecture ? false : undefined} 
+                                                        id="prefecture"
                                                         fontSize={13}
                                                     />
                                                 </div>

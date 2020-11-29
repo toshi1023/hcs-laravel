@@ -26,7 +26,14 @@ class UserService
   {
     if(is_null($table)) {
       // ユーザ情報の取得
-      return $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
+      $users = $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
+      // フレンド情報取得
+      $friends = $this->UserService->getFriendsQuery(request()->input('queryId'))->get();
+
+      return [
+        'users'   => $users,
+        'friends' => $friends
+      ];
     }
     // 指定したテーブルのデータをソートして取得
     return $this->UserService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
@@ -107,5 +114,15 @@ class UserService
   {
     // 友達申請が承認された値のみ取得
     return $this->UserService->getFriendsQuery($user_id, true)->get();
+  }
+
+  /**
+   * フレンド情報の更新
+   * 引数：データ
+   */
+  public function getFriendsUpdate($data)
+  {
+    // 友達申請の保存処理
+    return $this->UserService->getSave($data, 'friends');
   }
 }

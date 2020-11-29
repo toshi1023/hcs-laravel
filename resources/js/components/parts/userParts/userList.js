@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, selectSelectedUser } from "../../users/userSlice";
+import { selectUser, selectSelectedUser, fetchAsyncUpdateFriends } from "../../users/userSlice";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -13,7 +13,8 @@ import {
 } from "@material-ui/core";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import HowToRegIcon from '@material-ui/icons/HowToReg';
-import ReplyIcon from '@material-ui/icons/Reply';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
+import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 import _ from "lodash";
 
 const useStyles = makeStyles(theme => ({
@@ -36,6 +37,10 @@ const useStyles = makeStyles(theme => ({
         color: "blue",
         fontSize: 30
     },
+    applyIcon: {
+        color: "#f8cc6c",
+        fontSize: 30
+    },
     successIcon: {
         color: "green",
         fontSize: 30
@@ -46,7 +51,6 @@ export default function UserList(props) {
     const classes = useStyles();
     const [checked, setChecked] = React.useState([1]);
     const [add, setAdd] = React.useState(false);
-    const [reply, setReply] = React.useState([1]);
     // selectedUserのstateを変数に代入
     const selectedUsers = useSelector(selectSelectedUser);
     const dispatch = useDispatch();
@@ -64,25 +68,9 @@ export default function UserList(props) {
         setChecked(newChecked);
     };
 
-    const handleToggleReply = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-    
-        if (currentIndex === -1) {
-          newChecked.push(value);
-        } else {
-          newChecked.splice(currentIndex, 1);
-        }
-    
-        setReply(newChecked);
-      };
-
-    const handleAdd = () => {
-        if(add) {
-            setAdd(false)
-        } else {
-            setAdd(true)
-        }
+    // 友達申請処理
+    const handleFriendApply = async (id) => {
+        await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
     }
 
     // 詳細データの管理用stateを更新
@@ -103,7 +91,7 @@ export default function UserList(props) {
     
     return (
         <List dense className={classes.root}>
-            {_.map(props.user.users, value => {
+            {_.map(props.user, value => {
                 
                 return (
                     <>
@@ -130,39 +118,52 @@ export default function UserList(props) {
                             />
                             <ListItemSecondaryAction>
                                 <IconButton
-                                    style={{ backgroundColor: "#d0ddf5", marginRight: 5 }}
-                                >
-                                    <ReplyIcon
-                                        edge="end"
-                                        onChange={handleToggleReply(value.id)}
-                                        inputProps={{ 'aria-labelledby': value.id }}
-                                        className={classes.addIcon}
-                                    />
-                                </IconButton>
-                                <IconButton
                                     style={
-                                        add ? { backgroundColor: "#CCFFCC" } : { backgroundColor: "#d0ddf5" }
+                                        props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
+                                            props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                { backgroundColor: "#CCFFCC" } 
+                                            : 
+                                                { backgroundColor: "#f4f5ab" }
+                                        :
+                                            { backgroundColor: "#d0ddf5" }
                                     }
-                                    onClick={handleAdd}
+                                    onClick={
+                                        () => 
+                                        props.friendStatus.find(element => element.target_id === value.id) ? 
+                                            ''
+                                        : 
+                                            handleFriendApply(value.id)
+                                    }
                                 >
                                     {
-                                        add ? 
-                                        <HowToRegIcon 
-                                            edge="end"
-                                            onChange={handleToggleAdd(value.id)}
-                                            inputProps={{
-                                                "aria-labelledby": value.id
-                                            }}
-                                            className={classes.successIcon}
-                                        /> : 
-                                        <PersonAddIcon
-                                            edge="end"
-                                            onChange={handleToggleAdd(value.id)}
-                                            inputProps={{
-                                                "aria-labelledby": value.id
-                                            }}
-                                            className={classes.addIcon}
-                                        />
+                                        props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
+                                            props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                <HowToRegIcon 
+                                                    edge="end"
+                                                    onChange={handleToggleAdd(value.id)}
+                                                    inputProps={{
+                                                        "aria-labelledby": value.id
+                                                    }}
+                                                    className={classes.successIcon}
+                                                /> 
+                                            : 
+                                                <ContactMailIcon
+                                                    edge="end"
+                                                    onChange={handleToggleAdd(value.id)}
+                                                    inputProps={{
+                                                        "aria-labelledby": value.id
+                                                    }}
+                                                    className={classes.applyIcon}
+                                                />
+                                        :    
+                                            <PersonAddIcon
+                                                edge="end"
+                                                onChange={handleToggleAdd(value.id)}
+                                                inputProps={{
+                                                    "aria-labelledby": value.id
+                                                }}
+                                                className={classes.addIcon}
+                                            />
                                     }
                                 </IconButton>
                             </ListItemSecondaryAction>

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const loginUrl = 'http://localhost/api/login'
-// const apiUrl = 'http://localhost/api/api_users'
-const loginUrl = 'http://hcs-laravel/api/login'
-const apiUrl = 'http://hcs-laravel/api/api_users'
+const loginUrl = 'http://localhost/api/login'
+const apiUrl = 'http://localhost/api/api_users'
+// const loginUrl = 'http://hcs-laravel/api/login'
+// const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
@@ -43,7 +43,7 @@ export const fetchAsyncGetProf = createAsyncThunk('prof/get', async(id) =>{
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('users/index', async(conditions) => {
-    const res = await axios.get(`${apiUrl}?query=${conditions}`)
+    const res = await axios.get(`${apiUrl}?query=${conditions.user_name}&queryId=${conditions.user_id}`)
     return res.data
 })
 
@@ -82,8 +82,7 @@ export const fetchAsyncUpdate = createAsyncThunk('users/edit', async(user) => {
         },
     })
     return res.data
-}
-)
+})
 /**
  * 画像データの保存
  */
@@ -127,6 +126,18 @@ export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', asyn
  */
 export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(conditions) => {
     const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`)
+    return res.data
+})
+/**
+ * 友達データの更新
+ */
+export const fetchAsyncUpdateFriends = createAsyncThunk('friends/update', async(user) => {
+    const res = await axios.post(`${apiUrl}/${user.user_id}/friends/update`, user, {
+        headers: {
+            'Content-Type': 'application/json',
+            // Authorization: `Bearer ${token}`,
+        },
+    })
     return res.data
 })
 
@@ -193,22 +204,13 @@ const userSlice = createSlice({
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
         },
-        // ログインuserの詳細表示をした際に保持するstate
-        loggedInUser: {
+        friendStatus: [{
             id: '',                     // ID
-            users_photo_name: '',       // 画像名
-            users_photo_path: '',       // 画像パス
-            name: '',                   // ニックネーム
+            name: '',                   // ユーザ名
             prefecture: '',             // 都道府県
-            birthday: '',               // 生年月日
-            gender: '',                 // 性別
-            email: '',                  // メールアドレス
-            comment: '',                // コメント
-            status: '',                 // 会員フラグ
-            delete_flg: '',             // 削除フラグ
-            created_at: '',             // 記事の作成日
-            updated_at: '',             // 記事の更新日
-        },
+            status: '',                 // 申請状況
+            user_id_target: '',              // 対象
+        }],
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -257,7 +259,8 @@ const userSlice = createSlice({
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                users: action.payload, //apiから取得した記事の情報をstateのusersに格納
+                users: action.payload.users, //apiから取得した記事の情報をstateのusersに格納
+                friendStatus: action.payload.friends
             }
         })
         builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
@@ -307,6 +310,16 @@ const userSlice = createSlice({
                 users: action.payload,
             }
         })
+        builder.addCase(fetchAsyncUpdateFriends.fulfilled, (state, action) => {
+            console.log(action.payload.friend)
+            return {
+                ...state,
+                // 現在のfriendStatus一覧の要素をfというテンポラリの変数に格納して、選択したuser_id_targetに一致するidには変更したデータを格納
+                friendStatus: state.users.map((f) => 
+                    f.user_id_target === action.payload.friend.user_id_target ? action.payload.friend : f
+                ),
+            }
+        })
     },
 })
 
@@ -318,5 +331,6 @@ export const selectSelectedUser = (state) => state.user.selectedUser
 export const selectLoggedInUser = (state) => state.user.loggedInUser
 export const selectEditedUser = (state) => state.user.editedUser
 export const selectUsers = (state) => state.user.users
+export const selectFriendStatus = (state) => state.user.friendStatus
 
 export default userSlice.reducer

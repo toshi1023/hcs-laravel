@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function News() {
     const classes = useStyles()
-    const [value, setValue] = React.useState(1);
+    const [tab, setTab] = React.useState(1);
     const [newsPage, setNewsPage] = React.useState(true);
     const [newsListPage, setNewsListPage] = React.useState(false);
     const news = useSelector(selectNewsList)
@@ -82,8 +82,7 @@ export default function News() {
     
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
-        console.log(newValue)
-        setValue(newValue);
+        setTab(newValue);
     };
     // ニュース一覧ページを表示(スマホ用)
     const handleTabNewsList = () => {
@@ -116,7 +115,7 @@ export default function News() {
             <Grid container className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
                     <Tabs
-                        value={value}
+                        value={tab}
                         onChange={handleChange}
                         variant="fullWidth"
                         indicatorColor="secondary"

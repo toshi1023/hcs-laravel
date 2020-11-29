@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
-import { selectUsers, selectSelectedUser, fetchAsyncGet, fetchAsyncGetShow } from './userSlice';
+import { selectUsers, selectSelectedUser, fetchAsyncGet, fetchAsyncGetShow, selectFriendStatus } from './userSlice';
 import UserList from '../parts/userParts/userList';
 import _ from 'lodash';
 import Grid from '@material-ui/core/Grid';
@@ -79,12 +79,13 @@ const useStyles = makeStyles((theme) => ({
 export default function User() {
     const classes = useStyles();
     // タブ切り替え管理
-    const [value, setValue] = React.useState(1);
+    const [tab, setTab] = React.useState(1);
     const [userPage, setUserPage] = React.useState(true);
     const [userListPage, setUserListPage] = React.useState(false);
     // stateで管理するユーザ一覧データを使用できるようにローカルのusers定数に格納
     const users = useSelector(selectUsers)
     const selectedUser = useSelector(selectSelectedUser)
+    const friendStatus = useSelector(selectFriendStatus)
     const dispatch = useDispatch()
     const [state, setState] = React.useState({
         userName: null,
@@ -96,7 +97,7 @@ export default function User() {
             // Loading開始
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
-            const resultReg = await dispatch(fetchAsyncGet(document.getElementById("userSearch").value))
+            const resultReg = await dispatch(fetchAsyncGet({user_name: document.getElementById("userSearch").value, user_id: localStorage.getItem('loginId')}))
             const resultShow = await dispatch(fetchAsyncGetShow(''))
             if (fetchAsyncGet.fulfilled.match(resultReg) && fetchAsyncGetShow.fulfilled.match(resultShow)) {
                 // ロード終了
@@ -133,7 +134,7 @@ export default function User() {
             // Loading開始
             await dispatch(fetchCredStart())
             // ユーザを取得
-            const resultSearch = await dispatch(fetchAsyncGet(state.userName))
+            const resultSearch = await dispatch(fetchAsyncGet({user_name: state.userName, user_id: localStorage.getItem('loginId')}))
             
             if (fetchAsyncGet.fulfilled.match(resultSearch)) {
                 setState({
@@ -152,7 +153,7 @@ export default function User() {
 
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setTab(newValue);
     };
     // ニュース一覧ページを表示(スマホ用)
     const handleTabUserList = () => {
@@ -168,7 +169,7 @@ export default function User() {
     // ユーザ一覧を生成
     const renderUsers = () => {
         return (
-            <UserList user={users} handleChange={handleChange} handleTabUser={handleTabUser} />
+            <UserList user={users} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
         )
     }
     
@@ -178,7 +179,7 @@ export default function User() {
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
                     <Tabs
-                        value={value}
+                        value={tab}
                         onChange={handleChange}
                         variant="fullWidth"
                         indicatorColor="secondary"
@@ -252,22 +253,20 @@ export default function User() {
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item sm={8}>
                         <Grid container justify="center">
-                            {/* <div className={classes.mainContent}> */}
-                                {
-                                    localStorage.getItem('loginId') ? 
-                                        <Grid item sm={10}>
-                                            <div className={classes.userShow}>
-                                                <UserShow />
-                                            </div>
-                                        </Grid>
-                                    : 
-                                        <Grid item sm={6}>
-                                            <div className={classes.userShow}>
-                                                <MessageCard />
-                                            </div>
-                                        </Grid>
-                                }
-                            {/* </div> */}
+                            {
+                                localStorage.getItem('loginId') ? 
+                                    <Grid item sm={10}>
+                                        <div className={classes.userShow}>
+                                            <UserShow />
+                                        </div>
+                                    </Grid>
+                                : 
+                                    <Grid item sm={6}>
+                                        <div className={classes.userShow}>
+                                            <MessageCard />
+                                        </div>
+                                    </Grid>
+                            }
                         </Grid>
                     </Grid>
                     <Grid item sm={4}>

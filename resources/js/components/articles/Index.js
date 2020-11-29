@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 function Article() {
     const classes = useStyles();
     // タブ用のstate
-    const [value, setValue] = React.useState(0);
+    const [tab, setTab] = React.useState(0);
     const [articlePage, setArticlePage] = React.useState(false);
     const [friendListPage, setFriendListPage] = React.useState(true);
     // stateで管理するデータを使用できるように定数に格納
@@ -140,7 +140,7 @@ function Article() {
 
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setTab(newValue);
     };
     // 記事一覧ページを表示(スマホ用)
     const handleTabArticle = () => {
@@ -177,7 +177,7 @@ function Article() {
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
                     <Tabs
-                        value={value}
+                        value={tab}
                         onChange={handleChange}
                         variant="fullWidth"
                         indicatorColor="secondary"

@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Model\Article;
 use App\Model\ArticleImage;
 use App\Model\Comment;
+use App\Model\Friend;
 use App\Model\Like;
 use App\Model\Admin;
 use App\Model\User;
@@ -57,9 +58,9 @@ class NewModelServiceProvider extends ServiceProvider
             return new Prefecture;
         });
         // // 'friends'テーブルをインスタンス化して返す
-        // $this->app->bind('friends', function($app) {
-        //     return new Friend;
-        // });
+        $this->app->bind('friends', function($app) {
+            return new Friend;
+        });
         // 'messages'テーブルをインスタンス化して返す
         $this->app->bind('messages', function($app) {
             return new Message;

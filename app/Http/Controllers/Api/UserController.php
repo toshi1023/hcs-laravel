@@ -30,12 +30,14 @@ class UserController extends Controller
       // 検索条件のセット
       $conditions = [];
       if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
+      if ($request->input('queryId')) { $conditions['users.id@not'] = $request->input('queryId'); }
 
-      // 全ユーザデータを更新日時順にソートして取得
-      $users = $this->database->getIndex(null, $conditions);
+      // 全ユーザデータとフレンド情報を更新日時順にソートして取得
+      $data = $this->database->getIndex(null, $conditions);
 
       return response()->json([
-        'users' => $users, 
+        'users' => $data['users'], 
+        'friends' => $data['friends']
       ],200, [], JSON_UNESCAPED_UNICODE);
 
       // 認証失敗時はエラーメッセージを返す
@@ -220,6 +222,24 @@ class UserController extends Controller
 
       return response()->json([
         'friends' => $friends, 
+      ],200, [], JSON_UNESCAPED_UNICODE);
+
+      // 取得失敗時はエラーメッセージを返す
+      return new JsonResponse([
+        'message' => 'Unauthenticated.'
+      ], 500);
+    }
+
+    /**
+     * フレンド情報の更新
+     */
+    public function friendsUpdate(Request $request) 
+    {
+      // ユーザのフレンド情報を取得
+      $friend = $this->database->getFriendsUpdate($request->all());
+
+      return response()->json([
+        'friend' => $friend, 
       ],200, [], JSON_UNESCAPED_UNICODE);
 
       // 取得失敗時はエラーメッセージを返す

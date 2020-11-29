@@ -22,9 +22,10 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
     
     /********** ユーザ管理(users) **********/
     // Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);
-    Route::resource('api_users',     'Api\UserController');
-    Route::get('api_users/show',     'Api\UserController@initShow')->name('api_users.initShow');
-    Route::get('api_users/{api_user}/friends',     'Api\UserController@friendsIndex')->name('api_users.friends');
+    Route::resource('api_users',                        'Api\UserController');
+    Route::get('api_users/show',                        'Api\UserController@initShow')->name('api_users.initShow');
+    Route::get('api_users/{api_user}/friends',          'Api\UserController@friendsIndex')->name('api_users.friends');
+    Route::post('api_users/{api_user}/friends/update',   'Api\UserController@friendsUpdate')->name('api_users.friends.update');
     
     /********** 都道府県管理(prefectures) **********/
     Route::get('api_prefectures',       'Api\UserController@getPrefectures')->name('api_prefectures');

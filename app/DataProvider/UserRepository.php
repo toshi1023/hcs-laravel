@@ -111,7 +111,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
         $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'myfriends.*')
                              ->fromSub($subQueryB, 'myfriends')
                              ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
-        
+
         if($approval) {
             // 友達申請が承認済みの値のみに絞る
             $query = $query->where('myfriends.status', '=', 2);

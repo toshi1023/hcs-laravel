@@ -6,7 +6,7 @@ import _ from "lodash";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { 
-    Card, CardContent, CardMedia, List, ListItem, 
+    Card, CardContent, CardMedia, List, ListItem, IconButton,
     ListItemText, ListItemAvatar, Avatar, Divider, Fab, Tooltip
  } from "@material-ui/core";
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
@@ -14,6 +14,7 @@ import EventIcon from '@material-ui/icons/Event';
 import EditIcon from '@material-ui/icons/Edit';
 import CommentIcon from '@material-ui/icons/Comment';
 import RoomIcon from '@material-ui/icons/Room';
+import ReplyIcon from '@material-ui/icons/Reply';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
@@ -62,6 +63,10 @@ const useStyles = makeStyles(theme => ({
         height: 300,
         width: 350,
     },
+    addIcon: {
+        color: "blue",
+        fontSize: 30
+    },
     gridContainer: {
         paddingTop: "10px",
         paddingBottom: "20px"
@@ -81,6 +86,8 @@ function UserShow(props) {
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
+    const [checked, setChecked] = React.useState([1]);
+    const [reply, setReply] = React.useState([1]);
     // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
     const selectedUser = useSelector(selectSelectedUser);
     
@@ -94,6 +101,20 @@ function UserShow(props) {
         history.push('/users/mypage/edit');
     };
 
+    // メッセージ用関数
+    const handleToggleReply = (value) => () => {
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+    
+        if (currentIndex === -1) {
+          newChecked.push(value);
+        } else {
+          newChecked.splice(currentIndex, 1);
+        }
+    
+        setReply(newChecked);
+    };
+
     return (
         <>
             <Card className={classes.root}>
@@ -104,6 +125,16 @@ function UserShow(props) {
                                 <EditIcon />
                             </Fab>
                         </Tooltip>
+                        <IconButton
+                            style={{ backgroundColor: "#d0ddf5", marginRight: 5 }}
+                        >
+                            <ReplyIcon
+                                edge="end"
+                                onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : ''))}
+                                inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : '') }}
+                                className={classes.addIcon}
+                            />
+                        </IconButton>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6}>
                         <CardMedia

@@ -6,11 +6,12 @@ import ArticleDropzone from '../parts/articleParts/dropzone';
 import ArticleCard from '../parts/articleParts/articleCard';
 import SwitchType from '../parts/common/switch';
 import PrefectureSelects from '../parts/common/prefectureSearch';
+import ArticlePrefectureSelects from '../parts/articleParts/articlePrefectureSelects';
 import SnackMessages from '../parts/common/snackMessages';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
-import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl, FormLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CreateIcon from '@material-ui/icons/Create';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -85,7 +86,7 @@ function MyArticle() {
     const classes = useStyles();
     const childRef = useRef();
     // タブ用のstate
-    const [value, setValue] = React.useState(0);
+    const [tab, setTab] = React.useState(0);
     const [articlePage, setArticlePage] = React.useState(false);
     const [createPage, setCreatePage] = React.useState(true);
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
@@ -129,17 +130,16 @@ function MyArticle() {
     const setType = () => {
         setState({
             ...state,
-            type: document.getElementById("typeSwitch").checked,
+            type: document.getElementById("typeSwitch").checked
         })
     }
-
     // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
     const doAction = (id) => {
         childRef.current.onSubmit(id)
     }
   
     // 作成(stateの値をApiで送信)
-    async function createClicked() {
+    async function createClicked(values) {
         // ロード開始
         await dispatch(fetchCredStart())
         
@@ -227,7 +227,7 @@ function MyArticle() {
 
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setTab(newValue);
     };
     // 記事一覧ページを表示(スマホ用)
     const handleTabArticle = () => {
@@ -257,7 +257,7 @@ function MyArticle() {
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
                     <Tabs
-                        value={value}
+                        value={tab}
                         onChange={handleChange}
                         variant="fullWidth"
                         indicatorColor="secondary"
@@ -313,8 +313,19 @@ function MyArticle() {
                                             content: '',
                                         }}
                                         onSubmit={async (values) => {
+                                            console.log(document.getElementById("mobileFormPrefecture").value)
+                                            console.log(values)
                                             // ユーザ登録処理
-                                            createClicked()
+                                            let formData = new FormData(document.forms.form);
+                                            formData.append('prefecture', document.getElementById("mobileFormPrefecture").value)
+                                            formData.append('title', values.title)
+                                            formData.append('content', values.content)
+                                            formData.append('type', document.getElementById("typeSwitch").checked)
+                                            console.log(formData.get('prefecture'))
+                                            console.log(formData.get('title'))
+                                            console.log(formData.get('content'))
+                                            console.log(formData.get('type'))
+                                            // createClicked()
                                         }}
                                         validationSchema={Yup.object().shape({
                                             title: Yup.string()
@@ -335,7 +346,7 @@ function MyArticle() {
                                         <Form onSubmit={handleSubmit}>
                                             <FormControl className={classes.margin}>
                                                 <div className={classes.margin} onBlur={setPrefecture}>
-                                                    <PrefectureSelects id="formPrefecture" fontSize={15} />
+                                                    <ArticlePrefectureSelects id="mobileFormPrefecture" fontSize={15} />
                                                 </div>
                                                 <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("title").value)}}>
                                                     <TextField
@@ -431,7 +442,17 @@ function MyArticle() {
                                             }}
                                             onSubmit={async (values) => {
                                                 // ユーザ登録処理
-                                                createClicked()
+                                                let formData = new FormData(document.forms.form);
+                                                formData.append('prefecture', document.getElementById("formPrefecture").value)
+                                                formData.append('title', values.title)
+                                                formData.append('content', values.content)
+                                                formData.append('type', document.getElementById("typeSwitch").checked)
+                                                console.log(formData.get('prefecture'))
+                                                console.log(formData.get('title'))
+                                                console.log(formData.get('content'))
+                                                console.log(formData.get('type'))
+
+                                                // createClicked(values)
                                             }}
                                             validationSchema={Yup.object().shape({
                                                 title: Yup.string()
@@ -449,10 +470,10 @@ function MyArticle() {
                                             touched,
                                             isValid,
                                         }) => (
-                                            <Form onSubmit={handleSubmit}>
+                                            <Form id="form" onSubmit={handleSubmit}>
                                                 <FormControl>
                                                     <div className={classes.margin}  onBlur={setPrefecture}>
-                                                        <PrefectureSelects id="formPrefecture" fontSize={15} />
+                                                        <ArticlePrefectureSelects id="formPrefecture" fontSize={15} />
                                                     </div>
                                                     <div className={classes.margin}  onBlur={() => {setTitle(document.getElementById("title").value)}}>
                                                         <TextField
@@ -494,6 +515,7 @@ function MyArticle() {
                                                         ) : null}
                                                     </div>
                                                     <div className={classes.margin} onClick={setType}>
+                                                        <FormLabel name="type" display="hidden"></FormLabel>
                                                         <SwitchType 
                                                             id="typeSwitch"
                                                             switchLabel={{true: '会員限定', false: '全員'}} 
