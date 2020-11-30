@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const loginUrl = 'http://localhost/api/login'
-// const apiUrl = 'http://localhost/api/api_users'
-const loginUrl = 'http://hcs-laravel/api/login'
-const apiUrl = 'http://hcs-laravel/api/api_users'
+const loginUrl = 'http://localhost/api/login'
+const apiUrl = 'http://localhost/api/api_users'
+// const loginUrl = 'http://hcs-laravel/api/login'
+// const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
@@ -209,7 +209,7 @@ const userSlice = createSlice({
             name: '',                   // ユーザ名
             prefecture: '',             // 都道府県
             status: '',                 // 申請状況
-            user_id_target: '',              // 対象
+            user_id_target: '',         // 対象
         }],
     },
     // Reducer (actionの処理を記述)
@@ -311,12 +311,11 @@ const userSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncUpdateFriends.fulfilled, (state, action) => {
-            console.log(action.payload.friend)
             return {
                 ...state,
                 // 現在のfriendStatus一覧の要素をfというテンポラリの変数に格納して、選択したuser_id_targetに一致するidには変更したデータを格納
-                friendStatus: state.users.map((f) => 
-                    f.user_id_target === action.payload.friend.user_id_target ? action.payload.friend : f
+                friendStatus: state.friendStatus.map((f) => 
+                    f.user_id_target != action.payload.friend.user_id_target ? f : action.payload.friend
                 ),
             }
         })

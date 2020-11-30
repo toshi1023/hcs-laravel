@@ -123,6 +123,10 @@ class UserService
   public function getFriendsUpdate($data)
   {
     // 友達申請の保存処理
-    return $this->UserService->getSave($data, 'friends');
+    $friend = $this->UserService->getSave($data, 'friends');
+    $friend = $this->UserService->getFriendsQuery($friend->user_id, false)
+                                ->where('myfriends.target_id', '=', $friend->user_id_target)
+                                ->first();
+    return $friend;
   }
 }

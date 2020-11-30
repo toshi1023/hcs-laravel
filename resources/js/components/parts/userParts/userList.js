@@ -89,7 +89,7 @@ export default function UserList(props) {
             props.handleTabUser()
         }
     }
-    
+    console.log(props.friendStatus)
     return (
         <List dense className={classes.root}>
             {_.map(props.user, value => {
@@ -122,10 +122,13 @@ export default function UserList(props) {
                                     style={
                                         props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
                                             props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                // 承認済み
                                                 { backgroundColor: "#CCFFCC" } 
                                             : 
+                                                // 申請中
                                                 { backgroundColor: "#f4f5ab" }
                                         :
+                                            // 友達申請
                                             { backgroundColor: "#d0ddf5" }
                                     }
                                     onClick={
@@ -139,6 +142,7 @@ export default function UserList(props) {
                                     {
                                         props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
                                             props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                // 承認済み
                                                 <HowToRegIcon 
                                                     edge="end"
                                                     onChange={handleToggleAdd(value.id)}
@@ -148,6 +152,7 @@ export default function UserList(props) {
                                                     className={classes.successIcon}
                                                 /> 
                                             : 
+                                                // 申請中
                                                 <ContactMailIcon
                                                     edge="end"
                                                     onChange={handleToggleAdd(value.id)}
@@ -157,6 +162,7 @@ export default function UserList(props) {
                                                     className={classes.applyIcon}
                                                 />
                                         :    
+                                            // 友達追加
                                             <PersonAddIcon
                                                 edge="end"
                                                 onChange={handleToggleAdd(value.id)}
