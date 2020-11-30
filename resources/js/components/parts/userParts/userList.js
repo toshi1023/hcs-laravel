@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, selectSelectedUser, fetchAsyncUpdateFriends } from "../../users/userSlice";
+import { selectUser, selectSelectedUser, fetchAsyncUpdateFriends, selectFriendStatus } from "../../users/userSlice";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -52,7 +52,7 @@ export default function UserList(props) {
     const [checked, setChecked] = React.useState([1]);
     const [add, setAdd] = React.useState(false);
     // selectedUserのstateを変数に代入
-    const selectedUsers = useSelector(selectSelectedUser);
+    const selectedFriendStatus = useSelector(selectFriendStatus);
     const dispatch = useDispatch();
 
     const handleToggleAdd = value => () => {
@@ -71,6 +71,7 @@ export default function UserList(props) {
     // 友達申請処理
     const handleFriendApply = async (id) => {
         await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
+        console.log(selectedFriendStatus)
     }
 
     // 詳細データの管理用stateを更新

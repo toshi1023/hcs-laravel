@@ -237,7 +237,7 @@ class UserController extends Controller
     {
       // ユーザのフレンド情報を取得
       $friend = $this->database->getFriendsUpdate($request->all());
-
+      
       return response()->json([
         'friend' => $friend, 
       ],200, [], JSON_UNESCAPED_UNICODE);
