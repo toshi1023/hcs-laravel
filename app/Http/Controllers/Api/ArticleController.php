@@ -61,34 +61,35 @@ class ArticleController extends Controller
    */
   public function store(Request $request)
   {
-    DB::beginTransaction();
+    try {
+      DB::beginTransaction();
 
-    // ファイル名の生成
-    $filename = null;
-    if ($request->file('upload_image')){
-      $filename = $this->getFilename($request->file('upload_image'));
-    }
+      // ファイル名の生成
+      $filename = null;
+      if ($request->file('upload_image')){
+        $filename = $this->getFilename($request->file('upload_image'));
+      }
+  
+      // 登録データを配列化
+      $data = $request->input();
+  
+      // 記事の保存処理
+      $article = $this->database->save($data, $filename);
 
-    // 登録データを配列化
-    $data = $request->input();
-
-    // 記事の保存処理
-    $article = $this->database->save($data, $filename);
-    
-    if ($article) {
       DB::commit();
-        return response()->json([
-          'info_message' => '記事を投稿しました', 
-          'id'           => $article->id,
-        ],200, [], JSON_UNESCAPED_UNICODE);
-    } else {
-        DB::rollBack();
-        // 作成失敗時はエラーメッセージを返す
-        return new JsonResponse([
-          'error_message' => '記事の投稿に失敗しました',
-          'status'        => 500,
-        ], 500);
-    }  
+      return response()->json([
+        'info_message' => '記事を投稿しました', 
+        'article'      => $article,
+      ],200, [], JSON_UNESCAPED_UNICODE);
+      
+    } catch (\Exception $e) {
+      DB::rollBack();
+      // 作成失敗時はエラーメッセージを返す
+      return new JsonResponse([
+        'error_message' => '記事の投稿に失敗しました',
+        'status'        => 500,
+      ], 500);
+    }
   }
 
   // 記事の変更を反映
@@ -96,15 +97,34 @@ class ArticleController extends Controller
   {
     $article = $this->database->getEdit($article)['article'];
 
-    DB::beginTransaction();
+    try {
+      DB::beginTransaction();
 
-    if ($this->database->articleSave($request, null)) {
+      // ファイル名の生成
+      $filename = null;
+      if ($request->file('upload_image')){
+        $filename = $this->getFilename($request->file('upload_image'));
+      }
+  
+      // 登録データを配列化
+      $data = $request->input();
+  
+      // 記事の保存処理
+      $article = $this->database->save($data, $filename);
+
       DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を保存しました');
-    } else {
+      return response()->json([
+        'info_message' => '記事を投稿しました', 
+        'article'      => $article,
+      ],200, [], JSON_UNESCAPED_UNICODE);
+      
+    } catch (\Exception $e) {
       DB::rollBack();
-      $this->messages->add('', '記事の保存に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
+      // 作成失敗時はエラーメッセージを返す
+      return new JsonResponse([
+        'error_message' => '記事の投稿に失敗しました',
+        'status'        => 500,
+      ], 500);
     }
   }
 

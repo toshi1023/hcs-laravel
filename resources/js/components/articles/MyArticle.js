@@ -135,6 +135,7 @@ function MyArticle() {
     }
     // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
     const doAction = (id) => {
+        console.log(id)
         childRef.current.onSubmit(id)
     }
   
@@ -143,11 +144,11 @@ function MyArticle() {
         // ロード開始
         await dispatch(fetchCredStart())
         
-        const result = await dispatch(fetchAsyncCreate(state))
+        const result = await dispatch(fetchAsyncCreate(values))
 
         if (fetchAsyncCreate.fulfilled.match(result)) {
             // 画像の保存
-            // doAction(result.payload.id)
+            doAction(result.payload.article.id)
             // infoメッセージの表示
             result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
             // 記事の再読み込み
@@ -313,25 +314,21 @@ function MyArticle() {
                                             content: '',
                                         }}
                                         onSubmit={async (values) => {
-                                            console.log(document.getElementById("mobileFormPrefecture").value)
-                                            console.log(values)
                                             // ユーザ登録処理
                                             let formData = new FormData(document.forms.form);
                                             formData.append('prefecture', document.getElementById("mobileFormPrefecture").value)
-                                            formData.append('title', values.title)
-                                            formData.append('content', values.content)
-                                            formData.append('type', document.getElementById("typeSwitch").checked)
-                                            console.log(formData.get('prefecture'))
-                                            console.log(formData.get('title'))
-                                            console.log(formData.get('content'))
-                                            console.log(formData.get('type'))
-                                            // createClicked()
+                                            formData.append('title', values.mobileTitle)
+                                            formData.append('content', values.mobileContent)
+                                            formData.append('type', document.getElementById("mobileTypeSwitch").checked)
+                                            
+                                            // 記事の登録処理
+                                            createClicked(formData)
                                         }}
                                         validationSchema={Yup.object().shape({
-                                            title: Yup.string()
-                                                    .required("タイトルの入力は必須です"),
-                                            content: Yup.string()
-                                                        .required("内容の入力は必須です"),
+                                            mobileTitle: Yup.string()
+                                                            .required("タイトルの入力は必須です"),
+                                            mobileContent: Yup.string()
+                                                              .required("内容の入力は必須です"),
                                         })}
                                     >
                                     {({
@@ -350,8 +347,8 @@ function MyArticle() {
                                                 </div>
                                                 <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("title").value)}}>
                                                     <TextField
-                                                        id="title"
-                                                        name="title"
+                                                        id="mobileTitle"
+                                                        name="mobileTitle"
                                                         label="タイトル"
                                                         variant="outlined"
                                                         style = {{width: 250}}
@@ -360,7 +357,7 @@ function MyArticle() {
                                                         }}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.title}
+                                                        value={values.mobileTitle}
                                                     />
                                                     {touched.title && errors.title ? (
                                                         <div className={classes.error}>{errors.title}</div>
@@ -368,8 +365,8 @@ function MyArticle() {
                                                 </div>
                                                 <div className={classes.margin} onBlur={() => {setContent(document.getElementById("content").value)}}>
                                                     <TextField
-                                                        id="content"
-                                                        name="content"
+                                                        id="mobileContent"
+                                                        name="mobileContent"
                                                         label="内容"
                                                         variant="outlined"
                                                         style = {{width: 250}}
@@ -380,7 +377,7 @@ function MyArticle() {
                                                         }}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.content}
+                                                        value={values.mobileContent}
                                                     />
                                                     {touched.content && errors.content ? (
                                                         <div className={classes.error}>{errors.content}</div>
@@ -388,7 +385,7 @@ function MyArticle() {
                                                 </div>
                                                 <div className={classes.margin} onClick={setType}>
                                                     <SwitchType 
-                                                        id="typeSwitch"
+                                                        id="mobileTypeSwitch"
                                                         switchLabel={{true: '会員限定', false: '全員'}} 
                                                         checked={state.type}
                                                         value={values.type}
@@ -446,13 +443,11 @@ function MyArticle() {
                                                 formData.append('prefecture', document.getElementById("formPrefecture").value)
                                                 formData.append('title', values.title)
                                                 formData.append('content', values.content)
-                                                formData.append('type', document.getElementById("typeSwitch").checked)
-                                                console.log(formData.get('prefecture'))
-                                                console.log(formData.get('title'))
-                                                console.log(formData.get('content'))
-                                                console.log(formData.get('type'))
+                                                formData.append('type', document.getElementById("typeSwitch").checked ? 1 : 0)
+                                                formData.append('user_id', localStorage.getItem('loginId'))
 
-                                                // createClicked(values)
+                                                // 記事の登録処理
+                                                createClicked(formData)
                                             }}
                                             validationSchema={Yup.object().shape({
                                                 title: Yup.string()

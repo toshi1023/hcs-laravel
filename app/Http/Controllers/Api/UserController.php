@@ -65,24 +65,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-      DB::beginTransaction();
+      try {
+        DB::beginTransaction();
 
-      // ファイル名の生成
-      $filename = null;
-      if ($request->file('upload_image')){
-        $filename = $this->getFilename($request->file('upload_image'));
-      }
-
-      // 登録データを配列化
-      $data = $request->input();
-
-      // パスワードのハッシュ処理
-      $data['password'] = Hash::make($data['password']);
-
-      // ユーザ保存処理
-      $user = $this->database->save($data, $filename);
-      
-      if ($user){
+        // ファイル名の生成
+        $filename = null;
+        if ($request->file('upload_image')){
+          $filename = $this->getFilename($request->file('upload_image'));
+        }
+  
+        // 登録データを配列化
+        $data = $request->input();
+  
+        // パスワードのハッシュ処理
+        $data['password'] = Hash::make($data['password']);
+  
+        // ユーザ保存処理
+        $user = $this->database->save($data, $filename);
+        
         DB::commit();
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました', 
@@ -90,13 +90,14 @@ class UserController extends Controller
           'name'         => $request->input('name'),
           'password'     => $request->input('password'),
         ],200, [], JSON_UNESCAPED_UNICODE);
-      } else {
+      } catch (\Exception $e) {
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
-        return new JsonResponse([
-          'error_message' => 'ユーザの登録に失敗しました',
+        return response()->json([
+          // 'error_message' => 'ユーザの登録に失敗しました',
+          'error_message' => $e->getMessage(),
           'status'        => 500,
-        ], 500);
+        ], 500, [], JSON_UNESCAPED_UNICODE);
       }
 
       // $data = $this->database->save($request, $filename);
@@ -163,35 +164,35 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-      DB::beginTransaction();
+      try {
+        DB::beginTransaction();
 
-      // ファイル名の生成
-      $filename = null;
-      if ($request->file('upload_image')){
-        $filename = $this->getFilename($request->file('upload_image'));
-      }
-      
-      // 登録データを配列化
-      $data = $request->input();
+        // ファイル名の生成
+        $filename = null;
+        if ($request->file('upload_image')){
+          $filename = $this->getFilename($request->file('upload_image'));
+        }
+        
+        // 登録データを配列化
+        $data = $request->input();
 
-      // パスワードのハッシュ処理
-      if(key_exists('password', $data)) {
-        $data['password'] = Hash::make($data['password']);
-      }
-      
-      if ($this->database->save($data, $filename)[0]){
+        // パスワードのハッシュ処理
+        if(key_exists('password', $data)) {
+          $data['password'] = Hash::make($data['password']);
+        }
+        $user = $this->database->save($data, $filename);
         DB::commit();
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました!', 
           'name'         => $request->input('name'),
           'password'     => $request->input('password'),
         ],200, [], JSON_UNESCAPED_UNICODE);
-      } else {
+      } catch (\Exception $e) {
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
-        return new JsonResponse([
+        return response()->json([
           'error_message' => 'ユーザの登録に失敗しました!'
-        ], 200);
+        ], 500, [], JSON_UNESCAPED_UNICODE);
       }
     }
 

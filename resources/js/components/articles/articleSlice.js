@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const apiUrl = 'http://localhost/api/api_articles'
-const apiUrl = 'http://hcs-laravel/api/api_articles'
+const apiUrl = 'http://localhost/api/api_articles'
+// const apiUrl = 'http://hcs-laravel/api/api_articles'
 const token = localStorage.localToken
 
 /**
@@ -249,12 +249,12 @@ const articleSlice = createSlice({
                 articles: action.payload, //apiから取得した記事の情報をstateのarticlesに格納
             }
         })
-        // builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
-        //     return {
-        //         ...state,
-        //         articles: [action.payload, ...state.articles],
-        //     }
-        // })
+        builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
+            return {
+                ...state,
+                articles: [action.payload.article, ...state.articles],
+            }
+        })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
             return {
                 ...state,
