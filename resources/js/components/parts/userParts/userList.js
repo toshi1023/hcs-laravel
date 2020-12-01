@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, selectSelectedUser, fetchAsyncUpdateFriends, selectFriendStatus } from "../../users/userSlice";
+import { selectUser, selectSelectedUser, fetchAsyncGet, fetchAsyncUpdateFriends, selectFriendStatus } from "../../users/userSlice";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -71,7 +71,7 @@ export default function UserList(props) {
     // 友達申請処理
     const handleFriendApply = async (id) => {
         await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
-        console.log(selectedFriendStatus)
+        await dispatch(fetchAsyncGet({user_name: document.getElementById("userSearch").value, user_id: localStorage.getItem('loginId')}))
     }
 
     // 詳細データの管理用stateを更新
