@@ -117,6 +117,16 @@ class UserService
   }
 
   /**
+   * ログインユーザへのフレンド申請リストの取得
+   * 引数：検索条件
+   */
+  public function getFriendsApplyQuery($conditions)
+  {
+    // フレンド申請中のユーザデータを取得
+    return $this->UserService->getFriendsApplyQuery($conditions)->get();
+  }
+
+  /**
    * フレンド情報の更新
    * 引数：データ
    */

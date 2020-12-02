@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const loginUrl = 'http://localhost/api/login'
-// const apiUrl = 'http://localhost/api/api_users'
-const loginUrl = 'http://hcs-laravel/api/login'
-const apiUrl = 'http://hcs-laravel/api/api_users'
+const loginUrl = 'http://localhost/api/login'
+const apiUrl = 'http://localhost/api/api_users'
+// const loginUrl = 'http://hcs-laravel/api/login'
+// const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
@@ -126,6 +126,13 @@ export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', asyn
  */
 export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(conditions) => {
     const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`)
+    return res.data
+})
+/**
+ * 友達申請データの取得(プロフィールページ表示用)
+ */
+export const fetchAsyncGetFriendsApply = createAsyncThunk('friends/apply', async(conditions) => {
+    const res = await axios.get(`${apiUrl}/${conditions}/friends/apply?query=${conditions}`)
     return res.data
 })
 /**
@@ -302,6 +309,13 @@ const userSlice = createSlice({
             return {
                 ...state,
                 prefectures: action.payload,
+            }
+        })
+        builder.addCase(fetchAsyncGetFriendsApply.fulfilled, (state, action) => {
+            console.log(action)
+            return {
+                ...state,
+                users: action.payload,
             }
         })
         builder.addCase(fetchAsyncGetFriends.fulfilled, (state, action) => {

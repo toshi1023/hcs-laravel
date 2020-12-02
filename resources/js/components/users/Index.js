@@ -155,22 +155,15 @@ export default function User() {
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
-    // ニュース一覧ページを表示(スマホ用)
+    // ユーザ一覧ページを表示(スマホ用)
     const handleTabUserList = () => {
         setUserPage(true)
         setUserListPage(false)
     }
-    // ニュース詳細ページを表示(スマホ用)
+    // ユーザ詳細ページを表示(スマホ用)
     const handleTabUser = () => {
         setUserPage(false)
         setUserListPage(true)
-    }
-
-    // ユーザ一覧を生成
-    const renderUsers = () => {
-        return (
-            <UserList user={users} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
-        )
     }
     
     return (
@@ -242,7 +235,7 @@ export default function User() {
                                     </Button>
                                 </div>
                             </form>
-                            {renderUsers()}
+                            <UserList user={users} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
                         </Grid>
                     </Grid>
                 </div>
@@ -301,7 +294,7 @@ export default function User() {
                                 </Button>
                             </div>
                         </form>
-                        {renderUsers()}
+                        <UserList user={users} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
                     </Grid>
                 </Grid>
             </div>

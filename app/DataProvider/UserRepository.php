@@ -128,6 +128,21 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     }
 
     /**
+     * mypageページのフレンド申請データを取得
+     * 引数1：検索条件
+     */
+    public function getFriendsApplyQuery($conditions) {
+        // サブクエリ
+        $subQuery = $this->getQuery('friends', $conditions)->orderBy('updated_at', 'desc');
+
+        $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'applyfriends.*')
+                             ->fromSub($subQuery, 'applyfriends')
+                             ->leftJoin('users', 'applyfriends.user_id', '=', 'users.id');
+
+        return $query;
+    }
+
+    /**
      * 送信者に紐づくメッセージのデータをカウント
      * 引数：ユーザID(受信者ID)
      */

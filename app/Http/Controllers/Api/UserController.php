@@ -226,9 +226,32 @@ class UserController extends Controller
       ],200, [], JSON_UNESCAPED_UNICODE);
 
       // 取得失敗時はエラーメッセージを返す
-      return new JsonResponse([
+      return response()->json([
         'message' => 'Unauthenticated.'
-      ], 500);
+      ], 500, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * フレンド情報の取得(ログインユーザへのフレンド申請リスト)
+     */
+    public function friendsApply(Request $request) 
+    {
+      // 検索条件のセット
+      $conditions = [];
+      $conditions['status'] = 1;
+      if ($request->input('query')) { $conditions['user_id_target'] = $request->input('query'); }
+
+      // ログインユーザへ申請中のフレンド情報を取得
+      $friends = $this->database->getFriendsApplyQuery($conditions);
+
+      return response()->json([
+        'friends' => $friends, 
+      ],200, [], JSON_UNESCAPED_UNICODE);
+
+      // 取得失敗時はエラーメッセージを返す
+      return response()->json([
+        'message' => 'Unauthenticated.'
+      ], 500, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**

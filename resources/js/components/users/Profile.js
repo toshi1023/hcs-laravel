@@ -1,22 +1,17 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import UserList from '../parts/userParts/userList';
 import UserShow from './Show';
-import { selectSelectedUser, fetchAsyncGetProf } from "./userSlice";
+import { fetchAsyncGetProf, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
-import Grid from "@material-ui/core/Grid";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
-    Card, CardContent, CardMedia, Typography, List, ListItem, 
-    ListItemText, ListItemAvatar, Avatar, Divider, Fab
- } from "@material-ui/core";
- import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
- import EventIcon from '@material-ui/icons/Event';
- import EditIcon from '@material-ui/icons/Edit';
- import CommentIcon from '@material-ui/icons/Comment';
-import RoomIcon from '@material-ui/icons/Room';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+    Paper, Tabs, Tab, Grid
+} from "@material-ui/core";
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import GroupIcon from '@material-ui/icons/Group'; 
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -41,6 +36,31 @@ const useStyles = makeStyles(theme => ({
     content: {
         flex: "1 0 auto",
     },
+    tab: {
+        width: '100%',
+        minWidth: 300,
+        backgroundColor: theme.palette.background.paper,
+        position: 'fixed',
+        zIndex: 1,
+    },
+    mobileMainContent: {
+        paddingTop: theme.spacing(10),
+        zIndex: 0,
+    },
+    sectionDesktop: {
+        display: "none",
+        paddingTop: theme.spacing(10),
+        [theme.breakpoints.up("sm")]: {
+            display: "block"
+        }
+    },
+    sectionMobile: {
+        display: "block",
+        paddingTop: theme.spacing(7),
+        [theme.breakpoints.up("sm")]: {
+            display: "none"
+        }
+    },
     cover: {
         margin: '60px 10px 0 10px',
         height: 280
@@ -59,10 +79,16 @@ const useStyles = makeStyles(theme => ({
 
 function Profile(props) {
     const classes = useStyles();
-    const theme = useTheme();
-    const history = useHistory();
+    // タブ切り替え管理
+    const [tab, setTab] = React.useState(1);
+    const [userPage, setUserPage] = React.useState(true);
+    const [userListPage, setUserListPage] = React.useState(false);
+    // stateで管理するユーザ情報を取得
+    const applyFriends = useSelector(selectUsers)
+    const friendStatus = useSelector(selectFriendStatus)
     const dispatch = useDispatch()
-
+    const history = useHistory();
+    console.log(friendStatus)
     useEffect(() => {
         // 非同期の関数を定義
         const fetchUserProf = async () => {
@@ -70,22 +96,81 @@ function Profile(props) {
             await dispatch(fetchCredStart())
             // ログイン情報を取得
             const resultReg = await dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
-            if (fetchAsyncGetProf.fulfilled.match(resultReg)) {
+            // 申請中の友達一覧を取得
+            const resultFriends = await dispatch(fetchAsyncGetFriendsApply(localStorage.getItem('loginId')))
+            
+            if (fetchAsyncGetProf.fulfilled.match(resultReg) && fetchAsyncGetFriendsApply.fulfilled.match(resultFriends)) {
                 // ロード終了
-                await dispatch(fetchCredEnd());       
+                await dispatch(fetchCredEnd());
             }
+            // ロード終了
+            await dispatch(fetchCredEnd());
         }
         // 上で定義した非同期の関数を実行
         fetchUserProf()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
+
+    // タブ切り替え処理
+    const handleChange = (event, newValue) => {
+        setTab(newValue);
+    };
+    // ユーザ一覧ページを表示(スマホ用)
+    const handleTabUserList = () => {
+        setUserPage(true)
+        setUserListPage(false)
+    }
+    // ユーザ詳細ページを表示(スマホ用)
+    const handleTabUser = () => {
+        setUserPage(false)
+        setUserListPage(true)
+    }
     
     return (
-        <Grid container className={classes.gridContainer} justify="center">
-            <Grid item xs={12} sm={6}>
-                <UserShow />
-            </Grid>
-        </Grid>
+        <>
+            {/* スマホ版 */}
+            <div className={classes.sectionMobile}>
+                <Paper square className={classes.tab}>
+                    <Tabs
+                        value={tab}
+                        onChange={handleChange}
+                        variant="fullWidth"
+                        indicatorColor="secondary"
+                        textColor="secondary"
+                        aria-label="icon label tabs example"
+                    >
+                        <Tab icon={<PersonPinIcon />} label="ユーザ詳細" onClick={handleTabUser} />
+                        <Tab icon={<GroupIcon />} label="ユーザ一覧" onClick={handleTabUserList} />
+                    </Tabs>
+                </Paper>
+                <Grid container className={classes.gridContainer} justify="center">
+                    <Grid item xs={11} hidden={userPage}>
+                        <Grid container justify="center">
+                            <UserShow />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={11} hidden={userListPage}>
+                        {/* <UserList user={applyFriends} handleTabUser={handleTabUser} /> */}
+                        <UserList user={applyFriends} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
+                    </Grid>
+                </Grid>
+            </div>
+            <div className={classes.sectionDesktop}>
+                <Grid container className={classes.gridContainer} justify="center">
+                    <Grid item sm={8}>
+                        <Grid container justify="center">
+                            <Grid item sm={10}>
+                                <UserShow />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item sm={4}>
+                        {/* <UserList user={applyFriends} handleTabUser={handleTabUser} /> */}
+                        <UserList user={applyFriends} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
+                    </Grid>
+                </Grid>
+            </div>
+        </>
     );
 }
 
