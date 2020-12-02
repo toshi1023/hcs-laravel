@@ -72,10 +72,13 @@ class ArticleController extends Controller
   
       // 登録データを配列化
       $data = $request->input();
-  
+      $data['type'] = $request->input('type') == 'true' ? 1 : 0;
+      $data['user_id'] = 2;
       // 記事の保存処理
       $article = $this->database->save($data, $filename);
-
+      // 記事の保存が成功している場合は配列化
+      $article ? $article = $article->toArray() : '';
+      
       DB::commit();
       return response()->json([
         'info_message' => '記事を投稿しました', 
@@ -85,10 +88,10 @@ class ArticleController extends Controller
     } catch (\Exception $e) {
       DB::rollBack();
       // 作成失敗時はエラーメッセージを返す
-      return new JsonResponse([
+      return response()->json([
         'error_message' => '記事の投稿に失敗しました',
         'status'        => 500,
-      ], 500);
+      ], 500, [], JSON_UNESCAPED_UNICODE);
     }
   }
 

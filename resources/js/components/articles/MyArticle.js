@@ -145,7 +145,7 @@ function MyArticle() {
         await dispatch(fetchCredStart())
         
         const result = await dispatch(fetchAsyncCreate(values))
-
+        console.log(result)
         if (fetchAsyncCreate.fulfilled.match(result)) {
             // 画像の保存
             doAction(result.payload.article.id)
