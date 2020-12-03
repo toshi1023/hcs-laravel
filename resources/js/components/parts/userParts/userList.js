@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, fetchAsyncUpdateFriends, selectFriendStatus } from "../../users/userSlice";
+import { fetchGetInfoMessages, selectInfo } from '../../app/appSlice';
+import SnackMessages from '../common/snackMessages';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -52,7 +54,8 @@ export default function UserList(props) {
     const [checked, setChecked] = React.useState([1]);
     const [add, setAdd] = React.useState(false);
     // selectedUserのstateを変数に代入
-    const selectedFriendStatus = useSelector(selectFriendStatus);
+    const friendStatus = useSelector(selectFriendStatus)
+    const infoMessages = useSelector(selectInfo)
     const dispatch = useDispatch();
 
     const handleToggleAdd = value => () => {
@@ -70,7 +73,11 @@ export default function UserList(props) {
 
     // 友達申請処理
     const handleFriendApply = async (id) => {
-        await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
+        const resultReg = await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
+        if (fetchAsyncUpdateFriends.fulfilled.match(resultReg)) {
+            // infoメッセージの表示 
+            await dispatch(fetchGetInfoMessages(resultReg))
+        }
     }
 
     // 詳細データの管理用stateを更新
@@ -91,6 +98,13 @@ export default function UserList(props) {
 
     return (
         <List dense className={classes.root}>
+            {
+                // メッセージ表示
+                infoMessages ? 
+                    <SnackMessages infoOpen={true} />
+                :
+                    <SnackMessages errorOpen={true} />
+            }
             {_.map(props.user, value => {
                 
                 return (
