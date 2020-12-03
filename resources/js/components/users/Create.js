@@ -206,7 +206,9 @@ export default function UserCreate() {
                                 password: Yup.string()
                                              .required("パスワードの入力は必須です")
                                              .min(6, '6文字以上を入れてください'),
-                                name: Yup.string().required("ニックネームはの入力は必須です"),
+                                name: Yup.string()
+                                　　　　　.required("ニックネームはの入力は必須です")
+                                         .max(15, 'ニックネームは15文字以内で入力してください'),
                             })}
                         >
                         {({

@@ -135,7 +135,6 @@ function MyArticle() {
     }
     // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
     const doAction = (id) => {
-        console.log(id)
         childRef.current.onSubmit(id)
     }
   

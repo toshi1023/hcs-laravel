@@ -30,7 +30,7 @@ class UserController extends Controller
       // 検索条件のセット
       $conditions = [];
       if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
-      if ($request->input('queryId')) { $conditions['users.id@not'] = $request->input('queryId'); }
+      if ($request->input('queryId')) { $conditions['users.id@not'] = $request->input('queryId'); } // ユーザ一覧に自分を表示しないようにするため
 
       // 全ユーザデータとフレンド情報を更新日時順にソートして取得
       $data = $this->database->getIndex(null, $conditions);
@@ -219,7 +219,7 @@ class UserController extends Controller
     public function friendsIndex(Request $request) 
     {
       // ユーザのフレンド情報を取得
-      $friends = $this->database->getFriendsQuery($request->input('query'));
+      $friends = $this->database->getFriendsQuery($request->input('query'), 2);
 
       return response()->json([
         'friends' => $friends, 
@@ -232,7 +232,7 @@ class UserController extends Controller
     }
 
     /**
-     * フレンド情報の取得(ログインユーザへのフレンド申請リスト)
+     * フレンド情報の取得(ログインユーザへの友達リクエストを含む)
      */
     public function friendsApply(Request $request) 
     {
@@ -241,11 +241,14 @@ class UserController extends Controller
       $conditions['status'] = 1;
       if ($request->input('query')) { $conditions['user_id_target'] = $request->input('query'); }
 
-      // ログインユーザへ申請中のフレンド情報を取得
-      $friends = $this->database->getFriendsApplyQuery($conditions);
-
+      // ログインユーザのフレンド情報を取得
+      $friends = $this->database->getFriendsQuery($request->input('query'));
+      // ログインユーザへの友達リクエスト送信中のユーザ情報を取得
+      $friendStatus = $this->database->getFriendsApplyQuery($conditions);
+      
       return response()->json([
-        'friends' => $friends, 
+        'friends' => $friends,
+        'friendStatus' => $friendStatus,
       ],200, [], JSON_UNESCAPED_UNICODE);
 
       // 取得失敗時はエラーメッセージを返す
@@ -259,17 +262,26 @@ class UserController extends Controller
      */
     public function friendsUpdate(Request $request) 
     {
-      // ユーザのフレンド情報を取得
-      $friend = $this->database->getFriendsUpdate($request->all());
-      
-      return response()->json([
-        'friend' => $friend, 
-      ],200, [], JSON_UNESCAPED_UNICODE);
+      try {
+        DB::beginTransaction();
+        // ユーザのフレンド情報を取得
+        $friend = $this->database->getFriendsUpdate($request->all());
+        
+        // メッセージの分岐
+        $request->input('status') ? $message = 'リクエストを承認しました' : $message = 'リクエストを受け付けました';
 
-      // 取得失敗時はエラーメッセージを返す
-      return new JsonResponse([
-        'message' => 'Unauthenticated.'
-      ], 500);
+        DB::commit();
+        return response()->json([
+          'friend' => $friend, 
+          'info_message' => $message
+        ],200, [], JSON_UNESCAPED_UNICODE);
+
+      } catch (\Exception $e) {
+        DB::rollBack();
+        // 取得失敗時はエラーメッセージを返す
+        return new JsonResponse([
+          'error_message' => 'リクエストの処理の失敗しました'
+        ], 500);
+      }
     }
-
 }

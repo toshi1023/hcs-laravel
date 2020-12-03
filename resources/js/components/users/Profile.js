@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import UserList from '../parts/userParts/userList';
+import FriendList from '../parts/userParts/friendList';
 import UserShow from './Show';
 import { fetchAsyncGetProf, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
-import styles from '../parts/userParts/userParts.module.css';
+// import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
@@ -14,6 +14,7 @@ import PersonPinIcon from '@material-ui/icons/PersonPin';
 import GroupIcon from '@material-ui/icons/Group'; 
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
+import styles from '../app/bodyTitle.module.css';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -44,7 +45,7 @@ const useStyles = makeStyles(theme => ({
         zIndex: 1,
     },
     mobileMainContent: {
-        paddingTop: theme.spacing(10),
+        paddingTop: theme.spacing(5),
         zIndex: 0,
     },
     sectionDesktop: {
@@ -66,7 +67,7 @@ const useStyles = makeStyles(theme => ({
         height: 280
     },
     gridContainer: {
-        paddingTop: theme.spacing(15),
+        paddingTop: theme.spacing(10),
         paddingBottom: theme.spacing(5),
     },
     userName: {
@@ -80,15 +81,15 @@ const useStyles = makeStyles(theme => ({
 function Profile(props) {
     const classes = useStyles();
     // タブ切り替え管理
-    const [tab, setTab] = React.useState(1);
-    const [userPage, setUserPage] = React.useState(true);
-    const [userListPage, setUserListPage] = React.useState(false);
+    const [tab, setTab] = React.useState(0);
+    const [userPage, setUserPage] = React.useState(false);
+    const [userListPage, setUserListPage] = React.useState(true);
     // stateで管理するユーザ情報を取得
-    const applyFriends = useSelector(selectUsers)
+    const friends = useSelector(selectUsers)
     const friendStatus = useSelector(selectFriendStatus)
     const dispatch = useDispatch()
     const history = useHistory();
-    console.log(friendStatus)
+    
     useEffect(() => {
         // 非同期の関数を定義
         const fetchUserProf = async () => {
@@ -140,21 +141,28 @@ function Profile(props) {
                         aria-label="icon label tabs example"
                     >
                         <Tab icon={<PersonPinIcon />} label="ユーザ詳細" onClick={handleTabUser} />
-                        <Tab icon={<GroupIcon />} label="ユーザ一覧" onClick={handleTabUserList} />
+                        <Tab icon={<GroupIcon />} label="フレンド一覧" onClick={handleTabUserList} />
                     </Tabs>
                 </Paper>
-                <Grid container className={classes.gridContainer} justify="center">
-                    <Grid item xs={11} hidden={userPage}>
-                        <Grid container justify="center">
-                            <UserShow />
+                <div className={classes.mobileMainContent}>
+                    <Grid container className={classes.gridContainer} justify="center">
+                        <Grid item xs={11} hidden={userPage}>
+                            <Grid container justify="center">
+                                <UserShow />
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={11} hidden={userListPage}>
+                            <h1 className={styles.friendList}>
+                                フレンド一覧
+                            </h1>
+                            <br />
+                            <FriendList user={friends} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
                         </Grid>
                     </Grid>
-                    <Grid item xs={11} hidden={userListPage}>
-                        {/* <UserList user={applyFriends} handleTabUser={handleTabUser} /> */}
-                        <UserList user={applyFriends} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
-                    </Grid>
-                </Grid>
+                </div>
             </div>
+
+            {/* PC版 */}
             <div className={classes.sectionDesktop}>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item sm={8}>
@@ -165,8 +173,13 @@ function Profile(props) {
                         </Grid>
                     </Grid>
                     <Grid item sm={4}>
-                        {/* <UserList user={applyFriends} handleTabUser={handleTabUser} /> */}
-                        <UserList user={applyFriends} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
+                        <Grid item sm={11}>
+                            <h1 className={styles.friendList}>
+                                フレンド一覧
+                            </h1>
+                        </Grid>
+                        <br />
+                        <FriendList user={friends} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
                     </Grid>
                 </Grid>
             </div>

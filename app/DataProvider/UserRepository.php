@@ -94,7 +94,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
      * usersページのフレンド一覧データを取得
      * 引数1：ユーザID, 引数2：承認済みフラグ
      */
-    public function getFriendsQuery($user_id, $approval=false) {
+    public function getFriendsQuery($user_id, $approval=null) {
         // サブクエリ
         $subQueryA = $this->model->select('id', 'user_id as target_id', 'status', 'updated_at')
                                  ->from('friends')
@@ -112,9 +112,17 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                              ->fromSub($subQueryB, 'myfriends')
                              ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
 
-        if($approval) {
+        if($approval == 1) {
+            // 友達申請が申請中の値のみに絞る
+            $query = $query->where('myfriends.status', '=', 1);
+        }
+        if($approval == 2) {
             // 友達申請が承認済みの値のみに絞る
             $query = $query->where('myfriends.status', '=', 2);
+        }
+        if($approval == 3) {
+            // 友達申請が却下の値のみに絞る
+            $query = $query->where('myfriends.status', '=', 3);
         }
 
         return $query;

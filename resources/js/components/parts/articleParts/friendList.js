@@ -36,7 +36,7 @@ export default function FriendList(props) {
 
     // 選択したフレンドの記事を取得
     const handleFriendArticles = async value => {
-        console.log(value.target_id)
+
         // Loading開始
         await dispatch(fetchCredStart())
         // 都道府県情報をセット
@@ -68,7 +68,7 @@ export default function FriendList(props) {
     
     return (
         <List dense className={classes.root}>
-            {_.map(props.friend.friends, value => {
+            {_.map(props.friend, value => {
         
                 return (
                     <>

@@ -1,12 +1,14 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSelectedUser, editUser } from "./userSlice";
+import { selectSelectedUser, editUser, selectFriendStatus, fetchAsyncUpdateFriends } from "./userSlice";
+import { fetchGetInfoMessages, selectInfo } from '../app/appSlice';
+import SnackMessages from '../parts/common/snackMessages';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { 
-    Card, CardContent, CardMedia, List, ListItem, IconButton,
+    Card, CardContent, CardMedia, List, ListItem, IconButton, Button,
     ListItemText, ListItemAvatar, Avatar, Divider, Fab, Tooltip
  } from "@material-ui/core";
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
@@ -77,6 +79,12 @@ const useStyles = makeStyles(theme => ({
     button: {
         marginLeft: 'auto',
     },
+    applyButton: {
+        marginLeft: 'auto',
+        fontSize: 13,
+        // marginTop: theme.spacing(2),
+        // marginBottom: theme.spacing(1),
+    },
     tooltip: {
         fontSize: 14,
     },
@@ -89,7 +97,9 @@ function UserShow(props) {
     const [checked, setChecked] = React.useState([1]);
     const [reply, setReply] = React.useState([1]);
     // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
-    const selectedUser = useSelector(selectSelectedUser);
+    const selectedUser = useSelector(selectSelectedUser)
+    const friendStatus = useSelector(selectFriendStatus)
+    const infoMessages = useSelector(selectInfo)
     
     // 編集データの管理用stateを更新
     const handleEditUser = value => {
@@ -115,16 +125,37 @@ function UserShow(props) {
         setReply(newChecked);
     };
 
+    // 友達リクエストの承認
+    const handleApproval = async (value) => {
+        const resultReg = await dispatch(fetchAsyncUpdateFriends({id: value.id, status: 2}))
+        if (fetchAsyncUpdateFriends.fulfilled.match(resultReg)) {
+            // infoメッセージの表示 
+            await dispatch(fetchGetInfoMessages(resultReg))
+        }
+    }
+
     return (
         <>
+            {
+                // メッセージ表示
+                infoMessages ? 
+                    <SnackMessages infoOpen={true} />
+                :
+                    <SnackMessages errorOpen={true} />
+            }
             <Card className={classes.root}>
                 <Grid container  spacing={2}>
                     <Grid item xs={12} sm={12}>
-                        <Tooltip title="編集" classes={{tooltip: classes.tooltip}}>
-                            <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUser.value ? selectedUser.value : selectedUser.user)}>
-                                <EditIcon />
-                            </Fab>
-                        </Tooltip>
+                        {
+                            // ログインユーザに一致する場合のみ"編集"ボタンを表示
+                            selectedUser.user !== undefined && localStorage.getItem('loginId') == selectedUser.user.id ? 
+                                <Tooltip title="編集" classes={{tooltip: classes.tooltip}}>
+                                    <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUser.value ? selectedUser.value : selectedUser.user)}>
+                                        <EditIcon />
+                                    </Fab>
+                                </Tooltip>
+                            : ''
+                        }
                         <IconButton
                             style={{ backgroundColor: "#d0ddf5", marginRight: 5 }}
                         >
@@ -135,6 +166,17 @@ function UserShow(props) {
                                 className={classes.addIcon}
                             />
                         </IconButton>
+                        {
+                            // 友達リクエストが来ているユーザを表示した場合
+                            friendStatus != undefined && selectedUser.value != undefined ? 
+                                friendStatus.find(element => element.user_id === selectedUser.value.id) ? 
+                                    <Button variant="contained" color="primary" className={classes.applyButton} onClick={() => handleApproval(friendStatus.find(element => element.user_id === selectedUser.value.id))}>
+                                        承認する
+                                    </Button>
+                                : ''
+                            : ''
+                        }
+                        
                     </Grid>
                     <Grid item xs={12} sm={12} md={6}>
                         <CardMedia

@@ -47,12 +47,10 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function UserList(props) {
+export default function FriendList(props) {
     const classes = useStyles();
     const [checked, setChecked] = React.useState([1]);
     const [add, setAdd] = React.useState(false);
-    // selectedUserのstateを変数に代入
-    const selectedFriendStatus = useSelector(selectFriendStatus);
     const dispatch = useDispatch();
 
     const handleToggleAdd = value => () => {
@@ -67,11 +65,6 @@ export default function UserList(props) {
 
         setChecked(newChecked);
     };
-
-    // 友達申請処理
-    const handleFriendApply = async (id) => {
-        await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
-    }
 
     // 詳細データの管理用stateを更新
     const handleSetUser = value => {
@@ -119,56 +112,35 @@ export default function UserList(props) {
                             <ListItemSecondaryAction>
                                 <IconButton
                                     style={
-                                        props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
-                                            props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
-                                                // 承認済み
-                                                { backgroundColor: "#CCFFCC" } 
-                                            : 
-                                                // 申請中
-                                                { backgroundColor: "#f4f5ab" }
+                                        value.status === 2 ? 
+                                            // 承認済み
+                                            { backgroundColor: "#CCFFCC" } 
                                         :
-                                            // 友達申請
-                                            { backgroundColor: "#d0ddf5" }
+                                            // 申請中
+                                            { backgroundColor: "#f4f5ab" }
                                     }
-                                    onClick={
-                                        () => 
-                                        props.friendStatus.find(element => element.target_id === value.id) ? 
-                                            ''
-                                        : 
-                                            handleFriendApply(value.id)
-                                    }
+                                    disabled
                                 >
                                     {
-                                        props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
-                                            props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
-                                                // 承認済み
-                                                <HowToRegIcon 
-                                                    edge="end"
-                                                    onChange={handleToggleAdd(value.id)}
-                                                    inputProps={{
-                                                        "aria-labelledby": value.id
-                                                    }}
-                                                    className={classes.successIcon}
-                                                /> 
-                                            : 
-                                                // 申請中
-                                                <ContactMailIcon
-                                                    edge="end"
-                                                    onChange={handleToggleAdd(value.id)}
-                                                    inputProps={{
-                                                        "aria-labelledby": value.id
-                                                    }}
-                                                    className={classes.applyIcon}
-                                                />
-                                        :    
-                                            // 友達追加
-                                            <PersonAddIcon
+                                        value.status === 2 ? 
+                                            // 承認済み
+                                            <HowToRegIcon 
                                                 edge="end"
                                                 onChange={handleToggleAdd(value.id)}
                                                 inputProps={{
                                                     "aria-labelledby": value.id
                                                 }}
-                                                className={classes.addIcon}
+                                                className={classes.successIcon}
+                                            /> 
+                                        : 
+                                            // 申請中
+                                            <ContactMailIcon
+                                                edge="end"
+                                                onChange={handleToggleAdd(value.id)}
+                                                inputProps={{
+                                                    "aria-labelledby": value.id
+                                                }}
+                                                className={classes.applyIcon}
                                             />
                                     }
                                 </IconButton>

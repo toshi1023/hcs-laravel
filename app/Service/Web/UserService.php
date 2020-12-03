@@ -108,21 +108,21 @@ class UserService
 
   /**
    * フレンド情報の取得
-   * 引数：ユーザID
+   * 引数1：ユーザID, 引数2：承認ステータス 
    */
-  public function getFriendsQuery($user_id)
+  public function getFriendsQuery($user_id, $approve=null)
   {
     // 友達申請が承認された値のみ取得
-    return $this->UserService->getFriendsQuery($user_id, true)->get();
+    return $this->UserService->getFriendsQuery($user_id, $approve)->get();
   }
 
   /**
-   * ログインユーザへのフレンド申請リストの取得
+   * ログインユーザへの友達リクエストリストの取得
    * 引数：検索条件
    */
   public function getFriendsApplyQuery($conditions)
   {
-    // フレンド申請中のユーザデータを取得
+    // 友達リクエストのユーザデータを取得
     return $this->UserService->getFriendsApplyQuery($conditions)->get();
   }
 

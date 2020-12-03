@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const loginUrl = 'http://localhost/api/login'
-const apiUrl = 'http://localhost/api/api_users'
-// const loginUrl = 'http://hcs-laravel/api/login'
-// const apiUrl = 'http://hcs-laravel/api/api_users'
+// const loginUrl = 'http://localhost/api/login'
+// const apiUrl = 'http://localhost/api/api_users'
+const loginUrl = 'http://hcs-laravel/api/login'
+const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
@@ -312,16 +312,16 @@ const userSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncGetFriendsApply.fulfilled, (state, action) => {
-            console.log(action)
             return {
                 ...state,
-                users: action.payload,
+                users: action.payload.friends,
+                friendStatus: action.payload.friendStatus
             }
         })
         builder.addCase(fetchAsyncGetFriends.fulfilled, (state, action) => {
             return {
                 ...state,
-                users: action.payload,
+                users: action.payload.friends,
             }
         })
         builder.addCase(fetchAsyncUpdateFriends.fulfilled, (state, action) => {
