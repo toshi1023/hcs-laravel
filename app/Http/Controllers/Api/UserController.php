@@ -264,6 +264,7 @@ class UserController extends Controller
     {
       try {
         DB::beginTransaction();
+
         // ユーザのフレンド情報を取得
         $friend = $this->database->getFriendsUpdate($request->all());
         

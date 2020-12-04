@@ -325,10 +325,11 @@ const userSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncUpdateFriends.fulfilled, (state, action) => {
+            console.log(action.payload)
             return {
                 ...state,
                 friendStatus: [action.payload.friend, ...state.friendStatus],
-                // 現在のfriendStatus一覧の要素をfというテンポラリの変数に格納して、選択したuser_id_targetに一致するidには変更したデータを格納
+                // // 現在のfriendStatus一覧の要素をfというテンポラリの変数に格納して、選択したuser_id_targetに一致するidには変更したデータを格納
                 // friendStatus: state.friendStatus.map((f) => 
                 //     f.user_id_target != action.payload.friend.user_id_target ? f : action.payload.friend
                 // ),

@@ -134,8 +134,13 @@ class UserService
   {
     // 友達申請の保存処理
     $friend = $this->UserService->getSave($data, 'friends');
-    $friend = $this->UserService->getFriendsQuery($friend->user_id, false)
-                                ->where('myfriends.target_id', '=', $friend->user_id_target)
+    // 自身のIDを変数にセット
+    key_exists('id', $data) ? $user_id = $friend->user_id_target : $user_id = $friend->user_id;
+    // 相手側のIDを変数にセット
+    key_exists('id', $data) ? $user_id_target = $friend->user_id : $user_id_target = $friend->user_id_target;
+    // 保存したデータをユーザページに表示する用に取得
+    $friend = $this->UserService->getFriendsQuery($user_id, false)
+                                ->where('myfriends.target_id', '=', $user_id_target)
                                 ->first();
     return $friend;
   }

@@ -133,7 +133,7 @@ function UserShow(props) {
             await dispatch(fetchGetInfoMessages(resultReg))
         }
     }
-
+    console.log(friendStatus)
     return (
         <>
             {
@@ -169,8 +169,8 @@ function UserShow(props) {
                         {
                             // 友達リクエストが来ているユーザを表示した場合
                             friendStatus != undefined && selectedUser.value != undefined ? 
-                                friendStatus.find(element => element.user_id === selectedUser.value.id) ? 
-                                    <Button variant="contained" color="primary" className={classes.applyButton} onClick={() => handleApproval(friendStatus.find(element => element.user_id === selectedUser.value.id))}>
+                                friendStatus.find(element => element.user_id === selectedUser.value.target_id) ? 
+                                    <Button variant="contained" color="primary" className={classes.applyButton} onClick={() => handleApproval(friendStatus.find(element => element.user_id === selectedUser.value.target_id))}>
                                         承認する
                                     </Button>
                                 : ''
