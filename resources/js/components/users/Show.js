@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSelectedUser, editUser, selectFriendStatus, fetchAsyncUpdateFriends } from "./userSlice";
+import { selectSelectedUser, editUser, selectFriendStatus, fetchAsyncUpdateFriends, fetchAsyncGetFriendsApply } from "./userSlice";
 import { fetchGetInfoMessages, selectInfo } from '../app/appSlice';
 import SnackMessages from '../parts/common/snackMessages';
 import styles from '../parts/userParts/userParts.module.css';
@@ -129,11 +129,13 @@ function UserShow(props) {
     const handleApproval = async (value) => {
         const resultReg = await dispatch(fetchAsyncUpdateFriends({id: value.id, status: 2}))
         if (fetchAsyncUpdateFriends.fulfilled.match(resultReg)) {
+            // 申請中の友達リストを再取得
+            await dispatch(fetchAsyncGetFriendsApply(localStorage.getItem('loginId')))
             // infoメッセージの表示 
             await dispatch(fetchGetInfoMessages(resultReg))
         }
     }
-    console.log(friendStatus)
+    
     return (
         <>
             {
