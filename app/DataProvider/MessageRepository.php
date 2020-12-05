@@ -39,29 +39,52 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
     }
 
     /**
-     * ログインユーザに紐づくメッセージの送受信ユーザをすべて取得
+     * 特定ユーザとのメッセージ履歴をすべて取得
      */
-    public function getMessangerQuery($conditions=null) {
+    public function getMessageQuery($conditions=null) {
         // messagesテーブルの値をUnion結合して取得
-        $subQuery = $this->model->select('*', 'user_id_sender as user_id')
-                              ->where('user_id_receiver', '=', $conditions['messages.user_id'])
+        $subQuery = $this->model->select('*', 'user_id_sender as target_id')
+                              ->where('user_id_receiver', '=', $conditions['user_id'])
+                              ->where('user_id_sender', '=', $conditions['user_id_target'])
                               ->where('delete_flg', '=', 0);
 
-        $query = $this->model->select('*', 'user_id_receiver as user_id')
-                             ->where('user_id_sender', '=', $conditions['messages.user_id'])
+        $subQuery = $this->model->select('*', 'user_id_receiver as target_id')
+                             ->where('user_id_sender', '=', $conditions['user_id'])
+                             ->where('user_id_receiver', '=', $conditions['user_id_target'])
                              ->where('delete_flg', '=', 0)
                              ->union($subQuery)
                              ->orderBy('updated_at', 'desc');
+
+        $query = $this->model->select('messages.*', 'users.users_photo_path', 'users.name', 'users.gender')
+                             ->fromSub($subQuery, 'messages')
+                             ->leftJoin('users', 'users.id', '=', 'messages.target_id');
         
         return $query;
+
+        // 完成系のSQL(ユーザID:1とユーザID:2のメッセージの場合)
+        // SELECT `messages`.*, `users`.`users_photo_path`, `users`.`name`, `users`.`gender`
+        // FROM
+        // (SELECT *, `user_id_receiver` AS `target_id` FROM `messages` WHERE `user_id_sender` = 1 AND `user_id_receiver` = 2 AND `delete_flg` = 0
+        // UNION
+        // SELECT *, `user_id_sender` AS `target_id` FROM `messages` WHERE `user_id_receiver` = 1 AND `user_id_sender` = 2 AND `delete_flg` = 0
+        // ORDER BY `updated_at` DESC) AS `messages`
+        // LEFT JOIN `users` ON `messages`.`target_id` = `users`.`id`
     }
 
     /**
      * messagesページの一覧表示データを取得
      */
     public function getIndexQuery($conditions=null) {
-        // 送受信のユーザ情報を取得
-        $subQuery = $this->getMessangerQuery($conditions);
+        // messagesテーブルの値をUnion結合して取得
+        $subQuery = $this->model->select('*', 'user_id_sender as user_id')
+                              ->where('user_id_receiver', '=', $conditions['user_id'])
+                              ->where('delete_flg', '=', 0);
+
+        $subQuery = $this->model->select('*', 'user_id_receiver as user_id')
+                             ->where('user_id_sender', '=', $conditions['user_id'])
+                             ->where('delete_flg', '=', 0)
+                             ->union($subQuery)
+                             ->orderBy('updated_at', 'desc');
         
         // usersテーブルの値も結合して取得
         $query = $this->model->selectRaw('distinct(messangers.user_id)')

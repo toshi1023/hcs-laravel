@@ -33,9 +33,11 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
 
     /********** ニュース管理(news) **********/
     Route::get('api_news',              'Api\NewsController@index')->name('api_news');
-    Route::get('api_news/show',     'Api\NewsController@initShow')->name('api_news.initShow');
+    Route::get('api_news/show',         'Api\NewsController@initShow')->name('api_news.initShow');
 
-    Route::resource('api_messages' ,    'Api\MessageController', ['only' => ['index']]);
+    /********** メッセージ管理(messages) **********/
+    Route::get('api_messages' ,         'Api\MessageController@index')->name('api_news');
+    Route::get('api_messages/show' ,    'Api\MessageController@show')->name('api_news.initShow');
 });
 
 
@@ -51,6 +53,6 @@ Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
     // Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show']]);
 
     /********** メッセージ管理(messages) **********/
-    Route::resource('api_messages' , 'Api\MessageController', ['except' => ['index']]);
+    Route::resource('api_messages' , 'Api\MessageController', ['except' => ['index', 'show']]);
     // Route::resource('api_messages' , 'Api\MessageController');
 });

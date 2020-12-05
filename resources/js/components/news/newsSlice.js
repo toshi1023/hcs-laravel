@@ -10,22 +10,36 @@ const token = localStorage.localToken
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('news/index', async(conditions) => {
-    const res = await axios.get(`${apiUrl}?query=${conditions}`, {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-    })
-    return res.data
+    try {
+        const res = await axios.get(`${apiUrl}?query=${conditions}`, {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 詳細データ(初期表示用)の取得
  */
 export const fetchAsyncGetShow = createAsyncThunk('news/initShow', async(conditions) => {
-    const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-    })
-    return res.data
+    try {
+        const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**

@@ -33,119 +33,196 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
  * Loginユーザの取得用非同期関数
  */
 export const fetchAsyncGetProf = createAsyncThunk('prof/get', async(id) =>{
-    // axios: 引数1: URL, 引数2: メタ情報
-    const res = await axios.get(`${apiUrl}/${id}?query=${id}`, {})
-    // Apiからの返り値
-    return res.data
+    try {
+        // axios: 引数1: URL, 引数2: メタ情報
+        const res = await axios.get(`${apiUrl}/${id}?query=${id}`, {})
+        // Apiからの返り値
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('users/index', async(conditions) => {
-    const res = await axios.get(`${apiUrl}?query=${conditions.user_name}&queryId=${conditions.user_id}`)
-    return res.data
+    try {
+        const res = await axios.get(`${apiUrl}?query=${conditions.user_name}&queryId=${conditions.user_id}`)
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 詳細データ(初期表示用)の取得
  */
 export const fetchAsyncGetShow = createAsyncThunk('users/initShow', async(conditions) => {
-    const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-    })
-    return res.data
+    try {
+        const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * データ作成
  */
 export const fetchAsyncCreate = createAsyncThunk('users/create', async(user) => {
-    const res = await axios.post(apiUrl, user, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.post(apiUrl, user, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * データの更新
  */
 export const fetchAsyncUpdate = createAsyncThunk('users/edit', async(user) => {
-    const res = await axios.put(`${apiUrl}/${user.id}`, user, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.put(`${apiUrl}/${user.id}`, user, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 /**
  * 画像データの保存
  */
 export const fetchAsyncImage = createAsyncThunk('users/image', async(data) => {
-    const res = await axios.post(`${apiUrl}/${data.getAll('id')}`, data, {
-        headers: {
-            'X-HTTP-Method-Override': 'PUT',
-            'Content-Type': 'multipart/form-data',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.post(`${apiUrl}/${data.getAll('id')}`, data, {
+            headers: {
+                'X-HTTP-Method-Override': 'PUT',
+                'Content-Type': 'multipart/form-data',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * データの削除処理
  */
 export const fetchAsyncDelete = createAsyncThunk('users/delete', async(id) => {
-    // deleteの場合は第2引数で渡すデータはない
-    await axios.delete(`${apiUrl}/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return id
+    try {
+        // deleteの場合は第2引数で渡すデータはない
+        await axios.delete(`${apiUrl}/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return id
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 都道府県データの取得用非同期関数
  */
 export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', async() =>{
-    // axios: 引数1:  引数2: メタ情報
-    const res = await axios.get(prefectureUrl, {})
-    // Apiからの返り値
-    return res.data
+    try {
+        // axios: 引数1:  引数2: メタ情報
+        const res = await axios.get(prefectureUrl, {})
+        // Apiからの返り値
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 友達一覧データの取得
  */
 export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(conditions) => {
-    const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`)
-    return res.data
+    try {
+        const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`)
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 /**
  * 友達申請データの取得(プロフィールページ表示用)
  */
 export const fetchAsyncGetFriendsApply = createAsyncThunk('friends/apply', async(conditions) => {
-    const res = await axios.get(`${apiUrl}/${conditions}/friends/apply?query=${conditions}`)
-    return res.data
+    try {
+        const res = await axios.get(`${apiUrl}/${conditions}/friends/apply?query=${conditions}`)
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 /**
  * 友達データの更新
  */
 export const fetchAsyncUpdateFriends = createAsyncThunk('friends/update', async(user) => {
-    const res = await axios.post(`${apiUrl}/${user.user_id}/friends/update`, user, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.post(`${apiUrl}/${user.user_id}/friends/update`, user, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 

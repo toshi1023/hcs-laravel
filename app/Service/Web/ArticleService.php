@@ -133,10 +133,10 @@ class ArticleService
       $data['delete_flg'] = $update_data->delete_flg;
 
       // 保存処理
-      $result = $this->ArticleService->likeSave($data);
+      $this->ArticleService->likeSave($data);
     } else {
       // 値の新規登録
-      $result = $this->ArticleService->likeSave($data);
+      $this->ArticleService->likeSave($data);
     }
 
     // フラグをリターン
@@ -146,7 +146,6 @@ class ArticleService
 
     // 結果をリターン
     return $response = [
-      'result'   => $result,
       'like_flg' => $like_flg,
       'data'     => $data,
     ];

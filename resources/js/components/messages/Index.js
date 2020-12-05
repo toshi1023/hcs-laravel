@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import MessageList from '../parts/messageParts/messageList';
+import MessageBord from '../parts/messageParts/messageBord';
 import _ from 'lodash';
 import { Grid, Paper, Tabs, Tab } from '@material-ui/core';
 import MailIcon from '@material-ui/icons/Mail';
 import GroupIcon from '@material-ui/icons/Group';
 import { makeStyles } from '@material-ui/core/styles';
-import UserSearch from '../parts/userParts/userSearch';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import UserSearch from '../parts/userParts/userSearch';
+import SnackMessages from '../parts/common/snackMessages';
+import { fetchCredStart, fetchCredEnd, selectError } from '../app/appSlice';
 import { selectMessages, fetchAsyncGet } from './messageSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionDesktop: {
         display: "none",
-        paddingTop: theme.spacing(3),
+        paddingTop: theme.spacing(2),
         [theme.breakpoints.up("sm")]: {
             display: "block"
         }
@@ -43,12 +45,6 @@ const useStyles = makeStyles((theme) => ({
     messageBordField: {
         paddingTop: theme.spacing(3),
     },
-    mobileMessageBord: {
-        height: theme.spacing(60),
-    },
-    messageBord: {
-        height: theme.spacing(70),
-    }
 }));
 
 export default function Message() {
@@ -59,8 +55,9 @@ export default function Message() {
     const [messageListPage, setMessageListPage] = React.useState(false);
     // メッセージデータの取得
     const messages = useSelector(selectMessages)
+    const errorMessages = useSelector(selectError)
     const dispatch = useDispatch()
-    
+
     useEffect(() => {
         // 非同期の関数を定義
         const fetchMessages = async () => {
@@ -82,7 +79,7 @@ export default function Message() {
 
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setTab(newValue);
     };
     // メッセージ一覧ページを表示(スマホ用)
     const handleTabMessageList = () => {
@@ -94,9 +91,16 @@ export default function Message() {
         setMessagePage(false)
         setMessageListPage(true)
     }
-
+    
     return (
         <>
+            {
+                // メッセージ表示
+                errorMessages ? 
+                    <SnackMessages errorOpen={true} />
+                :
+                    <SnackMessages infoOpen={true} />
+            }
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
                     <Tabs
@@ -113,13 +117,11 @@ export default function Message() {
                 </Paper>
                 <Grid container className={classes.gridContainer} justify="center">
                     <Grid item xs={11} className={classes.mobileMainContent} hidden={messagePage}>
-                        <Paper className={classes.mobileMessageBord}>
-                            メッセージ
-                        </Paper>
+                        <MessageBord />
                     </Grid>
                     <Grid item xs={11} className={classes.mobileMainContent} hidden={messageListPage}>
                         <UserSearch />
-                        <MessageList message={messages} />
+                        <MessageList message={messages} handleChange={handleChange} handleTabMessage={handleTabMessage} />
                     </Grid>
                 </Grid>
             </div>
@@ -129,15 +131,13 @@ export default function Message() {
                     <Grid item sm={8} className={classes.messageBordField}>
                         <Grid container justify="center">
                             <Grid item sm={8}>
-                                <Paper className={classes.messageBord}>
-                                    メッセージ
-                                </Paper>
+                                <MessageBord />
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item sm={4}>
                         <UserSearch />
-                        <MessageList message={messages} />
+                        <MessageList message={messages} handleChange={handleChange} handleTabMessage={handleTabMessage} />
                     </Grid>
                 </Grid>
             </div>

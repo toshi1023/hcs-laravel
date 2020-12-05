@@ -24,18 +24,27 @@ class NewsController extends Controller
      */
     public function index(Request $request)
     {   
-        // 検索条件のセット
-        $conditions = [];
-        $conditions['status'] = 1;
-        // 会員限定のニュースを取得するときに検索条件をセット
-        if ((int)$request->input('query') == 0 && $request->input('query') != 'undefined') { $conditions['member_flg'] = $request->input('query'); }
+        try {
+            // 検索条件のセット
+            $conditions = [];
+            $conditions['status'] = 1;
+            // 会員限定のニュースを取得するときに検索条件をセット
+            if ((int)$request->input('query') == 0 && $request->input('query') != 'undefined') { $conditions['member_flg'] = $request->input('query'); }
+            
+            // ニュースデータの取得
+            $news = $this->database->getIndex($conditions);
+            
+            return response()->json([
+                'news' => $news,
+            ],200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            \Log::error('News get Error:'.$e->getMessage());
+            return response()->json([
+              'error_message' => 'ニュースの取得に失敗しました!'
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+
         
-        // ニュースデータの取得
-        $news = $this->database->getIndex($conditions);
-        
-        return response()->json([
-            'news' => $news,
-        ],200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -43,16 +52,23 @@ class NewsController extends Controller
      */
     public function initShow(Request $request)
     {   
-        // 検索条件のセット
-        $conditions = [];
-        $conditions['status'] = 1;
-        // 会員限定のニュースを取得するときに検索条件をセット
-        if ((int)$request->input('query') == 0 && $request->input('query') != 'undefined') { $conditions['member_flg'] = $request->input('query'); }
-        
-        // ニュースデータの取得
-        $news = $this->database->getShow($conditions);
-        return response()->json([
-            'news' => $news,
-        ],200, [], JSON_UNESCAPED_UNICODE);
+        try {
+            // 検索条件のセット
+            $conditions = [];
+            $conditions['status'] = 1;
+            // 会員限定のニュースを取得するときに検索条件をセット
+            if ((int)$request->input('query') == 0 && $request->input('query') != 'undefined') { $conditions['member_flg'] = $request->input('query'); }
+            
+            // ニュースデータの取得
+            $news = $this->database->getShow($conditions);
+            return response()->json([
+                'news' => $news,
+            ],200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            \Log::error('News get Error:'.$e->getMessage());
+            return response()->json([
+              'error_message' => 'ニュースの取得に失敗しました!'
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 }

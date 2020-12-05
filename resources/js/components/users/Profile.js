@@ -8,7 +8,7 @@ import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
 import _ from "lodash";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { 
-    Paper, Tabs, Tab, Grid
+    Paper, Tabs, Tab, Grid, Button
 } from "@material-ui/core";
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import GroupIcon from '@material-ui/icons/Group'; 
@@ -76,6 +76,12 @@ const useStyles = makeStyles(theme => ({
     button: {
         marginLeft: '0 0 0 auto',
     },
+    profileButton: {
+        float: 'right',
+        backgroundColor: 'white',
+        fontSize: 12,
+        fontWeight: 'bold'
+    },
 }));
 
 function Profile(props) {
@@ -126,6 +132,10 @@ function Profile(props) {
         setUserPage(false)
         setUserListPage(true)
     }
+
+    const handleGetProfile = () => {
+        
+    }
     
     return (
         <>
@@ -154,6 +164,9 @@ function Profile(props) {
                         <Grid item xs={11} hidden={userListPage}>
                             <h1 className={styles.friendList}>
                                 フレンド一覧
+                                <Button variant="outlined" color="primary" className={classes.profileButton}>
+                                    プロフィールを表示
+                                </Button>
                             </h1>
                             <br />
                             <FriendList user={friends} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
@@ -176,6 +189,9 @@ function Profile(props) {
                         <Grid item sm={11}>
                             <h1 className={styles.friendList}>
                                 フレンド一覧
+                                <Button variant="outlined" color="primary" className={classes.profileButton} onClick={handleGetProfile}>
+                                    プロフィールを表示
+                                </Button>
                             </h1>
                         </Grid>
                         <br />

@@ -27,7 +27,6 @@ class MessageService
     if(is_null($table)) {
       // ログインユーザのメッセージを全て取得
       return $this->MessageService->getIndexQuery($conditions)->get();
-      // return $this->MessageService->getBaseData($conditions)->get();
     }
     // 指定したテーブルのデータをソートして取得
     return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
@@ -35,12 +34,16 @@ class MessageService
 
   /* *
    * Showページ用データを取得するメソッド
-   * 引数: ユーザID
+   * 引数1：テーブル名, 引数2：検索条件
    * */
-  public function getShow($id)
+  public function getShow($table=null, $conditions=null)
   {
-    // 記事と紐づくユーザ情報の値を取得
-    return $this->ArticleService->getBaseData()->where('articles.id', '=' , $id)->first();
+    if(is_null($table)) {
+      // 特定ユーザとのメッセージ履歴を全て取得
+      return $this->MessageService->getMessageQuery($conditions)->orderBy('messages.created_at', 'asc')->get();
+    }
+    // 指定したテーブルのデータをソートして取得
+    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
   }
 
   /* *

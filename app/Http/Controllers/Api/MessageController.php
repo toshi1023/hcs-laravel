@@ -19,17 +19,51 @@ class MessageController extends Controller
         $this->database = $database;
     }
 
+    /**
+     * メッセージリストのデータ取得
+     */
     public function index(Request $request)
     {   
-        // 検索条件のセット
-        $conditions = [];
-        if ($request->input('query')) { $conditions['messages.user_id'] = $request->input('query'); }
-        
-        $messages = $this->database->getIndex(null, $conditions);
+        try {
+            // 検索条件のセット
+            $conditions = [];
+            if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }
+            
+            $messages = $this->database->getIndex(null, $conditions);
 
-        return response()->json([
-            'messages' => $messages,
-        ],200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json([
+                'messages' => $messages,
+            ],200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            \Log::error('Message get Error:'.$e->getMessage());
+            return response()->json([
+              'error_message' => 'メッセージの取得に失敗しました!'
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 
+    /**
+     * 特定ユーザとのメッセージ履歴データを取得
+     */
+    public function show(Request $request)
+    {   
+        try {
+            // 検索条件のセット
+            $conditions = [];
+            if ($request->input('queryUserId')) { $conditions['user_id'] = $request->input('queryUserId'); }
+            if ($request->input('queryUserIdTarget')) { $conditions['user_id_target'] = $request->input('queryUserIdTarget'); }
+
+            // メッセージの取得
+            $messages = $this->database->getShow(null, $conditions);
+    
+            return response()->json([
+                'messages' => $messages,
+            ],200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            \Log::error('Message get Error:'.$e->getMessage());
+            return response()->json([
+              'error_message' => 'メッセージの取得に失敗しました!',
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
 }

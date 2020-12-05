@@ -9,123 +9,193 @@ const token = localStorage.localToken
  * Home画面用データの取得
  */
 export const fetchAsyncGetHome = createAsyncThunk('articles/home', async() => {
-    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
-    const res = await axios.get(`${apiUrl}/home`)
-    
-    return res.data
+    try {
+        // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+        const res = await axios.get(`${apiUrl}/home`)
+        
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 記事一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions) => {
-    // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
-    const res = await axios.get(`${apiUrl}?queryPrefecture=${conditions.prefecture}&queryId=${conditions.user_id}`)
-    
-    return res.data
+    try {
+        // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+        const res = await axios.get(`${apiUrl}?queryPrefecture=${conditions.prefecture}&queryId=${conditions.user_id}`)
+        
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 記事データ作成
  */
 export const fetchAsyncCreate = createAsyncThunk('articles/create', async(article) => {
-    const res = await axios.post(apiUrl, article, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
+    try {
+        const res = await axios.post(apiUrl, article, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 
-    return res.data
 })
 
 /**
  * 記事データの更新
  */
 export const fetchAsyncUpdate = createAsyncThunk('articles/edit', async(article) => {
-    const res = await axios.put(`${apiUrl}/${id}`, article, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.put(`${apiUrl}/${id}`, article, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `JWT ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 画像データの保存
  */
 export const fetchAsyncImage = createAsyncThunk('articles/image', async(data) => {
-    const res = await axios.post(apiUrl, data, {
-        headers: {
-            'X-HTTP-Method-Override': 'PUT',
-            'Content-Type': 'multipart/form-data',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.post(apiUrl, data, {
+            headers: {
+                'X-HTTP-Method-Override': 'PUT',
+                'Content-Type': 'multipart/form-data',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * 記事データの削除処理
  */
 export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) => {
-    // deleteの場合は第2引数で渡すデータはない
-    await axios.delete(`${apiUrl}/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
-        },
-    })
-    return id
+    try {
+        // deleteの場合は第2引数で渡すデータはない
+        await axios.delete(`${apiUrl}/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `JWT ${token}`,
+            },
+        })
+        return id
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * いいね一覧データの取得
  */
 export const fetchAsyncGetLikes = createAsyncThunk('articles/likes/index', async(conditions) => {
-    // いいねの取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
-    const res = await axios.get(`${apiUrl}/likes?query=${conditions.user_id}`)
-    
-    return res.data
+    try {
+        // いいねの取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+        const res = await axios.get(`${apiUrl}/likes?query=${conditions.user_id}`)
+        
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 /**
  * いいねデータの更新
  */
 export const fetchAsyncUpdateLikes = createAsyncThunk('articles/likes/update', async(conditions) => {
-    // いいねの更新
-    const res = await axios.post(`${apiUrl}/likes`, conditions, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
-        },
-    })
-
-    return res.data
+    try {
+        // いいねの更新
+        const res = await axios.post(`${apiUrl}/likes`, conditions, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `JWT ${token}`,
+            },
+        })
+    
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * コメント一覧データの取得
  */
 export const fetchAsyncGetComments = createAsyncThunk('articles/comments/index', async() => {
-    // コメントの取得
-    const res = await axios.get(`${apiUrl}/comments`)
-    
-    return res.data
+    try {
+        // コメントの取得
+        const res = await axios.get(`${apiUrl}/comments`)
+        
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 /**
  * コメントデータの保存
  */
 export const fetchAsyncUpdateComments = createAsyncThunk('articles/comments/update', async(conditions) => {
-    // コメントの更新
-    const res = await axios.post(`${apiUrl}/comments`, conditions, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `JWT ${token}`,
-        },
-    })
-
-    return res.data
+    try {
+        // コメントの更新
+        const res = await axios.post(`${apiUrl}/comments`, conditions, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `JWT ${token}`,
+            },
+        })
+    
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**

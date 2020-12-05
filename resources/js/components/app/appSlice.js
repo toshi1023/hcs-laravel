@@ -7,10 +7,17 @@ const prefectureUrl = 'http://localhost/api/api_prefectures'
  * 都道府県データの取得用非同期関数
  */
 export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', async() =>{
-    // axios: 引数1:  引数2: メタ情報
-    const res = await axios.get(prefectureUrl, {})
-    // Apiからの返り値
-    return res.data
+    try {
+        // axios: 引数1:  引数2: メタ情報
+        const res = await axios.get(prefectureUrl, {})
+        // Apiからの返り値
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**

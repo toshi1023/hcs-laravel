@@ -127,6 +127,7 @@ function UserShow(props) {
 
     // 友達リクエストの承認
     const handleApproval = async (value) => {
+        // リクエストの承認 or 拒否
         const resultReg = await dispatch(fetchAsyncUpdateFriends({id: value.id, status: 2}))
         if (fetchAsyncUpdateFriends.fulfilled.match(resultReg)) {
             // 申請中の友達リストを再取得

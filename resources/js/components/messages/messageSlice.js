@@ -10,52 +10,97 @@ const token = localStorage.localToken
  * 一覧データの取得
  */
 export const fetchAsyncGet = createAsyncThunk('messages/index', async(conditions) => {
-    const res = await axios.get(`${apiUrl}?query=${conditions}`, {
-    // const res = await axios.get(`${apiUrl}`, {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-    })
-    return res.data
+    try {
+        const res = await axios.get(`${apiUrl}?query=${conditions}`, {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
+ * メッセージデータの取得
+ */
+export const fetchAsyncGetShow = createAsyncThunk('messages/show', async(conditions) => {
+    try {
+        const res = await axios.get(`${apiUrl}/show?queryUserId=${conditions.user_id}&queryUserIdTarget=${conditions.user_id_target}`, {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * データ作成
  */
 export const fetchAsyncCreate = createAsyncThunk('messages/create', async(message) => {
-    const res = await axios.post(apiUrl, message, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.post(apiUrl, message, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * データの更新
  */
 export const fetchAsyncUpdate = createAsyncThunk('messages/edit', async(message) => {
-    const res = await axios.put(`${apiUrl}/${message.id}`, message, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return res.data
+    try {
+        const res = await axios.put(`${apiUrl}/${message.id}`, message, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 /**
  * データの削除処理
  */
 export const fetchAsyncDelete = createAsyncThunk('messages/delete', async(id) => {
-    // deleteの場合は第2引数で渡すデータはない
-    await axios.delete(`${apiUrl}/${id}/`, {
-        headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${token}`,
-        },
-    })
-    return id
+    try {
+        // deleteの場合は第2引数で渡すデータはない
+        await axios.delete(`${apiUrl}/${id}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return id
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
 })
 
 
@@ -107,6 +152,17 @@ const messageSlice = createSlice({
             created_at: '',             // メッセージの作成日
             updated_at: '',             // メッセージの更新日
         },
+        // メッセージボードに表示するメッセージ内容
+        showMessages: {
+            id: '',                     // ID
+            target_id: '',              // メッセージ相手のID
+            content: '',                // 内容
+            created_at: '',             // メッセージの作成日
+            updated_at: '',             // メッセージの更新日
+            name: '',                   // メッセージ相手のニックネーム
+            gender: '',                 // メッセージ相手の性別
+            user_photo_path: '',        // メッセージ相手のプロフィール画像
+        },
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -124,6 +180,12 @@ const messageSlice = createSlice({
             return {
                 ...state,
                 messages: action.payload, //apiから取得した記事の情報をstateのmessagesに格納
+            }
+        })
+        builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
+            return {
+                ...state,
+                showMessages: action.payload,
             }
         })
         builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
@@ -163,5 +225,6 @@ export const { editMessage, selectMessage } = messageSlice.actions
 export const selectSelectedMessage = (state) => state.message.selectedMessage
 export const selectEditedMessage = (state) => state.message.editedMessage
 export const selectMessages = (state) => state.message.messages
+export const selectShowMessages = (state) => state.message.showMessages
 
 export default messageSlice.reducer

@@ -27,6 +27,7 @@ class ArticleController extends Controller
    */
   public function home(Request $request)
   {
+    try{
       // 検索条件のセット
       $conditions = [];
     
@@ -36,6 +37,12 @@ class ArticleController extends Controller
         'articles' => $articles['articles'], 
         'free_articles' => $articles['free_articles'],
       ],200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Exception $e) {
+      \Log::error('Article get Error:'.$e->getMessage());
+      return response()->json([
+        'error_message' => '記事の取得に失敗しました!'
+      ], 500, [], JSON_UNESCAPED_UNICODE);
+    }
   }
 
   /**
@@ -43,6 +50,7 @@ class ArticleController extends Controller
    */
   public function index(Request $request)
   {
+    try{
       // 検索条件のセット
       $conditions = [];
       if ($request->input('queryPrefecture')) { $conditions['articles.prefecture@like'] = $request->input('queryPrefecture'); }
@@ -54,6 +62,12 @@ class ArticleController extends Controller
         'articles' => $articles['articles'], 
         'free_articles' => $articles['free_articles'],
       ],200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Exception $e) {
+      \Log::error('Article get Error:'.$e->getMessage());
+      return response()->json([
+        'error_message' => '記事の取得に失敗しました!'
+      ], 500, [], JSON_UNESCAPED_UNICODE);
+    }
   }
   
   /**
@@ -151,16 +165,23 @@ class ArticleController extends Controller
    */
   public function likes(Request $request)
   {
-    // 検索条件のセット
-    $conditions = [];
-    if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }
-    
-    // 記事のいいね数を取得
-    $data = $this->database->getLikes($conditions);
-
-    return response()->json([
-      'likes' => $data
-    ], 200, [], JSON_UNESCAPED_UNICODE);
+    try {
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }
+      
+      // 記事のいいね数を取得
+      $data = $this->database->getLikes($conditions);
+  
+      return response()->json([
+        'likes' => $data
+      ], 200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Exception $e) {
+      \Log::error('Like get Error:'.$e->getMessage());
+      return response()->json([
+        'error_message' => 'いいねの取得に失敗しました!'
+      ], 500, [], JSON_UNESCAPED_UNICODE);
+    }
   }
 
   /**
@@ -169,25 +190,26 @@ class ArticleController extends Controller
    */
   public function likesUpdate(Request $request)
   {
-    // 検索条件のセット
-    $conditions = [];
-    if ($request->input('article_id')) { $conditions['article_id'] = $request->input('article_id'); }
-    if ($request->input('user_id')) { $conditions['user_id'] = $request->input('user_id'); }
-    // 更新処理を実行
-    $likes = $this->database->getLikesUpdate($conditions);
-    // 更新に成功したとき
-    if($likes['result']) {
+    try {
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->input('article_id')) { $conditions['article_id'] = $request->input('article_id'); }
+      if ($request->input('user_id')) { $conditions['user_id'] = $request->input('user_id'); }
+      // 更新処理を実行
+      $likes = $this->database->getLikesUpdate($conditions);
+      // 更新に成功したとき
       return response()->json([
         'likes_flg'       => $likes['like_flg'],
         'likes_counts'    => $likes['data'],
         'article_id'      => $request->input('article_id'),
       ], 200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Exception $e) {
+      // 更新に失敗したとき
+      return response()->json([
+        'error_message' => $likes['like_flg'],
+        'status'        => 500,
+      ], 500, [], JSON_UNESCAPED_UNICODE);
     }
-    // 更新に失敗したとき
-    return response()->json([
-      'error_message' => $likes['like_flg'],
-      'status'        => 500,
-    ], 500, [], JSON_UNESCAPED_UNICODE);
   }
 
   /**
@@ -195,13 +217,20 @@ class ArticleController extends Controller
    */
   public function comments(Request $request)
   {
-    // 記事のいいね数を取得
-    $data = $this->database->getComments();
-
-    return response()->json([
-      'comments'          => $data['data'],
-      'comments_counts'   => $data['counts']
-    ], 200, [], JSON_UNESCAPED_UNICODE);
+    try {
+      // 記事のコメントを取得
+      $data = $this->database->getComments();
+  
+      return response()->json([
+        'comments'          => $data['data'],
+        'comments_counts'   => $data['counts']
+      ], 200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Exception $e) {
+      \Log::error('Comment get Error:'.$e->getMessage());
+      return response()->json([
+        'error_message' => 'コメントの取得に失敗しました!'
+      ], 500, [], JSON_UNESCAPED_UNICODE);
+    }
   }
 
   /**
@@ -217,28 +246,30 @@ class ArticleController extends Controller
       ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
-    DB::beginTransaction();
-
-    // 保存データを配列化
-    $data = $request->all();
-    
-    // 記事のコメントを保存
-    $comment = $this->database->getCommentsUpdate($data);
-    if($comment) {
-      // コメントデータの取得
-      $comment = $this->database->getComments(['id' => $comment->id]);
+    try {
+      DB::beginTransaction();
+  
+      // 保存データを配列化
+      $data = $request->all();
       
-      DB::commit();
+      // 記事のコメントを保存
+      $comment = $this->database->getCommentsUpdate($data);
+      if($comment) {
+        // コメントデータの取得
+        $comment = $this->database->getComments(['id' => $comment->id]);
+        
+        DB::commit();
+        return response()->json([
+          'comment'       => $comment,
+          'info_message'  => 'コメントを投稿しました'
+        ], 200, [], JSON_UNESCAPED_UNICODE);
+      }
+    } catch (\Exception $e) {
+      DB::rollback();
       return response()->json([
-        'comment'       => $comment,
-        'info_message'  => 'コメントを投稿しました'
-      ], 200, [], JSON_UNESCAPED_UNICODE);
+        'error_message'  => 'コメントの投稿に失敗しました',
+        'status'         => 500,
+      ], 500, [], JSON_UNESCAPED_UNICODE);
     }
-
-    DB::rollback();
-    return response()->json([
-      'error_message'  => 'コメントの投稿に失敗しました',
-      'status'         => 500,
-    ], 500, [], JSON_UNESCAPED_UNICODE);
   }
 }

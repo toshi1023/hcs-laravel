@@ -27,24 +27,25 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-      // 検索条件のセット
-      $conditions = [];
-      if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
-      if ($request->input('queryId')) { $conditions['users.id@not'] = $request->input('queryId'); } // ユーザ一覧に自分を表示しないようにするため
-
-      // 全ユーザデータとフレンド情報を更新日時順にソートして取得
-      $data = $this->database->getIndex(null, $conditions);
-
-      return response()->json([
-        'users' => $data['users'], 
-        'friends' => $data['friends']
-      ],200, [], JSON_UNESCAPED_UNICODE);
-
-      // 認証失敗時はエラーメッセージを返す
-      return new JsonResponse([
-        'message' => 'Unauthenticated.'
-      ], 401);
-
+      try {
+        // 検索条件のセット
+        $conditions = [];
+        if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
+        if ($request->input('queryId')) { $conditions['users.id@not'] = $request->input('queryId'); } // ユーザ一覧に自分を表示しないようにするため
+  
+        // 全ユーザデータとフレンド情報を更新日時順にソートして取得
+        $data = $this->database->getIndex(null, $conditions);
+  
+        return response()->json([
+          'users' => $data['users'], 
+          'friends' => $data['friends']
+        ],200, [], JSON_UNESCAPED_UNICODE);
+      } catch (\Exception $e) {
+        \Log::error('User get Error:'.$e->getMessage());
+        return response()->json([
+          'error_message' => 'ユーザの取得に失敗しました!'
+        ], 500, [], JSON_UNESCAPED_UNICODE);
+      }
     }
 
     /**
@@ -117,34 +118,41 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-      // 検索条件のセット
-      $conditions = [];
-      $conditions['status'] = 0;
-      if ($request->input('query')) { $conditions['id'] = $request->input('query'); }
-        
-      $user = $this->database->getShow($conditions);
-
-      return response()->json([
-        'user' => $user, 
-      ],200, [], JSON_UNESCAPED_UNICODE);
+      try {
+        // 検索条件のセット
+        $conditions = [];
+        $conditions['status'] = 0;
+        if ($request->input('query')) { $conditions['id'] = $request->input('query'); }
+          
+        $user = $this->database->getShow($conditions);
+  
+        return response()->json([
+          'user' => $user, 
+        ],200, [], JSON_UNESCAPED_UNICODE);
+      }  catch (\Exception $e) {
+        \Log::error('User get Error:'.$e->getMessage());
+        return response()->json([
+          'error_message' => 'ユーザの取得に失敗しました!'
+        ], 500, [], JSON_UNESCAPED_UNICODE);
+      }
     }
 
     /**
      * ユーザ詳細ページ(初期表示用)
      */
-    public function initShow(Request $request)
-    {
-      // 検索条件のセット
-      $conditions = [];
-      $conditions['status'] = 0;
-      if ($request->input('query')) { $conditions['id'] = $request->input('query'); }
+    // public function initShow(Request $request)
+    // {
+    //   // 検索条件のセット
+    //   $conditions = [];
+    //   $conditions['status'] = 0;
+    //   if ($request->input('query')) { $conditions['id'] = $request->input('query'); }
         
-      $user = $this->database->getShow($conditions);
+    //   $user = $this->database->getShow($conditions);
 
-      return response()->json([
-        'user' => $user, 
-      ],200, [], JSON_UNESCAPED_UNICODE);
-    }
+    //   return response()->json([
+    //     'user' => $user, 
+    //   ],200, [], JSON_UNESCAPED_UNICODE);
+    // }
 
     /**
      * ユーザ編集ページ
@@ -201,16 +209,17 @@ class UserController extends Controller
      */
     public function getPrefectures()
     {
-      $prefectures = $this->database->getPrefecturesQuery('prefectures');
-
-      return response()->json([
-        'prefectures' => $prefectures, 
-      ],200, [], JSON_UNESCAPED_UNICODE);
-
-      // 取得失敗時はエラーメッセージを返す
-      return new JsonResponse([
-        'message' => 'Unauthenticated.'
-      ], 500);
+      try {
+        $prefectures = $this->database->getPrefecturesQuery('prefectures');
+  
+        return response()->json([
+          'prefectures' => $prefectures, 
+        ],200, [], JSON_UNESCAPED_UNICODE);
+      }  catch (\Exception $e) {
+        return response()->json([
+          'error_message' => '都道府県の取得に失敗しました!'
+        ], 500, [], JSON_UNESCAPED_UNICODE);
+      }
     }
 
     /**
@@ -218,17 +227,19 @@ class UserController extends Controller
      */
     public function friendsIndex(Request $request) 
     {
-      // ユーザのフレンド情報を取得
-      $friends = $this->database->getFriendsQuery($request->input('query'), 2);
-
-      return response()->json([
-        'friends' => $friends, 
-      ],200, [], JSON_UNESCAPED_UNICODE);
-
-      // 取得失敗時はエラーメッセージを返す
-      return response()->json([
-        'message' => 'Unauthenticated.'
-      ], 500, [], JSON_UNESCAPED_UNICODE);
+      try {
+        // ユーザのフレンド情報を取得
+        $friends = $this->database->getFriendsQuery($request->input('query'), 2);
+  
+        return response()->json([
+          'friends' => $friends, 
+        ],200, [], JSON_UNESCAPED_UNICODE);
+      }  catch (\Exception $e) {
+        \Log::error('Friend get Error:'.$e->getMessage());
+        return response()->json([
+          'error_message' => 'フレンドの取得に失敗しました!'
+        ], 500, [], JSON_UNESCAPED_UNICODE);
+      }
     }
 
     /**
@@ -236,25 +247,27 @@ class UserController extends Controller
      */
     public function friendsApply(Request $request) 
     {
-      // 検索条件のセット
-      $conditions = [];
-      $conditions['status'] = 1;
-      if ($request->input('query')) { $conditions['user_id_target'] = $request->input('query'); }
-
-      // ログインユーザのフレンド情報を取得
-      $friends = $this->database->getFriendsQuery($request->input('query'));
-      // ログインユーザへの友達リクエスト送信中のユーザ情報を取得
-      $friendStatus = $this->database->getFriendsApplyQuery($conditions);
-      
-      return response()->json([
-        'friends' => $friends,
-        'friendStatus' => $friendStatus,
-      ],200, [], JSON_UNESCAPED_UNICODE);
-
-      // 取得失敗時はエラーメッセージを返す
-      return response()->json([
-        'message' => 'Unauthenticated.'
-      ], 500, [], JSON_UNESCAPED_UNICODE);
+      try {
+        // 検索条件のセット
+        $conditions = [];
+        $conditions['status'] = 1;
+        if ($request->input('query')) { $conditions['user_id_target'] = $request->input('query'); }
+  
+        // ログインユーザのフレンド情報を取得
+        $friends = $this->database->getFriendsQuery($request->input('query'));
+        // ログインユーザへの友達リクエスト送信中のユーザ情報を取得
+        $friendStatus = $this->database->getFriendsApplyQuery($conditions);
+        
+        return response()->json([
+          'friends' => $friends,
+          'friendStatus' => $friendStatus,
+        ],200, [], JSON_UNESCAPED_UNICODE);
+      }  catch (\Exception $e) {
+        \Log::error('Friend get Error:'.$e->getMessage());
+        return response()->json([
+          'error_message' => 'フレンドの取得に失敗しました!'
+        ], 500, [], JSON_UNESCAPED_UNICODE);
+      }
     }
 
     /**
@@ -280,9 +293,9 @@ class UserController extends Controller
       } catch (\Exception $e) {
         DB::rollBack();
         // 取得失敗時はエラーメッセージを返す
-        return new JsonResponse([
+        return response()->json([
           'error_message' => 'リクエストの処理の失敗しました'
-        ], 500);
+        ], 500, [], JSON_UNESCAPED_UNICODE);
       }
     }
 }

@@ -4,6 +4,9 @@ import {List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar, A
 import ReplyIcon from '@material-ui/icons/Reply';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import _ from "lodash";
+import { useDispatch } from 'react-redux';
+import { fetchCredStart, fetchCredEnd, fetchGetErrorMessages } from '../../app/appSlice';
+import { fetchAsyncGetShow } from '../../messages/messageSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +50,7 @@ theme.typography.h3 = {
 export default function MessageList(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([1]);
+  const dispatch = useDispatch()
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -60,7 +64,42 @@ export default function MessageList(props) {
 
     setChecked(newChecked);
   };
- 
+
+  // 指定ユーザのメッセージを取得(引数：メッセージ相手のユーザID)
+  const handleSetMessages = async (id) => {
+    // Loading開始
+    await dispatch(fetchCredStart())
+    // 取得条件をセット
+    const conditions = {
+      user_id: localStorage.getItem('loginId'),
+      user_id_target: id
+    }
+    // ログインユーザのIDを検索条件にメッセージ一覧を取得
+    const resultReg = await dispatch(fetchAsyncGetShow(conditions))
+
+    if (fetchAsyncGetShow.fulfilled.match(resultReg)) {
+        // errorメッセージがある場合は表示
+        resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
+        // エラーが無ければスマホの場合はタブ切り替えを実行
+        resultReg.payload.error_message ? 
+          ''
+        :
+          // ページ最上部に戻る
+          window.scrollTo(0, 0)
+          // ユーザ詳細タブへ切り替え(スマホのみ)
+          if(window.matchMedia('(max-width: 767px)').matches) {
+              // タブ切り替え
+              props.handleChange(null, 0)
+              props.handleTabMessage()
+          }
+        
+        // ロード終了
+        await dispatch(fetchCredEnd());       
+    }
+    // ロード終了
+    await dispatch(fetchCredEnd());  
+  }
+
   return (
     <List dense className={classes.root}>
       {_.map(props.message.messages, value => {
@@ -68,11 +107,11 @@ export default function MessageList(props) {
         
         return (
           <>
-            <ListItem key={value.id} button >
+            <ListItem key={value.id} button onClick={() => handleSetMessages(value.user_id)} >
               <ListItemAvatar>
                 <Avatar
-                  alt={value.user_id_sender}
-                  src={value.sender_photo}
+                  alt={value.user_id}
+                  src={value.users_photo_path}
                   className={classes.avatar}
                 />
                 <p className={classes.name} style={{color: (value.gender == 1 ? 'blue' : 'red')}}>{value.name}</p>
