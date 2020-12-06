@@ -1,7 +1,7 @@
 import React from 'react';
 import CommentList from './commentList';
 import { makeStyles } from '@material-ui/core/styles';
-import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip, TextField, FormControl } from '@material-ui/core';
+import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip, TextField, FormControl, Grid } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -182,22 +182,26 @@ function ArticleCardExpand (props) {
                     localStorage.getItem('localToken') ? 
                         <div className={classes.commentField}>
                             <FormControl>
-                                <IconButton 
-                                    color="primary" 
-                                    aria-label="add" 
-                                    onClick={onSubmit}
-                                >
-                                    <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                                </IconButton>
-                                <TextField
-                                    id="comment"
-                                    name="comment"
-                                    label="コメント"
-                                    variant="outlined"
-                                    style={{marginLeft: 10, minWidth: 250, backgroundColor: 'white'}}
-                                    onChange={(e) => handleSetComment(e.target.value)}
-                                    multiline
-                                />
+                                <Grid container justify="center">
+                                    <IconButton 
+                                        color="primary" 
+                                        aria-label="add" 
+                                        onClick={onSubmit}
+                                    >
+                                        <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+                                    </IconButton>
+                                    <Grid item xs={10}>
+                                        <TextField
+                                            id="comment"
+                                            name="comment"
+                                            label="コメント"
+                                            variant="outlined"
+                                            style={{minWidth: 250, backgroundColor: 'white'}}
+                                            onChange={(e) => handleSetComment(e.target.value)}
+                                            multiline
+                                        />
+                                    </Grid>
+                                </Grid>
                             </FormControl>
                         </div>
                     : ''
@@ -281,24 +285,28 @@ function ArticleCardExpand (props) {
                     localStorage.getItem('localToken') ? 
                     <div className={classes.commentField}>
                         <FormControl>
-                            <Tooltip title="投稿する" classes={{tooltip: classes.tooltip}}>
-                                <IconButton 
-                                    color="primary" 
-                                    aria-label="add" 
-                                    onClick={onSubmit}
-                                >
-                                    <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
-                                </IconButton>
-                            </Tooltip>
-                            <TextField
-                                id="comment"
-                                name="comment"
-                                label="コメント"
-                                variant="outlined"
-                                style = {{marginLeft: 10, minWidth: 400, backgroundColor: 'white'}}
-                                onChange={(e) => handleSetComment(e.target.value)}
-                                multiline
-                            />
+                            <Grid container justify="center">
+                                <Tooltip title="投稿する" classes={{tooltip: classes.tooltip}}>
+                                    <IconButton 
+                                        color="primary" 
+                                        aria-label="add" 
+                                        onClick={onSubmit}
+                                    >
+                                        <ReplyIcon style={{ fontSize: 20, color: 'blue' }} />
+                                    </IconButton>
+                                </Tooltip>
+                                <Grid item sm={10}>
+                                    <TextField
+                                        id="comment"
+                                        name="comment"
+                                        label="コメント"
+                                        variant="outlined"
+                                        style = {{marginLeft: 10, minWidth: 400, backgroundColor: 'white'}}
+                                        onChange={(e) => handleSetComment(e.target.value)}
+                                        multiline
+                                    />
+                                </Grid>
+                            </Grid>
                         </FormControl>
                     </div>
                     : ''

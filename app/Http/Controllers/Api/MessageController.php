@@ -66,4 +66,24 @@ class MessageController extends Controller
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
+
+    /**
+     * メッセージの更新
+     */
+    public function update(Request $request)
+    {   
+        try {
+            // メッセージの保存
+            $message = $this->database->getMessageUpdate($request->all());
+    
+            return response()->json([
+                'message' => $message,
+            ],200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            \Log::error('Message get Error:'.$e->getMessage());
+            return response()->json([
+              'error_message' => 'メッセージの送信に失敗しました!',
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
 }

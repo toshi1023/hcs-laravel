@@ -36,8 +36,9 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
     Route::get('api_news/show',         'Api\NewsController@initShow')->name('api_news.initShow');
 
     /********** メッセージ管理(messages) **********/
-    Route::get('api_messages' ,         'Api\MessageController@index')->name('api_news');
-    Route::get('api_messages/show' ,    'Api\MessageController@show')->name('api_news.initShow');
+    Route::get('api_messages' ,         'Api\MessageController@index')->name('api_messages');
+    Route::get('api_messages/show' ,    'Api\MessageController@show')->name('api_messages.initShow');
+    Route::post('api_messages/update' ,    'Api\MessageController@update')->name('api_messages.update');
 });
 
 

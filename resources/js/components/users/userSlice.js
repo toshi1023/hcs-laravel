@@ -293,7 +293,6 @@ const userSlice = createSlice({
             name: '',                   // ユーザ名
             prefecture: '',             // 都道府県
             status: '',                 // 申請状況
-            user_id_target: '',         // 対象
         }],
     },
     // Reducer (actionの処理を記述)

@@ -43,31 +43,11 @@ export const fetchAsyncGetShow = createAsyncThunk('messages/show', async(conditi
 })
 
 /**
- * データ作成
- */
-export const fetchAsyncCreate = createAsyncThunk('messages/create', async(message) => {
-    try {
-        const res = await axios.post(apiUrl, message, {
-            headers: {
-                'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
-            },
-        })
-        return res.data
-    } catch (err) {
-        if (!err.response) {
-            throw err
-        }
-        return err.response.data
-    }
-})
-
-/**
  * データの更新
  */
-export const fetchAsyncUpdate = createAsyncThunk('messages/edit', async(message) => {
+export const fetchAsyncUpdate = createAsyncThunk('messages/update', async(message) => {
     try {
-        const res = await axios.put(`${apiUrl}/${message.id}`, message, {
+        const res = await axios.post(`${apiUrl}/update`, message, {
             headers: {
                 'Content-Type': 'application/json',
                 // Authorization: `Bearer ${token}`,
@@ -153,7 +133,7 @@ const messageSlice = createSlice({
             updated_at: '',             // メッセージの更新日
         },
         // メッセージボードに表示するメッセージ内容
-        showMessages: {
+        showMessages: [{
             id: '',                     // ID
             target_id: '',              // メッセージ相手のID
             content: '',                // 内容
@@ -162,7 +142,7 @@ const messageSlice = createSlice({
             name: '',                   // メッセージ相手のニックネーム
             gender: '',                 // メッセージ相手の性別
             user_photo_path: '',        // メッセージ相手のプロフィール画像
-        },
+        }],
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -188,21 +168,12 @@ const messageSlice = createSlice({
                 showMessages: action.payload,
             }
         })
-        builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
-            return {
-                ...state,
-                messages: [action.payload, ...state.messages],
-            }
-        })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
+            console.log(action.payload)
             return {
                 ...state,
-                // 現在のmessages一覧の要素をmというテンポラリの変数に格納して、選択したidに一致するidには変更したデータを格納
-                messages: state.messages.map((m) => 
-                    m.id === action.payload.id ? action.payload : m
-                ),
-                // 選択されている詳細messageにも更新したデータを格納
-                selectedMessage: action.payload,
+                showMessages: action.payload, ...state.showMessages,
+                // showMessages: action.payload,
             }
         })
         builder.addCase(fetchAsyncDelete.fulfilled, (state, action) => {

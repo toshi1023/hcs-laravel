@@ -29,7 +29,7 @@ class MessageService
       return $this->MessageService->getIndexQuery($conditions)->get();
     }
     // 指定したテーブルのデータをソートして取得
-    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
+    return $this->MessageService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
   }
 
   /* *
@@ -43,49 +43,28 @@ class MessageService
       return $this->MessageService->getMessageQuery($conditions)->orderBy('messages.created_at', 'asc')->get();
     }
     // 指定したテーブルのデータをソートして取得
-    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
-  }
-
-  /* *
-   * createページ用データを取得するメソッド
-   * 引数: 検索用テーブル
-   * */
-  public function getCreate($request)
-  {
-    return $this->ArticleService->getQuery($request)->get();
-  }
-
-  /* *
-   * editページ用データを取得するメソッド
-   * 引数: 自身のID(管理者の場合は選択した記事のID)
-   * */
-  public function getEdit($id)
-  {
-    //  自身の記事テーブルの値を取得
-    $data['article'] = $this->ArticleService->getBaseData()->where('articles.id', '=' , $id)->first();
-
-    // 都道府県データをすべて取得
-    $data['prefectures'] = $this->ArticleService->getQuery('prefectures')->get();
-
-    return $data;
+    return $this->MessageService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
   }
 
   /**
-   * 記事保存用メソッド
-   * 第一引数:登録データ, 第二引数:ファイル名, 第三引数:更新対象データ(新規保存の場合はnull)
+   * メッセージ情報の更新
+   * 引数：データ
    */
-  public function articleSave($data, $filename = null, $updateData = null)
+  public function getMessageUpdate($data)
   {
-    return $this->ArticleService->save($data, $filename, $updateData);
-  } 
+    // メッセージの保存処理
+    $message = $this->MessageService->getSave($data, 'messages');
 
-  /**
-    * 記事削除用メソッド
-    * 引数:記事ID
-    * */
-    public function articleDestroy($id)
-    {
-      return $this->ArticleService->destroy('articles', $id);
-    }
+    // 検索条件
+    $conditions = [
+      'user_id' => $message->user_id_sender,
+      'user_id_target' => $message->user_id_receiver
+    ];
+
+    // 作成したデータを取得
+    $message = $this->MessageService->getMessageQuery($conditions, $message->id)->orderBy('messages.created_at', 'asc')->first();
+    
+    return $message;
+  }
 
 }

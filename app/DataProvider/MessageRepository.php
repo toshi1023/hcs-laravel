@@ -41,7 +41,7 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
     /**
      * 特定ユーザとのメッセージ履歴をすべて取得
      */
-    public function getMessageQuery($conditions=null) {
+    public function getMessageQuery($conditions=null, $id=null) {
         // messagesテーブルの値をUnion結合して取得
         $subQuery = $this->model->select('*', 'user_id_sender as target_id')
                               ->where('user_id_receiver', '=', $conditions['user_id'])
@@ -59,6 +59,10 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
                              ->fromSub($subQuery, 'messages')
                              ->leftJoin('users', 'users.id', '=', 'messages.target_id');
         
+        if($id) {
+            $query = $query->where('messages.id', '=', $id);
+        }
+        
         return $query;
 
         // 完成系のSQL(ユーザID:1とユーザID:2のメッセージの場合)
@@ -74,7 +78,7 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
     /**
      * messagesページの一覧表示データを取得
      */
-    public function getIndexQuery($conditions=null) {
+    public function getIndexQuery($conditions=null, $id=null) {
         // messagesテーブルの値をUnion結合して取得
         $subQuery = $this->model->select('*', 'user_id_sender as user_id')
                               ->where('user_id_receiver', '=', $conditions['user_id'])
@@ -97,6 +101,10 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
         // messagesテーブルの内容と結合してログインユーザのメッセージ一覧情報を取得
         $query = $this->model->select('*')
                              ->rightJoinSub($query, 'messangers', 'messages.id', '=', 'messangers.messangers_id');
+
+        if($id) {
+            $query = $query->where('messages.id', '=', $id);
+        }
                              
         return $query;
 
