@@ -103,8 +103,10 @@ export default function MessageBord() {
         resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
         // 入力値の初期化
         document.getElementById('message').value = ''
+        
         setState({ content: '' })
     }
+    
 
     return (
         <>

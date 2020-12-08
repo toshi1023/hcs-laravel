@@ -321,7 +321,7 @@ const articleSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
-            console.log(action)
+            console.log({...state.articles})
             return {
                 ...state,
                 articles: [action.payload.article, ...state.articles],

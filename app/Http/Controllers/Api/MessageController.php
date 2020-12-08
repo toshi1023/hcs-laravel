@@ -77,7 +77,7 @@ class MessageController extends Controller
             $message = $this->database->getMessageUpdate($request->all());
     
             return response()->json([
-                'message' => $message,
+                'messages' => $message,
             ],200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());

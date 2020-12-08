@@ -170,9 +170,10 @@ const messageSlice = createSlice({
         })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
             console.log(action.payload)
+            console.log({...state.showMessages})
             return {
                 ...state,
-                showMessages: action.payload, ...state.showMessages,
+                showMessages: [action.payload.messages, ...state.showMessages],
                 // showMessages: action.payload,
             }
         })
