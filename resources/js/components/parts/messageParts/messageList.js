@@ -102,7 +102,7 @@ export default function MessageList(props) {
 
   return (
     <List dense className={classes.root}>
-      {_.map(props.message.messages, value => {
+      {_.map(props.message, value => {
         const labelId = `checkbox-list-secondary-label-${value.id}`;
         
         return (

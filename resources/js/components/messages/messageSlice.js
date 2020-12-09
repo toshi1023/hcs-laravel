@@ -159,22 +159,19 @@ const messageSlice = createSlice({
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                messages: action.payload, //apiから取得した記事の情報をstateのmessagesに格納
+                messages: action.payload.messages, //apiから取得した記事の情報をstateのmessagesに格納
             }
         })
         builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
             return {
                 ...state,
-                showMessages: action.payload,
+                showMessages: action.payload.messages,
             }
         })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
-            console.log(action.payload)
-            console.log({...state.showMessages})
             return {
                 ...state,
-                showMessages: [action.payload.messages, ...state.showMessages],
-                // showMessages: action.payload,
+                showMessages: [...state.showMessages, action.payload.messages],
             }
         })
         builder.addCase(fetchAsyncDelete.fulfilled, (state, action) => {

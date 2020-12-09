@@ -88,7 +88,7 @@ export default function MessageBord() {
     const handleSetMessage = (value) => {
         setState({
             ...state,
-            user_id_receiver: messages.messages[0].target_id,
+            user_id_receiver: messages[0].target_id,
             content: value
         })
     }
@@ -107,24 +107,23 @@ export default function MessageBord() {
         setState({ content: '' })
     }
     
-
     return (
         <>
             {/* スマホ版 */}
             <div className={classes.sectionMobile}>
                 {
                     // ユーザ名を表示
-                    messages.messages != undefined ?
-                        messages.messages[0].gender == 1 ?
-                            <Chip label={messages.messages[0].name} className={classes.mobileContent} color="primary" />
+                    messages != undefined ?
+                        messages[0].gender == 1 ?
+                            <Chip label={messages[0].name} className={classes.mobileContent} color="primary" />
                         :
-                            <Chip label={messages.messages[0].name} className={classes.mobileContent} color="secondary" />
+                            <Chip label={messages[0].name} className={classes.mobileContent} color="secondary" />
                     : ''
                 }
                 <Paper className={classes.mobileMessageBord} id="scrollInner">
                     {
                         messages.messages != undefined ?
-                            _.map(messages.messages, value => {
+                            _.map(messages, value => {
                                 return (
                                     <div className={classes.messageBox} key={value.id}>
                                         {
@@ -180,17 +179,17 @@ export default function MessageBord() {
             <div className={classes.sectionDesktop}>
                 {
                     // ユーザ名を表示
-                    messages.messages != undefined ?
-                        messages.messages[0].gender == 1 ?
-                            <Chip label={messages.messages[0].name} className={classes.content} color="primary" />
+                    messages != undefined ?
+                        messages[0].gender == 1 ?
+                            <Chip label={messages[0].name} className={classes.content} color="primary" />
                         :
-                            <Chip label={messages.messages[0].name} className={classes.content} color="secondary" />
+                            <Chip label={messages[0].name} className={classes.content} color="secondary" />
                     : ''
                 }
                 <Paper className={classes.messageBord} id="scrollInner">
                     {
-                        messages.messages != undefined ?
-                            _.map(messages.messages, value => {
+                        messages != undefined ?
+                            _.map(messages, value => {
                                 return (
                                     <div className={classes.messageBox} key={value.id}>
                                         {

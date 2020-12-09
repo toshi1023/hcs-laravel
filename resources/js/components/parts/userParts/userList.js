@@ -70,7 +70,7 @@ export default function UserList(props) {
 
         setChecked(newChecked);
     };
-
+    
     // 友達申請処理
     const handleFriendApply = async (id) => {
         const resultReg = await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
