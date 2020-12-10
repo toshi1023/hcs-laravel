@@ -79,8 +79,8 @@ export default function MessageBord() {
     })
 
     // スクロール位置を最下部に調整(※実装中)
-    let target = document.getElementById('scrollInner');
-    messages.messages != undefined ? target.scrollIntoView(false) : ''
+    // let target = document.getElementById('scrollInner');
+    // messages != undefined ? target.scrollIntoView(false) : ''
 
     /**
      * メッセージの取得
@@ -122,7 +122,7 @@ export default function MessageBord() {
                 }
                 <Paper className={classes.mobileMessageBord} id="scrollInner">
                     {
-                        messages.messages != undefined ?
+                        messages != undefined ?
                             _.map(messages, value => {
                                 return (
                                     <div className={classes.messageBox} key={value.id}>

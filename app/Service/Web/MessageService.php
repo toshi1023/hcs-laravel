@@ -58,13 +58,21 @@ class MessageService
     // 検索条件
     $conditions = [
       'user_id' => $message->user_id_sender,
-      'user_id_target' => $message->user_id_receiver
     ];
+
+    // メッセージリストのデータも更新
+    $messages = $this->MessageService->getIndexQuery($conditions, $message->id)->first();
+
+    // 検索条件を追加
+    $conditions['user_id_target'] = $message->user_id_receiver;
 
     // 作成したデータを取得
     $message = $this->MessageService->getMessageQuery($conditions, $message->id)->orderBy('messages.created_at', 'asc')->first();
     
-    return $message;
+    return [
+      'message'  => $message,
+      'messages' => $messages
+    ];
   }
 
 }

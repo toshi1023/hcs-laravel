@@ -32,7 +32,7 @@ class MessageController extends Controller
             $messages = $this->database->getIndex(null, $conditions);
 
             return response()->json([
-                'messages' => $messages,
+                'message_lists' => $messages,
             ],200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());
@@ -77,7 +77,8 @@ class MessageController extends Controller
             $message = $this->database->getMessageUpdate($request->all());
     
             return response()->json([
-                'messages' => $message,
+                'messages' => $message['message'],
+                'message_lists' => $message['messages'],
             ],200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());

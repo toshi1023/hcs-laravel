@@ -159,7 +159,7 @@ const messageSlice = createSlice({
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                messages: action.payload.messages, //apiから取得した記事の情報をstateのmessagesに格納
+                messages: action.payload.message_lists, //apiから取得した記事の情報をstateのmessagesに格納
             }
         })
         builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
@@ -172,6 +172,10 @@ const messageSlice = createSlice({
             return {
                 ...state,
                 showMessages: [...state.showMessages, action.payload.messages],
+                // 現在のmessages一覧の要素をmというテンポラリの変数に格納して、選択したidに一致するidには変更したデータを格納
+                messages: state.messages.map((m) => 
+                    m.user_id === action.payload.message_lists.user_id ? action.payload.message_lists : m
+                ),
             }
         })
         builder.addCase(fetchAsyncDelete.fulfilled, (state, action) => {
