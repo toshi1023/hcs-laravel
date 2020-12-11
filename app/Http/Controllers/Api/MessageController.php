@@ -37,7 +37,7 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());
             return response()->json([
-              'error_message' => 'メッセージの取得に失敗しました!'
+              'error_message' => 'メッセージの取得に失敗しました'
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
@@ -62,7 +62,7 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());
             return response()->json([
-              'error_message' => 'メッセージの取得に失敗しました!',
+              'error_message' => 'メッセージの取得に失敗しました',
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
@@ -72,6 +72,16 @@ class MessageController extends Controller
      */
     public function update(Request $request)
     {   
+        if(empty($request->input('user_id_receiver'))) {
+            return response()->json([
+                'error_message' => '送信先が選択されていません',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        }
+        if(empty($request->input('content'))) {
+            return response()->json([
+                'error_message' => 'メッセージの内容が入力されていません',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        }
         try {
             // メッセージの保存
             $message = $this->database->getMessageUpdate($request->all());

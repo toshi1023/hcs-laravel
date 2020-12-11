@@ -89,6 +89,7 @@ export default function MessageBord() {
         setState({
             ...state,
             user_id_receiver: messages[0].target_id,
+            user_id_sender: localStorage.getItem('loginId'),
             content: value
         })
     }
@@ -103,8 +104,12 @@ export default function MessageBord() {
         resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
         // 入力値の初期化
         document.getElementById('message').value = ''
+        console.log(messages)
         
-        setState({ content: '' })
+        setState({ 
+            ...state,
+            content: ''
+        })
     }
     
     return (
@@ -137,7 +142,7 @@ export default function MessageBord() {
                                                 <div>
                                                     <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
                                                         <Avatar
-                                                            alt={value.user_id}
+                                                            alt={value.target_id}
                                                             src={value.users_photo_path}
                                                             className={classes.avatar}
                                                         />
@@ -203,7 +208,7 @@ export default function MessageBord() {
                                                 <div>
                                                     <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
                                                         <Avatar
-                                                            alt={value.user_id}
+                                                            alt={value.target_id}
                                                             src={value.users_photo_path}
                                                             className={classes.avatar}
                                                         />

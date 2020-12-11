@@ -169,6 +169,16 @@ const messageSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
+            // エラーが返ってきた場合
+            if(action.payload.error_message) {
+                return {
+                    ...state,
+                    showMessages: [...state.showMessages],
+                    messages: [...state.messages]
+                }  
+            }
+
+            // 正常に完了した場合
             return {
                 ...state,
                 showMessages: [...state.showMessages, action.payload.messages],
