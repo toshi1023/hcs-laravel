@@ -55,7 +55,7 @@ function Home() {
     // 記事一覧を生成
     const renderArticles = () => {
         return (
-            <ArticleCard article={articles.articles} />
+            <ArticleCard article={articles} />
         )
     }
 

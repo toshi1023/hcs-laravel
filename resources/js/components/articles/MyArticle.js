@@ -144,7 +144,7 @@ function MyArticle() {
         await dispatch(fetchCredStart())
         
         const result = await dispatch(fetchAsyncCreate(values))
-        console.log(result)
+
         if (fetchAsyncCreate.fulfilled.match(result)) {
             // 画像の保存
             doAction(result.payload.article.id)
@@ -245,12 +245,12 @@ function MyArticle() {
         return (
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={12} sm={6}>
-                    <ArticleCard article={articles.articles} />
+                    <ArticleCard article={articles} />
                 </Grid>
             </Grid>
         )
     }
-
+    console.log(articles)
     return (
         <>
             {/* タブ(スマホ版のみ) */}

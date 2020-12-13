@@ -201,130 +201,241 @@ export default function ArticleCard(props) {
   }
 
   /**
-     * コメントの保存処理
-     */
-    const commentsUpdate = async (value) => {
-      // ロード開始
-      await dispatch(fetchCredStart())
-      
-      const result = await dispatch(fetchAsyncUpdateComments(value))
-      if (fetchAsyncUpdateComments.fulfilled.match(result)) {
-          // infoメッセージの表示
-          result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-          // コメントを再取得
-          await dispatch(fetchAsyncGetComments())
-          // ロード終了
-          await dispatch(fetchCredEnd()); 
-          return;
-      }
-      // ロード終了
-      await dispatch(fetchCredEnd()); 
-      return;
+   * コメントの保存処理
+   */
+  const commentsUpdate = async (value) => {
+    // ロード開始
+    await dispatch(fetchCredStart())
+    
+    const result = await dispatch(fetchAsyncUpdateComments(value))
+    if (fetchAsyncUpdateComments.fulfilled.match(result)) {
+        // infoメッセージの表示
+        result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+        // コメントを再取得
+        await dispatch(fetchAsyncGetComments())
+        // ロード終了
+        await dispatch(fetchCredEnd()); 
+        return;
+    }
+    // ロード終了
+    await dispatch(fetchCredEnd()); 
+    return;
   }
-  
+  console.log(props.article)
   return (
     _.map(props.article, article => (
       <>
-        
         {/* スマホ版 */}
-        <div className={classes.sectionMobile}>
-          <Card className={classes.mobileRoot}>
-            <CardHeader
-              avatar={
-              //   プロフィール画像
-                <Avatar 
-                  aria-label="article" 
-                  className={classes.large} 
-                  style={{ fontSize: 15 }}
-                  src={article.users_photo_path}
+        {
+          // 記事の公開が限定されている場合
+          article.type == 1 ? 
+            localStorage.getItem('localToken') ? 
+              <div className={classes.sectionMobile}>
+                <Card className={classes.mobileRoot}>
+                  <CardHeader
+                    avatar={
+                    //   プロフィール画像
+                      <Avatar 
+                        aria-label="article" 
+                        className={classes.large} 
+                        style={{ fontSize: 15 }}
+                        src={article.users_photo_path}
+                      />
+                    }
+                    action={
+                      // ログインユーザが生成した記事以外は表示しないように設定
+                      article.user_id == localStorage.getItem('loginId') ? 
+                        handleButton()
+                      : ''
+                    }
+                    title={<Typography className={classes.mobileHeaderTitle}>{article.title}</Typography>}
+                    subheader={nickNameDesign(article)}
+                  />
+                  <CardMedia
+                    className={classes.media}
+                    image={article.articles_photo_path}
+                    title={article.title}
+                  />
+                  <CardContent>
+                    <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+                      <CardContent>
+                      <Typography paragraph><span className={classes.mobileLabel}>内容:</span></Typography>
+                      <Typography paragraph>
+                          <span className={classes.mobileContent}>{article.content}</span>
+                      </Typography>
+                      </CardContent>
+                    </Box>
+                    <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
+                  </CardContent>
+                  {/* 拡張のデザイン */}
+                  <ArticleCardExpand 
+                    article={article} 
+                    likes={likes.data} 
+                    likesUpdate={likesUpdate}
+                    comments={comments} 
+                    commentsCounts={commentsCounts}
+                    commentsUpdate={commentsUpdate} 
+                  />
+                </Card>
+              </div>
+            :
+              ''
+          :
+            <div className={classes.sectionMobile}>
+              <Card className={classes.mobileRoot}>
+                <CardHeader
+                  avatar={
+                  //   プロフィール画像
+                    <Avatar 
+                      aria-label="article" 
+                      className={classes.large} 
+                      style={{ fontSize: 15 }}
+                      src={article.users_photo_path}
+                    />
+                  }
+                  action={
+                    // ログインユーザが生成した記事以外は表示しないように設定
+                    article.user_id == localStorage.getItem('loginId') ? 
+                      handleButton()
+                    : ''
+                  }
+                  title={<Typography className={classes.mobileHeaderTitle}>{article.title}</Typography>}
+                  subheader={nickNameDesign(article)}
                 />
-              }
-              action={
-                // ログインユーザが生成した記事以外は表示しないように設定
-                article.user_id == localStorage.getItem('loginId') ? 
-                  handleButton()
-                : ''
-              }
-              title={<Typography className={classes.mobileHeaderTitle}>{article.title}</Typography>}
-              subheader={nickNameDesign(article)}
-            />
-            <CardMedia
-              className={classes.media}
-              image={article.articles_photo_path}
-              title={article.title}
-            />
-            <CardContent>
-              <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+                <CardMedia
+                  className={classes.media}
+                  image={article.articles_photo_path}
+                  title={article.title}
+                />
                 <CardContent>
-                <Typography paragraph><span className={classes.mobileLabel}>内容:</span></Typography>
-                <Typography paragraph>
-                    <span className={classes.mobileContent}>{article.content}</span>
-                </Typography>
+                  <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+                    <CardContent>
+                    <Typography paragraph><span className={classes.mobileLabel}>内容:</span></Typography>
+                    <Typography paragraph>
+                        <span className={classes.mobileContent}>{article.content}</span>
+                    </Typography>
+                    </CardContent>
+                  </Box>
+                  <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
                 </CardContent>
-              </Box>
-              <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
-            </CardContent>
-            {/* 拡張のデザイン */}
-            <ArticleCardExpand 
-              article={article} 
-              likes={likes.data} 
-              likesUpdate={likesUpdate}
-              comments={comments} 
-              commentsCounts={commentsCounts}
-              commentsUpdate={commentsUpdate} 
-            />
-          </Card>
-        </div>
+                {/* 拡張のデザイン */}
+                <ArticleCardExpand 
+                  article={article} 
+                  likes={likes.data} 
+                  likesUpdate={likesUpdate}
+                  comments={comments} 
+                  commentsCounts={commentsCounts}
+                  commentsUpdate={commentsUpdate} 
+                />
+              </Card>
+            </div>
+        }
 
         {/* PC版 */}
-        <div className={classes.sectionDesktop}>
-          <Card className={classes.root}>
-            <CardHeader
-              avatar={
-                // プロフィール画像
-                <Avatar 
-                  aria-label="article" 
-                  className={classes.large} 
-                  style={{ fontSize: 15 }}
-                  src={article.users_photo_path}
+        {
+          // 記事の公開が限定されている場合
+          article.type == 1 ? 
+            localStorage.getItem('localToken') ? 
+              <div className={classes.sectionDesktop}>
+                <Card className={classes.root}>
+                  <CardHeader
+                    avatar={
+                      // プロフィール画像
+                      <Avatar 
+                        aria-label="article" 
+                        className={classes.large} 
+                        style={{ fontSize: 15 }}
+                        src={article.users_photo_path}
+                      />
+                    }
+                    action={
+                      // ログインユーザが生成した記事以外は表示しないように設定
+                      article.user_id == localStorage.getItem('loginId') ? 
+                        handleButton()
+                      : ''
+                    }
+                    title={<Typography className={classes.headerTitle}>{article.title}</Typography>}
+                    subheader={nickNameDesign(article)}
+                  />
+                  <CardMedia
+                    className={classes.media}
+                    image={article.articles_photo_path}
+                    title={article.title}
+                  />
+                  <CardContent>
+                    <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+                      <CardContent>
+                      <Typography paragraph><span className={classes.label}>内容:</span></Typography>
+                      <Typography paragraph>
+                          <span className={classes.content}>{article.content}</span>
+                      </Typography>
+                      </CardContent>
+                    </Box>
+                    <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
+                  </CardContent>
+                  {/* 拡張のデザイン */}
+                  <ArticleCardExpand 
+                    article={article} 
+                    likes={likes.data} 
+                    likesUpdate={likesUpdate} 
+                    comments={comments} 
+                    commentsCounts={commentsCounts} 
+                    commentsUpdate={commentsUpdate} 
+                  />
+                </Card>
+              </div>
+            :
+              ''
+          :
+            <div className={classes.sectionDesktop}>
+              <Card className={classes.root}>
+                <CardHeader
+                  avatar={
+                    // プロフィール画像
+                    <Avatar 
+                      aria-label="article" 
+                      className={classes.large} 
+                      style={{ fontSize: 15 }}
+                      src={article.users_photo_path}
+                    />
+                  }
+                  action={
+                    // ログインユーザが生成した記事以外は表示しないように設定
+                    article.user_id == localStorage.getItem('loginId') ? 
+                      handleButton()
+                    : ''
+                  }
+                  title={<Typography className={classes.headerTitle}>{article.title}</Typography>}
+                  subheader={nickNameDesign(article)}
                 />
-              }
-              action={
-                // ログインユーザが生成した記事以外は表示しないように設定
-                article.user_id == localStorage.getItem('loginId') ? 
-                  handleButton()
-                : ''
-              }
-              title={<Typography className={classes.headerTitle}>{article.title}</Typography>}
-              subheader={nickNameDesign(article)}
-            />
-            <CardMedia
-              className={classes.media}
-              image={article.articles_photo_path}
-              title={article.title}
-            />
-            <CardContent>
-              <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+                <CardMedia
+                  className={classes.media}
+                  image={article.articles_photo_path}
+                  title={article.title}
+                />
                 <CardContent>
-                <Typography paragraph><span className={classes.label}>内容:</span></Typography>
-                <Typography paragraph>
-                    <span className={classes.content}>{article.content}</span>
-                </Typography>
+                  <Box component="div" m={1} borderRadius={16} style={{ backgroundColor: '#1b2538', color: 'white' }}>
+                    <CardContent>
+                    <Typography paragraph><span className={classes.label}>内容:</span></Typography>
+                    <Typography paragraph>
+                        <span className={classes.content}>{article.content}</span>
+                    </Typography>
+                    </CardContent>
+                  </Box>
+                  <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
                 </CardContent>
-              </Box>
-              <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
-            </CardContent>
-            {/* 拡張のデザイン */}
-            <ArticleCardExpand 
-              article={article} 
-              likes={likes.data} 
-              likesUpdate={likesUpdate} 
-              comments={comments} 
-              commentsCounts={commentsCounts} 
-              commentsUpdate={commentsUpdate} 
-            />
-          </Card>
-        </div>
+                {/* 拡張のデザイン */}
+                <ArticleCardExpand 
+                  article={article} 
+                  likes={likes.data} 
+                  likesUpdate={likesUpdate} 
+                  comments={comments} 
+                  commentsCounts={commentsCounts} 
+                  commentsUpdate={commentsUpdate} 
+                />
+              </Card>
+            </div>
+        }
       </>
     ))
   );

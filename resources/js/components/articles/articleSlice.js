@@ -311,17 +311,16 @@ const articleSlice = createSlice({
         builder.addCase(fetchAsyncGetHome.fulfilled, (state, action) => {
             return {
                 ...state,
-                articles: action.payload, //apiから取得した記事の情報をstateのarticlesに格納
+                articles: action.payload.articles, //apiから取得した記事の情報をstateのarticlesに格納
             }
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                articles: action.payload, //apiから取得した記事の情報をstateのarticlesに格納
+                articles: action.payload.articles, //apiから取得した記事の情報をstateのarticlesに格納
             }
         })
         builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
-            console.log({...state.articles})
             return {
                 ...state,
                 articles: [action.payload.article, ...state.articles],

@@ -119,19 +119,6 @@ const messageSlice = createSlice({
             created_at: '',             // メッセージの作成日
             updated_at: '',             // メッセージの更新日
         },
-        // messageの詳細表示をした際に保持するstate
-        selectedMessage: {
-            id: '',                     // ID
-            user_id_sender: '',         // 送信者ID
-            user_id_receiver: '',       // 受信者ID
-            sender_name: '',            // 送信者名
-            receiver_name: '',          // 受信者名
-            sender_photo: '',           // 送信者イメージ
-            receiver_photo: '',         // 受信者イメージ
-            content: '',                // 内容
-            created_at: '',             // メッセージの作成日
-            updated_at: '',             // メッセージの更新日
-        },
         // メッセージボードに表示するメッセージ内容
         showMessages: [{
             id: '',                     // ID
@@ -149,8 +136,19 @@ const messageSlice = createSlice({
         editMessage(state, action) {
             state.editedMessage = action.payload
         },
-        selectMessage(state, action) {
-            state.selectedMessage = action.payload
+        reduceMessages(state, action) {
+            return {
+                ...state,
+                messages: state.messages.map((m) => 
+                    m.user_id === action.payload.user_id ? action.payload : m
+                ),
+            }
+        },
+        reduceShowMessages(state, action) {
+            return {
+                ...state,
+                showMessages: [...state.showMessages, action.payload], 
+            }
         },
     },
     // 追加Reducer (Api通信の処理を記述)
@@ -203,7 +201,7 @@ const messageSlice = createSlice({
     },
 })
 
-export const { editMessage, selectMessage } = messageSlice.actions
+export const { editMessage, reduceMessages, reduceShowMessages } = messageSlice.actions
 
 export const selectSelectedMessage = (state) => state.message.selectedMessage
 export const selectEditedMessage = (state) => state.message.editedMessage

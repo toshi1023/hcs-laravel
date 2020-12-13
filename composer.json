@@ -22,6 +22,7 @@
         "laravelcollective/html": "^6.1",
         "league/flysystem-aws-s3-v3": "~1.0",
         "nesbot/carbon": "^2.39",
+        "pusher/pusher-php-server": "~3.0",
         "yajra/laravel-datatables-oracle": "^9.10"
     },
     "require-dev": {

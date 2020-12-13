@@ -10,7 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import UserSearch from '../parts/userParts/userSearch';
 import SnackMessages from '../parts/common/snackMessages';
 import { fetchCredStart, fetchCredEnd, selectError } from '../app/appSlice';
-import { selectMessages, fetchAsyncGet } from './messageSlice';
+import { selectMessages, fetchAsyncGet, reduceShowMessages, reduceMessages } from './messageSlice';
+import Echo from 'laravel-echo';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -74,9 +75,27 @@ export default function Message() {
         }
         // 上で定義した非同期の関数を実行
         fetchMessages()
+        
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            // Laravelの環境変数から値を取得
+            key: process.env.MIX_PUSHER_APP_KEY,
+            cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+            forceTLS: true
+        });
+        var channel = window.Echo.channel('message');
+        channel.listen('.my-event', function(data) {
+            // 受信したメッセージデータを表示(受信者側のみ)
+            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                dispatch(reduceShowMessages(data.message.message))
+            :
+                ''
+            // 受信したメッセージデータを表示
+            dispatch(reduceMessages(data.message.realtime_message_list))
+        })
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
-
+    
     // タブ切り替え処理
     const handleChange = (event, newValue) => {
         setTab(newValue);
@@ -91,7 +110,7 @@ export default function Message() {
         setMessagePage(false)
         setMessageListPage(true)
     }
-    
+   
     return (
         <>
             {
