@@ -221,9 +221,9 @@ export default function ArticleCard(props) {
     await dispatch(fetchCredEnd()); 
     return;
   }
-  console.log(props.article)
+  // console.log(likes.data != undefined ? likes.data : '')
   return (
-    _.map(props.article, article => (
+    _.map(props.article != undefined ? props.article : '', article => (
       <>
         {/* スマホ版 */}
         {
@@ -268,14 +268,14 @@ export default function ArticleCard(props) {
                     <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
                   </CardContent>
                   {/* 拡張のデザイン */}
-                  <ArticleCardExpand 
+                  {/* <ArticleCardExpand 
                     article={article} 
-                    likes={likes.data} 
+                    likes={likes.data != undefined ? likes.data : ''} 
                     likesUpdate={likesUpdate}
                     comments={comments} 
                     commentsCounts={commentsCounts}
                     commentsUpdate={commentsUpdate} 
-                  />
+                  /> */}
                 </Card>
               </div>
             :
@@ -319,14 +319,14 @@ export default function ArticleCard(props) {
                   <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
                 </CardContent>
                 {/* 拡張のデザイン */}
-                <ArticleCardExpand 
+                {/* <ArticleCardExpand 
                   article={article} 
-                  likes={likes.data} 
+                  likes={likes.data != undefined ? likes.data : ''} 
                   likesUpdate={likesUpdate}
                   comments={comments} 
                   commentsCounts={commentsCounts}
                   commentsUpdate={commentsUpdate} 
-                />
+                /> */}
               </Card>
             </div>
         }
@@ -376,7 +376,7 @@ export default function ArticleCard(props) {
                   {/* 拡張のデザイン */}
                   <ArticleCardExpand 
                     article={article} 
-                    likes={likes.data} 
+                    likes={likes.data != undefined ? likes.data : ''} 
                     likesUpdate={likesUpdate} 
                     comments={comments} 
                     commentsCounts={commentsCounts} 
@@ -427,7 +427,7 @@ export default function ArticleCard(props) {
                 {/* 拡張のデザイン */}
                 <ArticleCardExpand 
                   article={article} 
-                  likes={likes.data} 
+                  likes={likes.data != undefined ? likes.data : ''} 
                   likesUpdate={likesUpdate} 
                   comments={comments} 
                   commentsCounts={commentsCounts} 
