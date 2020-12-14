@@ -110,9 +110,7 @@ function ArticleCardExpand (props) {
             comment: ''
         })
     }
-    console.log(props.likes)
-    console.log(props.likes.hasOwnProperty('article_id'))
-    props.likes != undefined ? console.log(Object.keys(props.likes).indexOf('article_id') === props.article.id) : ''
+    
     return (
         <>
           {/* スマホ版 */}
@@ -125,26 +123,26 @@ function ArticleCardExpand (props) {
                         <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
                             {
                                 // いいねボタンのアクティブフラグ
-                                props.likes != undefined ? 
-                                    props.likes.find(element => element.article_id === props.article.id) != undefined
-                                    ? 
-                                        props.likes.find(element => element.article_id === props.article.id).user_id == null 
-                                        ? 
+                                props.likes ? 
+                                    props.likes.find(element => element.article_id === props.article.id) != undefined ? 
+                                        props.likes.find(element => element.article_id === props.article.id).user_id == null ? 
                                             <FavoriteIcon style={{ fontSize: 20 }} />
                                         : 
                                             <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
-                                    : 
+                                    :
                                         ''
-                                :
+                                : 
                                     ''
                             }
                         </IconButton>
                         <span className={classes.likesCounts}>
                             {
                                 // いいね数の取得・表示
-                                props.likes.find(element => element.article_id === props.article.id) != undefined 
-                                ? 
-                                    props.likes.find(element => element.article_id === props.article.id).likes_counts
+                                props.likes ? 
+                                    props.likes.find(element => element.article_id === props.article.id) != undefined ? 
+                                        props.likes.find(element => element.article_id === props.article.id).likes_counts
+                                    :
+                                        ''
                                 : 
                                     ''
                             }
@@ -160,8 +158,7 @@ function ArticleCardExpand (props) {
                         <span className={classes.commentCounts}>
                             {
                                 // コメント数の取得・表示
-                                props.commentsCounts.find(element => element.article_id === props.article.id) != undefined 
-                                ? 
+                                props.commentsCounts[0].article_id ? 
                                     props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
                                 : 
                                     ''
@@ -226,17 +223,15 @@ function ArticleCardExpand (props) {
                             <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
                                 {
                                     // いいねボタンのアクティブフラグ
-                                    props.likes != undefined ? 
-                                        // props.likes.find(element => element.article_id === props.article.id) != undefined
-                                        // ? 
-                                            props.likes.find(element => element.article_id === props.article.id).user_id == null 
-                                            ? 
+                                    props.likes ? 
+                                        props.likes.find(element => element.article_id === props.article.id) != undefined ? 
+                                            props.likes.find(element => element.article_id === props.article.id).user_id == null ? 
                                                 <FavoriteIcon style={{ fontSize: 20 }} />
                                             : 
                                                 <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
-                                        // : 
-                                        //     ''
-                                    :
+                                        :
+                                            ''
+                                    : 
                                         ''
                                 }
                             </IconButton>
@@ -244,13 +239,12 @@ function ArticleCardExpand (props) {
                         <span className={classes.likesCounts}>
                             {
                                 // いいね数の取得・表示
-                                props.likes != undefined ? 
-                                    // props.likes.find(element => element.article_id === props.article.id) != undefined 
-                                    // ? 
+                                props.likes ? 
+                                    props.likes.find(element => element.article_id === props.article.id) != undefined ? 
                                         props.likes.find(element => element.article_id === props.article.id).likes_counts
-                                    // : 
-                                    //     ''
-                                :
+                                    :
+                                        ''
+                                : 
                                     ''
                             }
                         </span>
@@ -267,13 +261,9 @@ function ArticleCardExpand (props) {
                         <span className={classes.commentCounts}>
                             {
                                 // コメント数の取得・表示
-                                props.commentCounts != undefined ? 
-                                    props.commentsCounts.find(element => element.article_id === props.article.id) != undefined 
-                                    ? 
-                                        props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
-                                    : 
-                                        ''
-                                :
+                                props.commentsCounts[0].article_id ? 
+                                    props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
+                                : 
                                     ''
                             }
                         </span>

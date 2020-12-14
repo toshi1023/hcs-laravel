@@ -79,7 +79,7 @@ function Home() {
                             <SnackMessages errorOpen={true} />
                     }
                     <Grid container className={classes.gridContainer} justify="center">
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={7}>
                             <h1 className={styles.friendList}>
                                 人気記事を見る
                             </h1>

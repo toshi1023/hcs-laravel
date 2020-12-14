@@ -319,14 +319,14 @@ export default function ArticleCard(props) {
                   <Typography className={classes.subHeader}>{DateFormat(article.updated_at)}</Typography>
                 </CardContent>
                 {/* 拡張のデザイン */}
-                {/* <ArticleCardExpand 
+                <ArticleCardExpand 
                   article={article} 
                   likes={likes.data != undefined ? likes.data : ''} 
                   likesUpdate={likesUpdate}
                   comments={comments} 
                   commentsCounts={commentsCounts}
                   commentsUpdate={commentsUpdate} 
-                /> */}
+                />
               </Card>
             </div>
         }
