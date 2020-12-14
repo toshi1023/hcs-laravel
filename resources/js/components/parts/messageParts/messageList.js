@@ -80,6 +80,7 @@ export default function MessageList(props) {
     if (fetchAsyncGetShow.fulfilled.match(resultReg)) {
         // errorメッセージがある場合は表示
         resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
+        
         // エラーが無ければスマホの場合はタブ切り替えを実行
         resultReg.payload.error_message ? 
           ''
@@ -99,12 +100,12 @@ export default function MessageList(props) {
     // ロード終了
     await dispatch(fetchCredEnd());  
   }
-
+  
   return (
     <List dense className={classes.root}>
-      {_.map(props.message.messages, value => {
+      {_.map(props.message, value => {
         const labelId = `checkbox-list-secondary-label-${value.id}`;
-        
+
         return (
           <>
             <ListItem key={value.id} button onClick={() => handleSetMessages(value.user_id)} >

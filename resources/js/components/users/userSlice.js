@@ -401,6 +401,7 @@ const userSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncUpdateFriends.fulfilled, (state, action) => {
+            console.log({...state.friendStatus})
             return {
                 ...state,
                 friendStatus: [action.payload.friend, ...state.friendStatus],

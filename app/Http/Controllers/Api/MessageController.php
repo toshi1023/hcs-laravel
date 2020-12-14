@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use App\Service\Web\MessageService;
+use App\Events\MessageCreated;
 
 class MessageController extends Controller
 {
@@ -32,12 +33,12 @@ class MessageController extends Controller
             $messages = $this->database->getIndex(null, $conditions);
 
             return response()->json([
-                'messages' => $messages,
+                'message_lists' => $messages,
             ],200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());
             return response()->json([
-              'error_message' => 'メッセージの取得に失敗しました!'
+              'error_message' => 'メッセージの取得に失敗しました'
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
@@ -62,7 +63,7 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());
             return response()->json([
-              'error_message' => 'メッセージの取得に失敗しました!',
+              'error_message' => 'メッセージの取得に失敗しました',
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
@@ -72,12 +73,28 @@ class MessageController extends Controller
      */
     public function update(Request $request)
     {   
+        // メッセージデータのバリデーション
+        if(empty($request->input('user_id_receiver'))) {
+            return response()->json([
+                'error_message' => '送信先が選択されていません',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        }
+        if(empty($request->input('content'))) {
+            return response()->json([
+                'error_message' => 'メッセージの内容が入力されていません',
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        }
+
         try {
             // メッセージの保存
             $message = $this->database->getMessageUpdate($request->all());
     
+            // Pusherにデータを送信(リアルタイム通信を実行)
+            event(new MessageCreated($message));
+
             return response()->json([
-                'message' => $message,
+                'messages' => $message['message'],
+                'message_lists' => $message['message_list'],
             ],200, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             \Log::error('Message get Error:'.$e->getMessage());

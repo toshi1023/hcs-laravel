@@ -4,7 +4,7 @@ import { Paper, Box, CardContent, Avatar, Chip, FormControl, IconButton, TextFie
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchGetErrorMessages } from '../../app/appSlice';
-import { selectShowMessages, fetchAsyncUpdate, fetchAsyncGet } from '../../messages/messageSlice';
+import { selectShowMessages, fetchAsyncUpdate } from '../../messages/messageSlice';
 import ReplyIcon from '@material-ui/icons/Reply';
 
 const useStyles = makeStyles((theme) => ({
@@ -79,8 +79,8 @@ export default function MessageBord() {
     })
 
     // スクロール位置を最下部に調整(※実装中)
-    let target = document.getElementById('scrollInner');
-    messages.messages != undefined ? target.scrollIntoView(false) : ''
+    // let target = document.getElementById('scrollInner');
+    // messages != undefined ? target.scrollIntoView(false) : ''
 
     /**
      * メッセージの取得
@@ -88,11 +88,12 @@ export default function MessageBord() {
     const handleSetMessage = (value) => {
         setState({
             ...state,
-            user_id_receiver: messages.messages[0].target_id,
+            user_id_receiver: messages[0].target_id,
+            user_id_sender: localStorage.getItem('loginId'),
             content: value
         })
     }
-
+    
     /**
      * メッセージの保存処理実行
      */
@@ -101,28 +102,33 @@ export default function MessageBord() {
         const resultReg = await dispatch(fetchAsyncUpdate(state))
         // errorメッセージがある場合は表示
         resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
+
         // 入力値の初期化
         document.getElementById('message').value = ''
-        setState({ content: '' })
+        
+        setState({ 
+            ...state,
+            content: ''
+        })
     }
-
+    
     return (
         <>
             {/* スマホ版 */}
             <div className={classes.sectionMobile}>
                 {
                     // ユーザ名を表示
-                    messages.messages != undefined ?
-                        messages.messages[0].gender == 1 ?
-                            <Chip label={messages.messages[0].name} className={classes.mobileContent} color="primary" />
+                    messages != undefined ?
+                        messages[0].gender == 1 ?
+                            <Chip label={messages[0].name} className={classes.mobileContent} color="primary" />
                         :
-                            <Chip label={messages.messages[0].name} className={classes.mobileContent} color="secondary" />
+                            <Chip label={messages[0].name} className={classes.mobileContent} color="secondary" />
                     : ''
                 }
                 <Paper className={classes.mobileMessageBord} id="scrollInner">
                     {
-                        messages.messages != undefined ?
-                            _.map(messages.messages, value => {
+                        messages != undefined ?
+                            _.map(messages, value => {
                                 return (
                                     <div className={classes.messageBox} key={value.id}>
                                         {
@@ -136,7 +142,7 @@ export default function MessageBord() {
                                                 <div>
                                                     <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
                                                         <Avatar
-                                                            alt={value.user_id}
+                                                            alt={value.target_id}
                                                             src={value.users_photo_path}
                                                             className={classes.avatar}
                                                         />
@@ -178,17 +184,17 @@ export default function MessageBord() {
             <div className={classes.sectionDesktop}>
                 {
                     // ユーザ名を表示
-                    messages.messages != undefined ?
-                        messages.messages[0].gender == 1 ?
-                            <Chip label={messages.messages[0].name} className={classes.content} color="primary" />
+                    messages != undefined ?
+                        messages[0].gender == 1 ?
+                            <Chip label={messages[0].name} className={classes.content} color="primary" />
                         :
-                            <Chip label={messages.messages[0].name} className={classes.content} color="secondary" />
+                            <Chip label={messages[0].name} className={classes.content} color="secondary" />
                     : ''
                 }
                 <Paper className={classes.messageBord} id="scrollInner">
                     {
-                        messages.messages != undefined ?
-                            _.map(messages.messages, value => {
+                        messages != undefined ?
+                            _.map(messages, value => {
                                 return (
                                     <div className={classes.messageBox} key={value.id}>
                                         {
@@ -202,7 +208,7 @@ export default function MessageBord() {
                                                 <div>
                                                     <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
                                                         <Avatar
-                                                            alt={value.user_id}
+                                                            alt={value.target_id}
                                                             src={value.users_photo_path}
                                                             className={classes.avatar}
                                                         />

@@ -119,19 +119,6 @@ const messageSlice = createSlice({
             created_at: '',             // メッセージの作成日
             updated_at: '',             // メッセージの更新日
         },
-        // messageの詳細表示をした際に保持するstate
-        selectedMessage: {
-            id: '',                     // ID
-            user_id_sender: '',         // 送信者ID
-            user_id_receiver: '',       // 受信者ID
-            sender_name: '',            // 送信者名
-            receiver_name: '',          // 受信者名
-            sender_photo: '',           // 送信者イメージ
-            receiver_photo: '',         // 受信者イメージ
-            content: '',                // 内容
-            created_at: '',             // メッセージの作成日
-            updated_at: '',             // メッセージの更新日
-        },
         // メッセージボードに表示するメッセージ内容
         showMessages: [{
             id: '',                     // ID
@@ -149,8 +136,19 @@ const messageSlice = createSlice({
         editMessage(state, action) {
             state.editedMessage = action.payload
         },
-        selectMessage(state, action) {
-            state.selectedMessage = action.payload
+        reduceMessages(state, action) {
+            return {
+                ...state,
+                messages: state.messages.map((m) => 
+                    m.user_id === action.payload.user_id ? action.payload : m
+                ),
+            }
+        },
+        reduceShowMessages(state, action) {
+            return {
+                ...state,
+                showMessages: [...state.showMessages, action.payload], 
+            }
         },
     },
     // 追加Reducer (Api通信の処理を記述)
@@ -159,21 +157,33 @@ const messageSlice = createSlice({
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                messages: action.payload, //apiから取得した記事の情報をstateのmessagesに格納
+                messages: action.payload.message_lists, //apiから取得した記事の情報をstateのmessagesに格納
             }
         })
         builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
             return {
                 ...state,
-                showMessages: action.payload,
+                showMessages: action.payload.messages,
             }
         })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
-            console.log(action.payload)
+            // エラーが返ってきた場合
+            if(action.payload.error_message) {
+                return {
+                    ...state,
+                    showMessages: [...state.showMessages],
+                    messages: [...state.messages]
+                }  
+            }
+
+            // 正常に完了した場合
             return {
                 ...state,
-                showMessages: action.payload, ...state.showMessages,
-                // showMessages: action.payload,
+                showMessages: [...state.showMessages, action.payload.messages],
+                // 現在のmessages一覧の要素をmというテンポラリの変数に格納して、選択したidに一致するidには変更したデータを格納
+                messages: state.messages.map((m) => 
+                    m.user_id === action.payload.message_lists.user_id ? action.payload.message_lists : m
+                ),
             }
         })
         builder.addCase(fetchAsyncDelete.fulfilled, (state, action) => {
@@ -191,7 +201,7 @@ const messageSlice = createSlice({
     },
 })
 
-export const { editMessage, selectMessage } = messageSlice.actions
+export const { editMessage, reduceMessages, reduceShowMessages } = messageSlice.actions
 
 export const selectSelectedMessage = (state) => state.message.selectedMessage
 export const selectEditedMessage = (state) => state.message.editedMessage

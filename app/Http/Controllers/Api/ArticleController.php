@@ -35,7 +35,7 @@ class ArticleController extends Controller
 
       return response()->json([
         'articles' => $articles['articles'], 
-        'free_articles' => $articles['free_articles'],
+        // 'free_articles' => $articles['free_articles'],
       ],200, [], JSON_UNESCAPED_UNICODE);
     } catch (\Exception $e) {
       \Log::error('Article get Error:'.$e->getMessage());
@@ -60,7 +60,7 @@ class ArticleController extends Controller
 
       return response()->json([
         'articles' => $articles['articles'], 
-        'free_articles' => $articles['free_articles'],
+        // 'free_articles' => $articles['free_articles'],
       ],200, [], JSON_UNESCAPED_UNICODE);
     } catch (\Exception $e) {
       \Log::error('Article get Error:'.$e->getMessage());
@@ -172,7 +172,7 @@ class ArticleController extends Controller
       
       // 記事のいいね数を取得
       $data = $this->database->getLikes($conditions);
-  
+      
       return response()->json([
         'likes' => $data
       ], 200, [], JSON_UNESCAPED_UNICODE);

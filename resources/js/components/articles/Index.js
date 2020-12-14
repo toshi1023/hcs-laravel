@@ -158,7 +158,7 @@ function Article() {
         return (
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={12} sm={6}>
-                    <ArticleCard article={articles.articles} />
+                    <ArticleCard article={articles} />
                 </Grid>
             </Grid>
         )
