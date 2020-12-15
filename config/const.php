@@ -15,11 +15,15 @@ return [
     'private_name'   => '非公開',
     'public_name'    => '公開',
 
-    // アカウント停止フラグ
-    'available'         => 0,
-    'unavailable'       => 1,
-    'available_name'    => '有効',
-    'unavailable_name'  => '停止中',
+    // アカウントステータス
+    'app_member'            => 1,               // (一般)会員ユーザー
+    'app_unsubscribe'       => 2,               // (一般)退会済み
+    'app_admin'             => 3,               // (管理者)運営管理者
+    'app_account_stop'      => 4,               // (一般)アカウント停止
+    'app_member_name'       => '会員',          // (一般)会員ユーザー
+    'app_unsubscribe_name'  => '退会済み',       // (一般)退会済み
+    'app_admin_name'        => '運営管理者',     // (管理者)運営管理者
+    'app_account_stop_name' => 'アカウント停止', // (一般)アカウント停止
     
     // 対象フラグ
     'all'           => 0,

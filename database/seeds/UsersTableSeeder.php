@@ -21,6 +21,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'root@xxx.co.jp',
             'password' => Hash::make("root1234"),
             'comment'  => 'こんにちはrootです！これから盛り上げていきましょう！',
+            'status'   => 3,
         ]);
 
         // faker使う(引数には日本語を設定している)
