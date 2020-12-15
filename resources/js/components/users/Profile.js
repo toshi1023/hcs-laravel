@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import FriendList from '../parts/userParts/friendList';
 import UserShow from './Show';
 import { fetchAsyncGetProf, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus } from "./userSlice";
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetErrorMessages } from '../app/appSlice';
 // import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -103,6 +103,8 @@ function Profile(props) {
             await dispatch(fetchCredStart())
             // ログイン情報を取得
             const resultReg = await dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
+            // ログイン情報の取得に失敗した場合
+            resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
             // 申請中の友達一覧を取得
             const resultFriends = await dispatch(fetchAsyncGetFriendsApply(localStorage.getItem('loginId')))
             

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use App\Service\Web\UserService;
+use Exception;
 
 class UserController extends Controller
 {
@@ -40,7 +41,7 @@ class UserController extends Controller
           'users' => $data['users'], 
           'friends' => $data['friends']
         ],200, [], JSON_UNESCAPED_UNICODE);
-      } catch (\Exception $e) {
+      } catch (Exception $e) {
         \Log::error('User get Error:'.$e->getMessage());
         return response()->json([
           'error_message' => 'ユーザの取得に失敗しました!'
@@ -91,7 +92,7 @@ class UserController extends Controller
           'name'         => $request->input('name'),
           'password'     => $request->input('password'),
         ],200, [], JSON_UNESCAPED_UNICODE);
-      } catch (\Exception $e) {
+      } catch (Exception $e) {
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
         return response()->json([
@@ -121,15 +122,19 @@ class UserController extends Controller
       try {
         // 検索条件のセット
         $conditions = [];
-        $conditions['status'] = 0;
+        
         if ($request->input('query')) { $conditions['id'] = $request->input('query'); }
           
         $user = $this->database->getShow($conditions);
-  
+        
+        if ($user->status === 2 || $user->status === 4) {
+          throw new Exception('ユーザが退会済みかもしくはアカウントを停止されています');
+        }
+        
         return response()->json([
           'user' => $user, 
         ],200, [], JSON_UNESCAPED_UNICODE);
-      }  catch (\Exception $e) {
+      }  catch (Exception $e) {
         \Log::error('User get Error:'.$e->getMessage());
         return response()->json([
           'error_message' => 'ユーザの取得に失敗しました!'
@@ -195,7 +200,7 @@ class UserController extends Controller
           'name'         => $request->input('name'),
           'password'     => $request->input('password'),
         ],200, [], JSON_UNESCAPED_UNICODE);
-      } catch (\Exception $e) {
+      } catch (Exception $e) {
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
         return response()->json([
@@ -215,7 +220,7 @@ class UserController extends Controller
         return response()->json([
           'prefectures' => $prefectures, 
         ],200, [], JSON_UNESCAPED_UNICODE);
-      }  catch (\Exception $e) {
+      }  catch (Exception $e) {
         return response()->json([
           'error_message' => '都道府県の取得に失敗しました!'
         ], 500, [], JSON_UNESCAPED_UNICODE);
@@ -234,7 +239,7 @@ class UserController extends Controller
         return response()->json([
           'friends' => $friends, 
         ],200, [], JSON_UNESCAPED_UNICODE);
-      }  catch (\Exception $e) {
+      }  catch (Exception $e) {
         \Log::error('Friend get Error:'.$e->getMessage());
         return response()->json([
           'error_message' => 'フレンドの取得に失敗しました!'
@@ -262,7 +267,7 @@ class UserController extends Controller
           'friends' => $friends,
           'friendStatus' => $friendStatus,
         ],200, [], JSON_UNESCAPED_UNICODE);
-      }  catch (\Exception $e) {
+      }  catch (Exception $e) {
         \Log::error('Friend get Error:'.$e->getMessage());
         return response()->json([
           'error_message' => 'フレンドの取得に失敗しました!'
@@ -290,7 +295,7 @@ class UserController extends Controller
           'info_message' => $message
         ],200, [], JSON_UNESCAPED_UNICODE);
 
-      } catch (\Exception $e) {
+      } catch (Exception $e) {
         DB::rollBack();
         // 取得失敗時はエラーメッセージを返す
         return response()->json([

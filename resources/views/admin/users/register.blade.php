@@ -94,6 +94,14 @@
                                                             <input class="form-control required-text" type="password" id="password_confirmation" name="password_confirmation" maxlength="50" placeholder="パスワード(確認用)" value="">
                                                         </div>
                                                     </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-4 col-form-label">管理者権限<span class="text-danger">※</span></label>
+                                                        <div class="col-md-8 form-inline" id="admin_flg">
+                                                            <input type="checkbox" id="gender_flg" data-toggle="toggle" data-on="{{ config('const.man_name') }}" data-off="{{ config('const.women_name') }}"
+                                                                   data-onstyle="primary" data-offstyle="danger" {{ $register_mode === 'edit' && ($data->gender === config('const.man') || old('gender') == config('const.man')) ? 'checked' : '' }}>
+                                                            <input type="hidden" id="gender" name="gender" value="{{ $register_mode === 'create' ? (old('gender') ? old('gender') : 0) : $data->gender }}">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-sm-10 col-md-6">
                                                     <div class="form-group row">
