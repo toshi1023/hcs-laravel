@@ -179,7 +179,7 @@ class UserController extends Controller
     public function update(UserRegisterRequest $request, $user)
     {
       DB::beginTransaction();
-
+    
       // パスワードのハッシュ処理
       if(!is_null($request['password'])) {
         // ハッシュ処理

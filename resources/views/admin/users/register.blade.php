@@ -95,11 +95,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-md-4 col-form-label">管理者権限<span class="text-danger">※</span></label>
-                                                        <div class="col-md-8 form-inline" id="admin_flg">
-                                                            <input type="checkbox" id="gender_flg" data-toggle="toggle" data-on="{{ config('const.man_name') }}" data-off="{{ config('const.women_name') }}"
-                                                                   data-onstyle="primary" data-offstyle="danger" {{ $register_mode === 'edit' && ($data->gender === config('const.man') || old('gender') == config('const.man')) ? 'checked' : '' }}>
-                                                            <input type="hidden" id="gender" name="gender" value="{{ $register_mode === 'create' ? (old('gender') ? old('gender') : 0) : $data->gender }}">
+                                                        <label class="col-md-4 col-form-label">管理者権限</label>
+                                                        <div class="col-md-8 form-inline" id="admin_checked">
+                                                            <input type="checkbox" id="admin_flg" data-toggle="toggle" data-on="{{ config('const.app_admin_name') }}" data-off="{{ config('const.app_member_name') }}"
+                                                                   data-onstyle="primary" data-offstyle="secondary" {{ $register_mode === 'edit' && ($data->status === config('const.app_admin') || old('status') == config('const.app_admin')) ? 'checked' : '' }}>
+                                                            <input type="hidden" id="status" name="status" value="{{ $register_mode === 'create' ? (old('status') ? old('status') : config('const.app_member')) : $data->status }}">
                                                         </div>
                                                     </div>
                                                 </div>

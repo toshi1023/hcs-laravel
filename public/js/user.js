@@ -19,6 +19,15 @@ $(function(){
         }
     });
 
+    // 管理者フラグのvalue値設定
+    $('#admin_flg').change(function() {
+        if($('#admin_flg').prop('checked')) {
+            $('#status').val(3);
+        } else {
+            $('#status').val(1);
+        }
+    });
+
     /* 
      *   アカウント停止処理
      */
