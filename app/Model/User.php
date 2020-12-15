@@ -55,6 +55,17 @@ class User extends Authenticatable
     }
 
     /**
+     * 管理画面権限があるかどうか
+     * @return bool
+     */
+    public function isAdmin() {
+        if ($this->status == 3) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 性別を日本語名で返す
      * @return string
      */
@@ -68,8 +79,10 @@ class User extends Authenticatable
      * @return string
      */
     public function getStatusNameAttribute() {
-        if ($this->status == config('const.available'))   return config('const.available_name');
-        if ($this->status == config('const.unavailable'))  return config('const.unavailable_name');
+        if ($this->status == config('const.app_member'))   return config('const.app_member_name');
+        if ($this->status == config('const.app_unsubscribe'))   return config('const.app_unsubscribe_name');
+        if ($this->status == config('const.app_admin'))   return config('const.app_admin_name');
+        if ($this->status == config('const.app_account_stop'))   return config('const.app_account_stop_name');
     }
 
     /**

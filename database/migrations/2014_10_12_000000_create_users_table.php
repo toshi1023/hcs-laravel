@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable()->comment('メールアドレス（確認）');
             $table->string('password')->comment('パスワード');
             $table->text('comment')->nullable()->comment('自己紹介文');                             // 自己紹介文
-            $table->boolean('status')->default(false)->comment('アカウント停止フラグ');              // アカウント停止フラグ
+            $table->tinyInteger('status')->default(1)->comment('アカウントステータス');              // アカウントステータス
             $table->text('memo')->nullable()->comment('備考');                                      // 備考
             $table->boolean('delete_flg')->default(false)->comment('削除フラグ');                   // 0: noフラグ, 1: 削除
             $table->timestamp('login_time')->nullable()->comment('最終ログイン日時');
