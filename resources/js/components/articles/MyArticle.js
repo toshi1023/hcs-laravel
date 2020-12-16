@@ -135,7 +135,8 @@ function MyArticle() {
     }
     // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
     const doAction = (id) => {
-        childRef.current.onSubmit(id)
+        console.log(id)
+        childRef.current.onSubmitArticleImage(id)
     }
   
     // 作成(stateの値をApiで送信)
@@ -146,6 +147,7 @@ function MyArticle() {
         const result = await dispatch(fetchAsyncCreate(values))
 
         if (fetchAsyncCreate.fulfilled.match(result)) {
+            console.log('Hi')
             // 画像の保存
             doAction(result.payload.article.id)
             // infoメッセージの表示
@@ -391,7 +393,7 @@ function MyArticle() {
                                                     />
                                                 </div>
                                                 <div className={classes.margin}>
-                                                    <ArticleDropzone />
+                                                    <ArticleDropzone ref={childRef} />
                                                 </div>
                                                 <div className={classes.margin}>
                                                     <Button 
@@ -518,7 +520,7 @@ function MyArticle() {
                                                         />
                                                     </div>
                                                     <div className={classes.margin}>
-                                                        <ArticleDropzone />
+                                                        <ArticleDropzone ref={childRef} />
                                                     </div>
                                                     <div className={classes.margin}>
                                                         <Button 

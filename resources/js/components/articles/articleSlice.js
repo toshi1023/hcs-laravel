@@ -85,7 +85,7 @@ export const fetchAsyncUpdate = createAsyncThunk('articles/edit', async(article)
  */
 export const fetchAsyncImage = createAsyncThunk('articles/image', async(data) => {
     try {
-        const res = await axios.post(apiUrl, data, {
+        const res = await axios.post(`${apiUrl}/${data.getAll('id')}`, data, {
             headers: {
                 'X-HTTP-Method-Override': 'PUT',
                 'Content-Type': 'multipart/form-data',

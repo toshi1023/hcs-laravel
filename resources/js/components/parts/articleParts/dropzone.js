@@ -169,7 +169,7 @@ function ArticleDropzone(props, ref) {
    * 画像の保存処理
    */
   useImperativeHandle(ref, () => ({
-    async onSubmit(id) {
+    async onSubmitArticleImage(id) {
       console.log(acceptedFiles)
       let formData = new FormData();
       acceptedFiles.map(file => {

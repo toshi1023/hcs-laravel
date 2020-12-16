@@ -77,17 +77,17 @@ class ArticleController extends Controller
   {
     try {
       DB::beginTransaction();
-
+      
       // ファイル名の生成
       $filename = null;
-      if ($request->file('upload_image')){
-        $filename = $this->getFilename($request->file('upload_image'));
-      }
-  
+      // if ($request->file('upload_image')){
+      //   $filename = $this->getFilename($request->file('upload_image'));
+      // }
+      
       // 登録データを配列化
       $data = $request->input();
       $data['type'] = $request->input('type') == 'true' ? 1 : 0;
-      $data['user_id'] = 2;
+      $data['user_id'] = \Auth::user()->id;
       // 記事の保存処理
       $article = $this->database->save($data, $filename);
       // 記事の保存が成功している場合は配列化
@@ -112,8 +112,6 @@ class ArticleController extends Controller
   // 記事の変更を反映
   public function update(Request $request, $article)
   {
-    $article = $this->database->getEdit($article)['article'];
-
     try {
       DB::beginTransaction();
 
@@ -122,7 +120,7 @@ class ArticleController extends Controller
       if ($request->file('upload_image')){
         $filename = $this->getFilename($request->file('upload_image'));
       }
-  
+      
       // 登録データを配列化
       $data = $request->input();
   

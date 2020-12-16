@@ -159,8 +159,11 @@ function ArticleCardExpand (props) {
                             {
                                 // コメント数の取得・表示
                                 props.commentsCounts[0].article_id ? 
-                                    props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
-                                : 
+                                    props.commentsCounts.find(element => element.article_id === props.article.id) != undefined ? 
+                                        props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
+                                    : 
+                                        ''
+                                :
                                     ''
                                 }
                         </span>
@@ -262,8 +265,11 @@ function ArticleCardExpand (props) {
                             {
                                 // コメント数の取得・表示
                                 props.commentsCounts[0].article_id ? 
-                                    props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
-                                : 
+                                    props.commentsCounts.find(element => element.article_id === props.article.id) != undefined ? 
+                                        props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts
+                                    : 
+                                        ''
+                                :
                                     ''
                             }
                         </span>

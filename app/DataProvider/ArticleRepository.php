@@ -86,6 +86,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
             $articleData = $this->model;            
             $data['id'] = $this->model->id;
+            $data['user_id'] = $this->model->user_id;
             
             /* イメージの保存メソッド */
             // テーブル名を変数に代入
@@ -108,6 +109,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             
             // 画像をアップロード
             $file = request()->file('upload_image') ? request()->file('upload_image') : null;
+            
             $file_upload = $this->fileSave($file, $foldername);
 
             $model->articles_photo_name = $filename;
@@ -130,7 +132,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
      */
     public function fileSave($file, $foldername)
     {
-        if (!is_null($file)){
+        if ($file){
             try {
                 //s3アップロード開始
                 // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
