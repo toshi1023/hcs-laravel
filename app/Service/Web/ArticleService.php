@@ -49,15 +49,7 @@ class ArticleService
   {
     if(is_null($table)) {
       // 記事を全て取得(Userモデルのテーブルも結合して取得)
-      $articles = $this->ArticleService->getBaseData($conditions)->get();
-
-      // 会員限定公開をされていない記事のみ取得
-      $free_articles = $this->ArticleService->getBaseData($conditions)->where('type', '=', 0)->get();
-
-      return [
-        'articles' => $articles, 
-        'free_articles' => $free_articles,
-      ];
+      return $this->ArticleService->getBaseData($conditions)->get();
     }
     // 指定したテーブルのデータをソートして取得
     return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
@@ -69,7 +61,11 @@ class ArticleService
    */
   public function save($data, $filename = null)
   {
-    return $this->ArticleService->save($data, $filename);
+    // 記事を保存
+    $article = $this->ArticleService->save($data, $filename);
+    
+    // 保存したデータを一覧ページに必要なデータにカスタムして取得
+    return $this->ArticleService->getBaseData(['articles.id' => $article->id])->first();
   }
 
   /**

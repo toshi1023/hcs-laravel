@@ -26,9 +26,10 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     {
         // 各記事のいいね数を取得
         $likes = $this->getLikesCountQuery();
-
+        
         // usersテーブルの値も結合して取得
-        $query = $this->model->leftjoin('users', 'articles.user_id', '=', 'users.id')
+        $query = $this->model->from('articles')
+                             ->leftjoin('users', 'articles.user_id', '=', 'users.id')
                              ->leftjoin('article_images', 'articles.id', '=', 'article_images.article_id')
                              ->leftJoinSub($likes, 'likes_counts', 'articles.id', '=', 'likes_counts.article_id')
                              ->select(
@@ -42,7 +43,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                                  'likes_counts.likes_counts',
                              )
                              ->where('articles.delete_flg', '=', 0);
-        
+                             
         // 検索条件が設定されている場合は検索を実行
         if(!is_null($conditions)) {
             $query = $this->getWhereQuery(null, $conditions, $query);
@@ -58,7 +59,8 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     private function getLikesCountQuery() {
         $query = $this->model()->query();
 
-        $query->leftjoin('likes', 'articles.id', '=', 'likes.article_id')
+        $query->from('articles')
+              ->leftjoin('likes', 'articles.id', '=', 'likes.article_id')
               ->selectRaw('count(likes.user_id) as likes_counts')
               ->addSelect('likes.article_id')
               ->groupByRaw('likes.article_id')
@@ -117,7 +119,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             $model->article_id = $data['id'];
             $model->user_id = $data['user_id'];
             $model->save();
-
+            
             return $articleData;
 
         } catch (\Exception $e) {

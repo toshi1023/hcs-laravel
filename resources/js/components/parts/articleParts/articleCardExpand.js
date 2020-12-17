@@ -130,9 +130,9 @@ function ArticleCardExpand (props) {
                                         : 
                                             <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
                                     :
-                                        ''
+                                        <FavoriteIcon style={{ fontSize: 20 }} />
                                 : 
-                                    ''
+                                    <FavoriteIcon style={{ fontSize: 20 }} />
                             }
                         </IconButton>
                         <span className={classes.likesCounts}>
@@ -233,9 +233,9 @@ function ArticleCardExpand (props) {
                                             : 
                                                 <FavoriteIcon style={{ fontSize: 20, color: 'red' }} />
                                         :
-                                            ''
+                                            <FavoriteIcon style={{ fontSize: 20 }} />
                                     : 
-                                        ''
+                                        <FavoriteIcon style={{ fontSize: 20 }} />
                                 }
                             </IconButton>
                         </Tooltip>

@@ -54,6 +54,6 @@ Route::group(['middleware' => ['auth:api'], 'prefix'], function() {
     // Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show']]);
 
     /********** メッセージ管理(messages) **********/
-    Route::resource('api_messages' , 'Api\MessageController', ['except' => ['index', 'show']]);
+    // Route::resource('api_messages' , 'Api\MessageController', ['except' => ['index', 'show']]);
     // Route::resource('api_messages' , 'Api\MessageController');
 });

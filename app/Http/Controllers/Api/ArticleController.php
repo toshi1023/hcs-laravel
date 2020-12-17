@@ -59,8 +59,7 @@ class ArticleController extends Controller
       $articles = $this->database->getIndex(null, $conditions);
 
       return response()->json([
-        'articles' => $articles['articles'], 
-        // 'free_articles' => $articles['free_articles'],
+        'articles' => $articles, 
       ],200, [], JSON_UNESCAPED_UNICODE);
     } catch (\Exception $e) {
       \Log::error('Article get Error:'.$e->getMessage());
@@ -80,9 +79,9 @@ class ArticleController extends Controller
       
       // ファイル名の生成
       $filename = null;
-      // if ($request->file('upload_image')){
-      //   $filename = $this->getFilename($request->file('upload_image'));
-      // }
+      if ($request->file('upload_image')){
+        $filename = $this->getFilename($request->file('upload_image'));
+      }
       
       // 登録データを配列化
       $data = $request->input();
@@ -90,8 +89,6 @@ class ArticleController extends Controller
       $data['user_id'] = \Auth::user()->id;
       // 記事の保存処理
       $article = $this->database->save($data, $filename);
-      // 記事の保存が成功している場合は配列化
-      $article ? $article = $article->toArray() : '';
       
       DB::commit();
       return response()->json([
@@ -101,6 +98,7 @@ class ArticleController extends Controller
       
     } catch (\Exception $e) {
       DB::rollBack();
+      \Log::error('Article save Error:'.$e->getMessage());
       // 作成失敗時はエラーメッセージを返す
       return response()->json([
         'error_message' => '記事の投稿に失敗しました',
@@ -135,6 +133,7 @@ class ArticleController extends Controller
       
     } catch (\Exception $e) {
       DB::rollBack();
+      \Log::error('Article save Error:'.$e->getMessage());
       // 作成失敗時はエラーメッセージを返す
       return new JsonResponse([
         'error_message' => '記事の投稿に失敗しました',

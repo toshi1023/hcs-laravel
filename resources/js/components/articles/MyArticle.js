@@ -134,10 +134,7 @@ function MyArticle() {
             type: document.getElementById("typeSwitch").checked
         })
     }
-    // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
-    // const doAction = (id) => {
-    //     childRef.current.onSubmitArticleImage(id)
-    // }
+    
     // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
     const doAction = (values) => {
         return childRef.current.onSubmitArticleImage(values)
@@ -149,44 +146,23 @@ function MyArticle() {
         await dispatch(fetchCredStart())
         
         // 画像の保存
-        const data = doAction(values)
-        const result = await dispatch(fetchAsyncCreate(data))
+        doAction(values).then((value) => {
+            const result = dispatch(fetchAsyncCreate(value))
+            if (fetchAsyncCreate.fulfilled.match(result)) {
+                // infoメッセージの表示
+                result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+                // 記事の再読み込み
+                dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
+                // ロード終了
+                dispatch(fetchCredEnd()); 
+                return;
+            }
+        })
 
-        if (fetchAsyncCreate.fulfilled.match(result)) {
-            // infoメッセージの表示
-            result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-            // 記事の再読み込み
-            dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
-            // ロード終了
-            await dispatch(fetchCredEnd()); 
-            return;
-        }
         // ロード終了
         await dispatch(fetchCredEnd()); 
         return;
     }
-
-    // 作成(stateの値をApiで送信)
-    // async function createClicked(values) {
-    //     // ロード開始
-    //     await dispatch(fetchCredStart())
-    //     const result = await dispatch(fetchAsyncCreate(values))
-        
-    //     if (fetchAsyncCreate.fulfilled.match(result)) {
-    //         // 画像の保存
-    //         doAction(result.payload.id)
-    //         // infoメッセージの表示
-    //         result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-    //         // 記事の再読み込み
-    //         dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
-    //         // ロード終了
-    //         await dispatch(fetchCredEnd()); 
-    //         return;
-    //     }
-    //         // ロード終了
-    //         await dispatch(fetchCredEnd()); 
-    //         return;
-    // }
 
     useEffect(() => {
         // 非同期の関数を定義
@@ -500,7 +476,7 @@ function MyArticle() {
                                                 formData.append('title', values.title)
                                                 formData.append('content', values.content)
                                                 formData.append('type', document.getElementById("typeSwitch").checked ? 1 : 0)
-
+                                                
                                                 // 記事の登録処理
                                                 createClicked(formData)
                                             }}
