@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, selectInfo } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal, selectInfo, selectModal } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet, fetchAsyncCreate } from './articleSlice';
+import ArticleEdit from './Edit';
 import ArticleDropzone from '../parts/articleParts/dropzone';
 import ArticleCard from '../parts/articleParts/articleCard';
 import SwitchType from '../parts/common/switch';
@@ -11,7 +12,7 @@ import SnackMessages from '../parts/common/snackMessages';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
-import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl, FormLabel } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl, FormLabel, Modal, Backdrop, Fade, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CreateIcon from '@material-ui/icons/Create';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -92,6 +93,7 @@ function MyArticle() {
     // stateで管理する記事一覧データを使用できるようにローカルのarticles定数に格納
     const articles = useSelector(selectArticles)
     const infoMessages = useSelector(selectInfo)
+    const open = useSelector(selectModal)
     const dispatch = useDispatch()
     // stateの初期設定
     const [state, setState] = React.useState({
@@ -102,9 +104,8 @@ function MyArticle() {
         title: '',
         content: '',
         type: false,
-        user_id: localStorage.getItem('loginId')
     });
-
+    
     /**
      * 値のセット
      */
@@ -134,9 +135,12 @@ function MyArticle() {
         })
     }
     // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
-    const doAction = (id) => {
-        console.log(id)
-        childRef.current.onSubmitArticleImage(id)
+    // const doAction = (id) => {
+    //     childRef.current.onSubmitArticleImage(id)
+    // }
+    // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+    const doAction = (values) => {
+        return childRef.current.onSubmitArticleImage(values)
     }
   
     // 作成(stateの値をApiで送信)
@@ -144,12 +148,11 @@ function MyArticle() {
         // ロード開始
         await dispatch(fetchCredStart())
         
-        const result = await dispatch(fetchAsyncCreate(values))
+        // 画像の保存
+        const data = doAction(values)
+        const result = await dispatch(fetchAsyncCreate(data))
 
         if (fetchAsyncCreate.fulfilled.match(result)) {
-            console.log('Hi')
-            // 画像の保存
-            doAction(result.payload.article.id)
             // infoメッセージの表示
             result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
             // 記事の再読み込み
@@ -162,6 +165,28 @@ function MyArticle() {
         await dispatch(fetchCredEnd()); 
         return;
     }
+
+    // 作成(stateの値をApiで送信)
+    // async function createClicked(values) {
+    //     // ロード開始
+    //     await dispatch(fetchCredStart())
+    //     const result = await dispatch(fetchAsyncCreate(values))
+        
+    //     if (fetchAsyncCreate.fulfilled.match(result)) {
+    //         // 画像の保存
+    //         doAction(result.payload.id)
+    //         // infoメッセージの表示
+    //         result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+    //         // 記事の再読み込み
+    //         dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
+    //         // ロード終了
+    //         await dispatch(fetchCredEnd()); 
+    //         return;
+    //     }
+    //         // ロード終了
+    //         await dispatch(fetchCredEnd()); 
+    //         return;
+    // }
 
     useEffect(() => {
         // 非同期の関数を定義
@@ -241,6 +266,11 @@ function MyArticle() {
         setArticlePage(true)
         setCreatePage(false)
     }
+
+    // Modalの非表示設定
+    const handleClose = () => {
+        dispatch(fetchOpenModal(false))
+    };
     
     // 記事一覧を生成
     const renderArticles = () => {
@@ -252,7 +282,29 @@ function MyArticle() {
             </Grid>
         )
     }
-    // console.log(articles)
+    
+    // 記事の編集モーダルを生成
+    const renderEditModal = () => {
+        return (
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+                <Fade in={open}>
+                    <ArticleEdit />
+                </Fade>
+            </Modal>
+        )
+    }
+
     return (
         <>
             {/* タブ(スマホ版のみ) */}
@@ -279,6 +331,9 @@ function MyArticle() {
                 :
                     <SnackMessages errorOpen={true} />
             }
+
+            {/* 記事の編集モーダル */}
+            {renderEditModal()}
 
             {/* 検索デザイン */}
             <Grid container className={classes.searchField}>
@@ -445,7 +500,6 @@ function MyArticle() {
                                                 formData.append('title', values.title)
                                                 formData.append('content', values.content)
                                                 formData.append('type', document.getElementById("typeSwitch").checked ? 1 : 0)
-                                                formData.append('user_id', localStorage.getItem('loginId'))
 
                                                 // 記事の登録処理
                                                 createClicked(formData)

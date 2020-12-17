@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ArticleCardExpand from './articleCardExpand';
-import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages } from '../../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal } from '../../app/appSlice';
 import { 
   selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes, selectComments, selectCommentsCounts, 
   fetchAsyncGetComments, fetchAsyncUpdateComments
@@ -152,6 +152,11 @@ export default function ArticleCard(props) {
     )
   }
   
+  // 記事の編集モーダルを表示
+  const editArticle = () => {
+    dispatch(fetchOpenModal(true))
+    return;
+  }
   // 記事の削除処理
   const deleteArticle = () => {
     if (confirm('この記事を削除しますか？')) {
@@ -172,7 +177,7 @@ export default function ArticleCard(props) {
               <MoreVertIcon style={{ fontSize: 20 }} />
             </IconButton>
             <Menu {...bindMenu(popupState)}>
-              <MenuItem className={classes.menuItem} onClick={popupState.close}><EditIcon style={{ marginRight: 5, color: 'blue' }} />編集</MenuItem>
+              <MenuItem className={classes.menuItem} onClick={popupState.close, editArticle}><EditIcon style={{ marginRight: 5, color: 'blue' }} />編集</MenuItem>
               <MenuItem className={classes.menuItem} onClick={popupState.close, deleteArticle}><DeleteForeverIcon style={{ marginRight: 5, color: 'red' }} />削除</MenuItem>
             </Menu>
           </React.Fragment>

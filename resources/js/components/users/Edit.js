@@ -14,11 +14,11 @@ import {
     ListItemAvatar, Avatar, Modal, Backdrop, Fade, Tooltip,
     Input, InputLabel, InputAdornment, FormControl, FormLabel, Fab,
  } from "@material-ui/core";
- import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
- import EventIcon from '@material-ui/icons/Event';
- import SaveIcon from '@material-ui/icons/Save';
- import CommentIcon from '@material-ui/icons/Comment';
- import CancelIcon from '@material-ui/icons/Cancel';
+import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
+import EventIcon from '@material-ui/icons/Event';
+import SaveIcon from '@material-ui/icons/Save';
+import CommentIcon from '@material-ui/icons/Comment';
+import CancelIcon from '@material-ui/icons/Cancel';
 import RoomIcon from '@material-ui/icons/Room';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
@@ -76,10 +76,10 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
     },
     paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
     },
     closeIcon: {
         marginLeft: 'auto',
@@ -172,7 +172,6 @@ function UserEdit(props) {
         let month = document.getElementById("selectMonth").value
         let day = document.getElementById("selectDay").value
         setState({...state, birthday: `${year}-${month}-${day}`})
-        console.log(state)
     }
     // Modal設定
     const [open, setOpen] = React.useState(false);

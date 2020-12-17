@@ -78,6 +78,7 @@ class UserController extends Controller
   
         // 登録データを配列化
         $data = $request->input();
+        $data['user_id'] = \Auth::user()->id;
   
         // パスワードのハッシュ処理
         $data['password'] = Hash::make($data['password']);
@@ -188,6 +189,7 @@ class UserController extends Controller
         
         // 登録データを配列化
         $data = $request->input();
+        $data['user_id'] = \Auth::user()->id;
 
         // パスワードのハッシュ処理
         if(key_exists('password', $data)) {

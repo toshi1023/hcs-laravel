@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const prefectureUrl = 'http://localhost/api/api_prefectures'
-// const prefectureUrl = 'http://hcs-laravel/api/api_prefectures'
+// const prefectureUrl = 'http://localhost/api/api_prefectures'
+const prefectureUrl = 'http://hcs-laravel/api/api_prefectures'
 
 /**
  * 都道府県データの取得用非同期関数
@@ -37,6 +37,8 @@ const appSlice = createSlice({
         prefectures: {
 
         },
+        // モーダルのオープンフラグ
+        modal: false,
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -56,6 +58,9 @@ const appSlice = createSlice({
         fetchGetErrorMessages(state, action) {
             state.errorMessages = action.payload
         },
+        fetchOpenModal(state, action) {
+            state.modal = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchAsyncGetPrefectures.fulfilled, (state, action) => {
@@ -72,11 +77,13 @@ export const {
     fetchCredEnd,
     fetchGetInfoMessages,
     fetchGetErrorMessages,
+    fetchOpenModal
   } = appSlice.actions;
 
 export const selectLoading = (state) => state.app.isLoading
 export const selectInfo = (state) => state.app.infoMessages
 export const selectError = (state) => state.app.errorMessages
 export const selectPrefectures = (state) => state.app.prefectures
+export const selectModal = (state) => state.app.modal
 
 export default appSlice.reducer
