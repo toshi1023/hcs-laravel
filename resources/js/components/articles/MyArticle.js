@@ -149,15 +149,16 @@ function MyArticle() {
         await dispatch(fetchCredStart())
         
         // 画像の保存
-        doAction(values).then((value) => {
-            const result = dispatch(fetchAsyncCreate(value))
+        doAction(values).then(async (value) => {
+            const result = await dispatch(fetchAsyncCreate(value))
             if (fetchAsyncCreate.fulfilled.match(result)) {
+                
                 // infoメッセージの表示
                 result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
                 // 記事の再読み込み
-                dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
+                await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
                 // ロード終了
-                dispatch(fetchCredEnd()); 
+                await dispatch(fetchCredEnd()); 
                 return;
             }
         })

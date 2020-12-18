@@ -131,11 +131,11 @@ function UserShow(props) {
         value.user ? user = value.user : user = value.value
 
         // データのセット
-        let data = {
+        let data = [{
             target_id: user.id,
             name: user.name,
             gender: user.gender
-        }
+        }]
         dispatch(reduceSetShowMessage(data))
         history.push('/messages')
     }
