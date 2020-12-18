@@ -131,61 +131,66 @@ export default function UserList(props) {
                                 }}
                             />
                             <ListItemSecondaryAction>
-                                <IconButton
-                                    style={
-                                        props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
-                                            props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
-                                                // 承認済み
-                                                { backgroundColor: "#CCFFCC" } 
-                                            : 
-                                                // 申請中
-                                                { backgroundColor: "#f4f5ab" }
-                                        :
-                                            // 友達申請
-                                            { backgroundColor: "#d0ddf5" }
-                                    }
-                                    onClick={
-                                        () => 
-                                        props.friendStatus.find(element => element.target_id === value.id) ? 
-                                            ''
-                                        : 
-                                            handleFriendApply(value.id)
-                                    }
-                                >
-                                    {
-                                        props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
-                                            props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
-                                                // 承認済み
-                                                <HowToRegIcon 
-                                                    edge="end"
-                                                    onChange={handleToggleAdd(value.id)}
-                                                    inputProps={{
-                                                        "aria-labelledby": value.id
-                                                    }}
-                                                    className={classes.successIcon}
-                                                /> 
-                                            : 
-                                                // 申請中
-                                                <ContactMailIcon
-                                                    edge="end"
-                                                    onChange={handleToggleAdd(value.id)}
-                                                    inputProps={{
-                                                        "aria-labelledby": value.id
-                                                    }}
-                                                    className={classes.applyIcon}
-                                                />
-                                        :    
-                                            // 友達追加
-                                            <PersonAddIcon
-                                                edge="end"
-                                                onChange={handleToggleAdd(value.id)}
-                                                inputProps={{
-                                                    "aria-labelledby": value.id
-                                                }}
-                                                className={classes.addIcon}
-                                            />
-                                    }
-                                </IconButton>
+                                {
+                                    localStorage.getItem('localToken') ? 
+                                        <IconButton
+                                            style={
+                                                props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
+                                                    props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                        // 承認済み
+                                                        { backgroundColor: "#CCFFCC" } 
+                                                    : 
+                                                        // 申請中
+                                                        { backgroundColor: "#f4f5ab" }
+                                                :
+                                                    // 友達申請
+                                                    { backgroundColor: "#d0ddf5" }
+                                            }
+                                            onClick={
+                                                () => 
+                                                props.friendStatus.find(element => element.target_id === value.id) ? 
+                                                    ''
+                                                : 
+                                                    handleFriendApply(value.id)
+                                            }
+                                        >
+                                            {
+                                                props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
+                                                    props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                        // 承認済み
+                                                        <HowToRegIcon 
+                                                            edge="end"
+                                                            onChange={handleToggleAdd(value.id)}
+                                                            inputProps={{
+                                                                "aria-labelledby": value.id
+                                                            }}
+                                                            className={classes.successIcon}
+                                                        /> 
+                                                    : 
+                                                        // 申請中
+                                                        <ContactMailIcon
+                                                            edge="end"
+                                                            onChange={handleToggleAdd(value.id)}
+                                                            inputProps={{
+                                                                "aria-labelledby": value.id
+                                                            }}
+                                                            className={classes.applyIcon}
+                                                        />
+                                                :    
+                                                    // 友達追加
+                                                    <PersonAddIcon
+                                                        edge="end"
+                                                        onChange={handleToggleAdd(value.id)}
+                                                        inputProps={{
+                                                            "aria-labelledby": value.id
+                                                        }}
+                                                        className={classes.addIcon}
+                                                    />
+                                            }
+                                        </IconButton>
+                                    :
+                                        ''
+                                }
                             </ListItemSecondaryAction>
                         </ListItem>
                         <hr />

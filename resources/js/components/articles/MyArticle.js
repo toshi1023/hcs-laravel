@@ -80,7 +80,10 @@ const useStyles = makeStyles((theme) => ({
     },
     input: {
         zIndex: 0
-    }
+    },
+    modal: {
+        overflow:'scroll',
+    },
   }));
 
 function MyArticle() {

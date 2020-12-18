@@ -236,7 +236,7 @@ function HcsAppBar() {
                         </IconButton>
                         <p>メッセージ</p>
                     </MenuItem>
-                    <MenuItem>
+                    {/* <MenuItem>
                         <IconButton
                             aria-label="show new notifications"
                             color="inherit"
@@ -246,7 +246,7 @@ function HcsAppBar() {
                             </Badge>
                         </IconButton>
                         <p>通知</p>
-                    </MenuItem>
+                    </MenuItem> */}
                 </div>
                 : ''
             }
@@ -308,7 +308,7 @@ function HcsAppBar() {
                                     <MailIcon fontSize="large" />
                                 </Badge>
                             </IconButton>
-                            <IconButton
+                            {/* <IconButton
                                 aria-label="show new notifications"
                                 color="inherit"
                                 className={classes.badge}
@@ -316,7 +316,7 @@ function HcsAppBar() {
                                 <Badge badgeContent={11} color="secondary">
                                     <NotificationsIcon fontSize="large" />
                                 </Badge>
-                            </IconButton>
+                            </IconButton> */}
                             <IconButton
                                 edge="end"
                                 aria-label="account of current user"

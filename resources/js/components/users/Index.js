@@ -247,7 +247,7 @@ export default function User() {
                     <Grid item sm={8}>
                         <Grid container justify="center">
                             {
-                                localStorage.getItem('loginId') ? 
+                                localStorage.getItem('localToken') ? 
                                     <Grid item sm={10}>
                                         <div className={classes.userShow}>
                                             <UserShow />

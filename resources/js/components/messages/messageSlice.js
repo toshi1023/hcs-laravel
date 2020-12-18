@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost/api/api_messages'
-// const apiUrl = 'http://hcs-laravel/api/api_messages'
+// const apiUrl = 'http://localhost/api/api_messages'
+const apiUrl = 'http://hcs-laravel/api/api_messages'
 const token = localStorage.localToken
 
 
@@ -136,6 +136,7 @@ const messageSlice = createSlice({
         editMessage(state, action) {
             state.editedMessage = action.payload
         },
+        // Pusherから受け取ったデータを処理
         reduceMessages(state, action) {
             return {
                 ...state,
@@ -144,11 +145,22 @@ const messageSlice = createSlice({
                 ),
             }
         },
+        // Pusherから受け取ったデータを処理
         reduceShowMessages(state, action) {
             return {
                 ...state,
                 showMessages: [...state.showMessages, action.payload], 
             }
+        },
+        // usersページから遷移したとき
+        reduceSetShowMessage(state, action) {
+            return {
+                ...state,
+                showMessages: action.payload, 
+            }
+            // state.showMessages.target_id = action.payload.id    // ユーザID
+            // state.showMessages.name = action.payload.name       // ユーザのニックネーム
+            // state.showMessages.gender = action.payload.gender   // ユーザの性別
         },
     },
     // 追加Reducer (Api通信の処理を記述)
@@ -201,7 +213,7 @@ const messageSlice = createSlice({
     },
 })
 
-export const { editMessage, reduceMessages, reduceShowMessages } = messageSlice.actions
+export const { editMessage, reduceMessages, reduceShowMessages, reduceSetShowMessage } = messageSlice.actions
 
 export const selectSelectedMessage = (state) => state.message.selectedMessage
 export const selectEditedMessage = (state) => state.message.editedMessage

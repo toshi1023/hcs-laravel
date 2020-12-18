@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSelectedUser, editUser, selectFriendStatus, fetchAsyncUpdateFriends, fetchAsyncGetFriendsApply } from "./userSlice";
 import { fetchGetInfoMessages, selectInfo } from '../app/appSlice';
+import { reduceSetShowMessage } from '../messages/messageSlice';
 import SnackMessages from '../parts/common/snackMessages';
 import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -82,8 +83,6 @@ const useStyles = makeStyles(theme => ({
     applyButton: {
         marginLeft: 'auto',
         fontSize: 13,
-        // marginTop: theme.spacing(2),
-        // marginBottom: theme.spacing(1),
     },
     tooltip: {
         fontSize: 14,
@@ -125,6 +124,22 @@ function UserShow(props) {
         setReply(newChecked);
     };
 
+    // リプライアイコンボタンをクリック時
+    const handleSetMessage = (value) => {
+        let user = ''
+        // 初期表示のユーザか選択したユーザかを判別し変数に代入
+        value.user ? user = value.user : user = value.value
+
+        // データのセット
+        let data = {
+            target_id: user.id,
+            name: user.name,
+            gender: user.gender
+        }
+        dispatch(reduceSetShowMessage(data))
+        history.push('/messages')
+    }
+
     // 友達リクエストの承認
     const handleApproval = async (value) => {
         // リクエストの承認 or 拒否
@@ -160,7 +175,7 @@ function UserShow(props) {
                             : ''
                         }
                         <IconButton
-                            style={{ backgroundColor: "#d0ddf5", marginRight: 5 }}
+                            style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
                         >
                             <ReplyIcon
                                 edge="end"
