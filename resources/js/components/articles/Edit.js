@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, selectInfo, fetchOpenModal } from '../app/appSlice';
-import { fetchAsyncUpdate } from './articleSlice';
+import { fetchAsyncUpdate, selectEditedArticle } from './articleSlice';
 import ArticleDropzone from '../parts/articleParts/dropzone';
 import SwitchType from '../parts/common/switch';
 import ArticlePrefectureSelects from '../parts/articleParts/articlePrefectureSelects';
@@ -12,7 +12,6 @@ import _ from 'lodash';
 import { Grid, Button, TextField, FormControl, Paper } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
-import styles from './myArticle.module.css';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -42,12 +41,13 @@ const useStyles = makeStyles((theme) => ({
 
   export default function ArticleEdit() {
     const classes = useStyles();
+    const editedArticle = useSelector(selectEditedArticle)
     const dispatch = useDispatch();
     const childRef = useRef();
     // stateの初期設定
     const [state, setState] = React.useState({
         // 保存対象の値
-        prefecture: '',
+        prefecture: editedArticle.prefecture,
         latitude: '',
         longitude: '',
         title: '',
@@ -55,13 +55,27 @@ const useStyles = makeStyles((theme) => ({
         type: false,
     });
     
+    useEffect(() => {
+        // 非同期の関数を定義
+        const fetchPrefectures = async () => {
+            // Loading開始
+            await dispatch(fetchCredStart())
+            // ユーザの登録している都道府県が選択されている状態でセット
+            document.getElementById("modalFormPrefecture").value = editedArticle.prefecture
+            // ロード終了
+            await dispatch(fetchCredEnd());
+        }
+        // 上で定義した非同期の関数を実行
+        fetchPrefectures()
+    }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
+    
     /**
      * 値のセット
      */
     const setPrefecture = () => {
         setState({
             ...state,
-            prefecture: document.getElementById("formPrefecture").value,
+            prefecture: document.getElementById("modalFormPrefecture").value,
             prefectureCheck: false,
         })
     }
@@ -80,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
     const setType = () => {
         setState({
             ...state,
-            type: document.getElementById("typeSwitch").checked
+            type: document.getElementById("modalTypeSwitch").checked
         })
     }
 
@@ -88,13 +102,17 @@ const useStyles = makeStyles((theme) => ({
     const handleClose = () => {
         dispatch(fetchOpenModal(false))
     };
+
+    // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+    const doAction = (values) => {
+        return childRef.current.onSubmitArticleImage(values)
+    }
     
     return (
         <>
             <Grid container justify="center">
-                <Grid item xs={10} sm={3} md={3}>
+                <Grid item xs={10} sm={6} md={4}>
                 <Paper className={classes.paper}>
-                {/* <div className={classes.paper}> */}
                     <Grid container>
                         <h3 className={classes.modalTitle}>記事の編集</h3>
                         <Button className={classes.closeIcon} onClick={handleClose}>
@@ -104,26 +122,26 @@ const useStyles = makeStyles((theme) => ({
                     <Grid container justify="center">
                         <Grid item xs={10} sm={10} md={10}> 
                             <Formik
-                                initialErrors={{ title: "required", content: "required" }}
+                                initialErrors={{ modalTitle: "required", modalContent: "required" }}
                                 initialValues={{ 
-                                    title: '',
-                                    content: '',
+                                    modalTitle: editedArticle.title,
+                                    modalContent: editedArticle.content,
                                 }}
                                 onSubmit={async (values) => {
                                     // ユーザ登録処理
                                     let formData = new FormData(document.forms.form);
-                                    formData.append('prefecture', document.getElementById("mobileFormPrefecture").value)
+                                    formData.append('prefecture', document.getElementById("modalFormPrefecture").value)
                                     formData.append('title', values.mobileTitle)
                                     formData.append('content', values.mobileContent)
-                                    formData.append('type', document.getElementById("mobileTypeSwitch").checked)
+                                    formData.append('type', document.getElementById("modalTypeSwitch").checked)
                                     
                                     // 記事の登録処理
                                     createClicked(formData)
                                 }}
                                 validationSchema={Yup.object().shape({
-                                    mobileTitle: Yup.string()
+                                    modalTitle: Yup.string()
                                                     .required("タイトルの入力は必須です"),
-                                    mobileContent: Yup.string()
+                                    modalContent: Yup.string()
                                                         .required("内容の入力は必須です"),
                                 })}
                             >
@@ -139,12 +157,16 @@ const useStyles = makeStyles((theme) => ({
                                 <Form onSubmit={handleSubmit}>
                                     <FormControl className={classes.margin}>
                                         <div className={classes.margin} onBlur={setPrefecture}>
-                                            <ArticlePrefectureSelects id="mobileFormPrefecture" fontSize={15} />
+                                            <ArticlePrefectureSelects 
+                                                labelFlg={editedArticle.prefecture ? false : undefined} 
+                                                id="modalFormPrefecture" 
+                                                fontSize={15} 
+                                            />
                                         </div>
-                                        <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("title").value)}}>
+                                        <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("modalTitle").value)}}>
                                             <TextField
-                                                id="mobileTitle"
-                                                name="mobileTitle"
+                                                id="modalTitle"
+                                                name="modalTitle"
                                                 label="タイトル"
                                                 variant="outlined"
                                                 style = {{width: 250}}
@@ -153,16 +175,16 @@ const useStyles = makeStyles((theme) => ({
                                                 }}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.mobileTitle}
+                                                value={values.modalTitle}
                                             />
                                             {touched.title && errors.title ? (
                                                 <div className={classes.error}>{errors.title}</div>
                                             ) : null}
                                         </div>
-                                        <div className={classes.margin} onBlur={() => {setContent(document.getElementById("content").value)}}>
+                                        <div className={classes.margin} onBlur={() => {setContent(document.getElementById("modalContent").value)}}>
                                             <TextField
-                                                id="mobileContent"
-                                                name="mobileContent"
+                                                id="modalContent"
+                                                name="modalContent"
                                                 label="内容"
                                                 variant="outlined"
                                                 style = {{width: 250}}
@@ -173,7 +195,7 @@ const useStyles = makeStyles((theme) => ({
                                                 }}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.mobileContent}
+                                                value={values.modalContent}
                                             />
                                             {touched.content && errors.content ? (
                                                 <div className={classes.error}>{errors.content}</div>
@@ -181,10 +203,10 @@ const useStyles = makeStyles((theme) => ({
                                         </div>
                                         <div className={classes.margin} onClick={setType}>
                                             <SwitchType 
-                                                id="mobileTypeSwitch"
+                                                id="modalTypeSwitch"
                                                 switchLabel={{true: '会員限定', false: '全員'}} 
                                                 checked={state.type}
-                                                value={values.type}
+                                                value={editedArticle ? editedArticle.type : values.type}
                                             />
                                         </div>
                                         <div className={classes.margin}>
@@ -207,7 +229,6 @@ const useStyles = makeStyles((theme) => ({
                             </Formik>
                         </Grid>
                     </Grid>
-                {/* </div> */}
                 </Paper>
                 </Grid>
             </Grid>

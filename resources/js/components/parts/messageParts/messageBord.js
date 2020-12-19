@@ -4,7 +4,7 @@ import { Paper, Box, CardContent, Avatar, Chip, FormControl, IconButton, TextFie
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchGetErrorMessages } from '../../app/appSlice';
-import { selectShowMessages, fetchAsyncUpdate } from '../../messages/messageSlice';
+import { selectShowMessages, fetchAsyncCreate, fetchAsyncUpdate } from '../../messages/messageSlice';
 import ReplyIcon from '@material-ui/icons/Reply';
 
 const useStyles = makeStyles((theme) => ({
@@ -93,13 +93,20 @@ export default function MessageBord() {
             content: value
         })
     }
-    
+
     /**
      * メッセージの保存処理実行
      */
     const onSubmit = async () => {
-        // メッセージの保存処理
-        const resultReg = await dispatch(fetchAsyncUpdate(state))
+        let resultReg;
+        // 新規ユーザとのメッセージか既存ユーザとのメッセージか判別
+        messages[0].content === undefined ? 
+            // メッセージの保存処理(新規ユーザ)
+            resultReg = await dispatch(fetchAsyncCreate(state))
+        :
+            // メッセージの保存処理(既存ユーザ)
+            resultReg = await dispatch(fetchAsyncUpdate(state))
+        
         // errorメッセージがある場合は表示
         resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
 

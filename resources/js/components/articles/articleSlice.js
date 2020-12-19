@@ -227,18 +227,18 @@ const articleSlice = createSlice({
         ],
         // articleの編集時に選択・保持するstate
         editedArticle: {
-            user_id: 0,                 // ユーザid
-            prefecture: '',             // 都道府県
-            article_id: 0,              // 記事のid
-            articles_photo_name: '',    // 記事の画像名
-            title: '',                  // 記事タイトル
-            content: '',                // 記事の内容
-            articles_photo_path: '',    // 記事の画像パス
-            type: 0,                    // 公開対象
-            latitude: '',               // 緯度
-            longitude: '',              // 経度
-            created_at: '',             // 記事の作成日
-            updated_at: '',             // 記事の更新日
+            // user_id: 0,                 // ユーザid
+            // prefecture: '',             // 都道府県
+            // article_id: 0,              // 記事のid
+            // articles_photo_name: '',    // 記事の画像名
+            // title: '',                  // 記事タイトル
+            // content: '',                // 記事の内容
+            // articles_photo_path: '',    // 記事の画像パス
+            // type: 0,                    // 公開対象
+            // latitude: '',               // 緯度
+            // longitude: '',              // 経度
+            // created_at: '',             // 記事の作成日
+            // updated_at: '',             // 記事の更新日
         },
         // articleの詳細表示をした際に保持するstate
         selectedArticle: {
@@ -293,13 +293,13 @@ const articleSlice = createSlice({
     // Reducer (actionの処理を記述)
     reducers: {
         editArticle(state, action) {
-            state.editArticle = action.payload
+            state.editedArticle = action.payload
         },
         selectArticle(state, action) {
             state.selectedArticle = action.payload
         },
         openModal(state, action) {
-            state.editModal = action.payload
+            state.editedModal = action.payload
         },
         selectLike(state, action) {
             state.selectedLike = action.payload

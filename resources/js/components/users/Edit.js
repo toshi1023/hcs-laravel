@@ -115,16 +115,12 @@ function UserEdit(props) {
         const fetchPrefectures = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
-            // // 都道府県一覧を取得
-            // const resultReg = await dispatch(fetchAsyncGetPrefectures())
-            // if (fetchAsyncGetPrefectures.fulfilled.match(resultReg)) {
-                // ユーザの登録している都道府県が選択されている状態でセット
-                document.getElementById("prefecture").value = editedUser.value.prefecture
-                // ユーザの登録している生年月日が選択されている状態でセット
-                setBirthday(true)
-                // ロード終了
-                await dispatch(fetchCredEnd());       
-            // }
+            // ユーザの登録している都道府県が選択されている状態でセット
+            document.getElementById("prefecture").value = editedUser.value.prefecture
+            // ユーザの登録している生年月日が選択されている状態でセット
+            setBirthday(true)
+            // ロード終了
+            await dispatch(fetchCredEnd());
         }
         // 上で定義した非同期の関数を実行
         fetchPrefectures()

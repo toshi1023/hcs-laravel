@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import UserSearch from '../parts/userParts/userSearch';
 import SnackMessages from '../parts/common/snackMessages';
 import { fetchCredStart, fetchCredEnd, selectError } from '../app/appSlice';
-import { selectMessages, fetchAsyncGet, reduceShowMessages, reduceMessages } from './messageSlice';
+import { selectMessages, selectShowMessages, fetchAsyncGet, reduceShowMessages, reduceMessages, reduceNewMessages } from './messageSlice';
 import Echo from 'laravel-echo';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +56,7 @@ export default function Message() {
     const [messageListPage, setMessageListPage] = React.useState(false);
     // メッセージデータの取得
     const messages = useSelector(selectMessages)
+    const showMessages = useSelector(selectShowMessages)
     const errorMessages = useSelector(selectError)
     const dispatch = useDispatch()
 
@@ -67,6 +68,11 @@ export default function Message() {
             // ログインユーザのIDを検索条件にメッセージ一覧を取得
             const resultReg = await dispatch(fetchAsyncGet(localStorage.getItem('loginId')))
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
+                // 新規ユーザへのメッセージの場合はメッセージ詳細タブをデフォルトに表示
+                if(showMessages[0].target_id) {
+                    handleTabMessage()
+                    handleChange(null, 0)
+                }
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -76,6 +82,9 @@ export default function Message() {
         // 上で定義した非同期の関数を実行
         fetchMessages()
         
+        /**
+         * メッセージのリアルタイム取得
+         */
         window.Echo = new Echo({
             broadcaster: 'pusher',
             // Laravelの環境変数から値を取得
@@ -85,13 +94,32 @@ export default function Message() {
         });
         var channel = window.Echo.channel('message');
         channel.listen('.my-event', function(data) {
+            // メッセージリストにあるユーザからのメッセージかどうか確認
+            let flg = false
+            messages.map((m) => 
+                m.user_id === data.message.message.user_id_sender ? flg = true : ''
+            )
             // 受信したメッセージデータを表示(受信者側のみ)
-            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
-                dispatch(reduceShowMessages(data.message.message))
+            flg ? 
+                data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                    dispatch(reduceShowMessages(data.message.message))
+                :
+                    ''
             :
                 ''
-            // 受信したメッセージデータを表示
-            dispatch(reduceMessages(data.message.realtime_message_list))
+            // メッセージリストの更新
+            flg ? 
+                data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                    // 受信したメッセージデータを表示
+                    dispatch(reduceMessages(data.message.realtime_message_list))
+                :
+                    ''
+            :
+                data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                    // 受信したメッセージデータを表示
+                    dispatch(reduceNewMessages(data.message.realtime_message_list))
+                :
+                    ''
         })
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])

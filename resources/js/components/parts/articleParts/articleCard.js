@@ -4,7 +4,7 @@ import ArticleCardExpand from './articleCardExpand';
 import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal } from '../../app/appSlice';
 import { 
   selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes, selectComments, selectCommentsCounts, 
-  fetchAsyncGetComments, fetchAsyncUpdateComments
+  fetchAsyncGetComments, fetchAsyncUpdateComments, editArticle
 } from '../../articles/articleSlice';
 import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
@@ -153,12 +153,13 @@ export default function ArticleCard(props) {
   }
   
   // 記事の編集モーダルを表示
-  const editArticle = () => {
+  const editModal = (value) => {
+    dispatch(editArticle(value))
     dispatch(fetchOpenModal(true))
     return;
   }
   // 記事の削除処理
-  const deleteArticle = () => {
+  const deleteModal = () => {
     if (confirm('この記事を削除しますか？')) {
       // 記事の削除処理
 
@@ -168,7 +169,7 @@ export default function ArticleCard(props) {
   }
 
   // 操作ボタンのクリック時
-  const handleButton = () => {
+  const handleButton = (value) => {
     return (
       <PopupState variant="popover" popupId="demo-popup-menu">
         {(popupState) => (
@@ -177,8 +178,8 @@ export default function ArticleCard(props) {
               <MoreVertIcon style={{ fontSize: 20 }} />
             </IconButton>
             <Menu {...bindMenu(popupState)}>
-              <MenuItem className={classes.menuItem} onClick={popupState.close, editArticle}><EditIcon style={{ marginRight: 5, color: 'blue' }} />編集</MenuItem>
-              <MenuItem className={classes.menuItem} onClick={popupState.close, deleteArticle}><DeleteForeverIcon style={{ marginRight: 5, color: 'red' }} />削除</MenuItem>
+              <MenuItem className={classes.menuItem} onClick={popupState.close, () => editModal(value)}><EditIcon style={{ marginRight: 5, color: 'blue' }} />編集</MenuItem>
+              <MenuItem className={classes.menuItem} onClick={popupState.close, deleteModal}><DeleteForeverIcon style={{ marginRight: 5, color: 'red' }} />削除</MenuItem>
             </Menu>
           </React.Fragment>
         )}
@@ -226,7 +227,7 @@ export default function ArticleCard(props) {
     await dispatch(fetchCredEnd()); 
     return;
   }
-  // console.log(likes.data != undefined ? likes.data : '')
+  
   return (
     _.map(props.article != undefined ? props.article : '', article => (
       <>
@@ -250,7 +251,7 @@ export default function ArticleCard(props) {
                     action={
                       // ログインユーザが生成した記事以外は表示しないように設定
                       article.user_id == localStorage.getItem('loginId') ? 
-                        handleButton()
+                        handleButton(article)
                       : ''
                     }
                     title={<Typography className={classes.mobileHeaderTitle}>{article.title}</Typography>}
@@ -301,7 +302,7 @@ export default function ArticleCard(props) {
                   action={
                     // ログインユーザが生成した記事以外は表示しないように設定
                     article.user_id == localStorage.getItem('loginId') ? 
-                      handleButton()
+                      handleButton(article)
                     : ''
                   }
                   title={<Typography className={classes.mobileHeaderTitle}>{article.title}</Typography>}
@@ -356,7 +357,7 @@ export default function ArticleCard(props) {
                     action={
                       // ログインユーザが生成した記事以外は表示しないように設定
                       article.user_id == localStorage.getItem('loginId') ? 
-                        handleButton()
+                        handleButton(article)
                       : ''
                     }
                     title={<Typography className={classes.headerTitle}>{article.title}</Typography>}
@@ -407,7 +408,7 @@ export default function ArticleCard(props) {
                   action={
                     // ログインユーザが生成した記事以外は表示しないように設定
                     article.user_id == localStorage.getItem('loginId') ? 
-                      handleButton()
+                      handleButton(article)
                     : ''
                   }
                   title={<Typography className={classes.headerTitle}>{article.title}</Typography>}

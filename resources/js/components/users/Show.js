@@ -172,18 +172,19 @@ function UserShow(props) {
                                         <EditIcon />
                                     </Fab>
                                 </Tooltip>
-                            : ''
+                            : 
+                                // ログインユーザ以外には"リプライ"ボタンを表示
+                                <IconButton
+                                    style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
+                                >
+                                    <ReplyIcon
+                                        edge="end"
+                                        onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : ''))}
+                                        inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : '') }}
+                                        className={classes.addIcon}
+                                    />
+                                </IconButton>
                         }
-                        <IconButton
-                            style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
-                        >
-                            <ReplyIcon
-                                edge="end"
-                                onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : ''))}
-                                inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : '') }}
-                                className={classes.addIcon}
-                            />
-                        </IconButton>
                         {
                             // 友達リクエストが来ているユーザを表示した場合
                             friendStatus != undefined && selectedUser.value != undefined ? 
@@ -196,7 +197,6 @@ function UserShow(props) {
                                 : ''
                             : ''
                         }
-                        
                     </Grid>
                     <Grid item xs={12} sm={12} md={6}>
                         <CardMedia

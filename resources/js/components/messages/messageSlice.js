@@ -43,6 +43,26 @@ export const fetchAsyncGetShow = createAsyncThunk('messages/show', async(conditi
 })
 
 /**
+ * データの作成
+ */
+export const fetchAsyncCreate = createAsyncThunk('messages/create', async(message) => {
+    try {
+        const res = await axios.post(`${apiUrl}/update`, message, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
  * データの更新
  */
 export const fetchAsyncUpdate = createAsyncThunk('messages/update', async(message) => {
@@ -106,19 +126,6 @@ const messageSlice = createSlice({
                 updated_at: '',             // メッセージの更新日
             },
         ],
-        // messageの編集時に選択・保持するstate
-        editedMessage: {
-            id: '',                     // ID
-            user_id_sender: '',         // 送信者ID
-            user_id_receiver: '',       // 受信者ID
-            sender_name: '',            // 送信者名
-            receiver_name: '',          // 受信者名
-            sender_photo: '',           // 送信者イメージ
-            receiver_photo: '',         // 受信者イメージ
-            content: '',                // 内容
-            created_at: '',             // メッセージの作成日
-            updated_at: '',             // メッセージの更新日
-        },
         // メッセージボードに表示するメッセージ内容
         showMessages: [{
             id: '',                     // ID
@@ -133,9 +140,6 @@ const messageSlice = createSlice({
     },
     // Reducer (actionの処理を記述)
     reducers: {
-        editMessage(state, action) {
-            state.editedMessage = action.payload
-        },
         // Pusherから受け取ったデータを処理
         reduceMessages(state, action) {
             return {
@@ -143,6 +147,13 @@ const messageSlice = createSlice({
                 messages: state.messages.map((m) => 
                     m.user_id === action.payload.user_id ? action.payload : m
                 ),
+            }
+        },
+        // Pusherから受け取ったデータを処理
+        reduceNewMessages(state, action) {
+            return {
+                ...state,
+                messages: [...state.messages, action.payload]
             }
         },
         // Pusherから受け取ったデータを処理
@@ -158,9 +169,6 @@ const messageSlice = createSlice({
                 ...state,
                 showMessages: action.payload, 
             }
-            // state.showMessages.target_id = action.payload.id    // ユーザID
-            // state.showMessages.name = action.payload.name       // ユーザのニックネーム
-            // state.showMessages.gender = action.payload.gender   // ユーザの性別
         },
     },
     // 追加Reducer (Api通信の処理を記述)
@@ -176,6 +184,23 @@ const messageSlice = createSlice({
             return {
                 ...state,
                 showMessages: action.payload.messages,
+            }
+        })
+        builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
+            // エラーが返ってきた場合
+            if(action.payload.error_message) {
+                return {
+                    ...state,
+                    showMessages: [...state.showMessages],
+                    messages: [...state.messages]
+                }  
+            }
+            
+            // 正常に完了した場合
+            return {
+                ...state,
+                showMessages: [action.payload.messages],  // 初回のshwMessagesデータを更新しないとfetchAsyncUpdateに処理が移らない
+                messages: [...state.messages, action.payload.message_lists]
             }
         })
         builder.addCase(fetchAsyncUpdate.fulfilled, (state, action) => {
@@ -213,7 +238,7 @@ const messageSlice = createSlice({
     },
 })
 
-export const { editMessage, reduceMessages, reduceShowMessages, reduceSetShowMessage } = messageSlice.actions
+export const { editMessage, reduceMessages, reduceNewMessages, reduceShowMessages, reduceSetShowMessage } = messageSlice.actions
 
 export const selectSelectedMessage = (state) => state.message.selectedMessage
 export const selectEditedMessage = (state) => state.message.editedMessage
