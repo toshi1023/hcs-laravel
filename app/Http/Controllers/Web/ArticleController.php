@@ -21,16 +21,6 @@ class ArticleController extends Controller
     $this->database = $database;
   }
 
-  public function index()
-  {
-      $articles = $this->database->getIndex();
-      
-      return view('articles/index', [
-          'articles' => $articles['articles'],
-          'free_articles' => $articles['free_articles'],
-      ]);
-  }
-
   /* 記事作成メソッド */
   public function create()
   {

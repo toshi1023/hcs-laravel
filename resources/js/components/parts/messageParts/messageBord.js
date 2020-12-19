@@ -149,7 +149,6 @@ export default function MessageBord() {
                                                 <div>
                                                     <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
                                                         <Avatar
-                                                            alt={value.target_id}
                                                             src={value.users_photo_path}
                                                             className={classes.avatar}
                                                         />
@@ -215,7 +214,6 @@ export default function MessageBord() {
                                                 <div>
                                                     <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
                                                         <Avatar
-                                                            alt={value.target_id}
                                                             src={value.users_photo_path}
                                                             className={classes.avatar}
                                                         />

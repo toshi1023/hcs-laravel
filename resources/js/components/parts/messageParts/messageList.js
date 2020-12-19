@@ -108,10 +108,10 @@ export default function MessageList(props) {
 
         return (
           <>
-            <ListItem key={value.id} button onClick={() => handleSetMessages(value.user_id)} >
+            <ListItem button key={value.id} onClick={() => handleSetMessages(value.user_id)} >
               <ListItemAvatar>
                 <Avatar
-                  alt={value.user_id}
+                  alt={value.name}
                   src={value.users_photo_path}
                   className={classes.avatar}
                 />

@@ -237,7 +237,7 @@ export default function ArticleCard(props) {
           article.type == 1 ? 
             localStorage.getItem('localToken') ? 
               <div className={classes.sectionMobile}>
-                <Card className={classes.mobileRoot}>
+                <Card className={classes.mobileRoot} key={article.id}>
                   <CardHeader
                     avatar={
                     //   プロフィール画像
@@ -288,7 +288,7 @@ export default function ArticleCard(props) {
               ''
           :
             <div className={classes.sectionMobile}>
-              <Card className={classes.mobileRoot}>
+              <Card className={classes.mobileRoot} key={article.id}>
                 <CardHeader
                   avatar={
                   //   プロフィール画像
@@ -343,7 +343,7 @@ export default function ArticleCard(props) {
           article.type == 1 ? 
             localStorage.getItem('localToken') ? 
               <div className={classes.sectionDesktop}>
-                <Card className={classes.root}>
+                <Card className={classes.root} key={article.id}>
                   <CardHeader
                     avatar={
                       // プロフィール画像
@@ -394,7 +394,7 @@ export default function ArticleCard(props) {
               ''
           :
             <div className={classes.sectionDesktop}>
-              <Card className={classes.root}>
+              <Card className={classes.root} key={article.id}>
                 <CardHeader
                   avatar={
                     // プロフィール画像

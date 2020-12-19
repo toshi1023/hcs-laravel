@@ -32,10 +32,10 @@ export default function CommentList(props) {
                         comment.article_id === props.articleId 
                         ?
                             <div>
-                                <ListItem alignItems="flex-start">
-                                    <ListItemAvatar>
-                                      <Tooltip title={comment.user_name} classes={{tooltip: classes.tooltip}}>
-                                        <Avatar alt={comment.user_name} src={comment.users_photo_path} />
+                                <ListItem alignItems="flex-start" key={comment.id}>
+                                    <ListItemAvatar key={comment.id}>
+                                      <Tooltip title={comment.user_name} classes={{tooltip: classes.tooltip}} key={comment.id}>
+                                        <Avatar alt={comment.user_name} src={comment.users_photo_path} key={comment.id} />
                                       </Tooltip>
                                     </ListItemAvatar>
                                     <ListItemText

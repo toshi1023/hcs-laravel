@@ -248,7 +248,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         $model = $this->getModel('comments');
         
         // 記事ごとのコメントとユーザ情報を取得
-        $query = $model->select('comments.comment', 'comments.user_id', 'comments.article_id', 'users.users_photo_path', 'users.name as user_name')
+        $query = $model->select('comments.id', 'comments.comment', 'comments.user_id', 'comments.article_id', 'users.users_photo_path', 'users.name as user_name')
                           ->from('comments')
                           ->leftJoin('users', 'comments.user_id', '=', 'users.id')
                           ->where('comments.delete_flg', '=', 0);

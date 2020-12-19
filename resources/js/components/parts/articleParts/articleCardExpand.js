@@ -1,8 +1,11 @@
 import React from 'react';
 import CommentList from './commentList';
 import { makeStyles } from '@material-ui/core/styles';
-import { Collapse, Box, CardContent, CardActions, Typography, IconButton, Tooltip, TextField, FormControl, Grid } from '@material-ui/core';
+import { Collapse, Box, CardContent, CardActions, Typography, IconButton, 
+         Tooltip, TextField, FormControl, Grid, Button } 
+from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import MapIcon from '@material-ui/icons/Map';
 import ShareIcon from '@material-ui/icons/Share';
 import CommentIcon from '@material-ui/icons/Comment';
 import ReplyIcon from '@material-ui/icons/Reply';
@@ -64,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
     tooltip: {
         fontSize: 14,
     },
+    mapButton: {
+        marginLeft: theme.spacing(1),
+        fontSize: 13,
+    }
 }))
 
 function ArticleCardExpand (props) {
@@ -168,9 +175,14 @@ function ArticleCardExpand (props) {
                                 }
                         </span>
                         {/* シェア'ボタンのデザイン */}
-                        <IconButton aria-label="share">
+                        {/* <IconButton aria-label="share">
                             <ShareIcon style={{ fontSize: 17 }} />
-                        </IconButton>
+                        </IconButton> */}
+
+                        {/* Mapボタンのデザイン */}
+                        <Button variant="contained" color="primary" className={classes.mapButton}>
+                            <MapIcon />
+                        </Button>
                     </div>
                     : ''
                 }
@@ -274,10 +286,17 @@ function ArticleCardExpand (props) {
                             }
                         </span>
                         {/* シェア'ボタンのデザイン */}
-                        <Tooltip title="シェアする" classes={{tooltip: classes.tooltip}}>
+                        {/* <Tooltip title="シェアする" classes={{tooltip: classes.tooltip}}>
                             <IconButton aria-label="share">
                                 <ShareIcon style={{ fontSize: 20 }} />
                             </IconButton>
+                        </Tooltip> */}
+
+                        {/* Mapボタンのデザイン */}
+                        <Tooltip title="Mapで確認する" classes={{tooltip: classes.tooltip}}>
+                            <Button variant="contained" color="primary" className={classes.mapButton}>
+                                <MapIcon />
+                            </Button>
                         </Tooltip>
                     </div>
                     : ''
