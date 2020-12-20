@@ -62,9 +62,12 @@ function Article() {
     const [tab, setTab] = React.useState(0);
     const [articlePage, setArticlePage] = React.useState(false);
     const [friendListPage, setFriendListPage] = React.useState(true);
+    // フレンドリストの表示フラグ
+    const [state, setState] = React.useState({
+        friends: true,
+    })
     // stateで管理するデータを使用できるように定数に格納
     const articles = useSelector(selectArticles)
-    const friends = useSelector(selectUsers)
     const searchedUser = useSelector(selectSearchUser)
     const infoMessages = useSelector(selectInfo)
     const dispatch = useDispatch()
@@ -74,11 +77,17 @@ function Article() {
         const fetchArticleProf = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
-            // 記事一覧を取得
-            const resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: ''}))
-            // 友達一覧を取得
-            const resultFriends = await dispatch(fetchAsyncGetFriends(localStorage.getItem('loginId')))
-            if (fetchAsyncGet.fulfilled.match(resultReg) && fetchAsyncGetFriends.fulfilled.match(resultFriends)) {
+            let resultReg = ''
+            // Mapページからユーザ検索が実行されているかどうかで分岐
+            if(searchedUser.user_id) {
+                // 記事一覧を取得
+                resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: searchedUser.user_id}))
+            } else {
+                // 記事一覧を取得
+                resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: ''}))
+            }
+            
+            if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -120,7 +129,6 @@ function Article() {
     const handleSearchClear = async () => {
         // Loading開始
         await dispatch(fetchCredStart())
-        
         // 記事一覧を取得
         const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', user_id: ''}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
@@ -152,6 +160,20 @@ function Article() {
     const handleTabFriendList = () => {
         setArticlePage(true)
         setFriendListPage(false)
+    }
+
+    // フレンドリストの表示制御
+    const setFriends = () => {
+        setState({
+            ...state,
+            friends: document.getElementById("friendsSwitch").checked,
+        })
+    }
+    const setMobileFriends = () => {
+        setState({
+            ...state,
+            friends: document.getElementById("friendsMobileSwitch").checked,
+        })
     }
     
     // 記事一覧を生成
@@ -215,17 +237,19 @@ function Article() {
                         <h1 className={styles.titleBar}>
                             ユーザで検索する
                         </h1>
-                        <SwitchType 
-                            id="friendsSwitch"
-                            switchLabel={{true: '友達のみ', false: '全員'}}
-                            labelPlacement='end'
-                            className={classes.switchType}
-                            // checked={state.gender}
-                        />
+                        <div onClick={setMobileFriends}>
+                            <SwitchType 
+                                id="friendsMobileSwitch"
+                                switchLabel={{true: '友達のみ', false: '全員'}}
+                                initialState={true}
+                                labelPlacement='end'
+                                className={classes.switchType}
+                            />
+                        </div>
                         <br />
                         {
                             localStorage.getItem('loginId') ? 
-                                <FriendList friend={friends} handleChange={handleChange} handleTabArticle={handleTabArticle} />
+                                <FriendList handleChange={handleChange} handleTabArticle={handleTabArticle} />
                             : <MessageCard />
                         }
                     </Grid>
@@ -244,17 +268,19 @@ function Article() {
                                 ユーザで検索する
                             </h1>
                         </Grid>
-                        <SwitchType 
-                            id="friendsSwitch"
-                            switchLabel={{true: '友達のみ', false: '全員'}}
-                            labelPlacement='end'
-                            className={classes.switchType}
-                            // checked={state.gender}
-                        />
+                        <div onClick={setFriends}>
+                            <SwitchType 
+                                id="friendsSwitch"
+                                switchLabel={{true: '友達のみ', false: '全員'}}
+                                initialState={true}
+                                labelPlacement='end'
+                                className={classes.switchType}
+                            />
+                        </div>
                         <br />
                         {
                             localStorage.getItem('loginId') ? 
-                                <FriendList friend={friends} />
+                                <FriendList friendList={state.friends} />
                             : 
                                 <Grid container justify="center">
                                     <Grid item sm={10}>

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { selectUsers } from '../users/userSlice';
 
 const apiUrl = 'http://localhost/api/api_articles'
 // const apiUrl = 'http://hcs-laravel/api/api_articles'
@@ -288,6 +289,9 @@ const articleSlice = createSlice({
         ],
         searchedUser: {
             user_id: '',
+        },
+        selectedUser: {
+            user_id: '',
         }
     },
     // Reducer (actionの処理を記述)
@@ -305,8 +309,8 @@ const articleSlice = createSlice({
             state.selectedLike = action.payload
         },
         searchUser(state, action) {
-            state.searchedUser = action.payload
-        }
+            state.searchedUser.user_id = action.payload
+        },
     },
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {

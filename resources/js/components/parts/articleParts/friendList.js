@@ -1,7 +1,9 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
 import { fetchAsyncGet, searchUser } from '../../articles/articleSlice';
+import { selectUsers, fetchAsyncGetFriends } from '../../users/userSlice';
+import UserList from './userList';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -32,7 +34,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function FriendList(props) {
     const classes = useStyles();
+    const friends = useSelector(selectUsers)
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        // 非同期の関数を定義
+        const fetchUser = async () => {
+            // Loading開始
+            await dispatch(fetchCredStart())
+            // 友達一覧を取得
+            const resultReg = await dispatch(fetchAsyncGetFriends(localStorage.getItem('loginId')))
+            if (fetchAsyncGet.fulfilled.match(resultReg)) {
+                // ロード終了
+                await dispatch(fetchCredEnd());       
+            }
+        }
+        // 上で定義した非同期の関数を実行
+        fetchUser()
+        // dispatchをuseEffectの第2引数に定義する必要がある
+    }, [dispatch])
 
     // 選択したフレンドの記事を取得
     const handleFriendArticles = async value => {
@@ -68,36 +88,41 @@ export default function FriendList(props) {
     
     return (
         <List dense className={classes.root}>
-            {_.map(props.friend, value => {
-        
-                return (
-                    <>
-                        {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-                        <ListItem
-                            key={value.target_id}
-                            button
-                            onClick={() => handleFriendArticles(value)}
-                        >
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={`Avatar n°${value.target_id}`}
-                                    src={`${value.users_photo_path}`}
-                                    className={classes.avatar}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText
-                                id={value.target_id}
-                                primary={`${value.name}`}
-                                classes={{ primary: classes.list }}
-                                style={{
-                                    color: value.gender == 1 ? "blue" : "red"
-                                }}
-                            />
-                        </ListItem>
-                        <hr />
-                    </>
-                );
-            })}
+            {
+                props.friendList ? 
+                    _.map(friends, value => {
+                
+                        return (
+                            <>
+                                {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
+                                <ListItem
+                                    key={value.target_id}
+                                    button
+                                    onClick={() => handleFriendArticles(value)}
+                                >
+                                    <ListItemAvatar>
+                                        <Avatar
+                                            alt={`Avatar n°${value.target_id}`}
+                                            src={`${value.users_photo_path}`}
+                                            className={classes.avatar}
+                                        />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        id={value.target_id}
+                                        primary={`${value.name}`}
+                                        classes={{ primary: classes.list }}
+                                        style={{
+                                            color: value.gender == 1 ? "blue" : "red"
+                                        }}
+                                    />
+                                </ListItem>
+                                <hr />
+                            </>
+                        );
+                    })
+                :
+                    <UserList handleFriendArticles={handleFriendArticles} />
+            }
         </List>
     );
 }

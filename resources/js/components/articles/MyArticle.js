@@ -422,6 +422,7 @@ function MyArticle() {
                                                     <SwitchType 
                                                         id="mobileTypeSwitch"
                                                         switchLabel={{true: '会員限定', false: '全員'}}
+                                                        initialState={false}
                                                         labelPlacement='bottom'
                                                         checked={state.type}
                                                         value={values.type}
@@ -549,6 +550,7 @@ function MyArticle() {
                                                         <SwitchType 
                                                             id="typeSwitch"
                                                             switchLabel={{true: '会員限定', false: '全員'}}
+                                                            initialState={false}
                                                             labelPlacement='bottom'
                                                             checked={state.type}
                                                             value={values.type}

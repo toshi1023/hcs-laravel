@@ -310,6 +310,7 @@ export default function UserCreate() {
                                                     <SwitchType 
                                                         id="genderSwitch"
                                                         switchLabel={{true: '男性', false: '女性'}}
+                                                        initialState={false}
                                                         labelPlacement='bottom'
                                                         checked={state.gender}
                                                         value={values.gender}
