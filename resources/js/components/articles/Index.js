@@ -113,7 +113,7 @@ function Article() {
                 prefecture = ''
             }
             // 記事一覧を取得
-            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, user_id: searchedUser}))
+            const resultSearch = await dispatch(fetchAsyncGet({prefecture: prefecture, user_id: searchedUser.user_id}))
             if (fetchAsyncGet.fulfilled.match(resultSearch)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
