@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
     searchMapUserButton: {
         marginTop: theme.spacing(1),
+        width: '100%',
         fontSize: 13,
     }
 }))
