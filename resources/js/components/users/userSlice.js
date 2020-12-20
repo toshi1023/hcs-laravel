@@ -294,6 +294,9 @@ const userSlice = createSlice({
             prefecture: '',             // 都道府県
             status: '',                 // 申請状況
         }],
+        messageHistory: [{
+            user_id: ''                 // ユーザID
+        }]
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -343,7 +346,8 @@ const userSlice = createSlice({
             return {
                 ...state,
                 users: action.payload.users, //apiから取得した記事の情報をstateのusersに格納
-                friendStatus: action.payload.friends
+                friendStatus: action.payload.friends,
+                messageHistory: action.payload.messages
             }
         })
         builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
@@ -419,5 +423,6 @@ export const selectLoggedInUser = (state) => state.user.loggedInUser
 export const selectEditedUser = (state) => state.user.editedUser
 export const selectUsers = (state) => state.user.users
 export const selectFriendStatus = (state) => state.user.friendStatus
+export const selectMessageHistory = (state) => state.user.messageHistory
 
 export default userSlice.reducer

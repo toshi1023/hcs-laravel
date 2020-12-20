@@ -75,14 +75,13 @@ Route::namespace('Web')->group(function(){
 
     /********** ルート **********/
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/home', 'HomeController@index')->name('home2');
-    Route::get('/welcome', 'HomeController@welcome')->name('welcome');
 
     /********** 記事管理(articles) **********/
     Route::get('/articles',             'ArticleController@index')->name('articles.index');
     Route::get('/articles/create',      'ArticleController@create')->name('articles.create');
     Route::get('/articles/{id}',        'ArticleController@show')->name('articles.show');
     Route::get('/articles/{id}/edit',   'ArticleController@edit')->name('articles.edit');
+    Route::get('/map',   'ArticleController@index')->name('articles.map');
     // Route::post('/articles',            'ArticleController@store')->name('articles.store');
     // Route::put('/articles/{id}',        'ArticleController@edit')->name('articles.edit');
     // Route::get('/articles/{id}/edit',   'ArticleController@edit')->name('articles.edit');

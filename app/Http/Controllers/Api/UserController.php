@@ -39,7 +39,8 @@ class UserController extends Controller
   
         return response()->json([
           'users' => $data['users'], 
-          'friends' => $data['friends']
+          'friends' => $data['friends'],
+          'messages' => $data['messages']
         ],200, [], JSON_UNESCAPED_UNICODE);
       } catch (Exception $e) {
         \Log::error('User get Error:'.$e->getMessage());

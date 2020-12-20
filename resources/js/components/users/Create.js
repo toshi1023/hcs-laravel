@@ -309,7 +309,8 @@ export default function UserCreate() {
                                                     <FormLabel style={{fontSize: 15}} name="gender" display="block">性別</FormLabel>
                                                     <SwitchType 
                                                         id="genderSwitch"
-                                                        switchLabel={{true: '男性', false: '女性'}} 
+                                                        switchLabel={{true: '男性', false: '女性'}}
+                                                        labelPlacement='bottom'
                                                         checked={state.gender}
                                                         value={values.gender}
                                                     />

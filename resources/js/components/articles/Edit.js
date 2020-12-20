@@ -204,7 +204,8 @@ const useStyles = makeStyles((theme) => ({
                                         <div className={classes.margin} onClick={setType}>
                                             <SwitchType 
                                                 id="modalTypeSwitch"
-                                                switchLabel={{true: '会員限定', false: '全員'}} 
+                                                switchLabel={{true: '会員限定', false: '全員'}}
+                                                labelPlacement='bottom'
                                                 checked={state.type}
                                                 value={editedArticle ? editedArticle.type : values.type}
                                             />

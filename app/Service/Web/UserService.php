@@ -5,17 +5,21 @@ namespace App\Service\Web;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use App\DataProvider\DatabaseInterface\UserDatabaseInterface;
+use App\DataProvider\DatabaseInterface\MessageDatabaseInterface;
+
 use Storage;
 
 class UserService
 {
 
   protected $UserService;
+  protected $MessageService;
   
   /* DBリポジトリのインスタンス化 */
-  public function __construct(UserDatabaseInterface $service)
+  public function __construct(UserDatabaseInterface $service, MessageDatabaseInterface $messageService)
   {
     $this->UserService = $service; 
+    $this->MessageService = $messageService;
   }
 
   /**
@@ -29,10 +33,13 @@ class UserService
       $users = $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
       // フレンド情報取得
       $friends = $this->UserService->getFriendsQuery(request()->input('queryId'))->get();
+      // メッセージ履歴の取得(メッセージ相手のIDのみ取得)
+      $messages = $this->MessageService->getIndexQuery(['user_id' => \Auth::user()->id])->select('messangers.user_id')->get();
 
       return [
         'users'   => $users,
-        'friends' => $friends
+        'friends' => $friends,
+        'messages' => $messages
       ];
     }
     // 指定したテーブルのデータをソートして取得

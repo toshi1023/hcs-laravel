@@ -53,7 +53,7 @@ const MenuDrawer = (props) => {
     {
       text: 'Map',
       icon: <MapIcon />,
-      onClick: () => history.push('/')
+      onClick: () => history.push('/map')
     },
     {
       text: '記事',

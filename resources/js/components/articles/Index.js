@@ -8,12 +8,13 @@ import PrefectureSelects from '../parts/common/prefectureSearch';
 import MessageCard from '../parts/common/messageCard';
 import FriendList from '../parts/articleParts/friendList';
 import SnackMessages from '../parts/common/snackMessages';
+import SwitchType from '../parts/common/switch';
 import _ from 'lodash';
 import { Grid, Paper, Tabs, Tab, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CommentIcon from '@material-ui/icons/Comment';
 import GroupIcon from '@material-ui/icons/Group';
-import styles from '../app/bodyTitle.module.css';
+import styles from '../parts/common/commonParts.module.css';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 15,
         marginTop: theme.spacing(2),
         marginLeft: theme.spacing(2),
-    }
+    },
   }));
 
 function Article() {
@@ -211,9 +212,16 @@ function Article() {
                         {renderArticles()}
                     </Grid>
                     <Grid item xs={11} hidden={friendListPage}>
-                        <h1 className={styles.friendList}>
-                            フレンドの記事を見る
+                        <h1 className={styles.titleBar}>
+                            ユーザで検索する
                         </h1>
+                        <SwitchType 
+                            id="friendsSwitch"
+                            switchLabel={{true: '友達のみ', false: '全員'}}
+                            labelPlacement='end'
+                            className={classes.switchType}
+                            // checked={state.gender}
+                        />
                         <br />
                         {
                             localStorage.getItem('loginId') ? 
@@ -232,10 +240,17 @@ function Article() {
                     </Grid>
                     <Grid item sm={4} className={classes.sectionDesktop}>
                         <Grid item sm={11}>
-                            <h1 className={styles.friendList}>
-                                フレンドの記事を見る
+                            <h1 className={styles.titleBar}>
+                                ユーザで検索する
                             </h1>
                         </Grid>
+                        <SwitchType 
+                            id="friendsSwitch"
+                            switchLabel={{true: '友達のみ', false: '全員'}}
+                            labelPlacement='end'
+                            className={classes.switchType}
+                            // checked={state.gender}
+                        />
                         <br />
                         {
                             localStorage.getItem('loginId') ? 

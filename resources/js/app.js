@@ -15,7 +15,8 @@ require('./bootstrap');
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import Login from './components/users/Login';
-import Home from './components/home/Home';
+import Home from './components/articles/home/Home';
+import Map from './components/articles/map/Map';
 import Article from './components/articles/Index';
 import MyArticle from './components/articles/MyArticle';
 import User from './components/users/Index';
@@ -70,6 +71,7 @@ function App() {
             <Switch>
               <Route exact path="/login" render={props => <Login {...props} />} />
               <Route exact path="/" render={props => <Home {...props} />} /> {/* history.pushを活用するためにpropsを渡す */}
+              <Route exact path="/map" render={props => <Map {...props} />} />
               <Route exact path="/articles" render={props => <Article {...props} />} />
               <Route exact path="/articles/mypage" render={props => <MyArticle {...props} />} />
               <Route exact path="/users" render={props => <User {...props} />} />

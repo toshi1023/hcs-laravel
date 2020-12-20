@@ -14,7 +14,7 @@ import PersonPinIcon from '@material-ui/icons/PersonPin';
 import GroupIcon from '@material-ui/icons/Group'; 
 import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
-import styles from '../app/bodyTitle.module.css';
+import styles from '../parts/common/commonParts.module.css';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -164,7 +164,7 @@ function Profile(props) {
                             </Grid>
                         </Grid>
                         <Grid item xs={11} hidden={userListPage}>
-                            <h1 className={styles.friendList}>
+                            <h1 className={styles.titleBar}>
                                 フレンド一覧
                                 <Button variant="outlined" color="primary" className={classes.profileButton}>
                                     プロフィールを表示
@@ -189,7 +189,7 @@ function Profile(props) {
                     </Grid>
                     <Grid item sm={4}>
                         <Grid item sm={11}>
-                            <h1 className={styles.friendList}>
+                            <h1 className={styles.titleBar}>
                                 フレンド一覧
                                 <Button variant="outlined" color="primary" className={classes.profileButton} onClick={handleGetProfile}>
                                     プロフィールを表示

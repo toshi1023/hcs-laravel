@@ -298,7 +298,8 @@ function UserEdit(props) {
                                             <FormControl className={classes.margin}>
                                                 <FormLabel style={{fontSize: 11}} display="block">性別</FormLabel>
                                                 <SwitchType 
-                                                    switchLabel={{true: '男性', false: '女性'}} 
+                                                    switchLabel={{true: '男性', false: '女性'}}
+                                                    labelPlacement='bottom'
                                                     checked={state.gender}
                                                     value={state.gender}
                                                 />

@@ -82,6 +82,14 @@ function ArticleCardExpand (props) {
         user_id: localStorage.getItem('loginId'),
         comment: ''
     })
+
+    // Google Mapで記事のロケーションを表示
+    const handleMapView = (value) => {
+        // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
+        let url = `https://www.google.com/maps?q=${value.latitude},${value.longitude}`;
+        // 新規タブを開いてページを遷移
+        window.open(url, "google")
+    }
     
     /**
      * 拡張ページの表示
@@ -180,7 +188,7 @@ function ArticleCardExpand (props) {
                         </IconButton> */}
 
                         {/* Mapボタンのデザイン */}
-                        <Button variant="contained" color="primary" className={classes.mapButton}>
+                        <Button variant="contained" color="primary" className={classes.mapButton} onClick={() => handleMapView(props.article)}>
                             <MapIcon />
                         </Button>
                     </div>
@@ -293,8 +301,8 @@ function ArticleCardExpand (props) {
                         </Tooltip> */}
 
                         {/* Mapボタンのデザイン */}
-                        <Tooltip title="Mapで確認する" classes={{tooltip: classes.tooltip}}>
-                            <Button variant="contained" color="primary" className={classes.mapButton}>
+                        <Tooltip title="Mapで場所を確認" classes={{tooltip: classes.tooltip}}>
+                            <Button variant="contained" color="primary" className={classes.mapButton} onClick={() => handleMapView(props.article)}>
                                 <MapIcon />
                             </Button>
                         </Tooltip>

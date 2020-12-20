@@ -1,6 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSelectedUser, editUser, selectFriendStatus, fetchAsyncUpdateFriends, fetchAsyncGetFriendsApply } from "./userSlice";
+import { selectSelectedUser, editUser, selectFriendStatus, 
+         fetchAsyncUpdateFriends, fetchAsyncGetFriendsApply,
+         selectMessageHistory
+} from "./userSlice";
 import { fetchGetInfoMessages, selectInfo } from '../app/appSlice';
 import { reduceSetShowMessage } from '../messages/messageSlice';
 import SnackMessages from '../parts/common/snackMessages';
@@ -98,6 +101,7 @@ function UserShow(props) {
     // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
     const selectedUser = useSelector(selectSelectedUser)
     const friendStatus = useSelector(selectFriendStatus)
+    const messageHistory = useSelector(selectMessageHistory)
     const infoMessages = useSelector(selectInfo)
     
     // 編集データの管理用stateを更新
@@ -151,7 +155,7 @@ function UserShow(props) {
             await dispatch(fetchGetInfoMessages(resultReg))
         }
     }
-    
+
     return (
         <>
             {
@@ -173,17 +177,23 @@ function UserShow(props) {
                                     </Fab>
                                 </Tooltip>
                             : 
-                                // ログインユーザ以外には"リプライ"ボタンを表示
-                                <IconButton
-                                    style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
-                                >
-                                    <ReplyIcon
-                                        edge="end"
-                                        onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : ''))}
-                                        inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : '') }}
-                                        className={classes.addIcon}
-                                    />
-                                </IconButton>
+                                messageHistory[0].user_id ? 
+                                    selectedUser.user !== undefined && messageHistory.user_id !== selectedUser.user.id || selectedUser.value !== undefined && messageHistory.user_id !== selectedUser.value.id ? 
+                                        // ログインユーザ以外でメッセージの履歴がないユーザには"リプライ"ボタンを表示
+                                        <IconButton
+                                            style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
+                                        >
+                                            <ReplyIcon
+                                                edge="end"
+                                                onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : ''))}
+                                                inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : '') }}
+                                                className={classes.addIcon}
+                                            />
+                                        </IconButton>
+                                    :
+                                        ''
+                                :
+                                    ''
                         }
                         {
                             // 友達リクエストが来ているユーザを表示した場合

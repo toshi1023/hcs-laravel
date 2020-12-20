@@ -35,7 +35,7 @@ export default function SwitchType(props) {
         }
         // label="仮ログイン"
         label={labelChange()}
-        labelPlacement="bottom"
+        labelPlacement={props.labelPlacement}
       />
     </FormGroup>
   );

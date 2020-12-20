@@ -152,7 +152,6 @@ function MyArticle() {
         doAction(values).then(async (value) => {
             const result = await dispatch(fetchAsyncCreate(value))
             if (fetchAsyncCreate.fulfilled.match(result)) {
-                
                 // infoメッセージの表示
                 result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
                 // 記事の再読み込み
@@ -422,7 +421,8 @@ function MyArticle() {
                                                 <div className={classes.margin} onClick={setType}>
                                                     <SwitchType 
                                                         id="mobileTypeSwitch"
-                                                        switchLabel={{true: '会員限定', false: '全員'}} 
+                                                        switchLabel={{true: '会員限定', false: '全員'}}
+                                                        labelPlacement='bottom'
                                                         checked={state.type}
                                                         value={values.type}
                                                     />
@@ -548,7 +548,8 @@ function MyArticle() {
                                                         <FormLabel name="type" display="hidden"></FormLabel>
                                                         <SwitchType 
                                                             id="typeSwitch"
-                                                            switchLabel={{true: '会員限定', false: '全員'}} 
+                                                            switchLabel={{true: '会員限定', false: '全員'}}
+                                                            labelPlacement='bottom'
                                                             checked={state.type}
                                                             value={values.type}
                                                         />
