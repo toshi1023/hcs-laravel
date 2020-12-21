@@ -178,20 +178,39 @@ function UserShow(props) {
                                 </Tooltip>
                             : 
                                 messageHistory[0].user_id ? 
-                                    selectedUser.user !== undefined && messageHistory.user_id !== selectedUser.user.id || selectedUser.value !== undefined && messageHistory.user_id !== selectedUser.value.id ? 
-                                        // ログインユーザ以外でメッセージの履歴がないユーザには"リプライ"ボタンを表示
-                                        <IconButton
-                                            style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
-                                        >
-                                            <ReplyIcon
-                                                edge="end"
-                                                onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : ''))}
-                                                inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : (selectedUser.user != undefined ? selectedUser.user.id : '') }}
-                                                className={classes.addIcon}
-                                            />
-                                        </IconButton>
+                                    selectedUser.user !== undefined ? 
+                                        messageHistory.find(element => element.user_id == selectedUser.user.id) ? 
+                                            ''
+                                        :
+                                            // ログインユーザ以外でメッセージの履歴がないユーザには"リプライ"ボタンを表示
+                                            <IconButton
+                                                style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
+                                            >
+                                                <ReplyIcon
+                                                    edge="end"
+                                                    onChange={handleToggleReply(selectedUser.user != undefined ? selectedUser.user.id : '')}
+                                                    inputProps={{ 'aria-labelledby': selectedUser.user != undefined ? selectedUser.user.id : '' }}
+                                                    className={classes.addIcon}
+                                                />
+                                            </IconButton>
                                     :
-                                        ''
+                                        selectedUser.value !== undefined ? 
+                                            messageHistory.find(element => element.user_id == selectedUser.value.id) ? 
+                                                ''
+                                            :
+                                                // ログインユーザ以外でメッセージの履歴がないユーザには"リプライ"ボタンを表示
+                                                <IconButton
+                                                    style={{ backgroundColor: "#d0ddf5", marginRight: 5 }} onClick={() => handleSetMessage(selectedUser)}
+                                                >
+                                                    <ReplyIcon
+                                                        edge="end"
+                                                        onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : '')}
+                                                        inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : '' }}
+                                                        className={classes.addIcon}
+                                                    />
+                                                </IconButton>
+                                        :
+                                            ''
                                 :
                                     ''
                         }
