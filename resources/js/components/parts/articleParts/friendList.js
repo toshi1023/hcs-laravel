@@ -39,57 +39,29 @@ export default function FriendList(props) {
 
     useEffect(() => {
         // 非同期の関数を定義
-        const fetchUser = async () => {
+        const fetchFriend = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
             // 友達一覧を取得
             const resultReg = await dispatch(fetchAsyncGetFriends(localStorage.getItem('loginId')))
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // ロード終了
-                await dispatch(fetchCredEnd());       
+                await dispatch(fetchCredEnd());
             }
+            // ロード終了
+            await dispatch(fetchCredEnd());
         }
         // 上で定義した非同期の関数を実行
-        fetchUser()
+        fetchFriend()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
 
-    // 選択したフレンドの記事を取得
-    const handleFriendArticles = async value => {
-
-        // Loading開始
-        await dispatch(fetchCredStart())
-        // 都道府県情報をセット
-        let prefecture = document.getElementById("prefecture").value
-        if(prefecture == '全都道府県') {
-            prefecture = ''
-        }
-        // selectArticlesのstateを更新するReducerにdispatch
-        const resultSearch = await dispatch(
-            fetchAsyncGet({ prefecture: prefecture, user_id: value.target_id })
-        )
-
-        if (fetchAsyncGet.fulfilled.match(resultSearch)) {
-            // タブ切り替え(スマホ版のみ)
-            props.handleChange ?  props.handleChange(null, 0) : ''
-            props.handleTabArticle ? props.handleTabArticle() : ''
-
-            // 検索中のユーザIDをstoreのstateに格納
-            dispatch(searchUser(value.target_id))
-            
-            // ロード終了
-            await dispatch(fetchCredEnd());
-            return;     
-        }
-        // ロード終了
-        await dispatch(fetchCredEnd());
-        return;
-    }
+    
     
     return (
         <List dense className={classes.root}>
             {
-                props.friendList ? 
+                // props.friendList ? 
                     _.map(friends, value => {
                 
                         return (
@@ -98,7 +70,7 @@ export default function FriendList(props) {
                                 <ListItem
                                     key={value.target_id}
                                     button
-                                    onClick={() => handleFriendArticles(value)}
+                                    onClick={() => props.handleFriendArticles(value.target_id)}
                                 >
                                     <ListItemAvatar>
                                         <Avatar
@@ -120,8 +92,8 @@ export default function FriendList(props) {
                             </>
                         );
                     })
-                :
-                    <UserList handleFriendArticles={handleFriendArticles} />
+                // :
+                //     <UserList handleFriendArticles={handleFriendArticles} />
             }
         </List>
     );

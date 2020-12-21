@@ -38,6 +38,7 @@ export default function UserList(props) {
     useEffect(() => {
         // 非同期の関数を定義
         const fetchUser = async () => {
+            // console.log(users)
             // Loading開始
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
@@ -46,6 +47,8 @@ export default function UserList(props) {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
+            // ロード終了
+            await dispatch(fetchCredEnd());
         }
         // 上で定義した非同期の関数を実行
         fetchUser()
@@ -63,7 +66,7 @@ export default function UserList(props) {
                             <ListItem
                                 key={value.target_id}
                                 button
-                                onClick={() => props.handleFriendArticles(value)}
+                                onClick={() => props.handleFriendArticles(value.id)}
                             >
                                 <ListItemAvatar>
                                     <Avatar

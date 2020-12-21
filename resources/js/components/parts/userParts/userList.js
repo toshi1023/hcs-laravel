@@ -95,7 +95,7 @@ export default function UserList(props) {
             props.handleTabUser()
         }
     }
-
+    console.log(props.friendStatus)
     return (
         <List dense className={classes.root}>
             {

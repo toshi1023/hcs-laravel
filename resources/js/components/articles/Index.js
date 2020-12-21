@@ -7,6 +7,7 @@ import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import MessageCard from '../parts/common/messageCard';
 import FriendList from '../parts/articleParts/friendList';
+import UserList from '../parts/articleParts/userList';
 import SnackMessages from '../parts/common/snackMessages';
 import SwitchType from '../parts/common/switch';
 import _ from 'lodash';
@@ -123,6 +124,38 @@ function Article() {
         }
         // 上で定義した非同期の関数を実行
         fetchArticleSearch()
+    }
+
+    // 選択したフレンドの記事を取得
+    const handleFriendArticles = async value => {
+
+        // Loading開始
+        await dispatch(fetchCredStart())
+        // 都道府県情報をセット
+        let prefecture = document.getElementById("prefecture").value
+        if(prefecture == '全都道府県') {
+            prefecture = ''
+        }
+        // selectArticlesのstateを更新するReducerにdispatch
+        const resultSearch = await dispatch(
+            fetchAsyncGet({ prefecture: prefecture, user_id: value })
+        )
+
+        if (fetchAsyncGet.fulfilled.match(resultSearch)) {
+            // タブ切り替え(スマホ版のみ)
+            handleChange(null, 0)
+            handleTabArticle()
+
+            // 検索中のユーザIDをstoreのstateに格納
+            dispatch(searchUser(value))
+            
+            // ロード終了
+            await dispatch(fetchCredEnd());
+            return;     
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+        return;
     }
 
     // 検索条件のクリア
@@ -249,8 +282,12 @@ function Article() {
                         <br />
                         {
                             localStorage.getItem('loginId') ? 
-                                <FriendList handleChange={handleChange} handleTabArticle={handleTabArticle} />
-                            : <MessageCard />
+                                state.friends ? 
+                                    <FriendList handleChange={handleChange} handleTabArticle={handleTabArticle} handleFriendArticles={handleFriendArticles} />
+                                :
+                                    <UserList handleFriendArticles={handleFriendArticles} />
+                            : 
+                                <MessageCard />
                         }
                     </Grid>
                 </Grid>
@@ -280,7 +317,10 @@ function Article() {
                         <br />
                         {
                             localStorage.getItem('loginId') ? 
-                                <FriendList friendList={state.friends} />
+                                state.friends ? 
+                                    <FriendList handleChange={handleChange} handleTabArticle={handleTabArticle} handleFriendArticles={handleFriendArticles} />
+                                :
+                                    <UserList handleFriendArticles={handleFriendArticles} />
                             : 
                                 <Grid container justify="center">
                                     <Grid item sm={10}>
