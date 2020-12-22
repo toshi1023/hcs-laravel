@@ -1,8 +1,9 @@
 import React, { createRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, selectError } from '../../app/appSlice';
-import { selectArticles, fetchAsyncGet, searchUser } from '../../articles/articleSlice';
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { editArticle } from '../../articles/articleSlice';
+import { MapContainer, TileLayer, ZoomControl, useMapEvent } from 'react-leaflet';
+import { Button } from '@material-ui/core';
 import MessageCard from '../../parts/common/messageCard';
 import SnackMessages from '../../parts/common/snackMessages';
 import _ from 'lodash';
@@ -27,44 +28,21 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+// クリックした場所の緯度経度を取得
+function LocationProperty() {
+    const dispatch = useDispatch()
+    const map = useMapEvent('click', (e) => {
+        if(window.confirm('この地点を設定しますか？')) {
+            // dispatch(editArticle({latitude: e.latlng.latitude, longitude: e.latlng.longitude}))
+            console.log(e.latlng)
+        }
+    })
+    return null
+}
+
 function LocationMap() {
     const classes = useStyles();
-    const history = useHistory();
     const errorMessages = useSelector(selectError)
-    const dispatch = useDispatch()
-    const [property, setProperty] = React.useState({
-        latitude: 34.694138,
-        longitude: 135.196263
-    })
-
-    const handleSetProperty = (e) => {
-        // console.log(mapRef.current.leafletElement.locate())
-        console.log(e)
-        console.log('click')
-    }
-
-    // 記事ページへ遷移
-    // const handleSearch = async(value) => {
-    //     // Loading開始
-    //     await dispatch(fetchCredStart())
-    //     // 記事一覧を取得
-    //     const resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: value}))
-            
-    //     if (fetchAsyncGet.fulfilled.match(resultReg)) {
-    //         // errorが出た場合はメッセージを表示
-    //         resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
-    //         // 検索用ユーザのIDをセット
-    //         dispatch(searchUser(value))
-    //         // ロード終了
-    //         await dispatch(fetchCredEnd())
-    //         // エラーが無ければページ遷移
-    //         if(!resultReg.payload.error_message) {
-    //             history.push('/articles')
-    //         }
-    //     }
-    //     // ロード終了
-    //     await dispatch(fetchCredEnd())
-    // }
 
     return (
         <>
@@ -78,12 +56,13 @@ function LocationMap() {
             {
                 // Loginしていなければ表示しない
                 localStorage.getItem('loginId') ? 
-                    <MapContainer className={classes.leafletContainer} center={[property.latitude, property.longitude]} zoom={13} zoomControl={false} onClick={() => handleSetProperty(e)}>
+                    <MapContainer className={classes.leafletContainer} center={[34.694138, 135.196263]} zoom={13} zoomControl={false}>
                         <TileLayer
                             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         <ZoomControl position="bottomleft" scrollWheelZoom={true} />
+                        <LocationProperty />
                     </MapContainer>
                 : 
                     <div className={styles.wrap}>
