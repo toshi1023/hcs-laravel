@@ -26,7 +26,7 @@ class CreateNewsTable extends Migration
             $table->timestamps();
 
             // 外部キー制約
-            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -36,7 +36,7 @@ class ArticleService
 
   /* *
    * Showページ用データを取得するメソッド
-   * 引数: ユーザID
+   * 引数: 記事ID
    * */
   public function getShow($id)
   {
@@ -46,11 +46,20 @@ class ArticleService
     $like_flg = $this->ArticleService->getExist('likes', ['article_id' => $id, 'user_id' => \Auth::user()->id, 'delete_flg' => 0]);
     // 記事のいいね一覧データを取得(usersテーブルも結合して取得)
     $like_list = $this->ArticleService->getQuery('likes', ['article_id' => $id], ['users' => 'user_id']);
-    
+    // 記事のコメント一覧データを取得
+    $comments_list = $this->ArticleService->getQuery('comments', ['article_id' => $id], ['users' => 'user_id'])
+                                          ->select('comments.id', 'users.users_photo_path', 'users.name', 'comments.comment', 'comments.updated_at')
+                                          ->orderBy('comments.updated_at', 'desc');
+                                          
+    // 記事のコメント一覧データの数を取得
+    $comments_count = $this->ArticleService->getQuery('comments', ['article_id' => $id])->count();
+
     return [
       'article'   => $article,
       'like_flg'  => $like_flg,
       'like_list' => $like_list,
+      'comments_list' => $comments_list,
+      'comments_count' => $comments_count
     ];
   }
 

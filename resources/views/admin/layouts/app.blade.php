@@ -37,24 +37,12 @@
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  管理ユーザ
-                </a>
-                <div class="dropdown">
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.index') }}">管理ユーザ一覧</a>
-                    <a class="dropdown-item menu-list" href="{{ route('hcs-admin.admins.create') }}">管理ユーザ作成</a>
-                  </div>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link menu-list dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   ユーザ
                 </a>
                 <div class="dropdown">
                   <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.index') }}">ユーザ一覧</a>
                     <a class="dropdown-item menu-list" href="{{ route('hcs-admin.users.create') }}">ユーザ作成</a>
-                    <a class="dropdown-item menu-list" href="#">フレンド履歴</a>
                   </div>
                 </div>
               </li>

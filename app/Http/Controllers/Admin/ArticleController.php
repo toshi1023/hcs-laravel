@@ -103,7 +103,8 @@ class ArticleController extends Controller
       'status'    => 1,
       'article'   => $data['article'],
       'like_flg'  => $data['like_flg'],
-      'like_list' => $data['like_list']
+      'like_list' => $data['like_list'],
+      'comments_count' => $data['comments_count']
     ];
   }
 
@@ -117,9 +118,24 @@ class ArticleController extends Controller
     $conditions = [];
 
     // 詳細ページに表示する値を取得
-    $data = $this->database->getShow($article);
+    $data = $this->database->getShow($article)['like_list'];
 
-    return Datatables::eloquent($data['like_list'])->make(true);
+    return Datatables::eloquent($data)->make(true);
+  }
+
+  /**
+   * コメントの取得
+   * 引数2：記事ID
+   */
+  public function apiComment(Request $request, $article)
+  {
+    // 検索条件のセット
+    $conditions = [];
+
+    // 詳細ページに表示する値を取得
+    $data = $this->database->getShow($article)['comments_list'];
+
+    return Datatables::eloquent($data)->make(true);
   }
 
   /**

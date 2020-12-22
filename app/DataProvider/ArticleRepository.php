@@ -252,7 +252,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                           ->from('comments')
                           ->leftJoin('users', 'comments.user_id', '=', 'users.id')
                           ->where('comments.delete_flg', '=', 0);
-        
+
         return $query;
     }
 }
