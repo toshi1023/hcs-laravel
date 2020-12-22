@@ -211,4 +211,30 @@ class ArticleController extends Controller
       // 更新に失敗したとき
       return -1;
     }
+
+    /**
+     * いいねの削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function apiLikeDestroy(Request $request) {
+      if($this->database->remove($request->id, 'likes')) {
+        return redirect()->route('hcs-admin.articles.index')->with('info_message', 'いいねデータを削除しました');
+      }
+      $this->messages->add('', 'いいねの削除に失敗しました。管理者に問い合わせてください');
+      return redirect(route('hcs-admin.articles.index'))->withErrors($this->messages);
+    }
+
+    /**
+     * コメントの削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function apiCommentDestroy(Request $request) {
+      if($this->database->remove($request->id, 'comments')) {
+        return redirect()->route('hcs-admin.articles.index')->with('info_message', 'コメントを削除しました');
+      }
+      $this->messages->add('', 'コメントの削除に失敗しました。管理者に問い合わせてください');
+      return redirect(route('hcs-admin.articles.index'))->withErrors($this->messages);
+    }
 }

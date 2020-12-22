@@ -236,8 +236,8 @@ function settingCommentTables() {
             // 各操作列
             {
                 data: function (p) {
-                    // 編集
-                    return getListLink('remove', p.id ,`ajax/articles/${article_id}/likes/destroy`, 'list-button');
+                    // 削除
+                    return getListLink('remove', p.id ,`ajax/articles/${article_id}/comments/destroy`, 'list-button');
                 }
             }
         ],
@@ -382,7 +382,7 @@ function getListLink(type, id, link, clazz) {
         return '<a href="'+link+'" class="btn btn-primary '+clazz+'" data-toggle="tooltip" title="編集" data-placement="top"><i class="fas fa-edit fa-fw"></i></a>';
     }
     if (type == "remove") {
-        return '<a href="javascript:void(0)" class="btn btn-danger btn-remove '+clazz+'" data-toggle="tooltip" title="削除" data-placement="top" data-id="'+id+'"><i class="fas fa-trash-alt fa-fw"></i></a>';
+        return '<a href="javascript:void(0)" class="btn btn-danger btn-remove '+clazz+'" data-toggle="tooltip" title="削除" data-placement="top" data-id="'+id+'" data-url="'+ link +'"><i class="fas fa-trash-alt fa-fw"></i></a>';
     }
     if (type == "map") {
         return '<a href="'+ link +'" target="_blank" class="btn btn-primary btn-map '+clazz+'" data-toggle="tooltip" title="Google Mapで表示" data-placement="top" data-id="'+id+'"><i class="fas fa-map-marked-alt"></i></a>';

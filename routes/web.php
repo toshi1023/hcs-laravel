@@ -48,10 +48,11 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         /********** いいね更新(likes) **********/
         Route::post('ajax/articles/{article}/likes/update', 'ArticleController@apiLikeUpdate')->name('api_article.likes.update');
         /********** いいね削除(likes) **********/
-        // Route::post('ajax/articles/{article}/likes/destroy', 'ArticleController@apiLikeDestroy')->name('api_article.likes.destroy');
+        Route::delete('ajax/articles/{article}/likes/destroy', 'ArticleController@apiLikeDestroy')->name('api_article.likes.destroy');
         /********** コメント一覧(comments) **********/
         Route::get('ajax/articles/{article}/comments', 'ArticleController@apiComment')->name('api_articles.comments.index');
-        /********** いいね新規作成(likes) **********/
+        /********** コメント削除(comments) **********/
+        Route::delete('ajax/articles/{article}/comments', 'ArticleController@apiCommentDestroy')->name('api_articles.comments.destroy');
         /********** メッセージ一覧(送信者リスト)(messages) **********/
         Route::get('ajax/users/{user}/messages', 'UserController@apiSenderIndex')->name('api_senders');
         /********** メッセージ一覧(メッセージリスト)(messages) **********/
@@ -79,7 +80,8 @@ Route::namespace('Web')->group(function(){
     Route::get('/articles/create',      'ArticleController@create')->name('articles.create');
     Route::get('/articles/{id}',        'ArticleController@show')->name('articles.show');
     Route::get('/articles/{id}/edit',   'ArticleController@edit')->name('articles.edit');
-    Route::get('/map',   'ArticleController@index')->name('articles.map');
+    Route::get('/map',                  'ArticleController@index')->name('articles.map');
+    Route::get('/map/location',         'ArticleController@index')->name('articles.map.location');
 
     /********** ユーザ管理(users) **********/
     Route::get('/users',             'UserController@index')->name('users.index');

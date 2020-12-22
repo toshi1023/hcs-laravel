@@ -103,13 +103,13 @@ class ArticleService
   } 
 
   /**
-    * 記事削除用メソッド
-    * 引数:記事ID
-    * */
-    public function remove($id)
-    {
-      return $this->ArticleService->getDestroy($id);
-    }
+  * 削除用メソッド
+  * 引数1:ID, 引数2:テーブル, 引数3:トランザクションフラグ
+  * */
+  public function remove($id, $table=null, $transaction=true)
+  {
+    return $this->ArticleService->getDestroy($id, $table, $transaction);
+  }
 
   /*
   ファイル削除用メソッド
