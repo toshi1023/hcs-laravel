@@ -22,6 +22,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="item2-tab" data-toggle="tab" href="#item2" role="tab" aria-controls="item2" aria-selected="true">いいね一覧</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="item3-tab" data-toggle="tab" href="#item3" role="tab" aria-controls="item2" aria-selected="true">コメント一覧</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <!-- タブ1つ目(記事詳細)-->
@@ -52,7 +55,10 @@
                                     <dt class="col-3 text-right">いいね</dt>
                                     <dd class="col-9"><span id="detail_like" class="detail-view"></span></dd>
                                 </dl>
-                                
+                                <dl class="row">
+                                    <dt class="col-3 text-right">コメント件数</dt>
+                                    <dd class="col-9"><span id="detail_comment" class="detail-view" style="color: blue; font-weight: bold"></span>件</dd>
+                                </dl>
                             </div>
                             <div class="col-10 col-sm-7">
                                 <dl class="row">
@@ -76,6 +82,22 @@
                                     <th>いいねID</th>
                                     <th>プロフィール画像</th>
                                     <th>ユーザ名</th>
+                                    <th>更新日時</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    {{-- タブ3つ目(コメント管理) --}}
+                    <div class="tab-pane" id="item3" role="tabpanel" aria-labelledby="item3-tab">
+                        <table class="table table-striped table-bordered datatable table-sm" id="article_comment_list">
+                            <thead class="thead-dark">
+                                <tr role="row">
+                                    <th>コメントID</th>
+                                    <th>プロフィール画像</th>
+                                    <th>ユーザ名</th>
+                                    <th>コメント</th>
                                     <th>更新日時</th>
                                     <th>操作</th>
                                 </tr>

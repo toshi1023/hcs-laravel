@@ -103,7 +103,8 @@ class ArticleController extends Controller
       'status'    => 1,
       'article'   => $data['article'],
       'like_flg'  => $data['like_flg'],
-      'like_list' => $data['like_list']
+      'like_list' => $data['like_list'],
+      'comments_count' => $data['comments_count']
     ];
   }
 
@@ -117,9 +118,24 @@ class ArticleController extends Controller
     $conditions = [];
 
     // 詳細ページに表示する値を取得
-    $data = $this->database->getShow($article);
+    $data = $this->database->getShow($article)['like_list'];
 
-    return Datatables::eloquent($data['like_list'])->make(true);
+    return Datatables::eloquent($data)->make(true);
+  }
+
+  /**
+   * コメントの取得
+   * 引数2：記事ID
+   */
+  public function apiComment(Request $request, $article)
+  {
+    // 検索条件のセット
+    $conditions = [];
+
+    // 詳細ページに表示する値を取得
+    $data = $this->database->getShow($article)['comments_list'];
+
+    return Datatables::eloquent($data)->make(true);
   }
 
   /**
@@ -194,5 +210,31 @@ class ArticleController extends Controller
       }
       // 更新に失敗したとき
       return -1;
+    }
+
+    /**
+     * いいねの削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function apiLikeDestroy(Request $request) {
+      if($this->database->remove($request->id, 'likes')) {
+        return redirect()->route('hcs-admin.articles.index')->with('info_message', 'いいねデータを削除しました');
+      }
+      $this->messages->add('', 'いいねの削除に失敗しました。管理者に問い合わせてください');
+      return redirect(route('hcs-admin.articles.index'))->withErrors($this->messages);
+    }
+
+    /**
+     * コメントの削除
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function apiCommentDestroy(Request $request) {
+      if($this->database->remove($request->id, 'comments')) {
+        return redirect()->route('hcs-admin.articles.index')->with('info_message', 'コメントを削除しました');
+      }
+      $this->messages->add('', 'コメントの削除に失敗しました。管理者に問い合わせてください');
+      return redirect(route('hcs-admin.articles.index'))->withErrors($this->messages);
     }
 }

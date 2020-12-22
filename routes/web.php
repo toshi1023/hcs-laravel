@@ -19,9 +19,6 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         /********** ルート **********/
         Route::get('/home', 'HomeController@index')->name('home');
 
-        /********** 管理者管理(admins) **********/
-        Route::resource('admins', 'AdminController');
-
         /********** ユーザ管理(users) **********/
         Route::resource('users', 'UserController');
         
@@ -34,8 +31,6 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         /**
          * Api通信ルート
          */
-        /********** 管理者一覧(admins) **********/
-        Route::get('ajax/admins', 'AdminController@apiIndex')->name('api_admin');
         /********** ユーザ一覧(users) **********/
         Route::get('ajax/users', 'UserController@apiIndex')->name('api_user');
         /********** 記事一覧(articles) **********/
@@ -53,7 +48,11 @@ Route::prefix('hcs-admin')->namespace('Admin')->name('hcs-admin.')->group(functi
         /********** いいね更新(likes) **********/
         Route::post('ajax/articles/{article}/likes/update', 'ArticleController@apiLikeUpdate')->name('api_article.likes.update');
         /********** いいね削除(likes) **********/
-        // Route::post('ajax/articles/{article}/likes/destroy', 'ArticleController@apiLikeDestroy')->name('api_article.likes.destroy');
+        Route::delete('ajax/articles/{article}/likes/destroy', 'ArticleController@apiLikeDestroy')->name('api_article.likes.destroy');
+        /********** コメント一覧(comments) **********/
+        Route::get('ajax/articles/{article}/comments', 'ArticleController@apiComment')->name('api_articles.comments.index');
+        /********** コメント削除(comments) **********/
+        Route::delete('ajax/articles/{article}/comments', 'ArticleController@apiCommentDestroy')->name('api_articles.comments.destroy');
         /********** メッセージ一覧(送信者リスト)(messages) **********/
         Route::get('ajax/users/{user}/messages', 'UserController@apiSenderIndex')->name('api_senders');
         /********** メッセージ一覧(メッセージリスト)(messages) **********/
@@ -81,11 +80,8 @@ Route::namespace('Web')->group(function(){
     Route::get('/articles/create',      'ArticleController@create')->name('articles.create');
     Route::get('/articles/{id}',        'ArticleController@show')->name('articles.show');
     Route::get('/articles/{id}/edit',   'ArticleController@edit')->name('articles.edit');
-    Route::get('/map',   'ArticleController@index')->name('articles.map');
-    // Route::post('/articles',            'ArticleController@store')->name('articles.store');
-    // Route::put('/articles/{id}',        'ArticleController@edit')->name('articles.edit');
-    // Route::get('/articles/{id}/edit',   'ArticleController@edit')->name('articles.edit');
-    
+    Route::get('/map',                  'ArticleController@index')->name('articles.map');
+    Route::get('/map/location',         'ArticleController@index')->name('articles.map.location');
 
     /********** ユーザ管理(users) **********/
     Route::get('/users',             'UserController@index')->name('users.index');

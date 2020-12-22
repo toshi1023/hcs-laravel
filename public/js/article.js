@@ -64,6 +64,7 @@ function setDetailView(data, button) {
         $('#detail_content').html(data.article.content);
         $('#detail_photo').attr('src', data.article.articles_photo_path);
         $('#detail_location').append(getListLink('map', data.article.id, url, 'list-button'));
+        $('#detail_comment').html(data.comments_count);
 
         $('#article_id').data('id', data.article.id);              // 各タグで共有
 
@@ -82,11 +83,13 @@ function setDetailView(data, button) {
         $('#detail_modal').modal('show');
 
     /* 
-     *   "詳細"モーダルの表示処理("いいね一覧"タブ)
+     *   "詳細"モーダルの表示処理("いいね一覧"&"コメント一覧"タブ)
      */
     if(button == '.btn-detail') {
         // いいねテーブルを表示
-        settingLikeTables()
+        settingLikeTables();
+        // コメントテーブルを表示
+        settingCommentTables();
     }
 }
 
@@ -163,6 +166,85 @@ function settingLikeTables() {
         [
             { targets: [1], orderable: false, className: 'text-center', width: '150px'},
             { targets: [4], orderable: false, className: 'text-center', width: '100px'},
+        ],
+        false
+    );
+}
+
+/**
+ * コメントテーブルの実装処理
+ */
+function settingCommentTables() {
+    // 記事ID取得
+    let article_id = $('#article_id').data('id');
+
+    // 過去に表示したテーブルのリセット
+    if ($.fn.DataTable.isDataTable('#article_comment_list')) {
+        $('#article_comment_list').DataTable().destroy();
+    }
+    // DataTable設定("いいね一覧")
+    settingDataTables(
+        // 取得
+        // tableのID
+        'article_comment_list',
+        // 取得URLおよびパラメタ
+        `ajax/articles/${article_id}/comments`,
+        {},
+        // 各列ごとの表示定義
+        [
+            {data: 'id'},
+            {
+                // ユーザのイメージ画像を表示(モーダル形式)
+                data: function (p) {
+                    
+                    return `
+                        <a href="" data-toggle="modal" data-target="#like_modal${p.user_id}">
+                            <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
+                        </a>
+
+                        <div class="modal" id="like_modal${p.user_id}" tabindex="-1"
+                            role="dialog" aria-labelledby="label1" aria-hidden="true">
+                            <div class="modal-dialog modal-warning modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="label1">プロフィール画像</h5>
+                                        <button type="button" class="close" data-id="${p.user_id}" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" id="user_image_close" data-id="${p.user_id}">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+            {data: 'name'},
+            {data: 'comment'},
+            {
+                data: function(p) {
+                    // 日付フォーマットの形式を調整
+                    let time = moment(p.updated_at);
+                    return time.format("YYYY年MM月DD日 HH時mm分");
+                }, name: 'updated_at'
+            },
+            // 各操作列
+            {
+                data: function (p) {
+                    // 削除
+                    return getListLink('remove', p.id ,`ajax/articles/${article_id}/comments/destroy`, 'list-button');
+                }
+            }
+        ],
+        // 各列ごとの装飾
+        [
+            { targets: [1], orderable: false, className: 'text-center', width: '150px'},
+            { targets: [5], orderable: false, className: 'text-center', width: '100px'},
         ],
         false
     );
@@ -300,7 +382,7 @@ function getListLink(type, id, link, clazz) {
         return '<a href="'+link+'" class="btn btn-primary '+clazz+'" data-toggle="tooltip" title="編集" data-placement="top"><i class="fas fa-edit fa-fw"></i></a>';
     }
     if (type == "remove") {
-        return '<a href="javascript:void(0)" class="btn btn-danger btn-remove '+clazz+'" data-toggle="tooltip" title="削除" data-placement="top" data-id="'+id+'"><i class="fas fa-trash-alt fa-fw"></i></a>';
+        return '<a href="javascript:void(0)" class="btn btn-danger btn-remove '+clazz+'" data-toggle="tooltip" title="削除" data-placement="top" data-id="'+id+'" data-url="'+ link +'"><i class="fas fa-trash-alt fa-fw"></i></a>';
     }
     if (type == "map") {
         return '<a href="'+ link +'" target="_blank" class="btn btn-primary btn-map '+clazz+'" data-toggle="tooltip" title="Google Mapで表示" data-placement="top" data-id="'+id+'"><i class="fas fa-map-marked-alt"></i></a>';

@@ -12,7 +12,7 @@ import SnackMessages from '../parts/common/snackMessages';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
-import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl, FormLabel, Modal, Backdrop, Fade, } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl, FormLabel, FormControlLabel, Modal, Backdrop, Fade, Radio, RadioGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CreateIcon from '@material-ui/icons/Create';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -108,6 +108,24 @@ function MyArticle() {
         content: '',
         type: false,
     });
+    // ラジオボタン
+    const [value, setValue] = React.useState('female');
+    const handleChangeRadio = (event) => {
+        setValue(event.target.value);
+    };
+    // 現在地から緯度と経度を取得する
+    const handleSetMap = () => {
+        navigator.geolocation.getCurrentPosition(
+            // 現在地をstateに設定
+            pos => setState({ 
+                ...state,
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude,
+            }),
+            err => console.log(err),
+        );
+        console.log(state)
+    }
     
     /**
      * 値のセット
@@ -175,6 +193,15 @@ function MyArticle() {
             // 記事一覧を取得
             const resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
+                // 位置情報の初期値として現在地をstateに設定
+                navigator.geolocation.getCurrentPosition(
+                    pos => setState({ 
+                        ...state,
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude,
+                    }),
+                    err => console.log(err)
+                )
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -380,6 +407,13 @@ function MyArticle() {
                                                 <div className={classes.margin} onBlur={setPrefecture}>
                                                     <ArticlePrefectureSelects id="mobileFormPrefecture" fontSize={15} />
                                                 </div>
+                                                <div className={classes.margin}>
+                                                    <FormLabel component="legend">位置情報</FormLabel>
+                                                    <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChangeRadio}>
+                                                        <FormControlLabel value="female" control={<Radio onClick={handleSetMap} />} label="現在地から取得" />
+                                                        <FormControlLabel value="male" control={<Radio />} label="Mapから取得" />
+                                                    </RadioGroup>
+                                                </div>
                                                 <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("title").value)}}>
                                                     <TextField
                                                         id="mobileTitle"
@@ -505,6 +539,13 @@ function MyArticle() {
                                                 <FormControl>
                                                     <div className={classes.margin}  onBlur={setPrefecture}>
                                                         <ArticlePrefectureSelects id="formPrefecture" fontSize={15} />
+                                                    </div>
+                                                    <div className={classes.margin}>
+                                                        <FormLabel component="legend">位置情報</FormLabel>
+                                                        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChangeRadio}>
+                                                            <FormControlLabel value="female" control={<Radio onClick={handleSetMap} />} label="現在地から取得" />
+                                                            <FormControlLabel value="male" control={<Radio />} label="Mapから取得" />
+                                                        </RadioGroup>
                                                     </div>
                                                     <div className={classes.margin}  onBlur={() => {setTitle(document.getElementById("title").value)}}>
                                                         <TextField
