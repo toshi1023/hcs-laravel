@@ -129,7 +129,8 @@ function MyArticle() {
     // 位置情報の取得用Mapを別タブで表示
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
-        window.open('https://hcs-laravel/map/location', "Get Location")
+        // window.open('https://hcs-laravel/map/location', "Get Location")
+        window.open('http://localhost/map/location', "Get Location")
     }
     
     /**
