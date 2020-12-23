@@ -32,9 +32,12 @@ const useStyles = makeStyles((theme) => ({
 function LocationProperty() {
     const dispatch = useDispatch()
     const map = useMapEvent('click', (e) => {
-        if(window.confirm('この地点を設定しますか？')) {
-            // dispatch(editArticle({latitude: e.latlng.latitude, longitude: e.latlng.longitude}))
+        let message = `この地点を設定しますか？\n\n緯度：${e.latlng.lat}\n経度：${e.latlng.lng}`
+        if(window.confirm(message)) {
+            dispatch(editArticle({latitude: e.latlng.lat, longitude: e.latlng.lng}))
             console.log(e.latlng)
+            // 設定後にこのページを閉じる
+            window.close()
         }
     })
     return null
@@ -55,7 +58,7 @@ function LocationMap() {
             }
             {
                 // Loginしていなければ表示しない
-                localStorage.getItem('loginId') ? 
+                // localStorage.getItem('loginId') ? 
                     <MapContainer className={classes.leafletContainer} center={[34.694138, 135.196263]} zoom={13} zoomControl={false}>
                         <TileLayer
                             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -64,16 +67,17 @@ function LocationMap() {
                         <ZoomControl position="bottomleft" scrollWheelZoom={true} />
                         <LocationProperty />
                     </MapContainer>
-                : 
-                    <div className={styles.wrap}>
-                        <div className={styles.message}>
-                            {/* <Grid container>
-                                <Grid item xs={12} sm={12}> */}
-                                    <MessageCard />
-                                {/* </Grid>
-                            </Grid> */}
-                        </div>
-                    </div>
+                // : 
+                    // <div className={styles.wrap}>
+                    //     <div className={styles.message}>
+                    //         {/* <Grid container>
+                    //             <Grid item xs={12} sm={12}> */}
+                    //                 <MessageCard />
+                    //             {/* </Grid>
+                    //         </Grid> */}
+                    //     </div>
+                    // </div>
+                    
             }
         </>
     )

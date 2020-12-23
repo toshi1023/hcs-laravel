@@ -9,7 +9,7 @@ import SnackMessages from '../parts/common/snackMessages';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
-import { Grid, Button, TextField, FormControl, Paper } from '@material-ui/core';
+import { Grid, Button, TextField, FormControl, FormLabel, FormControlLabel, Paper, Radio, RadioGroup } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -54,6 +54,29 @@ const useStyles = makeStyles((theme) => ({
         content: '',
         type: false,
     });
+    // ラジオボタン
+    const [value, setValue] = React.useState('female');
+    const handleChangeRadio = (event) => {
+        setValue(event.target.value);
+    };
+    // 現在地から緯度と経度を取得する
+    const handleSetMap = () => {
+        navigator.geolocation.getCurrentPosition(
+            // 現在地をstateに設定
+            pos => setState({ 
+                ...state,
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude,
+            }),
+            err => console.log(err),
+        );
+        console.log(state)
+    }
+    // 位置情報の取得用Mapを別タブで表示
+    const handleOpenMap = () => {
+        // 新規タブを開いてページを遷移
+        window.open('https://hcs-laravel/map/location', "Get Location")
+    }
     
     useEffect(() => {
         // 非同期の関数を定義
@@ -162,6 +185,13 @@ const useStyles = makeStyles((theme) => ({
                                                 id="modalFormPrefecture" 
                                                 fontSize={15} 
                                             />
+                                        </div>
+                                        <div className={classes.margin}>
+                                            <FormLabel style={{ fontSize: 13 }}>位置情報</FormLabel>
+                                            <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChangeRadio}>
+                                                <FormControlLabel value="female" control={<Radio onClick={handleSetMap} />} label="現在地から取得" />
+                                                <FormControlLabel value="male" control={<Radio onClick={handleOpenMap} />} label="Mapから取得" />
+                                            </RadioGroup>
                                         </div>
                                         <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("modalTitle").value)}}>
                                             <TextField

@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { selectUsers } from '../users/userSlice';
 
-const apiUrl = 'http://localhost/api/api_articles'
-// const apiUrl = 'http://hcs-laravel/api/api_articles'
+// const apiUrl = 'http://localhost/api/api_articles'
+const apiUrl = 'http://hcs-laravel/api/api_articles'
 const token = localStorage.localToken
 
 /**
@@ -291,6 +291,7 @@ const articleSlice = createSlice({
     // Reducer (actionの処理を記述)
     reducers: {
         editArticle(state, action) {
+            console.log(action.payload)
             state.editedArticle = action.payload
         },
         selectArticle(state, action) {

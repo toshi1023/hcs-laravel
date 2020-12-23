@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal, selectInfo, selectModal } from '../app/appSlice';
-import { selectArticles, fetchAsyncGet, fetchAsyncCreate } from './articleSlice';
+import { selectArticles, fetchAsyncGet, fetchAsyncCreate, editArticle, selectEditedArticle } from './articleSlice';
 import ArticleEdit from './Edit';
 import ArticleDropzone from '../parts/articleParts/dropzone';
 import ArticleCard from '../parts/articleParts/articleCard';
@@ -97,6 +97,7 @@ function MyArticle() {
     const articles = useSelector(selectArticles)
     const infoMessages = useSelector(selectInfo)
     const open = useSelector(selectModal)
+    const editedArtcle = useSelector(selectEditedArticle)
     const dispatch = useDispatch()
     // stateの初期設定
     const [state, setState] = React.useState({
@@ -124,7 +125,11 @@ function MyArticle() {
             }),
             err => console.log(err),
         );
-        console.log(state)
+    }
+    // 位置情報の取得用Mapを別タブで表示
+    const handleOpenMap = () => {
+        // 新規タブを開いてページを遷移
+        window.open('https://hcs-laravel/map/location', "Get Location")
     }
     
     /**
@@ -194,26 +199,37 @@ function MyArticle() {
             const resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // 位置情報の初期値として現在地をstateに設定
+                // navigator.geolocation.getCurrentPosition(
+                //     pos => setState({ 
+                //         ...state,
+                //         latitude: pos.coords.latitude,
+                //         longitude: pos.coords.longitude,
+                //     }),
+                //     err => console.log(err),
+                // )
+                // ロード終了
+                await dispatch(fetchCredEnd());
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
                 navigator.geolocation.getCurrentPosition(
-                    pos => setState({ 
-                        ...state,
+                    pos => dispatch(editArticle({ 
                         latitude: pos.coords.latitude,
                         longitude: pos.coords.longitude,
-                    }),
-                    err => console.log(err)
+                    })),
+                    err => console.log(err),
                 )
-                // ロード終了
-                await dispatch(fetchCredEnd());       
-            }
+            )
             // ロード終了
             await dispatch(fetchCredEnd());  
+            return;
         }
         // 上で定義した非同期の関数を実行
         fetchArticleProf()
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
 
-
+    // console.log(editedArtcle)
     // 都道府県の検索条件をもとに記事の絞り込み
     const getSearchPrefecture = () => {
         // 非同期の関数を定義
@@ -408,11 +424,13 @@ function MyArticle() {
                                                     <ArticlePrefectureSelects id="mobileFormPrefecture" fontSize={15} />
                                                 </div>
                                                 <div className={classes.margin}>
-                                                    <FormLabel component="legend">位置情報</FormLabel>
+                                                    <FormLabel style={{ fontSize: 13 }}>位置情報</FormLabel>
                                                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChangeRadio}>
                                                         <FormControlLabel value="female" control={<Radio onClick={handleSetMap} />} label="現在地から取得" />
-                                                        <FormControlLabel value="male" control={<Radio />} label="Mapから取得" />
+                                                        <FormControlLabel value="male" control={<Radio onClick={handleOpenMap} />} label="Mapから取得" />
                                                     </RadioGroup>
+                                                    緯度：{editedArtcle.latitude}
+                                                    経度：{editedArtcle.longitude}
                                                 </div>
                                                 <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("title").value)}}>
                                                     <TextField
@@ -541,10 +559,10 @@ function MyArticle() {
                                                         <ArticlePrefectureSelects id="formPrefecture" fontSize={15} />
                                                     </div>
                                                     <div className={classes.margin}>
-                                                        <FormLabel component="legend">位置情報</FormLabel>
+                                                        <FormLabel style={{ fontSize: 13 }}>位置情報</FormLabel>
                                                         <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChangeRadio}>
                                                             <FormControlLabel value="female" control={<Radio onClick={handleSetMap} />} label="現在地から取得" />
-                                                            <FormControlLabel value="male" control={<Radio />} label="Mapから取得" />
+                                                            <FormControlLabel value="male" control={<Radio onClick={handleOpenMap} />} label="Mapから取得" />
                                                         </RadioGroup>
                                                     </div>
                                                     <div className={classes.margin}  onBlur={() => {setTitle(document.getElementById("title").value)}}>

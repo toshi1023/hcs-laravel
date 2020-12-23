@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const loginUrl = 'http://localhost/api/login'
-const apiUrl = 'http://localhost/api/api_users'
-// const loginUrl = 'http://hcs-laravel/api/login'
-// const apiUrl = 'http://hcs-laravel/api/api_users'
+// const loginUrl = 'http://localhost/api/login'
+// const apiUrl = 'http://localhost/api/api_users'
+const loginUrl = 'http://hcs-laravel/api/login'
+const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
