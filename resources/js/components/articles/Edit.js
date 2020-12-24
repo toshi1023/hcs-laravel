@@ -37,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         paddingLeft: theme.spacing(1),
     },
+    latlng: {
+        fontSize: 12,
+        paddingRight: theme.spacing(2),
+    }
   }));
 
   export default function ArticleEdit() {
@@ -48,34 +52,48 @@ const useStyles = makeStyles((theme) => ({
     const [state, setState] = React.useState({
         // 保存対象の値
         prefecture: editedArticle.prefecture,
-        latitude: '',
-        longitude: '',
+        latitude: editedArticle.latitude,
+        longitude: editedArticle.longitude,
         title: '',
         content: '',
         type: false,
     });
-    // ラジオボタン
-    const [value, setValue] = React.useState('female');
+    // ラジオボタン用のstate
+    const [value, setValue] = React.useState('current');
     const handleChangeRadio = (event) => {
         setValue(event.target.value);
     };
-    // 現在地から緯度と経度を取得する
-    const handleSetMap = () => {
-        navigator.geolocation.getCurrentPosition(
-            // 現在地をstateに設定
-            pos => setState({ 
-                ...state,
-                latitude: pos.coords.latitude,
-                longitude: pos.coords.longitude,
-            }),
-            err => console.log(err),
-        );
-        console.log(state)
+    // DBに保存しているデータをセット
+    const handleSetDB = () => {
+        setState({
+            ...state,
+            latitude: editedArticle.latitude,
+            longitude: editedArticle.longitude,
+        })
     }
     // 位置情報の取得用Mapを別タブで表示
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
         window.open('https://hcs-laravel/map/location', "Get Location")
+        // window.open('http://localhost/map/location', "Get Location")
+    }
+
+    // 新規タブから設定された緯度経度をstateにセット
+    const receiveMessage = (event) => {
+        if (event.origin !== "https://hcs-laravel") {
+            // 指定ドメイン以外は受け付けない
+            return;
+        }
+        // if (event.origin !== "http://localhost") {
+        //     // 指定ドメイン以外は受け付けない
+        //     return;
+        // }
+        setState({ 
+            ...state,
+            latitude: JSON.parse(event.data).lat,
+            longitude: JSON.parse(event.data).lng,
+        })
+        return;
     }
     
     useEffect(() => {
@@ -83,10 +101,16 @@ const useStyles = makeStyles((theme) => ({
         const fetchPrefectures = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
+            // 新規タブから送信された位置情報を取得
+            window.addEventListener("message", receiveMessage, false)
+
             // ユーザの登録している都道府県が選択されている状態でセット
             document.getElementById("modalFormPrefecture").value = editedArticle.prefecture
             // ロード終了
             await dispatch(fetchCredEnd());
+
+            // 新規タブからの位置情報取得処理を終了
+            return () => window.removeEventListener("message", receiveMessage)
         }
         // 上で定義した非同期の関数を実行
         fetchPrefectures()
@@ -188,10 +212,12 @@ const useStyles = makeStyles((theme) => ({
                                         </div>
                                         <div className={classes.margin}>
                                             <FormLabel style={{ fontSize: 13 }}>位置情報</FormLabel>
-                                            <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChangeRadio}>
-                                                <FormControlLabel value="female" control={<Radio onClick={handleSetMap} />} label="現在地から取得" />
-                                                <FormControlLabel value="male" control={<Radio onClick={handleOpenMap} />} label="Mapから取得" />
+                                            <RadioGroup aria-label="location" name="location" value={value} onChange={handleChangeRadio}>
+                                                <FormControlLabel value="current" control={<Radio onClick={handleSetDB} />} label={<span className={classes.latlng}>位置情報は更新しない</span>} />
+                                                <FormControlLabel value="map" control={<Radio onClick={handleOpenMap} />} label={<span className={classes.latlng}>Mapから取得</span>} />
                                             </RadioGroup>
+                                            <span className={classes.latlng}>緯度：{state.latitude}</span>
+                                            <span className={classes.latlng}>経度：{state.longitude}</span>
                                         </div>
                                         <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("modalTitle").value)}}>
                                             <TextField

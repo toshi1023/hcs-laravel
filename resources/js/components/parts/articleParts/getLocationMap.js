@@ -1,14 +1,10 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, selectError } from '../../app/appSlice';
-import { editArticle } from '../../articles/articleSlice';
+import { selectError } from '../../app/appSlice';
 import { MapContainer, TileLayer, ZoomControl, useMapEvent } from 'react-leaflet';
-import { Button } from '@material-ui/core';
-import MessageCard from '../../parts/common/messageCard';
 import SnackMessages from '../../parts/common/snackMessages';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     leafletContainer: {
@@ -34,8 +30,8 @@ function LocationProperty() {
     const map = useMapEvent('click', (e) => {
         let message = `この地点を設定しますか？\n\n緯度：${e.latlng.lat}\n経度：${e.latlng.lng}`
         if(window.confirm(message)) {
-            dispatch(editArticle({latitude: e.latlng.lat, longitude: e.latlng.lng}))
-            console.log(e.latlng)
+            window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "https://hcs-laravel/artilces/mypage")
+            // window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "http://localhost/artilces/mypage")
             // 設定後にこのページを閉じる
             window.close()
         }
@@ -57,27 +53,14 @@ function LocationMap() {
                     ''
             }
             {
-                // Loginしていなければ表示しない
-                // localStorage.getItem('loginId') ? 
-                    <MapContainer className={classes.leafletContainer} center={[34.694138, 135.196263]} zoom={13} zoomControl={false}>
-                        <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <ZoomControl position="bottomleft" scrollWheelZoom={true} />
-                        <LocationProperty />
-                    </MapContainer>
-                // : 
-                    // <div className={styles.wrap}>
-                    //     <div className={styles.message}>
-                    //         {/* <Grid container>
-                    //             <Grid item xs={12} sm={12}> */}
-                    //                 <MessageCard />
-                    //             {/* </Grid>
-                    //         </Grid> */}
-                    //     </div>
-                    // </div>
-                    
+                <MapContainer className={classes.leafletContainer} center={[34.694138, 135.196263]} zoom={13} zoomControl={false}>
+                    <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <ZoomControl position="bottomleft" scrollWheelZoom={true} />
+                    <LocationProperty />
+                </MapContainer>
             }
         </>
     )
