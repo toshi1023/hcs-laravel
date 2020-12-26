@@ -74,20 +74,20 @@ const useStyles = makeStyles((theme) => ({
     // 位置情報の取得用Mapを別タブで表示
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
-        window.open('https://hcs-laravel/map/location', "Get Location")
-        // window.open('http://localhost/map/location', "Get Location")
+        // window.open('https://hcs-laravel/map/location', "Get Location")
+        window.open('http://localhost/map/location', "Get Location")
     }
 
     // 新規タブから設定された緯度経度をstateにセット
     const receiveMessage = (event) => {
-        if (event.origin !== "https://hcs-laravel") {
-            // 指定ドメイン以外は受け付けない
-            return;
-        }
-        // if (event.origin !== "http://localhost") {
+        // if (event.origin !== "https://hcs-laravel") {
         //     // 指定ドメイン以外は受け付けない
         //     return;
         // }
+        if (event.origin !== "http://localhost") {
+            // 指定ドメイン以外は受け付けない
+            return;
+        }
         setState({ 
             ...state,
             latitude: JSON.parse(event.data).lat,

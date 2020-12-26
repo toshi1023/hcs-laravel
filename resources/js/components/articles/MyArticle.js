@@ -132,19 +132,19 @@ function MyArticle() {
     // 位置情報の取得用Mapを別タブで表示
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
-        window.open('https://hcs-laravel/map/location', "Get Location")
-        // window.open('http://localhost/map/location', "Get Location")
+        // window.open('https://hcs-laravel/map/location', "Get Location")
+        window.open('http://localhost/map/location', "Get Location")
     }
     // 新規タブから設定された緯度経度をstateにセット
     const receiveMessage = (event) => {
-        if (event.origin !== "https://hcs-laravel") {
-            // 指定ドメイン以外は受け付けない
-            return;
-        }
-        // if (event.origin !== "http://localhost") {
+        // if (event.origin !== "https://hcs-laravel") {
         //     // 指定ドメイン以外は受け付けない
         //     return;
         // }
+        if (event.origin !== "http://localhost") {
+            // 指定ドメイン以外は受け付けない
+            return;
+        }
         setState({ 
             ...state,
             latitude: JSON.parse(event.data).lat,
@@ -255,7 +255,6 @@ function MyArticle() {
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
 
-    // console.log(editedArtcle)
     // 都道府県の検索条件をもとに記事の絞り込み
     const getSearchPrefecture = () => {
         // 非同期の関数を定義
@@ -424,6 +423,8 @@ function MyArticle() {
                                             formData.append('title', values.mobileTitle)
                                             formData.append('content', values.mobileContent)
                                             formData.append('type', document.getElementById("mobileTypeSwitch").checked)
+                                            formData.append('latitude', state.latitude)
+                                            formData.append('longitude', state.longitude)
                                             
                                             // 記事の登録処理
                                             createClicked(formData)
@@ -559,6 +560,8 @@ function MyArticle() {
                                                 formData.append('title', values.title)
                                                 formData.append('content', values.content)
                                                 formData.append('type', document.getElementById("typeSwitch").checked ? 1 : 0)
+                                                formData.append('latitude', state.latitude)
+                                                formData.append('longitude', state.longitude)
                                                 
                                                 // 記事の登録処理
                                                 createClicked(formData)
