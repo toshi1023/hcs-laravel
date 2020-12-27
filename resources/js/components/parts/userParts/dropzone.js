@@ -178,9 +178,9 @@ function ProfileDropzone(props, ref) {
       // 編集用ユーザIDをセット
       formData.append('id', id)
       // 画像の保存処理
-      await dispatch(fetchAsyncImage(formData))
-      
-      return;
+      const resultUpdate = await dispatch(fetchAsyncImage(formData))
+      // console.log(resultUpdate)
+      return resultUpdate
     }
   }))
 

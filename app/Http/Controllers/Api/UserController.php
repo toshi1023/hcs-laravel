@@ -79,7 +79,7 @@ class UserController extends Controller
   
         // 登録データを配列化
         $data = $request->input();
-        $data['user_id'] = \Auth::user()->id;
+        // $data['user_id'] = \Auth::user()->id;
   
         // パスワードのハッシュ処理
         $data['password'] = Hash::make($data['password']);
@@ -91,10 +91,9 @@ class UserController extends Controller
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました', 
           'id'           => $user->id,
-          'name'         => $request->input('name'),
-          'password'     => $request->input('password'),
         ],200, [], JSON_UNESCAPED_UNICODE);
       } catch (Exception $e) {
+        \Log::error('user save error:'.$e->getMessage());
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
         return response()->json([
@@ -132,9 +131,12 @@ class UserController extends Controller
         if ($user->status === 2 || $user->status === 4) {
           throw new Exception('ユーザが退会済みかもしくはアカウントを停止されています');
         }
+
+        // パスワードをSessionに格納
+        
         
         return response()->json([
-          'user' => $user, 
+          'user' => $user,
         ],200, [], JSON_UNESCAPED_UNICODE);
       }  catch (Exception $e) {
         \Log::error('User get Error:'.$e->getMessage());
@@ -190,20 +192,22 @@ class UserController extends Controller
         
         // 登録データを配列化
         $data = $request->input();
-        $data['user_id'] = \Auth::user()->id;
+        // $data['user_id'] = \Auth::user()->id;
 
         // パスワードのハッシュ処理
         if(key_exists('password', $data)) {
           $data['password'] = Hash::make($data['password']);
         }
         $user = $this->database->save($data, $filename);
+        
         DB::commit();
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました!', 
-          'name'         => $request->input('name'),
-          'password'     => $request->input('password'),
+          'name'         => $user->name,
+          'password'     => $request->input('password')
         ],200, [], JSON_UNESCAPED_UNICODE);
       } catch (Exception $e) {
+        \Log::error('user update error:'.$e->getMessage());
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
         return response()->json([

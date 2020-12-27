@@ -160,13 +160,16 @@ export default function UserCreate() {
         const result = await dispatch(fetchAsyncCreate(state))
         if (fetchAsyncCreate.fulfilled.match(result)) {
             // 画像の保存
-            doAction(result.payload.id)
+            const resultUpdate = doAction(result.payload.id)
+            
             // ログイン処理
-            await dispatch(fetchAsyncLogin(result.payload))
-            // infoメッセージの表示
-            result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-            // Topページに遷移
-            history.push(`/`)
+            if(resultUpdate != undefined && resultUpdate.payload.name && resultUpdate.payload.password) {
+                await dispatch(fetchAsyncLogin(resultUpdate.payload))
+                // infoメッセージの表示
+                result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+                // Topページに遷移
+                history.push(`/`)
+            }
             // ロード終了
             await dispatch(fetchCredEnd()); 
             return;
