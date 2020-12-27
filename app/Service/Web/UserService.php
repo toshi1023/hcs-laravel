@@ -32,9 +32,15 @@ class UserService
       // ユーザ情報の取得
       $users = $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
       // フレンド情報取得
-      $friends = $this->UserService->getFriendsQuery(request()->input('queryId'))->get();
+      $friends = '';
+      if(request()->input('queryId')) {
+        $friends = $this->UserService->getFriendsQuery(request()->input('queryId'))->get();
+      }
       // メッセージ履歴の取得(メッセージ相手のIDのみ取得)
-      $messages = $this->MessageService->getIndexQuery(['user_id' => \Auth::user()->id])->select('messangers.user_id')->get();
+      $messages = '';
+      if(\Auth::user()) {
+        $messages = $this->MessageService->getIndexQuery(['user_id' => \Auth::user()->id])->select('messangers.user_id')->get();
+      }
 
       return [
         'users'   => $users,

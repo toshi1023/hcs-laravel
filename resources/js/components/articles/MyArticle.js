@@ -234,7 +234,8 @@ function MyArticle() {
                 )
                 // ロード終了
                 await dispatch(fetchCredEnd());
-                // return;
+                // 新規タブからの位置情報取得処理を終了
+                return () => window.removeEventListener("message", receiveMessage)
             }
             navigator.geolocation.getCurrentPosition(
                 pos => setState({ 
@@ -246,7 +247,6 @@ function MyArticle() {
             )
             // ロード終了
             await dispatch(fetchCredEnd());  
-
             // 新規タブからの位置情報取得処理を終了
             return () => window.removeEventListener("message", receiveMessage)
         }
@@ -354,6 +354,14 @@ function MyArticle() {
 
     return (
         <>
+            {
+                // メッセージ表示
+                infoMessages ? 
+                    <SnackMessages infoOpen={true} />
+                :
+                    <SnackMessages errorOpen={true} />
+            }
+            
             {/* タブ(スマホ版のみ) */}
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
@@ -370,14 +378,6 @@ function MyArticle() {
                     </Tabs>
                 </Paper>
             </div>
-
-            {
-                // メッセージ表示
-                infoMessages ? 
-                    <SnackMessages infoOpen={true} />
-                :
-                    <SnackMessages errorOpen={true} />
-            }
 
             {/* 記事の編集モーダル */}
             {renderEditModal()}

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetErrorMessages, selectError } from '../app/appSlice';
 import { selectUsers, selectSelectedUser, fetchAsyncGet, fetchAsyncGetShow, selectFriendStatus } from './userSlice';
 import UserList from '../parts/userParts/userList';
 import _ from 'lodash';
@@ -12,6 +12,7 @@ import GroupIcon from '@material-ui/icons/Group';
 import { makeStyles } from '@material-ui/core/styles';
 import UserShow from './Show';
 import MessageCard from '../parts/common/messageCard';
+import SnackMessages from '../parts/common/snackMessages';
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -86,6 +87,7 @@ export default function User() {
     const users = useSelector(selectUsers)
     const selectedUser = useSelector(selectSelectedUser)
     const friendStatus = useSelector(selectFriendStatus)
+    const errorMessages = useSelector(selectError)
     const dispatch = useDispatch()
     const [state, setState] = React.useState({
         userName: null,
@@ -97,9 +99,15 @@ export default function User() {
             // Loading開始
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
-            const resultReg = await dispatch(fetchAsyncGet({user_name: document.getElementById("userSearch").value, user_id: localStorage.getItem('loginId')}))
+            const resultReg = await dispatch(fetchAsyncGet({
+                user_name: document.getElementById("userSearch").value, 
+                user_id: localStorage.getItem('loginId')
+            }))
             const resultShow = await dispatch(fetchAsyncGetShow(''))
             if (fetchAsyncGet.fulfilled.match(resultReg) && fetchAsyncGetShow.fulfilled.match(resultShow)) {
+                // errorメッセージの表示
+                resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
+                resultShow.payload.error_message ? dispatch(fetchGetErrorMessages(resultShow)) : ''
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -134,13 +142,18 @@ export default function User() {
             // Loading開始
             await dispatch(fetchCredStart())
             // ユーザを取得
-            const resultSearch = await dispatch(fetchAsyncGet({user_name: state.userName, user_id: localStorage.getItem('loginId')}))
+            const resultSearch = await dispatch(fetchAsyncGet({
+                user_name: state.userName, 
+                user_id: localStorage.getItem('loginId')
+            }))
             
             if (fetchAsyncGet.fulfilled.match(resultSearch)) {
                 setState({
                     ...state,
                     userName: '',
                 })
+                // errorメッセージの表示
+                resultSearch.payload.error_message ? dispatch(fetchGetErrorMessages(resultSearch)) : ''
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
@@ -168,6 +181,14 @@ export default function User() {
     
     return (
         <>
+            {
+                // メッセージ表示
+                errorMessages ? 
+                    <SnackMessages errorOpen={true} />
+                :
+                    ''
+            }
+
             {/* スマホ版 */}
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
