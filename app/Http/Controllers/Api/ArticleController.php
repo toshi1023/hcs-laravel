@@ -145,15 +145,26 @@ class ArticleController extends Controller
   // 記事を削除
   public function destroy($article)
   {
-    DB::beginTransaction();
+    try {
+      DB::beginTransaction();
 
-    if ($this->database->articleDestroy($article)) {
+      // 記事を削除
+      $this->database->articleDestroy($article);
+
       DB::commit();
-      return redirect()->route('articles.index')->with('message', '記事を削除しました');
-    } else {
+      return response()->json([
+        'info_message' => '記事を削除しました',
+        'id'           => $article
+      ],200, [], JSON_UNESCAPED_UNICODE);
+
+    } catch (\Exception $e) {
       DB::rollBack();
-      $this->messages->add('', '記事の削除に失敗しました。管理者に問い合わせてください');
-      return redirect()->route('articles.index')->withErrors($this->messages);
+      \Log::error('Article delete Error:'.$e->getMessage());
+      // 削除失敗時はエラーメッセージを返す
+      return new JsonResponse([
+        'error_message' => '記事の削除に失敗しました',
+        'status'        => 500,
+      ], 500);
     }
   }
 

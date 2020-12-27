@@ -108,13 +108,13 @@ export const fetchAsyncImage = createAsyncThunk('articles/image', async(data) =>
 export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) => {
     try {
         // deleteの場合は第2引数で渡すデータはない
-        await axios.delete(`${apiUrl}/${id}/`, {
+        const res = await axios.delete(`${apiUrl}/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 // Authorization: `JWT ${token}`,
             },
         })
-        return id
+        return res.data
     } catch (err) {
         if (!err.response) {
             throw err
@@ -291,7 +291,6 @@ const articleSlice = createSlice({
     // Reducer (actionの処理を記述)
     reducers: {
         editArticle(state, action) {
-            console.log(action.payload)
             state.editedArticle = action.payload
         },
         selectArticle(state, action) {
@@ -343,26 +342,7 @@ const articleSlice = createSlice({
             return {
                 ...state,
                 // 削除対象のarticle以外のidでフィルターをかけてstateを更新
-                articles: state.articles.filter((a) => a.id !== action.payload.id),
-                // 値を初期値に再設定
-                selectedArticle: {
-                    user_id: 0,                 // ユーザid
-                    name: '',                   // 投稿者のニックネーム
-                    users_photo_path: '',       // 投稿者のプロフィール画像
-                    prefecture: '',             // 都道府県
-                    article_id: 0,              // 記事のid
-                    articles_photo_name: '',    // 記事の画像名
-                    title: '',                  // 記事タイトル
-                    content: '',                // 記事の内容
-                    articles_photo_path: '',    // 記事の画像パス
-                    type: 0,                    // 公開対象
-                    type_name: '',              // 公開対象名
-                    latitude: '',               // 緯度
-                    longitude: '',              // 経度
-                    delete_flg: '',             // 削除フラグ
-                    created_at: '',             // 記事の作成日
-                    updated_at: '',             // 記事の更新日
-                },
+                articles: state.articles.filter((a) => a.id != action.payload.id),
             }
         })
         builder.addCase(fetchAsyncGetLikes.fulfilled, (state, action) => {

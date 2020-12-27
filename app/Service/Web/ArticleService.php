@@ -74,7 +74,7 @@ class ArticleService
     * */
     public function articleDestroy($id)
     {
-      return $this->ArticleService->destroy('articles', $id);
+      return $this->ArticleService->getDestroy($id, 'articles');
     }
 
   /**

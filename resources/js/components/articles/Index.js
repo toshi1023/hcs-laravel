@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, selectInfo } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet, selectLikes, selectSearchUser, searchUser } from './articleSlice';
-import { selectUsers, fetchAsyncGetFriends } from '../users/userSlice';
+import ArticleEdit from './Edit';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
 import MessageCard from '../parts/common/messageCard';
@@ -245,6 +245,9 @@ function Article() {
                     </Tabs>
                 </Paper>
             </div>
+
+            {/* 記事の編集モーダル */}
+            <ArticleEdit />
 
             {/* 検索デザイン */}
             <Grid container className={classes.searchField}>

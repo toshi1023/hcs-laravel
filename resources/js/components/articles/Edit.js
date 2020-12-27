@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, selectInfo, fetchOpenModal } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, selectModal, fetchOpenModal } from '../app/appSlice';
 import { fetchAsyncUpdate, selectEditedArticle } from './articleSlice';
 import ArticleDropzone from '../parts/articleParts/dropzone';
 import SwitchType from '../parts/common/switch';
@@ -9,7 +9,7 @@ import SnackMessages from '../parts/common/snackMessages';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
-import { Grid, Button, TextField, FormControl, FormLabel, FormControlLabel, Paper, Radio, RadioGroup } from '@material-ui/core';
+import { Grid, Button, TextField, FormControl, FormLabel, FormControlLabel, Paper, Radio, RadioGroup, Modal, Backdrop, Fade } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -40,12 +40,16 @@ const useStyles = makeStyles((theme) => ({
     latlng: {
         fontSize: 12,
         paddingRight: theme.spacing(2),
-    }
+    },
+    modal: {
+        overflow:'scroll',
+    },
   }));
 
   export default function ArticleEdit() {
     const classes = useStyles();
     const editedArticle = useSelector(selectEditedArticle)
+    const open = useSelector(selectModal)
     const dispatch = useDispatch();
     const childRef = useRef();
     // stateの初期設定
@@ -105,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
             window.addEventListener("message", receiveMessage, false)
 
             // ユーザの登録している都道府県が選択されている状態でセット
+            console.log(editedArticle.prefecture)
             document.getElementById("modalFormPrefecture").value = editedArticle.prefecture
             // ロード終了
             await dispatch(fetchCredEnd());
@@ -157,138 +162,153 @@ const useStyles = makeStyles((theme) => ({
     
     return (
         <>
-            <Grid container justify="center">
-                <Grid item xs={10} sm={6} md={4}>
-                <Paper className={classes.paper}>
-                    <Grid container>
-                        <h3 className={classes.modalTitle}>記事の編集</h3>
-                        <Button className={classes.closeIcon} onClick={handleClose}>
-                            <CancelIcon />
-                        </Button>
-                    </Grid>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+                <Fade in={open}>
                     <Grid container justify="center">
-                        <Grid item xs={10} sm={10} md={10}> 
-                            <Formik
-                                initialErrors={{ modalTitle: "required", modalContent: "required" }}
-                                initialValues={{ 
-                                    modalTitle: editedArticle.title,
-                                    modalContent: editedArticle.content,
-                                }}
-                                onSubmit={async (values) => {
-                                    // ユーザ登録処理
-                                    let formData = new FormData(document.forms.form);
-                                    formData.append('prefecture', document.getElementById("modalFormPrefecture").value)
-                                    formData.append('title', values.mobileTitle)
-                                    formData.append('content', values.mobileContent)
-                                    formData.append('type', document.getElementById("modalTypeSwitch").checked)
-                                    
-                                    // 記事の登録処理
-                                    createClicked(formData)
-                                }}
-                                validationSchema={Yup.object().shape({
-                                    modalTitle: Yup.string()
-                                                    .required("タイトルの入力は必須です"),
-                                    modalContent: Yup.string()
-                                                        .required("内容の入力は必須です"),
-                                })}
-                            >
-                            {({
-                                handleSubmit,
-                                handleChange,
-                                handleBlur,
-                                values,
-                                errors,
-                                touched,
-                                isValid,
-                            }) => (
-                                <Form onSubmit={handleSubmit}>
-                                    <FormControl className={classes.margin}>
-                                        <div className={classes.margin} onBlur={setPrefecture}>
-                                            <ArticlePrefectureSelects 
-                                                labelFlg={editedArticle.prefecture ? false : undefined} 
-                                                id="modalFormPrefecture" 
-                                                fontSize={15} 
-                                            />
-                                        </div>
-                                        <div className={classes.margin}>
-                                            <FormLabel style={{ fontSize: 13 }}>位置情報</FormLabel>
-                                            <RadioGroup aria-label="location" name="location" value={value} onChange={handleChangeRadio}>
-                                                <FormControlLabel value="current" control={<Radio onClick={handleSetDB} />} label={<span className={classes.latlng}>位置情報は更新しない</span>} />
-                                                <FormControlLabel value="map" control={<Radio onClick={handleOpenMap} />} label={<span className={classes.latlng}>Mapから取得</span>} />
-                                            </RadioGroup>
-                                            <span className={classes.latlng}>緯度：{state.latitude}</span>
-                                            <span className={classes.latlng}>経度：{state.longitude}</span>
-                                        </div>
-                                        <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("modalTitle").value)}}>
-                                            <TextField
-                                                id="modalTitle"
-                                                name="modalTitle"
-                                                label="タイトル"
-                                                variant="outlined"
-                                                style = {{width: 250}}
-                                                InputLabelProps={{
-                                                    className: classes.input,
-                                                }}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.modalTitle}
-                                            />
-                                            {touched.title && errors.title ? (
-                                                <div className={classes.error}>{errors.title}</div>
-                                            ) : null}
-                                        </div>
-                                        <div className={classes.margin} onBlur={() => {setContent(document.getElementById("modalContent").value)}}>
-                                            <TextField
-                                                id="modalContent"
-                                                name="modalContent"
-                                                label="内容"
-                                                variant="outlined"
-                                                style = {{width: 250}}
-                                                multiline
-                                                rows={4}
-                                                InputLabelProps={{
-                                                    className: classes.input,
-                                                }}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.modalContent}
-                                            />
-                                            {touched.content && errors.content ? (
-                                                <div className={classes.error}>{errors.content}</div>
-                                            ) : null}
-                                        </div>
-                                        <div className={classes.margin} onClick={setType}>
-                                            <SwitchType 
-                                                id="modalTypeSwitch"
-                                                switchLabel={{true: '会員限定', false: '全員'}}
-                                                labelPlacement='bottom'
-                                                checked={state.type}
-                                                value={editedArticle ? editedArticle.type : values.type}
-                                            />
-                                        </div>
-                                        <div className={classes.margin}>
-                                            <ArticleDropzone ref={childRef} />
-                                        </div>
-                                        <div className={classes.margin}>
-                                            <Button 
-                                                variant="contained" 
-                                                color="primary" 
-                                                className={classes.button}
-                                                disabled={!isValid} 
-                                                type="submit"
-                                            >
-                                                投稿する
-                                            </Button>
-                                        </div>
-                                    </FormControl>
-                                </Form>
-                            )}
-                            </Formik>
+                        <Grid item xs={10} sm={6} md={4}>
+                        <Paper className={classes.paper}>
+                            <Grid container>
+                                <h3 className={classes.modalTitle}>記事の編集</h3>
+                                <Button className={classes.closeIcon} onClick={handleClose}>
+                                    <CancelIcon />
+                                </Button>
+                            </Grid>
+                            <Grid container justify="center">
+                                <Grid item xs={10} sm={10} md={10}> 
+                                    <Formik
+                                        initialErrors={{ modalTitle: "required", modalContent: "required" }}
+                                        initialValues={{ 
+                                            modalTitle: editedArticle.title,
+                                            modalContent: editedArticle.content,
+                                        }}
+                                        onSubmit={async (values) => {
+                                            // ユーザ登録処理
+                                            let formData = new FormData(document.forms.form);
+                                            formData.append('prefecture', document.getElementById("modalFormPrefecture").value)
+                                            formData.append('title', values.mobileTitle)
+                                            formData.append('content', values.mobileContent)
+                                            formData.append('type', document.getElementById("modalTypeSwitch").checked)
+                                            
+                                            // 記事の登録処理
+                                            createClicked(formData)
+                                        }}
+                                        validationSchema={Yup.object().shape({
+                                            modalTitle: Yup.string()
+                                                            .required("タイトルの入力は必須です"),
+                                            modalContent: Yup.string()
+                                                                .required("内容の入力は必須です"),
+                                        })}
+                                    >
+                                    {({
+                                        handleSubmit,
+                                        handleChange,
+                                        handleBlur,
+                                        values,
+                                        errors,
+                                        touched,
+                                        isValid,
+                                    }) => (
+                                        <Form onSubmit={handleSubmit}>
+                                            <FormControl className={classes.margin}>
+                                                <div className={classes.margin} onBlur={setPrefecture}>
+                                                    <ArticlePrefectureSelects 
+                                                        labelFlg={editedArticle.prefecture ? false : undefined} 
+                                                        id="modalFormPrefecture" 
+                                                        fontSize={15} 
+                                                    />
+                                                </div>
+                                                <div className={classes.margin}>
+                                                    <FormLabel style={{ fontSize: 13 }}>位置情報</FormLabel>
+                                                    <RadioGroup aria-label="location" name="location" value={value} onChange={handleChangeRadio}>
+                                                        <FormControlLabel value="current" control={<Radio onClick={handleSetDB} />} label={<span className={classes.latlng}>位置情報は更新しない</span>} />
+                                                        <FormControlLabel value="map" control={<Radio onClick={handleOpenMap} />} label={<span className={classes.latlng}>Mapから取得</span>} />
+                                                    </RadioGroup>
+                                                    <span className={classes.latlng}>緯度：{state.latitude}</span>
+                                                    <span className={classes.latlng}>経度：{state.longitude}</span>
+                                                </div>
+                                                <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("modalTitle").value)}}>
+                                                    <TextField
+                                                        id="modalTitle"
+                                                        name="modalTitle"
+                                                        label="タイトル"
+                                                        variant="outlined"
+                                                        style = {{width: 250}}
+                                                        InputLabelProps={{
+                                                            className: classes.input,
+                                                        }}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.modalTitle}
+                                                    />
+                                                    {touched.title && errors.title ? (
+                                                        <div className={classes.error}>{errors.title}</div>
+                                                    ) : null}
+                                                </div>
+                                                <div className={classes.margin} onBlur={() => {setContent(document.getElementById("modalContent").value)}}>
+                                                    <TextField
+                                                        id="modalContent"
+                                                        name="modalContent"
+                                                        label="内容"
+                                                        variant="outlined"
+                                                        style = {{width: 250}}
+                                                        multiline
+                                                        rows={4}
+                                                        InputLabelProps={{
+                                                            className: classes.input,
+                                                        }}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        value={values.modalContent}
+                                                    />
+                                                    {touched.content && errors.content ? (
+                                                        <div className={classes.error}>{errors.content}</div>
+                                                    ) : null}
+                                                </div>
+                                                <div className={classes.margin} onClick={setType}>
+                                                    <SwitchType 
+                                                        id="modalTypeSwitch"
+                                                        switchLabel={{true: '会員限定', false: '全員'}}
+                                                        labelPlacement='bottom'
+                                                        checked={state.type}
+                                                        value={editedArticle ? editedArticle.type : values.type}
+                                                    />
+                                                </div>
+                                                <div className={classes.margin}>
+                                                    <ArticleDropzone ref={childRef} />
+                                                </div>
+                                                <div className={classes.margin}>
+                                                    <Button 
+                                                        variant="contained" 
+                                                        color="primary" 
+                                                        className={classes.button}
+                                                        disabled={!isValid} 
+                                                        type="submit"
+                                                    >
+                                                        投稿する
+                                                    </Button>
+                                                </div>
+                                            </FormControl>
+                                        </Form>
+                                    )}
+                                    </Formik>
+                                </Grid>
+                            </Grid>
+                        </Paper>
                         </Grid>
                     </Grid>
-                </Paper>
-                </Grid>
-            </Grid>
+                </Fade>
+            </Modal>
         </>
     );
 }

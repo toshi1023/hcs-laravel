@@ -12,7 +12,7 @@ import SnackMessages from '../parts/common/snackMessages';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
-import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl, FormLabel, FormControlLabel, Modal, Backdrop, Fade, Radio, RadioGroup } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, Button, TextField, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CreateIcon from '@material-ui/icons/Create';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -314,11 +314,6 @@ function MyArticle() {
         setCreatePage(false)
     }
 
-    // Modalの非表示設定
-    const handleClose = () => {
-        dispatch(fetchOpenModal(false))
-    };
-    
     // 記事一覧を生成
     const renderArticles = () => {
         return (
@@ -330,28 +325,6 @@ function MyArticle() {
         )
     }
     
-    // 記事の編集モーダルを生成
-    const renderEditModal = () => {
-        return (
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                timeout: 500,
-                }}
-            >
-                <Fade in={open}>
-                    <ArticleEdit />
-                </Fade>
-            </Modal>
-        )
-    }
-
     return (
         <>
             {
@@ -361,7 +334,7 @@ function MyArticle() {
                 :
                     <SnackMessages errorOpen={true} />
             }
-            
+
             {/* タブ(スマホ版のみ) */}
             <div className={classes.sectionMobile}>
                 <Paper square className={classes.tab}>
@@ -380,7 +353,7 @@ function MyArticle() {
             </div>
 
             {/* 記事の編集モーダル */}
-            {renderEditModal()}
+            <ArticleEdit />
 
             {/* 検索デザイン */}
             <Grid container className={classes.searchField}>

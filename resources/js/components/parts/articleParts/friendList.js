@@ -61,39 +61,36 @@ export default function FriendList(props) {
     return (
         <List dense className={classes.root}>
             {
-                // props.friendList ? 
-                    _.map(friends, value => {
-                
-                        return (
-                            <>
-                                {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-                                <ListItem
-                                    key={value.target_id}
-                                    button
-                                    onClick={() => props.handleFriendArticles(value.target_id)}
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar
-                                            alt={`Avatar n°${value.target_id}`}
-                                            src={`${value.users_photo_path}`}
-                                            className={classes.avatar}
-                                        />
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        id={value.target_id}
-                                        primary={`${value.name}`}
-                                        classes={{ primary: classes.list }}
-                                        style={{
-                                            color: value.gender == 1 ? "blue" : "red"
-                                        }}
+                _.map(friends, value => {
+            
+                    return (
+                        <>
+                            {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
+                            <ListItem
+                                key={value.target_id}
+                                button
+                                onClick={() => props.handleFriendArticles(value.target_id)}
+                            >
+                                <ListItemAvatar>
+                                    <Avatar
+                                        alt={`Avatar n°${value.target_id}`}
+                                        src={`${value.users_photo_path}`}
+                                        className={classes.avatar}
                                     />
-                                </ListItem>
-                                <hr />
-                            </>
-                        );
-                    })
-                // :
-                //     <UserList handleFriendArticles={handleFriendArticles} />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    id={value.target_id}
+                                    primary={`${value.name}`}
+                                    classes={{ primary: classes.list }}
+                                    style={{
+                                        color: value.gender == 1 ? "blue" : "red"
+                                    }}
+                                />
+                            </ListItem>
+                            <hr />
+                        </>
+                    );
+                })
             }
         </List>
     );

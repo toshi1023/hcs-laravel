@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ArticleCardExpand from './articleCardExpand';
-import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal } from '../../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal, selectInfo } from '../../app/appSlice';
 import { 
   selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes, selectComments, selectCommentsCounts, 
-  fetchAsyncGetComments, fetchAsyncUpdateComments, editArticle
+  fetchAsyncGetComments, fetchAsyncUpdateComments, editArticle, fetchAsyncDelete
 } from '../../articles/articleSlice';
 import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
@@ -14,6 +14,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import DateFormat from '../common/dateFormat';
+import SnackMessages from '../common/snackMessages';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 const useStyles = makeStyles((theme) => ({
@@ -102,6 +103,7 @@ export default function ArticleCard(props) {
   const likes = useSelector(selectLikes)
   const comments = useSelector(selectComments)
   const commentsCounts = useSelector(selectCommentsCounts)
+  const infoMessages = useSelector(selectInfo)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -159,10 +161,14 @@ export default function ArticleCard(props) {
     return;
   }
   // 記事の削除処理
-  const deleteModal = () => {
+  const deleteModal = async (value) => {
     if (confirm('この記事を削除しますか？')) {
       // 記事の削除処理
-
+      const resultReg = await dispatch(fetchAsyncDelete(value))
+      if (fetchAsyncDelete.fulfilled.match(resultReg)) {
+        // infoメッセージの表示
+        resultReg.payload.info_message ? dispatch(fetchGetInfoMessages(resultReg)) : dispatch(fetchGetErrorMessages(resultReg))     
+      }
       return;
     }
     return;
@@ -179,7 +185,7 @@ export default function ArticleCard(props) {
             </IconButton>
             <Menu {...bindMenu(popupState)}>
               <MenuItem className={classes.menuItem} onClick={popupState.close, () => editModal(value)}><EditIcon style={{ marginRight: 5, color: 'blue' }} />編集</MenuItem>
-              <MenuItem className={classes.menuItem} onClick={popupState.close, deleteModal}><DeleteForeverIcon style={{ marginRight: 5, color: 'red' }} />削除</MenuItem>
+              <MenuItem className={classes.menuItem} onClick={popupState.close, () => deleteModal(value.id)}><DeleteForeverIcon style={{ marginRight: 5, color: 'red' }} />削除</MenuItem>
             </Menu>
           </React.Fragment>
         )}
@@ -231,6 +237,13 @@ export default function ArticleCard(props) {
   return (
     _.map(props.article != undefined ? props.article : '', article => (
       <>
+        {
+          // メッセージ表示
+          infoMessages ? 
+              <SnackMessages infoOpen={true} />
+          :
+              <SnackMessages errorOpen={true} />
+        }
         {/* スマホ版 */}
         {
           // 記事の公開が限定されている場合
