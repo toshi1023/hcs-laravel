@@ -166,9 +166,14 @@ function ArticleDropzone(props, ref) {
   }
 
   /**
-   * 画像の保存処理
+   * 親コンポーネントからの参照用関数
    */
   useImperativeHandle(ref, () => ({
+    
+    /**
+     * 画像の保存処理
+     * @param {*} values 
+     */
     async onSubmitArticleImage(values) {
       // let formData = new FormData();
       acceptedFiles.map(file => {

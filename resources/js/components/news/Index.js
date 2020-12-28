@@ -80,22 +80,33 @@ export default function News() {
         fetchNews()
     }, [dispatch])
     
-    // タブ切り替え処理
+    /**
+     * タブ切り替え処理
+     * @param {*} event 
+     * @param {*} newValue 
+     */
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
-    // ニュース一覧ページを表示(スマホ用)
+    /**
+     * ニュース一覧ページを表示(スマホ用)
+     */
     const handleTabNewsList = () => {
         setNewsPage(true)
         setNewsListPage(false)
     }
-    // ニュース詳細ページを表示(スマホ用)
+    /**
+     * ニュース詳細ページを表示(スマホ用)
+     */
     const handleTabNews = () => {
         setNewsPage(false)
         setNewsListPage(true)
     }
 
-    // 選択したニュースを詳細に表示
+    /**
+     * 選択したニュースを詳細に表示
+     * @param {*} value 
+     */
     const handleSetNews = value => {
         dispatch(
             selectNews({ value })

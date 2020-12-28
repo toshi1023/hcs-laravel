@@ -148,12 +148,17 @@ export default function UserCreate() {
         })
     }
 
-    // 画像の保存処理(ProfileDropzoneコンポーネントで実施)
+    /**
+     * 画像の保存処理(ProfileDropzoneコンポーネントで実施)
+     * @param {*} id 
+     */
     const doAction = (id) => {
         return childRef.current.onSubmit(id)
     }
   
-    // 作成(stateのeditedUserの値をApiで送信)
+    /**
+     * ユーザ作成(stateのeditedUserの値をApiで送信)
+     */
     async function createClicked() {
         // ロード開始
         await dispatch(fetchCredStart())

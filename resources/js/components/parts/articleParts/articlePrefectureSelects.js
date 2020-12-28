@@ -64,7 +64,9 @@ export default function ArticlePrefectureSelects(props) {
     })
   }
   
-  // 都道府県データの格納
+  /**
+   * 都道府県データの格納
+   */
   const renderPrefectures = () => {
     return _.map(prefectures.prefectures, prefecture => (
       <option key={prefecture.id} value={prefecture.name}>

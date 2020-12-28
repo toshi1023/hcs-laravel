@@ -104,7 +104,10 @@ function UserShow(props) {
     const messageHistory = useSelector(selectMessageHistory)
     const infoMessages = useSelector(selectInfo)
     
-    // 編集データの管理用stateを更新
+    /**
+     * 編集データの管理用stateを更新
+     * @param {*} value 
+     */
     const handleEditUser = value => {
         // editedUserのstateを更新するReducerにdispatch
         dispatch(
@@ -114,7 +117,10 @@ function UserShow(props) {
         history.push('/users/mypage/edit');
     };
 
-    // メッセージ用関数
+    /**
+     * メッセージ用関数
+     * @param {*} value 
+     */
     const handleToggleReply = (value) => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
@@ -128,7 +134,10 @@ function UserShow(props) {
         setReply(newChecked);
     };
 
-    // リプライアイコンボタンをクリック時
+    /**
+     * リプライアイコンボタンをクリック時
+     * @param {*} value 
+     */
     const handleSetMessage = (value) => {
         let user = ''
         // 初期表示のユーザか選択したユーザかを判別し変数に代入
@@ -144,7 +153,10 @@ function UserShow(props) {
         history.push('/messages')
     }
 
-    // 友達リクエストの承認
+    /**
+     * 友達リクエストの承認
+     * @param {*} value 
+     */
     const handleApproval = async (value) => {
         // リクエストの承認 or 拒否
         const resultReg = await dispatch(fetchAsyncUpdateFriends({id: value.id, status: 2}))

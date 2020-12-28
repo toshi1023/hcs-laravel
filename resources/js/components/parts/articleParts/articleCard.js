@@ -128,7 +128,10 @@ export default function ArticleCard(props) {
     
   }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
   
-  // 性別によって名前の色を色分け
+  /**
+   * 性別をトリガーにユーザ名の色分け処理を実行
+   * @param {*} value 
+   */
   const nickNameDesign = (value) => {
     if(value.gender === 1) {
       return (
@@ -154,13 +157,19 @@ export default function ArticleCard(props) {
     )
   }
   
-  // 記事の編集モーダルを表示
+  /**
+   * 記事の編集モーダルを表示
+   * @param {*} value 
+   */
   const editModal = (value) => {
     dispatch(editArticle(value))
     dispatch(fetchOpenModal(true))
     return;
   }
-  // 記事の削除処理
+  /**
+   * 記事の削除処理
+   * @param {*} value 
+   */
   const deleteModal = async (value) => {
     if (confirm('この記事を削除しますか？')) {
       // 記事の削除処理
@@ -174,7 +183,10 @@ export default function ArticleCard(props) {
     return;
   }
 
-  // 操作ボタンのクリック時
+  /**
+   * 操作ボタンのクリック時
+   * @param {*} value 
+   */
   const handleButton = (value) => {
     return (
       <PopupState variant="popover" popupId="demo-popup-menu">

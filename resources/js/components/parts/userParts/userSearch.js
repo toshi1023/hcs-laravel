@@ -30,7 +30,9 @@ export default function UserSearch() {
     })
   }
 
-  // 検索条件をもとに記事の絞り込み
+  /**
+   * 検索条件をもとに記事の絞り込み
+   */
   const getSearchUser = () => {
     // 非同期の関数を定義
     const fetchUserSearch = async () => {

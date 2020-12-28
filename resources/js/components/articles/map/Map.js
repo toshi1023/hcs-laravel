@@ -54,7 +54,10 @@ function Map() {
         
     }, [dispatch])
 
-    // 記事ページへ遷移
+    /**
+     * 記事ページへ遷移
+     * @param {*} value 
+     */
     const handleSearch = async(value) => {
         // Loading開始
         await dispatch(fetchCredStart())

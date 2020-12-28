@@ -71,7 +71,10 @@ export default function UserList(props) {
         setChecked(newChecked);
     };
     
-    // 友達申請処理
+    /**
+     * 友達申請処理
+     * @param {*} id 
+     */
     const handleFriendApply = async (id) => {
         const resultReg = await dispatch(fetchAsyncUpdateFriends({user_id: localStorage.getItem('loginId'), user_id_target: id}))
         if (fetchAsyncUpdateFriends.fulfilled.match(resultReg)) {
@@ -80,7 +83,10 @@ export default function UserList(props) {
         }
     }
 
-    // 詳細データの管理用stateを更新
+    /**
+     * 詳細データの管理用stateを更新
+     * @param {*} value 
+     */
     const handleSetUser = value => {
         // selectedUserのstateを更新するReducerにdispatch
         dispatch(

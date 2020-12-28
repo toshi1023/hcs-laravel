@@ -66,7 +66,10 @@ export default function FriendList(props) {
         setChecked(newChecked);
     };
 
-    // 詳細データの管理用stateを更新
+    /**
+     * 詳細データの管理用stateを更新
+     * @param {*} value 
+     */
     const handleSetUser = value => {
         // selectedUserのstateを更新するReducerにdispatch
         dispatch(

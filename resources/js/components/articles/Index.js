@@ -100,8 +100,10 @@ function Article() {
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
 
-
-    // 都道府県の検索条件をもとに記事の絞り込み
+    
+    /**
+     * 都道府県の検索条件をもとに記事の絞り込み
+     */
     const getSearchPrefecture = () => {
         // 非同期の関数を定義
         const fetchArticleSearch = async () => {
@@ -126,7 +128,10 @@ function Article() {
         fetchArticleSearch()
     }
 
-    // 選択したフレンドの記事を取得
+    /**
+     * 選択したフレンドの記事を取得
+     * @param {*} value 
+     */
     const handleFriendArticles = async value => {
 
         // Loading開始
@@ -158,7 +163,9 @@ function Article() {
         return;
     }
 
-    // 検索条件のクリア
+    /**
+     * 検索条件のクリア
+     */
     const handleSearchClear = async () => {
         // Loading開始
         await dispatch(fetchCredStart())
@@ -180,28 +187,41 @@ function Article() {
         await dispatch(fetchCredEnd())
     }
 
-    // タブ切り替え処理
+    /**
+     * タブ切り替え処理
+     * @param {*} event 
+     * @param {*} newValue 
+     */
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
-    // 記事一覧ページを表示(スマホ用)
+    /**
+     *  記事一覧ページを表示(スマホ用)
+     */
     const handleTabArticle = () => {
         setArticlePage(false)
         setFriendListPage(true)
     }
-    // 友達一覧ページを表示(スマホ用)
+    /**
+     * 友達一覧ページを表示(スマホ用)
+     */
     const handleTabFriendList = () => {
         setArticlePage(true)
         setFriendListPage(false)
     }
 
-    // フレンドリストの表示制御
+    /**
+     * フレンドリストの表示制御
+     */
     const setFriends = () => {
         setState({
             ...state,
             friends: document.getElementById("friendsSwitch").checked,
         })
     }
+    /**
+     * フレンドリストの表示制御(スマホ版)
+     */
     const setMobileFriends = () => {
         setState({
             ...state,
@@ -209,7 +229,9 @@ function Article() {
         })
     }
     
-    // 記事一覧を生成
+    /**
+     * 記事一覧を生成
+     */
     const renderArticles = () => {
         return (
             <Grid container className={classes.gridContainer} justify="center">

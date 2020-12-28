@@ -67,7 +67,10 @@ const useStyles = makeStyles((theme) => ({
     const handleChangeRadio = (event) => {
         setValue(event.target.value);
     };
-    // DBに保存しているデータをセット
+
+    /**
+     * DBに保存しているデータをセット
+     */
     const handleSetDB = () => {
         setState({
             ...state,
@@ -75,23 +78,29 @@ const useStyles = makeStyles((theme) => ({
             longitude: editedArticle.longitude,
         })
     }
-    // 位置情報の取得用Mapを別タブで表示
+    
+    /**
+     * 位置情報の取得用Mapを別タブで表示
+     */
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
-        // window.open('https://hcs-laravel/map/location', "Get Location")
-        window.open('http://localhost/map/location', "Get Location")
+        window.open('https://hcs-laravel/map/location', "Get Location")
+        // window.open('http://localhost/map/location', "Get Location")
     }
 
-    // 新規タブから設定された緯度経度をstateにセット
+    /**
+     * 新規タブから設定された緯度経度をstateにセット
+     * @param {*} event 
+     */
     const receiveMessage = (event) => {
-        // if (event.origin !== "https://hcs-laravel") {
-        //     // 指定ドメイン以外は受け付けない
-        //     return;
-        // }
-        if (event.origin !== "http://localhost") {
+        if (event.origin !== "https://hcs-laravel") {
             // 指定ドメイン以外は受け付けない
             return;
         }
+        // if (event.origin !== "http://localhost") {
+        //     // 指定ドメイン以外は受け付けない
+        //     return;
+        // }
         setState({ 
             ...state,
             latitude: JSON.parse(event.data).lat,
@@ -150,12 +159,18 @@ const useStyles = makeStyles((theme) => ({
         })
     }
 
-    // Modalの非表示設定
+    
+    /**
+     * Modalの非表示設定
+     */
     const handleClose = () => {
         dispatch(fetchOpenModal(false))
     };
 
-    // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+    /**
+     * 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+     * @param {*} values 
+     */
     const doAction = (values) => {
         return childRef.current.onSubmitArticleImage(values)
     }

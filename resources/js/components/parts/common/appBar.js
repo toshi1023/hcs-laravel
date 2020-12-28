@@ -101,22 +101,31 @@ function HcsAppBar() {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const dispatch = useDispatch();
     
-    // アカウントメニューを表示
+    /**
+     * アカウントメニューを表示
+     * @param {*} event 
+     */
     const handleProfileMenuOpen = event => {
         setAnchorEl(event.currentTarget);
     };
 
-    // Mobileメニューをクローズ
+    /**
+     * Mobileメニューをクローズ
+     */
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
 
-    // アカウントメニューをクローズ
+    /**
+     * アカウントメニューをクローズ
+     */
     const handleMenuClose = () => {
         setAnchorEl(null);
         handleMobileMenuClose();
     };
-    // アカウントメニューをクローズ
+    /**
+     * アカウントメニューをクローズ
+     */
     const handleProfileClose = () => {
         dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
         history.push('/users/mypage');
@@ -124,26 +133,34 @@ function HcsAppBar() {
         handleMobileMenuClose();
     };
 
-    // メッセージアイコンクリック
+    /**
+     * メッセージアイコンクリック
+     */
     const handleMessage = () => {
         history.push("/messages");
         handleMobileMenuClose();
     };
 
-    // 記事作成アイコンクリック
+    /**
+     * 記事作成アイコンクリック
+     */
     const handleCreateArticle = () => {
         history.push("/articles/mypage");
         handleMobileMenuClose();
     };
 
-    // Login処理
+    /**
+     * Loginページへリダイレクト
+     */
     const handleMenuCloseLogin = () => {
         history.push('/login')
         setAnchorEl(null);
         handleMobileMenuClose();
     };
 
-    // Logout処理
+    /**
+     * Logout処理
+     */
     const handleMenuCloseLogout = async () => {
         if (confirm("ログアウトをしますか？")) {
             // ロード開始
@@ -167,12 +184,17 @@ function HcsAppBar() {
         }
     };
 
-    // スマホサイズの時に表示されるメニューをオープン
+    /**
+     * スマホサイズの時に表示されるメニューをオープン
+     * @param {*} event 
+     */
     const handleMobileMenuOpen = event => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
-    // account & profileのメニュー設定
+    /**
+     * account & profileのメニュー設定
+     */
     const menuId = "primary-search-account-menu";
     const renderMenu = (
         <Menu
@@ -198,7 +220,9 @@ function HcsAppBar() {
         </Menu>
     );
 
-    // Mobileサイズの際のメニュー表示を設定
+    /**
+     * Mobileサイズの際のメニュー表示を設定
+     */
     const mobileMenuId = "primary-search-account-menu-mobile";
     const renderMobileMenu = (
         <Menu

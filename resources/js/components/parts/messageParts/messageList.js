@@ -65,7 +65,10 @@ export default function MessageList(props) {
     setChecked(newChecked);
   };
 
-  // 指定ユーザのメッセージを取得(引数：メッセージ相手のユーザID)
+  /**
+   * 指定ユーザのメッセージを取得(引数：メッセージ相手のユーザID)
+   * @param {*} id 
+   */
   const handleSetMessages = async (id) => {
     // Loading開始
     await dispatch(fetchCredStart())

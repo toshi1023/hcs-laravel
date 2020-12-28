@@ -117,13 +117,19 @@ export default function User() {
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
 
-    // ユーザ検索の値を管理
+    /**
+     * ユーザ検索の値を管理
+     * @param {*} event 
+     */
     const handleChangeName = (event) => {
         setState({
           ...state,
           userName: event.target.value,
         })
     }
+    /**
+     * ユーザ検索の値を消去
+     */
     const handleDeleteName = () => {
         setState({
           ...state,
@@ -135,7 +141,9 @@ export default function User() {
         document.getElementById('search').click()
     }
 
-    // 検索条件をもとにユーザの絞り込み
+    /**
+     * 検索条件をもとにユーザの絞り込み
+     */
     const getSearchUser = () => {
         // 非同期の関数を定義
         const fetchUserSearch = async () => {
@@ -164,16 +172,24 @@ export default function User() {
         fetchUserSearch()
     }
 
-    // タブ切り替え処理
+    /**
+     * タブ切り替え処理
+     * @param {*} event 
+     * @param {*} newValue 
+     */
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
-    // ユーザ一覧ページを表示(スマホ用)
+    /**
+     * ユーザ一覧ページを表示(スマホ用)
+     */
     const handleTabUserList = () => {
         setUserPage(true)
         setUserListPage(false)
     }
-    // ユーザ詳細ページを表示(スマホ用)
+    /**
+     * ユーザ詳細ページを表示(スマホ用)
+     */
     const handleTabUser = () => {
         setUserPage(false)
         setUserListPage(true)

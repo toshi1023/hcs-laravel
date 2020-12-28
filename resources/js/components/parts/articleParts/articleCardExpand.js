@@ -83,7 +83,10 @@ function ArticleCardExpand (props) {
         comment: ''
     })
 
-    // Google Mapで記事のロケーションを表示
+    /**
+     * Google Mapで記事のロケーションを表示
+     * @param {*} value 
+     */
     const handleMapView = (value) => {
         // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
         let url = `https://www.google.com/maps?q=${value.latitude},${value.longitude}`;

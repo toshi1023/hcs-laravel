@@ -56,8 +56,6 @@ export default function FriendList(props) {
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
 
-    
-    
     return (
         <List dense className={classes.root}>
             {

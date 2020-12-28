@@ -43,7 +43,9 @@ const MenuDrawer = (props) => {
     setState({ ...state, [anchor]: open });
   };
 
-  // リスト一覧
+  /**
+   * リスト一覧
+   */
   const itemList = [
     {
       text: 'Home',
@@ -67,7 +69,9 @@ const MenuDrawer = (props) => {
     },
   ]
 
-  // Logout処理
+  /**
+   * Logout処理
+   */
   const handleLogout = async () => {
     if (confirm("ログアウトをしますか？")) {
         // ロード開始

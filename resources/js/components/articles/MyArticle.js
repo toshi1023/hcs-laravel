@@ -112,12 +112,22 @@ function MyArticle() {
         content: '',
         type: false,
     });
-    // ラジオボタン用のstate
+
+    /**
+     * ラジオボタン用のstate
+     */
     const [value, setValue] = React.useState('current');
+    /**
+     * ラジオボタン切り替え処理
+     * @param {*} event 
+     */
     const handleChangeRadio = (event) => {
         setValue(event.target.value);
     };
-    // 現在地から緯度と経度を取得する
+
+    /**
+     * 現在地から緯度と経度を取得する
+     */
     const handleSetMap = () => {
         navigator.geolocation.getCurrentPosition(
             // 現在地をstateに設定
@@ -129,13 +139,19 @@ function MyArticle() {
             err => console.log(err),
         );
     }
-    // 位置情報の取得用Mapを別タブで表示
+
+    /**
+     * 位置情報の取得用Mapを別タブで表示
+     */
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
         // window.open('https://hcs-laravel/map/location', "Get Location")
         window.open('http://localhost/map/location', "Get Location")
     }
-    // 新規タブから設定された緯度経度をstateにセット
+    /**
+     * 新規タブから設定された緯度経度をstateにセット
+     * @param {*} event 
+     */
     const receiveMessage = (event) => {
         // if (event.origin !== "https://hcs-laravel") {
         //     // 指定ドメイン以外は受け付けない
@@ -182,12 +198,18 @@ function MyArticle() {
         })
     }
     
-    // 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+    /**
+     * 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+     * @param {*} values 
+     */
     const doAction = (values) => {
         return childRef.current.onSubmitArticleImage(values)
     }
   
-    // 作成(stateの値をApiで送信)
+    /**
+     * 記事の作成(stateの値をApiで送信)
+     * @param {*} values 
+     */
     async function createClicked(values) {
         // ロード開始
         await dispatch(fetchCredStart())
@@ -255,7 +277,10 @@ function MyArticle() {
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
 
-    // 都道府県の検索条件をもとに記事の絞り込み
+
+    /**
+     * 都道府県の検索条件をもとに記事の絞り込み
+     */
     const getSearchPrefecture = () => {
         // 非同期の関数を定義
         const fetchArticleSearch = async () => {
@@ -279,7 +304,9 @@ function MyArticle() {
         fetchArticleSearch()
     }
 
-    // 検索条件のクリア
+    /**
+     * 検索条件のクリア
+     */
     const handleSearchClear = async () => {
         // Loading開始
         await dispatch(fetchCredStart())
@@ -299,22 +326,32 @@ function MyArticle() {
         await dispatch(fetchCredEnd());
     }
 
-    // タブ切り替え処理
+    /**
+     * タブ切り替え処理
+     * @param {*} event 
+     * @param {*} newValue 
+     */
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
-    // 記事一覧ページを表示(スマホ用)
+    /**
+     * 記事一覧ページを表示(スマホ用)
+     */
     const handleTabArticle = () => {
         setArticlePage(false)
         setCreatePage(true)
     }
-    // 友達一覧ページを表示(スマホ用)
+    /**
+     * 友達一覧ページを表示(スマホ用)
+     */
     const handleTabCreate = () => {
         setArticlePage(true)
         setCreatePage(false)
     }
 
-    // 記事一覧を生成
+    /**
+     *  記事一覧を生成
+     */
     const renderArticles = () => {
         return (
             <Grid container className={classes.gridContainer} justify="center">

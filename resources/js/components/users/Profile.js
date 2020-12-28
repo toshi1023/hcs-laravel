@@ -120,16 +120,24 @@ function Profile(props) {
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
 
-    // タブ切り替え処理
+    /**
+     * タブ切り替え処理
+     * @param {*} event 
+     * @param {*} newValue 
+     */
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
-    // ユーザ一覧ページを表示(スマホ用)
+    /**
+     * ユーザ一覧ページを表示(スマホ用)
+     */
     const handleTabUserList = () => {
         setUserPage(true)
         setUserListPage(false)
     }
-    // ユーザ詳細ページを表示(スマホ用)
+    /**
+     * ユーザ詳細ページを表示(スマホ用)
+     */
     const handleTabUser = () => {
         setUserPage(false)
         setUserListPage(true)

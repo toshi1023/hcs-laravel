@@ -124,16 +124,24 @@ export default function Message() {
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
     
-    // タブ切り替え処理
+    /**
+     * タブ切り替え処理
+     * @param {*} event 
+     * @param {*} newValue 
+     */
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
-    // メッセージ一覧ページを表示(スマホ用)
+    /**
+     * メッセージ一覧ページを表示(スマホ用)
+     */
     const handleTabMessageList = () => {
         setMessagePage(true)
         setMessageListPage(false)
     }
-    // メッセージ詳細ページを表示(スマホ用)
+    /**
+     * メッセージ詳細ページを表示(スマホ用)
+     */
     const handleTabMessage = () => {
         setMessagePage(false)
         setMessageListPage(true)

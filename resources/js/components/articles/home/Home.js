@@ -52,14 +52,18 @@ function Home() {
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
 
-    // 記事一覧を生成
+    /**
+     * 記事一覧を生成
+     */
     const renderArticles = () => {
         return (
             <ArticleCard article={articles} />
         )
     }
 
-    // 記事一覧ページに遷移
+    /**
+     * 記事一覧ページに遷移
+     */
     const redirectArticles = () => {
         // ページ最上部に戻る
         window.scrollTo(0, 0)
