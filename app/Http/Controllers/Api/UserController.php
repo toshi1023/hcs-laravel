@@ -86,6 +86,9 @@ class UserController extends Controller
   
         // ユーザ保存処理
         $user = $this->database->save($data, $filename);
+
+        // セッションにパスワードを一時的に保存(ログイン後にセッションから削除する)
+        session()->put('password', $request->input('password'));
         
         DB::commit();
         return response()->json([
@@ -147,23 +150,6 @@ class UserController extends Controller
     }
 
     /**
-     * ユーザ詳細ページ(初期表示用)
-     */
-    // public function initShow(Request $request)
-    // {
-    //   // 検索条件のセット
-    //   $conditions = [];
-    //   $conditions['status'] = 0;
-    //   if ($request->input('query')) { $conditions['id'] = $request->input('query'); }
-        
-    //   $user = $this->database->getShow($conditions);
-
-    //   return response()->json([
-    //     'user' => $user, 
-    //   ],200, [], JSON_UNESCAPED_UNICODE);
-    // }
-
-    /**
      * ユーザ編集ページ
      */
     public function edit($user)
@@ -204,7 +190,7 @@ class UserController extends Controller
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました!', 
           'name'         => $user->name,
-          'password'     => $request->input('password')
+          'password'     => session()->get('password')  // storeメソッドで保存したセッション
         ],200, [], JSON_UNESCAPED_UNICODE);
       } catch (Exception $e) {
         \Log::error('user update error:'.$e->getMessage());

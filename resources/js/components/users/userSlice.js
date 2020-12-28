@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const loginUrl = 'http://localhost/api/login'
-const apiUrl = 'http://localhost/api/api_users'
-// const loginUrl = 'http://hcs-laravel/api/login'
-// const apiUrl = 'http://hcs-laravel/api/api_users'
+// const loginUrl = 'http://localhost/api/login'
+// const apiUrl = 'http://localhost/api/api_users'
+const loginUrl = 'http://hcs-laravel/api/login'
+const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
@@ -333,8 +333,6 @@ const userSlice = createSlice({
             if (action.payload.status == 401) {
                 return;
             }
-            // 認証に成功した場合は、ブラウザのlocalStorageに画像を保存
-            localStorage.setItem("loginPhoto", action.payload.login_user_photo)
         })
         builder.addCase(fetchAsyncGetProf.fulfilled, (state, action) => {
             return {

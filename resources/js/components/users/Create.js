@@ -150,7 +150,7 @@ export default function UserCreate() {
 
     // 画像の保存処理(ProfileDropzoneコンポーネントで実施)
     const doAction = (id) => {
-        childRef.current.onSubmit(id)
+        return childRef.current.onSubmit(id)
     }
   
     // 作成(stateのeditedUserの値をApiで送信)
@@ -159,19 +159,20 @@ export default function UserCreate() {
         await dispatch(fetchCredStart())
         const result = await dispatch(fetchAsyncCreate(state))
         if (fetchAsyncCreate.fulfilled.match(result)) {
-            // 画像の保存
-            const resultUpdate = doAction(result.payload.id)
-            
-            // ログイン処理
-            if(resultUpdate != undefined && resultUpdate.payload.name && resultUpdate.payload.password) {
-                await dispatch(fetchAsyncLogin(resultUpdate.payload))
-                // infoメッセージの表示
-                result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-                // Topページに遷移
-                history.push(`/`)
-            }
+            // 画像の保存処理
+            doAction(result.payload.id).then(async (value) => {
+                console.log(value)
+                // ログイン処理
+                if(value != undefined && value.name && value.password) {
+                    await dispatch(fetchAsyncLogin(value))
+                    // infoメッセージの表示
+                    result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+                    // Topページに遷移
+                    history.push(`/`)
+                }
+            })
             // ロード終了
-            await dispatch(fetchCredEnd()); 
+            await dispatch(fetchCredEnd())
             return;
         }
         // ロード終了

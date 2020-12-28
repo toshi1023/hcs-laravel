@@ -179,8 +179,8 @@ function ProfileDropzone(props, ref) {
       formData.append('id', id)
       // 画像の保存処理
       const resultUpdate = await dispatch(fetchAsyncImage(formData))
-      // console.log(resultUpdate)
-      return resultUpdate
+
+      return resultUpdate.payload
     }
   }))
 
