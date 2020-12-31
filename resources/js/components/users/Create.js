@@ -166,9 +166,8 @@ export default function UserCreate() {
         if (fetchAsyncCreate.fulfilled.match(result)) {
             // 画像の保存処理
             doAction(result.payload.id).then(async (value) => {
-                console.log(value)
                 // ログイン処理
-                if(value != undefined && value.name && value.password) {
+                if(value != undefined && value.name) {
                     await dispatch(fetchAsyncLogin(value))
                     // infoメッセージの表示
                     result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))

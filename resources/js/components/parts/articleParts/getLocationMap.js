@@ -30,8 +30,8 @@ function LocationProperty() {
     const map = useMapEvent('click', (e) => {
         let message = `この地点を設定しますか？\n\n緯度：${e.latlng.lat}\n経度：${e.latlng.lng}`
         if(window.confirm(message)) {
-            window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "https://hcs-laravel/artilces/mypage")
-            // window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "http://localhost/artilces/mypage")
+            // window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "https://hcs-laravel/artilces/mypage")
+            window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "http://localhost/artilces/mypage")
             // 設定後にこのページを閉じる
             window.close()
         }
