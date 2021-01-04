@@ -162,11 +162,11 @@ export default function UserCreate() {
     async function createClicked() {
         // ロード開始
         await dispatch(fetchCredStart())
+        // ユーザ作成処理
         const result = await dispatch(fetchAsyncCreate(state))
         if (fetchAsyncCreate.fulfilled.match(result)) {
-            // 画像の保存処理
+            // 画像の保存処理(Promiseで成功した場合)
             doAction(result.payload.id).then(async (value) => {
-                console.log(value)
                 // ログイン処理
                 if(value != undefined && value.name && value.password) {
                     await dispatch(fetchAsyncLogin(value))

@@ -133,7 +133,7 @@ class ArticleController extends Controller
       
     } catch (\Exception $e) {
       DB::rollBack();
-      \Log::error('Article save Error:'.$e->getMessage());
+      \Log::error('Article update Error:'.$e->getMessage());
       // 作成失敗時はエラーメッセージを返す
       return new JsonResponse([
         'error_message' => '記事の投稿に失敗しました',
