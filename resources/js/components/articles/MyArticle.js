@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal, selectInfo, selectModal } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, selectInfo, selectModal } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet, fetchAsyncCreate } from './articleSlice';
 import ArticleEdit from './Edit';
 import ArticleDropzone from '../parts/articleParts/dropzone';
@@ -145,22 +145,22 @@ function MyArticle() {
      */
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
-        // window.open('https://hcs-laravel/map/location', "Get Location")
-        window.open('http://localhost/map/location', "Get Location")
+        window.open('https://hcs-laravel/map/location', "Get Location")
+        // window.open('http://localhost/map/location', "Get Location")
     }
     /**
      * 新規タブから設定された緯度経度をstateにセット
      * @param {*} event 
      */
     const receiveMessage = (event) => {
-        // if (event.origin !== "https://hcs-laravel") {
-        //     // 指定ドメイン以外は受け付けない
-        //     return;
-        // }
-        if (event.origin !== "http://localhost") {
+        if (event.origin !== "https://hcs-laravel") {
             // 指定ドメイン以外は受け付けない
             return;
         }
+        // if (event.origin !== "http://localhost") {
+        //     // 指定ドメイン以外は受け付けない
+        //     return;
+        // }
         setState({ 
             ...state,
             latitude: JSON.parse(event.data).lat,
@@ -390,7 +390,13 @@ function MyArticle() {
             </div>
 
             {/* 記事の編集モーダル */}
-            <ArticleEdit />
+            {
+                // Modalの表示フラグがtrueの場合のみ表示
+                open ? 
+                    <ArticleEdit />
+                :
+                    ''
+            }
 
             {/* 検索デザイン */}
             <Grid container className={classes.searchField}>

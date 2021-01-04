@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FriendList from '../parts/userParts/friendList';
 import UserShow from './Show';
-import { fetchAsyncGetProf, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus } from "./userSlice";
+import { fetchAsyncGetProf, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus, selectSelectedUser, selectUser } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, fetchGetErrorMessages } from '../app/appSlice';
 // import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -91,10 +91,13 @@ function Profile(props) {
     const [userPage, setUserPage] = React.useState(false);
     const [userListPage, setUserListPage] = React.useState(true);
     // stateで管理するユーザ情報を取得
+    const selectedUser = useSelector(selectSelectedUser)
     const friends = useSelector(selectUsers)
     const friendStatus = useSelector(selectFriendStatus)
     const dispatch = useDispatch()
     const history = useHistory();
+    // プロフィールをローカルstateで管理
+    const [profile, setProfile] = React.useState('');
     
     useEffect(() => {
         // 非同期の関数を定義
@@ -105,10 +108,15 @@ function Profile(props) {
             const resultReg = await dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
             // ログイン情報の取得に失敗した場合
             resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
+            
             // 申請中の友達一覧を取得
             const resultFriends = await dispatch(fetchAsyncGetFriendsApply(localStorage.getItem('loginId')))
             
             if (fetchAsyncGetProf.fulfilled.match(resultReg) && fetchAsyncGetFriendsApply.fulfilled.match(resultFriends)) {
+                // ログインユーザのプロフィール情報をローカルstateに管理
+                setProfile({
+                    profile: selectedUser.user
+                })
                 // ロード終了
                 await dispatch(fetchCredEnd());
             }
@@ -119,7 +127,7 @@ function Profile(props) {
         fetchUserProf()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
-
+    
     /**
      * タブ切り替え処理
      * @param {*} event 
@@ -142,9 +150,13 @@ function Profile(props) {
         setUserPage(false)
         setUserListPage(true)
     }
-
+    /**
+     * ログインユーザのプロフィールを再表示
+     */
     const handleGetProfile = () => {
-        
+        console.log(profile)
+        console.log(selectedUser)
+        dispatch(selectUser(profile))
     }
     
     return (
@@ -174,7 +186,7 @@ function Profile(props) {
                         <Grid item xs={11} hidden={userListPage}>
                             <h1 className={styles.titleBar}>
                                 フレンド一覧
-                                <Button variant="outlined" color="primary" className={classes.profileButton}>
+                                <Button variant="outlined" color="primary" className={classes.profileButton} onClick={handleGetProfile}>
                                     プロフィールを表示
                                 </Button>
                             </h1>

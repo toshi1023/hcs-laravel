@@ -58,9 +58,9 @@ const useStyles = makeStyles((theme) => ({
         prefecture: editedArticle.prefecture,
         latitude: editedArticle.latitude,
         longitude: editedArticle.longitude,
-        title: '',
-        content: '',
-        type: false,
+        title: editedArticle.title,
+        content: editedArticle.content,
+        type: editedArticle.type,
     });
     // ラジオボタン用のstate
     const [value, setValue] = React.useState('current');
@@ -116,9 +116,7 @@ const useStyles = makeStyles((theme) => ({
             await dispatch(fetchCredStart())
             // 新規タブから送信された位置情報を取得
             window.addEventListener("message", receiveMessage, false)
-
             // ユーザの登録している都道府県が選択されている状態でセット
-            console.log(editedArticle.prefecture)
             document.getElementById("modalFormPrefecture").value = editedArticle.prefecture
             // ロード終了
             await dispatch(fetchCredEnd());
@@ -129,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
         // 上で定義した非同期の関数を実行
         fetchPrefectures()
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
-    
+
     /**
      * 値のセット
      */
@@ -191,7 +189,7 @@ const useStyles = makeStyles((theme) => ({
             >
                 <Fade in={open}>
                     <Grid container justify="center">
-                        <Grid item xs={10} sm={6} md={4}>
+                        <Grid item xs={11} sm={6} md={4}>
                         <Paper className={classes.paper}>
                             <Grid container>
                                 <h3 className={classes.modalTitle}>記事の編集</h3>
@@ -200,7 +198,7 @@ const useStyles = makeStyles((theme) => ({
                                 </Button>
                             </Grid>
                             <Grid container justify="center">
-                                <Grid item xs={10} sm={10} md={10}> 
+                                <Grid item xs={10}> 
                                     <Formik
                                         initialErrors={{ modalTitle: "required", modalContent: "required" }}
                                         initialValues={{ 
@@ -249,8 +247,8 @@ const useStyles = makeStyles((theme) => ({
                                                         <FormControlLabel value="current" control={<Radio onClick={handleSetDB} />} label={<span className={classes.latlng}>位置情報は更新しない</span>} />
                                                         <FormControlLabel value="map" control={<Radio onClick={handleOpenMap} />} label={<span className={classes.latlng}>Mapから取得</span>} />
                                                     </RadioGroup>
-                                                    <span className={classes.latlng}>緯度：{state.latitude}</span>
-                                                    <span className={classes.latlng}>経度：{state.longitude}</span>
+                                                    <span className={classes.latlng}>緯度：{editedArticle.latitude}</span>
+                                                    <span className={classes.latlng}>経度：{editedArticle.longitude}</span>
                                                 </div>
                                                 <div className={classes.margin} onBlur={() => {setTitle(document.getElementById("modalTitle").value)}}>
                                                     <TextField
@@ -295,7 +293,7 @@ const useStyles = makeStyles((theme) => ({
                                                         id="modalTypeSwitch"
                                                         switchLabel={{true: '会員限定', false: '全員'}}
                                                         labelPlacement='bottom'
-                                                        checked={state.type}
+                                                        checked={editedArticle.type}
                                                         value={editedArticle ? editedArticle.type : values.type}
                                                     />
                                                 </div>

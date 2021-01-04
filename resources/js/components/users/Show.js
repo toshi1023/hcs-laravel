@@ -1,10 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import UserEdit from './Edit'; 
 import { selectSelectedUser, editUser, selectFriendStatus, 
          fetchAsyncUpdateFriends, fetchAsyncGetFriendsApply,
-         selectMessageHistory
+         selectMessageHistory, selectEditedUser
 } from "./userSlice";
-import { fetchGetInfoMessages, selectInfo } from '../app/appSlice';
+import { fetchGetInfoMessages, selectInfo, fetchOpenModal, selectModal } from '../app/appSlice';
 import { reduceSetShowMessage } from '../messages/messageSlice';
 import SnackMessages from '../parts/common/snackMessages';
 import styles from '../parts/userParts/userParts.module.css';
@@ -66,8 +67,8 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(2),
         marginTop: theme.spacing(2),
         marginButtom: theme.spacing(2),
-        height: 300,
-        width: 350,
+        height: 280,
+        width: '90%',
     },
     addIcon: {
         color: "blue",
@@ -100,9 +101,11 @@ function UserShow(props) {
     const [reply, setReply] = React.useState([1]);
     // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
     const selectedUser = useSelector(selectSelectedUser)
+    const editedUser = useSelector(selectEditedUser)
     const friendStatus = useSelector(selectFriendStatus)
     const messageHistory = useSelector(selectMessageHistory)
     const infoMessages = useSelector(selectInfo)
+    const open = useSelector(selectModal)
     
     /**
      * 編集データの管理用stateを更新
@@ -113,8 +116,8 @@ function UserShow(props) {
         dispatch(
             editUser({ value })
         );
-        // ユーザの編集ページへリダイレクト
-        history.push('/users/mypage/edit');
+        // ユーザの編集モーダルを表示
+        dispatch(fetchOpenModal(true))
     };
 
     /**
@@ -177,6 +180,16 @@ function UserShow(props) {
                 :
                     <SnackMessages errorOpen={true} />
             }
+
+            {/* ユーザ編集モーダルの表示 */}
+            {
+                // Modalの表示フラグがtrueの場合のみ表示
+                open ? 
+                    <UserEdit />
+                :
+                    ''
+            }
+
             <Card className={classes.root}>
                 <Grid container  spacing={2}>
                     <Grid item xs={12} sm={12}>

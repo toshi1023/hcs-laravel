@@ -131,8 +131,8 @@ export default function MessageList(props) {
                   classes={{primary: classes.list}}
                 />
               </div>
-              <ListItemSecondaryAction>
-                <Badge badgeContent={1} color="secondary">
+              <ListItemSecondaryAction onClick={() => handleSetMessages(value.user_id)} >
+                {/* <Badge badgeContent={1} color="secondary"> */}
                   <IconButton style={{backgroundColor: '#d0ddf5'}}>
                     <ReplyIcon
                       edge="end"
@@ -141,7 +141,7 @@ export default function MessageList(props) {
                       className={classes.icon}
                     />
                   </IconButton>
-                </Badge>
+                {/* </Badge> */}
               </ListItemSecondaryAction>
             </ListItem>
             <hr />

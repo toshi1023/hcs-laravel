@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, selectInfo } from '../app/appSlice';
+import { fetchCredStart, fetchCredEnd, selectInfo, selectModal } from '../app/appSlice';
 import { selectArticles, fetchAsyncGet, selectLikes, selectSearchUser, searchUser } from './articleSlice';
 import ArticleEdit from './Edit';
 import ArticleCard from '../parts/articleParts/articleCard';
@@ -71,6 +71,7 @@ function Article() {
     const articles = useSelector(selectArticles)
     const searchedUser = useSelector(selectSearchUser)
     const infoMessages = useSelector(selectInfo)
+    const open = useSelector(selectModal)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -269,7 +270,13 @@ function Article() {
             </div>
 
             {/* 記事の編集モーダル */}
-            <ArticleEdit />
+            {
+                // Modalの表示フラグがtrueの場合のみ表示
+                open ? 
+                    <ArticleEdit />
+                :
+                    ''
+            }
 
             {/* 検索デザイン */}
             <Grid container className={classes.searchField}>
