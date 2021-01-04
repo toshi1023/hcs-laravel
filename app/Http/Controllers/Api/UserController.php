@@ -134,10 +134,7 @@ class UserController extends Controller
         if ($user->status === 2 || $user->status === 4) {
           throw new Exception('ユーザが退会済みかもしくはアカウントを停止されています');
         }
-
-        // パスワードをSessionに格納
-        
-        
+ 
         return response()->json([
           'user' => $user,
         ],200, [], JSON_UNESCAPED_UNICODE);
@@ -190,7 +187,6 @@ class UserController extends Controller
         return response()->json([
           'info_message' => 'ユーザの登録に成功しました!', 
           'name'         => $user->name,
-          'password'     => session()->get('password')  // storeメソッドで保存したセッション
         ],200, [], JSON_UNESCAPED_UNICODE);
       } catch (Exception $e) {
         \Log::error('user update error:'.$e->getMessage());
