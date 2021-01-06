@@ -18,6 +18,14 @@ import CreateIcon from '@material-ui/icons/Create';
 import CommentIcon from '@material-ui/icons/Comment';
 import styles from './myArticle.module.css';
 
+// MapのURL
+const URL = 'http://localhost/map/location'
+// const URL = 'https://hcs-laravel/map/location'
+
+// ホスト名
+const HOST = 'http://localhost'
+// const HOST = 'http://hcs-laravel'
+
 const useStyles = makeStyles((theme) => ({
     searchField: {
         paddingTop: theme.spacing(13),
@@ -145,22 +153,17 @@ function MyArticle() {
      */
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
-        window.open('https://hcs-laravel/map/location', "Get Location")
-        // window.open('http://localhost/map/location', "Get Location")
+        window.open(URL, "Get Location")
     }
     /**
      * 新規タブから設定された緯度経度をstateにセット
      * @param {*} event 
      */
     const receiveMessage = (event) => {
-        if (event.origin !== "https://hcs-laravel") {
+        if (event.origin !== HOST) {
             // 指定ドメイン以外は受け付けない
             return;
         }
-        // if (event.origin !== "http://localhost") {
-        //     // 指定ドメイン以外は受け付けない
-        //     return;
-        // }
         setState({ 
             ...state,
             latitude: JSON.parse(event.data).lat,

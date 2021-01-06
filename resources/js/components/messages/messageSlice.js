@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const apiUrl = 'http://localhost/api/api_messages'
-const apiUrl = 'http://hcs-laravel/api/api_messages'
+const apiUrl = 'http://localhost/api/api_messages'
+// const apiUrl = 'http://hcs-laravel/api/api_messages'
 const token = localStorage.localToken
 
 
@@ -50,7 +50,7 @@ export const fetchAsyncCreate = createAsyncThunk('messages/create', async(messag
         const res = await axios.post(`${apiUrl}/update`, message, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -70,7 +70,7 @@ export const fetchAsyncUpdate = createAsyncThunk('messages/update', async(messag
         const res = await axios.post(`${apiUrl}/update`, message, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -91,7 +91,7 @@ export const fetchAsyncDelete = createAsyncThunk('messages/delete', async(id) =>
         await axios.delete(`${apiUrl}/${id}/`, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return id

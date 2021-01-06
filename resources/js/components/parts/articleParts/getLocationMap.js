@@ -6,6 +6,10 @@ import SnackMessages from '../../parts/common/snackMessages';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 
+// MapのURL
+const URL = 'http://localhost/artilces/mypage'
+// const URL = 'https://hcs-laravel/artilces/mypage'
+
 const useStyles = makeStyles((theme) => ({
     leafletContainer: {
         width: '100%',
@@ -30,8 +34,8 @@ function LocationProperty() {
     const map = useMapEvent('click', (e) => {
         let message = `この地点を設定しますか？\n\n緯度：${e.latlng.lat}\n経度：${e.latlng.lng}`
         if(window.confirm(message)) {
-            window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "https://hcs-laravel/artilces/mypage")
-            // window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), "http://localhost/artilces/mypage")
+            // 記事作成ページに緯度経度データを送信
+            window.opener.postMessage(JSON.stringify({lat: e.latlng.lat, lng: e.latlng.lng}), URL)
             // 設定後にこのページを閉じる
             window.close()
         }

@@ -13,6 +13,10 @@ import { Grid, Button, TextField, FormControl, FormLabel, FormControlLabel, Pape
 import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
 
+// MapのURL
+const URL = 'http://localhost/map/location'
+// const URL = 'https://hcs-laravel/map/location'
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         border: '2px solid #000',
@@ -84,8 +88,7 @@ const useStyles = makeStyles((theme) => ({
      */
     const handleOpenMap = () => {
         // 新規タブを開いてページを遷移
-        window.open('https://hcs-laravel/map/location', "Get Location")
-        // window.open('http://localhost/map/location', "Get Location")
+        window.open(URL, "Get Location")
     }
 
     /**
