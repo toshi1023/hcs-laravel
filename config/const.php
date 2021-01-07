@@ -55,7 +55,7 @@ return [
     'bing_url'              => 'https://www.bing.com/maps',
 
     // AWSのS3パス
-    'aws_article_bucket'    => 'Article/',
-    'aws_user_bucket'       => 'User/',
+    'aws_article_bucket'    => 'Article',
+    'aws_user_bucket'       => 'User',
 
 ];

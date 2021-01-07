@@ -138,7 +138,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             try {
                 //s3アップロード開始
                 // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
-                $path = Storage::disk('s3')->putFile(config('const.aws_article_bucket').$foldername, $file, 'public');
+                $path = Storage::disk('s3')->putFile(config('const.aws_article_bucket').'/'.$foldername, $file, 'public');
                 // アップロードしたファイルのURLを取得し、DBにセット
                 $photo_path = Storage::disk('s3')->url($path);
 

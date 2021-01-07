@@ -267,7 +267,8 @@ class BaseRepository
             $file->delete($path);
             return true;
         } catch (\Exception $e) {
-            \Log::error('user image file delete error:'.$e->getmessage());
+            \Log::error('image file delete error:'.$e->getmessage());
+            \Log::error('image file at '.$path);
             return false;     
         }
     }

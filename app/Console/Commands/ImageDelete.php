@@ -39,44 +39,50 @@ class ImageDelete extends Command
     {
         try {
             // ユーザ情報の取得
-            $users = DB::select('select name, users_photo_path from users')->get();
+            $users = \App\Model\User::all();
 
-            // 各フォルダに保管しているイメージ名を取得
-            $user_folder = 'awsパス'.$user;
-            $storage_communities = Storage::files('public/images/communities');
-            $storage_community_locations = Storage::files('public/images/community_locations');
-            // $storage_user_locations = Storage::files('public/images/user_locations');
-            $storage_news = Storage::files('public/images/news');
-
-            // DBに存在しないファイル名のファイルがストレージにある場合は削除
+            // 画像の削除処理
+            $user_images = [];
+            $article_images = [];
             foreach($users as $value) {
-                // ユーザのフォルダ名を取得
-                $user_folder = 'awsパス'.$value->name;
-                // ユーザの保存イメージを取得
-                $user_file = Storage::files($user_folder);
-                if(!DB::table('users')->where('users_photo_path', basename($user_file))->exists()) {
-                    Storage::delete('awsパス'.basename($user_file));
+                // ユーザ名をキーにして、画像名を2次元配列で取得
+                // $user_images[$value->name] = [basename(Storage::disk('s3')->files(config('const.aws_user_bucket').'/'.$value->name.'/'))];
+                // $article_images[$value->name] = [basename(Storage::disk('s3')->files(config('const.aws_article_bucket').'/'.$value->name.'/'))];
+
+                $user_images[$value->name] = [$value->id, $value->name, $value->prefecture];
+            }
+
+            // 画像をユーザ名と画像名で分別
+            foreach ($user_images as $key => $value) {
+                // S3のストレージに保存されている画像名がDBに存在するか確認
+                foreach ($value as $image) {
+                    if (!DB::table('users')->where('users_photo_name', $image)->exists()) {
+                        // 存在しない場合は画像を削除する
+                        Storage::disk('s3')->delete(config('const.aws_user_bucket').'/'.$key.'/'.$image);
+                    }
                 }
             }
-            foreach($storage_communities as $value) {
-                if(!DB::table('communities')->where('image_file', basename($value))->exists()) {
-                    Storage::delete("public/images/communities/".basename($value));
+            // 記事用の画像の削除処理
+            foreach ($article_images as $key => $value) {
+                // S3のストレージに保存されている画像名がDBに存在するか確認
+                foreach ($value as $image) {
+                    if (!DB::table('article_images')->where('articles_photo_name', $image)->exists()) {
+                        // 存在しない場合は画像を削除する
+                        Storage::disk('s3')->delete(config('const.aws_article_bucket').'/'.$key.'/'.$image);
+                    }
                 }
             }
-            foreach($storage_community_locations as $value) {
-                if(!DB::table('community_locations')->where('image_file', basename($value))->exists()) {
-                    Storage::delete("public/images/community_locations/".basename($value));
-                }
-            }
-            foreach($storage_news as $value) {
-                if(!DB::table('news')->where('image_file', basename($value))->exists()) {
-                    Storage::delete("public/images/news/".basename($value));
-                }
-            }
-            logger()->info('All images delete Completed! .');
+
+            // Logにメッセージを出力
+            logger()->info('All images delete Completed!');
+            // ターミナルにメッセージを出力
+            $this->info('All images delete Completed!');
 
         } catch(\Exception $e) {
+            // Logにエラーメッセージを出力
             logger()->error($e->getMessage());
+            // ターミナルにエラーメッセージを出力
+            $this->error($e->getMessage());
         }
     }
 }

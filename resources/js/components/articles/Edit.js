@@ -14,8 +14,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
 
 // MapのURL
-const URL = 'http://localhost/map/location'
-// const URL = 'https://hcs-laravel/map/location'
+// const URL = 'http://localhost/map/location'
+const URL = 'https://hcs-laravel/map/location'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
