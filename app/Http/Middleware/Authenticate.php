@@ -15,6 +15,7 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+        dd($request->header());
         if (! $request->expectsJson()) {
             // prefixにhcs-admin/が付いていれば、管理画面側のログインページに飛ばす
             if($request->is('hcs-admin/*')) return route('hcs-admin.login');

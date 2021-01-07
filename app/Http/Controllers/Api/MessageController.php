@@ -26,6 +26,7 @@ class MessageController extends Controller
     public function index(Request $request)
     {   
         try {
+            dd($request->header());
             // 検索条件のセット
             $conditions = [];
             if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }

@@ -12,8 +12,10 @@ const token = localStorage.localToken
 export const fetchAsyncGet = createAsyncThunk('messages/index', async(conditions) => {
     try {
         const res = await axios.get(`${apiUrl}?query=${conditions}`, {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            }
         })
         return res.data
     } catch (err) {
