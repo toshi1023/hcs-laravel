@@ -7,8 +7,8 @@ import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 
 // MapのURL
-// const URL = 'http://localhost/artilces/mypage'
-const URL = 'https://hcs-laravel/artilces/mypage'
+const URL = 'http://localhost/artilces/mypage'
+// const URL = 'https://hcs-laravel/artilces/mypage'
 
 const useStyles = makeStyles((theme) => ({
     leafletContainer: {

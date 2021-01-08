@@ -112,7 +112,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             // 画像をアップロード
             $file = request()->file('upload_image') ? request()->file('upload_image') : null;
             
-            $file_upload = $this->fileSave($file, $foldername);
+            $file_upload = $this->fileSave($file, $foldername, $filename);
 
             $model->articles_photo_name = $filename;
             $model->articles_photo_path = $file_upload[1];
@@ -130,15 +130,16 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
     /**
      * ファイルアップロード用メソッド
-     * 第一引数:ファイル, 第二引数:フォルダ名に使用するための値
+     * 第一引数:ファイル, 第二引数:フォルダ名に使用するための値, 第三引数：ファイル名
      */
-    public function fileSave($file, $foldername)
+    public function fileSave($file, $foldername, $filename)
     {
         if ($file){
             try {
                 //s3アップロード開始
                 // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
-                $path = Storage::disk('s3')->putFile(config('const.aws_article_bucket').'/'.$foldername, $file, 'public');
+                // $path = Storage::disk('s3')->putFile(config('const.aws_article_bucket').'/'.$foldername, $file, 'public');
+                $path = Storage::disk('s3')->putFileAs(config('const.aws_article_bucket').'/'.$foldername, $file, $filename, 'public');
                 // アップロードしたファイルのURLを取得し、DBにセット
                 $photo_path = Storage::disk('s3')->url($path);
 

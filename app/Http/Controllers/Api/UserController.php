@@ -63,7 +63,7 @@ class UserController extends Controller
         if ($request->file('upload_image')){
           $filename = $this->getFilename($request->file('upload_image'));
         }
-  
+        
         // 登録データを配列化
         $data = $request->input();
   

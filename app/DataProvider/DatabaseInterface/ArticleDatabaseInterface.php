@@ -9,7 +9,7 @@ interface ArticleDatabaseInterface {
     public function getBaseData($conditions);
 
     // ファイルをアップロードする処理を記述
-    public function fileSave($file, $foldername);
+    public function fileSave($file, $foldername, $filename);
 
     // アップロードしたファイルを削除する処理を記述
     public function fileDelete($request);
