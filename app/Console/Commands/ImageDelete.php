@@ -52,7 +52,7 @@ class ImageDelete extends Command
                 $article_images[$value->name] = Storage::disk('s3')->files(config('const.aws_article_bucket').'/'.$value->name.'/');
             }
             
-            // 画像をユーザ名と画像名で分別
+            // プロフィール画像用配列をユーザ名と画像名で分別
             foreach ($user_images as $key => $value) {
                 // S3のストレージに保存されている画像名がDBに存在するか確認
                 foreach ($value as $image) {
@@ -61,8 +61,12 @@ class ImageDelete extends Command
                         Storage::disk('s3')->delete(config('const.aws_user_bucket').'/'.$key.'/'.basename($image));
                     }
                 }
+                // 画像が1件も存在しない場合はフォルダを削除する
+                if(!$value) {
+                    Storage::disk('s3')->deleteDirectory(config('const.aws_user_bucket').'/'.$key.'/');
+                }
             }
-            // 記事用の画像の削除処理
+            // 記事の画像用配列をユーザ名と画像名で分別
             foreach ($article_images as $key => $value) {
                 // S3のストレージに保存されている画像名がDBに存在するか確認
                 foreach ($value as $image) {
@@ -70,6 +74,10 @@ class ImageDelete extends Command
                         // 存在しない場合は画像を削除する
                         Storage::disk('s3')->delete(config('const.aws_article_bucket').'/'.$key.'/'.basename($image));
                     }
+                }
+                // 画像が1件も存在しない場合はフォルダを削除する
+                if(!$value) {
+                    Storage::disk('s3')->deleteDirectory(config('const.aws_article_bucket').'/'.$key.'/');
                 }
             }
             // Logにメッセージを出力
