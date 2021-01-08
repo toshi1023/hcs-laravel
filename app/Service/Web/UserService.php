@@ -157,4 +157,39 @@ class UserService
                                 ->first();
     return $friend;
   }
+
+  /**
+   * ユーザ作成時のバリデーションチェック
+   * 引数：データ
+   */
+  public function getValidation($data)
+  {
+    // チェックフラグ
+    $check = [];
+    // メールアドレスの重複チェック
+    if ($data->input('email')) {
+      $this->UserService->getExist('users', ['email' => $data->input('email')]) ? 
+        $check['email_error'] = config('const.email_error')
+      :
+        ''
+      ;
+    }
+    // ユーザ名の重複チェック
+    if ($data->input('name')) {
+      $this->UserService->getExist('users', ['name' => $data->input('name')]) ? 
+        $check['name_error'] = config('const.name_error')
+      :
+        ''
+      ;
+    }
+    // パスワードのチェック
+    if ($data->input('password')) {
+      // 推奨されない記号等を含んでいないかどうかチェック
+      if(!preg_match('/^[0-9a-zA-Z\_@!?#%&]+$/', $data->input('password'))) {
+        $check['password_error'] = config('const.password_error');
+      }
+    }
+    // 結果をリターン
+    return $check;
+  }
 }

@@ -51,19 +51,6 @@ class UserController extends Controller
     }
 
     /**
-     * ユーザ作成ページ
-     */
-    public function create()
-    {
-      // 都道府県データを会員登録フォームに渡す
-      $prefectures = $this->database->getCreate('prefectures')->get();
-
-      return view('users.create', [
-          'prefectures' => $prefectures,
-      ]);
-    }
-
-    /**
      * ユーザ保存
      */
     public function store(Request $request)
@@ -79,7 +66,6 @@ class UserController extends Controller
   
         // 登録データを配列化
         $data = $request->input();
-        // $data['user_id'] = \Auth::user()->id;
   
         // パスワードのハッシュ処理
         $data['password'] = Hash::make($data['password']);
@@ -105,17 +91,6 @@ class UserController extends Controller
           'status'        => 500,
         ], 500, [], JSON_UNESCAPED_UNICODE);
       }
-
-      // $data = $this->database->save($request, $filename);
-      // return new JsonResponse([
-      //   'info_message' => 'ユーザの作成に成功しました!',
-      //     'name'         => $request->input('name'),
-      //     'password'     => $request->input('password'),
-      //     'id'           => \Auth::user()->id,
-      // ], 200);
-      // return new JsonResponse([
-      //   'error_message' => 'ユーザの作成に失敗しました!管理者に問い合わせてください',
-      // ], 200);
     }
 
     /**
@@ -144,19 +119,6 @@ class UserController extends Controller
           'error_message' => 'ユーザの取得に失敗しました!'
         ], 500, [], JSON_UNESCAPED_UNICODE);
       }
-    }
-
-    /**
-     * ユーザ編集ページ
-     */
-    public function edit($user)
-    {
-      $data = $this->database->getEdit($user);
-
-      return view('users.edit', [
-        'user' => $data['user'],
-        'prefectures' => $data['prefectures'],
-      ]);
     }
 
     /**
@@ -286,6 +248,28 @@ class UserController extends Controller
 
       } catch (Exception $e) {
         DB::rollBack();
+        // 取得失敗時はエラーメッセージを返す
+        return response()->json([
+          'error_message' => 'リクエストの処理の失敗しました'
+        ], 500, [], JSON_UNESCAPED_UNICODE);
+      }
+    }
+
+    /**
+     * ユーザ登録情報のバリデーションチェック
+     */
+    public function validation(Request $request) 
+    {
+      try {
+        // バリデーションチェック
+        $validation = $this->database->getValidation($request);
+        
+        return response()->json([
+          'validation' => $validation
+        ],200, [], JSON_UNESCAPED_UNICODE);
+
+      } catch (Exception $e) {
+        \Log::error('Validation Error:'.$e->getMessage());
         // 取得失敗時はエラーメッセージを返す
         return response()->json([
           'error_message' => 'リクエストの処理の失敗しました'

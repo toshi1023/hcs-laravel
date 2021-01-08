@@ -161,23 +161,6 @@ export const fetchAsyncDelete = createAsyncThunk('users/delete', async(id) => {
 })
 
 /**
- * 都道府県データの取得用非同期関数
- */
-export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', async() =>{
-    try {
-        // axios: 引数1:  引数2: メタ情報
-        const res = await axios.get(prefectureUrl, {})
-        // Apiからの返り値
-        return res.data
-    } catch (err) {
-        if (!err.response) {
-            throw err
-        }
-        return err.response.data
-    }
-})
-
-/**
  * 友達一覧データの取得
  */
 export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(conditions) => {
@@ -214,6 +197,26 @@ export const fetchAsyncUpdateFriends = createAsyncThunk('friends/update', async(
             headers: {
                 'Content-Type': 'application/json',
                 // Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
+ * バリデーション実行
+ */
+export const fetchAsyncValidate = createAsyncThunk('users/validate', async(data) => {
+    try {
+        const res = await axios.post(`${apiUrl}/validation`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -296,7 +299,8 @@ const userSlice = createSlice({
         }],
         messageHistory: [{
             user_id: ''                 // ユーザID
-        }]
+        }],
+        validation: {}                  // バリデーション結果
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -383,12 +387,6 @@ const userSlice = createSlice({
                 },
             }
         })
-        builder.addCase(fetchAsyncGetPrefectures.fulfilled, (state, action) => {
-            return {
-                ...state,
-                prefectures: action.payload,
-            }
-        })
         builder.addCase(fetchAsyncGetFriendsApply.fulfilled, (state, action) => {
             return {
                 ...state,
@@ -408,6 +406,12 @@ const userSlice = createSlice({
                 friendStatus: [action.payload.friend, ...state.friendStatus],
             }
         })
+        builder.addCase(fetchAsyncValidate.fulfilled, (state, action) => {
+            return {
+                ...state,
+                validation: action.payload.validation,
+            }
+        })
     },
 })
 
@@ -421,5 +425,6 @@ export const selectEditedUser = (state) => state.user.editedUser
 export const selectUsers = (state) => state.user.users
 export const selectFriendStatus = (state) => state.user.friendStatus
 export const selectMessageHistory = (state) => state.user.messageHistory
+export const selectValidation = (state) => state.user.validation
 
 export default userSlice.reducer

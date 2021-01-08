@@ -15,7 +15,9 @@ import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessag
 import {
     fetchAsyncCreate, 
     fetchAsyncLogin,
+    fetchAsyncValidate,
     selectEditedUser,
+    selectValidation
 } from './userSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -82,7 +84,9 @@ export default function UserCreate() {
     const dispatch = useDispatch()
     // ユーザデータ編集のデータを使用できるようにローカルのeditedUser定数に格納
     const editedUser = useSelector(selectEditedUser)
-
+    // バリデーション結果を定数に格納
+    const validation = useSelector(selectValidation)
+    console.log(validation)
     // stateの初期設定
     const [state, setState] = React.useState({
         // 保存対象の値
@@ -105,6 +109,9 @@ export default function UserCreate() {
             ...state,
             email: value,
         })
+
+        // メールアドレスの重複チェック
+        dispatch(fetchAsyncValidate({email: value}))
     }
     const setPassword = (value) => {
         setState({
@@ -117,6 +124,9 @@ export default function UserCreate() {
             ...state,
             name: value,
         })
+
+        // ニックネームの重複チェック
+        dispatch(fetchAsyncValidate({name: value}))
     }
     const setBirthday = () => {
         let year = Number(document.getElementById("selectYear").value) ? Number(document.getElementById("selectYear").value) : document.getElementById("selectYear").value
@@ -254,6 +264,9 @@ export default function UserCreate() {
                                                 {touched.email && errors.email ? (
                                                     <div className={classes.error}>{errors.email}</div>
                                                 ) : null}
+                                                {validation.email_error ? (
+                                                    <div className={classes.error}>{validation.email_error}</div>
+                                                ) : null}
                                             </div>
                                             <div onBlur={() => {setPassword(document.getElementById("password").value)}}>
                                                 <FormControl className={classes.margin}>
@@ -294,6 +307,9 @@ export default function UserCreate() {
                                                 </FormControl>
                                                 {touched.name && errors.name ? (
                                                     <div className={classes.error}>{errors.name}</div>
+                                                ) : null}
+                                                {validation.name_error ? (
+                                                    <div className={classes.error}>{validation.name_error}</div>
                                                 ) : null}
                                             </div>
                                             <div onBlur={setBirthday}>
@@ -350,7 +366,7 @@ export default function UserCreate() {
                                                     variant="contained" 
                                                     color="primary" 
                                                     className={classes.button} 
-                                                    disabled={!isValid || state.birthdayCheck || state.prefectureCheck} 
+                                                    disabled={!isValid || state.birthdayCheck || state.prefectureCheck || validation} 
                                                     type="submit"
                                                 >
                                                     作成する
