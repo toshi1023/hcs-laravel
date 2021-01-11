@@ -224,7 +224,7 @@ function MyArticle() {
                 // infoメッセージの表示
                 result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
                 // 記事の再読み込み
-                await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
+                // await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
                 // ロード終了
                 await dispatch(fetchCredEnd()); 
                 return;

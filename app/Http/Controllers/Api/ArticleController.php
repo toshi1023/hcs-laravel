@@ -85,7 +85,6 @@ class ArticleController extends Controller
       
       // 登録データを配列化
       $data = $request->input();
-      $data['type'] = $request->input('type') == 'true' ? 1 : 0;
       $data['user_id'] = \Auth::user()->id;
       // 記事の保存処理
       $article = $this->database->save($data, $filename);
