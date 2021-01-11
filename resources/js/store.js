@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { combineReducers } from "redux";
 import appReducer from './components/app/appSlice';
 import articleReducer from './components/articles/articleSlice';
@@ -20,4 +20,11 @@ const reducer = combineReducers({
 /**
  * Storeを生成
  */
-export default configureStore({ reducer });
+export default configureStore({ 
+    reducer: reducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        // 'serializableCheck'を削除(※formDataでのデータ登録に警告を出さないようにするため)
+        serializableCheck: false,
+      }), 
+});

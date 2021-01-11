@@ -14,8 +14,12 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
 
 // MapのURL
-// const URL = 'http://localhost/map/location'
-const URL = 'https://hcs-laravel/map/location'
+const URL = 'http://localhost/map/location'
+// const URL = 'https://hcs-laravel/map/location'
+
+// ホスト名
+const HOST = 'http://localhost'
+// const HOST = 'http://hcs-laravel'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -96,14 +100,11 @@ const useStyles = makeStyles((theme) => ({
      * @param {*} event 
      */
     const receiveMessage = (event) => {
-        if (event.origin !== "https://hcs-laravel") {
+        if (event.origin !== HOST) {
             // 指定ドメイン以外は受け付けない
             return;
         }
-        // if (event.origin !== "http://localhost") {
-        //     // 指定ドメイン以外は受け付けない
-        //     return;
-        // }
+        
         setState({ 
             ...state,
             latitude: JSON.parse(event.data).lat,
@@ -175,7 +176,33 @@ const useStyles = makeStyles((theme) => ({
     const doAction = (values) => {
         return childRef.current.onSubmitArticleImage(values)
     }
-    
+
+    /**
+     * 記事の更新処理
+     */
+    const updateClicked = async (values) => {
+        // ロード開始
+        await dispatch(fetchCredStart())
+        
+        // 画像の保存
+        doAction(values).then(async (value) => {
+            const result = await dispatch(fetchAsyncUpdate(value))
+            if (fetchAsyncCreate.fulfilled.match(result)) {
+                // infoメッセージの表示
+                result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+                // 記事の再読み込み
+                await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
+                // ロード終了
+                await dispatch(fetchCredEnd()); 
+                return;
+            }
+        })
+
+        // ロード終了
+        await dispatch(fetchCredEnd()); 
+        return;
+    }
+
     return (
         <>
             <Modal
@@ -209,15 +236,16 @@ const useStyles = makeStyles((theme) => ({
                                             modalContent: editedArticle.content,
                                         }}
                                         onSubmit={async (values) => {
+                                            console.log(values)
                                             // ユーザ登録処理
                                             let formData = new FormData(document.forms.form);
                                             formData.append('prefecture', document.getElementById("modalFormPrefecture").value)
-                                            formData.append('title', values.mobileTitle)
-                                            formData.append('content', values.mobileContent)
+                                            formData.append('title', values.modalTitle)
+                                            formData.append('content', values.modalContent)
                                             formData.append('type', document.getElementById("modalTypeSwitch").checked)
-                                            
+
                                             // 記事の登録処理
-                                            createClicked(formData)
+                                            updateClicked(formData)
                                         }}
                                         validationSchema={Yup.object().shape({
                                             modalTitle: Yup.string()
@@ -311,7 +339,7 @@ const useStyles = makeStyles((theme) => ({
                                                         disabled={!isValid} 
                                                         type="submit"
                                                     >
-                                                        投稿する
+                                                        更新する
                                                     </Button>
                                                 </div>
                                             </FormControl>
