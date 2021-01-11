@@ -86,7 +86,15 @@ class User extends Authenticatable
     }
 
     /**
-     * フレンドデータを取得
+     * 記事テーブルとリレーション
+     */
+    public function articles()
+    {
+        return $this->hasMany('App\Model\Article');
+    }
+
+    /**
+     * フレンドテーブルとリレーション
      */
     public function friends()
     {

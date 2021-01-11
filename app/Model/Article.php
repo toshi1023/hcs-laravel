@@ -21,14 +21,14 @@ class Article extends BaseModel
     if($this->type === config('const.member')) return config('const.member_name');
   }
 
-  // userテーブルと1対多のリレーション構築(多側の設定)
-  public function user()
+  // usersテーブルと1対多のリレーション構築(多側の設定)
+  public function users()
   {
     return $this->belongsTo('App\Model\User');
   }
 
   // article_imagesテーブルと1対多のリレーション構築(1側の設定)
-  public function article_image()
+  public function article_images()
   {
     return $this->hasMany('App\Model\ArticleImage');
   }

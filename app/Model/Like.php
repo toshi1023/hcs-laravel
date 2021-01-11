@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends BaseModel
 {
-
-  public function article()
+  // articlesテーブルと1対多のリレーション構築(多側の設定)
+  public function articles()
   {
     return $this->belongsTo('App\Model\Article');
   }
 
-  public function user()
+  // usersテーブルと1対多のリレーション構築(多側の設定)
+  public function users()
   {
     return $this->belongsTo('App\Model\User');
   }
