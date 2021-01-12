@@ -107,6 +107,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
         //                      ->fromSub($subQueryParent, 'myfriends')
         //                      ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
         
+        // 本クエリ(フレンド履歴とユーザ情報をリレーション)
         $query = $this->model->fromSub($subQueryParent, 'myfriends')
                              ->select('*')
                              ->with('auth_friends:id,name,prefecture,gender,users_photo_name,users_photo_path');
