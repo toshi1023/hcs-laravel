@@ -95,21 +95,16 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
      * 引数1：ユーザID, 引数2：承認済みフラグ
      */
     public function getFriendsQuery($user_id, $approval=null) {
-        // サブクエリ
-        $subQueryA = $this->model->select('id', 'user_id as target_id', 'status', 'updated_at')
-                                 ->from('friends')
-                                 ->where('user_id_target', '=', $user_id)
-                                 ->where('delete_flg', '=', 0);
+        // サブクエリ(指定したユーザのフレンド履歴を取得)
+        $subQueryChild = $this->getQuery('friends', ['user_id_target' => $user_id])->select('id', 'user_id as target_id', 'status', 'updated_at');
+        $subQueryParent = $this->getQuery('friends', ['user_id' => $user_id])
+                               ->select('id', 'user_id_target as target_id', 'status', 'updated_at')
+                               ->union($subQueryChild)
+                               ->latest('updated_at');
 
-        $subQueryB = $this->model->select('id', 'user_id_target as target_id', 'status', 'updated_at')
-                                 ->from('friends')
-                                 ->where('user_id', '=', $user_id)
-                                 ->where('delete_flg', '=', 0)
-                                 ->union($subQueryA)
-                                 ->orderBy('updated_at', 'desc');
-
+        // 本クエリ(フレンド履歴とユーザ情報をリレーション)
         $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'myfriends.*')
-                             ->fromSub($subQueryB, 'myfriends')
+                             ->fromSub($subQueryParent, 'myfriends')
                              ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
 
         if($approval == 1) {

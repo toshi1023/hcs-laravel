@@ -86,7 +86,7 @@ class User extends Authenticatable
     }
 
     /**
-     * フレンドテーブルとリレーション
+     * friendsテーブルと1対多のリレーション構築(1側の設定)
      */
     public function friends()
     {

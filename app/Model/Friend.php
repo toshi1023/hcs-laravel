@@ -25,10 +25,10 @@ class Friend extends BaseModel
     }
 
     /**
-     * ユーザデータを取得
+     * usersテーブルと1対多のリレーション構築(多側の設定)
      */
     public function users()
     {
-        return $this->belongsToMany('App\Model\User');
+        return $this->belongsTo('App\Model\User');
     }
 }

@@ -27,10 +27,9 @@ class BaseRepository
 
     /* *
     * 指定したデータをすべて取得するメソッド
-    * 引数1: テーブル名, 引数2: 検索条件, 引数3: 結合テーブル(結合テーブル => 結合元の結合条件), 引数4: 削除フラグのON・OFF
-    *   ※$relationの記載例) ['articles' => 'user_id']  idを結合条件としたときのみ適用
+    * 引数1: テーブル名, 引数2: 検索条件, 引数4: 削除フラグのON・OFF
     * */
-    public function getQuery($table=null, $conditions=[], $relation=[], $delete_flg=true)
+    public function getQuery($table=null, $conditions=[], $delete_flg=true)
     {
         // 指定したモデルを変数に代入
         if($table) {
@@ -40,14 +39,6 @@ class BaseRepository
         }
         // テーブル名の取得
         $table_name = $query->getTable();
-        
-        if($relation) {
-            foreach($relation as $key => $condition) {
-                // リレーション
-                $query = $query->leftJoin($key, $table_name.'.'.$condition, '=', $key.'.id')
-                               ->addSelect($key.'.*');
-            }
-        }
         
         // 削除フラグがtrueの値を排除するか否か
         if($delete_flg) {
