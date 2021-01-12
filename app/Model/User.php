@@ -48,12 +48,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Articleテーブルと1対多のリレーション構築(1側の設定)
-    public function articles()
-    {
-        return $this->hasMany('App\Model\Article');
-    }
-
     /**
      * 管理画面権限があるかどうか
      * @return bool
@@ -85,6 +79,12 @@ class User extends Authenticatable
         if ($this->status == config('const.app_account_stop'))   return config('const.app_account_stop_name');
     }
 
+    // Articleテーブルと1対多のリレーション構築(1側の設定)
+    public function articles()
+    {
+        return $this->hasMany('App\Model\Article');
+    }
+
     /**
      * friendsテーブルと1対多のリレーション構築(1側の設定)
      */
@@ -92,4 +92,5 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Model\Friend');
     }
+
 }

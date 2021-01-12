@@ -103,9 +103,13 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                                ->latest('updated_at');
 
         // 本クエリ(フレンド履歴とユーザ情報をリレーション)
-        $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'myfriends.*')
-                             ->fromSub($subQueryParent, 'myfriends')
-                             ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
+        // $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'myfriends.*')
+        //                      ->fromSub($subQueryParent, 'myfriends')
+        //                      ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
+        
+        $query = $this->model->fromSub($subQueryParent, 'myfriends')
+                             ->select('*')
+                             ->with('auth_friends:id,name,prefecture,gender,users_photo_name,users_photo_path');
 
         if($approval == 1) {
             // 友達申請が申請中の値のみに絞る

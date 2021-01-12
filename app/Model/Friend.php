@@ -31,4 +31,12 @@ class Friend extends BaseModel
     {
         return $this->belongsTo('App\Model\User');
     }
+
+    /**
+     * ログインユーザのフレンド取得用リレーション構築
+     */
+    public function auth_friends()
+    {
+        return $this->belongsTo('App\Model\User', 'target_id', 'id');
+    }
 }
