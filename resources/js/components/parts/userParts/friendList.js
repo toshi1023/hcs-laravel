@@ -88,68 +88,75 @@ export default function FriendList(props) {
     return (
         <List dense className={classes.root}>
             {_.map(props.user, value => {
-                
                 return (
                     <>
                         {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-                        <ListItem
-                            key={value.id}
-                            button
-                            onClick={() => handleSetUser(value)}
-                        >
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={`Avatar n°${value.id}`}
-                                    src={`${value.users_photo_path}`}
-                                    className={classes.avatar}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText
-                                id={value.id}
-                                primary={`${value.name}`}
-                                classes={{ primary: classes.list }}
-                                style={{
-                                    color: value.gender == 1 ? "blue" : "red"
-                                }}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton
-                                    style={
-                                        value.status === 2 ? 
-                                            // 承認済み
-                                            { backgroundColor: "#CCFFCC" } 
-                                        :
-                                            // 申請中
-                                            { backgroundColor: "#f4f5ab" }
-                                    }
-                                    disabled
-                                >
-                                    {
-                                        value.status === 2 ? 
-                                            // 承認済み
-                                            <HowToRegIcon 
-                                                edge="end"
-                                                onChange={handleToggleAdd(value.id)}
-                                                inputProps={{
-                                                    "aria-labelledby": value.id
-                                                }}
-                                                className={classes.successIcon}
-                                            /> 
-                                        : 
-                                            // 申請中
-                                            <ContactMailIcon
-                                                edge="end"
-                                                onChange={handleToggleAdd(value.id)}
-                                                inputProps={{
-                                                    "aria-labelledby": value.id
-                                                }}
-                                                className={classes.applyIcon}
+                        {
+                            value.auth_friends != undefined ? 
+                                <>
+                                    <ListItem
+                                        key={value.auth_friends.id}
+                                        button
+                                        onClick={() => handleSetUser(value)}
+                                    >
+                                        <ListItemAvatar>
+                                            <Avatar
+                                                alt={`Avatar n°${value.auth_friends.id}`}
+                                                src={`${value.auth_friends.users_photo_path}`}
+                                                className={classes.avatar}
                                             />
-                                    }
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                        <hr />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            id={value.auth_friends.id}
+                                            primary={`${value.auth_friends.name}`}
+                                            classes={{ primary: classes.list }}
+                                            style={{
+                                                color: value.auth_friends.gender == 1 ? "blue" : "red"
+                                            }}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                style={
+                                                    value.status === 2 ? 
+                                                        // 承認済み
+                                                        { backgroundColor: "#CCFFCC" } 
+                                                    :
+                                                        // 申請中
+                                                        { backgroundColor: "#f4f5ab" }
+                                                }
+                                                disabled
+                                            >
+                                                {
+                                                    value.status === 2 ? 
+                                                        // 承認済み
+                                                        <HowToRegIcon 
+                                                            edge="end"
+                                                            onChange={handleToggleAdd(value.id)}
+                                                            inputProps={{
+                                                                "aria-labelledby": value.id
+                                                            }}
+                                                            className={classes.successIcon}
+                                                        /> 
+                                                    : 
+                                                        // 申請中
+                                                        <ContactMailIcon
+                                                            edge="end"
+                                                            onChange={handleToggleAdd(value.id)}
+                                                            inputProps={{
+                                                                "aria-labelledby": value.id
+                                                            }}
+                                                            className={classes.applyIcon}
+                                                        />
+                                                }
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                    <hr />
+                                </>
+                            :
+                                ''
+                        }
+                        
                     </>
                 );
             })}

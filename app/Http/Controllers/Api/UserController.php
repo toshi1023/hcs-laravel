@@ -184,9 +184,13 @@ class UserController extends Controller
     public function friendsIndex(Request $request) 
     {
       try {
-        // ユーザのフレンド情報を取得
-        $friends = $this->database->getFriendsQuery($request->input('query'), 2);
-  
+        // ユーザのフレンド情報を取得(申請ステータスが承認済みのものに限定)
+        $friends = $this->database->getFriendsQuery($request->input('query'), config('const.approval'));
+        foreach($friends as $value) {
+          dump($value->auth_friends);
+        }
+        exit;
+        dd($friends->auth_friends);
         return response()->json([
           'friends' => $friends, 
         ],200, [], JSON_UNESCAPED_UNICODE);

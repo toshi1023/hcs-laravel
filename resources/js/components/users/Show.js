@@ -144,7 +144,7 @@ function UserShow(props) {
     const handleSetMessage = (value) => {
         let user = ''
         // 初期表示のユーザか選択したユーザかを判別し変数に代入
-        value.user ? user = value.user : user = value.value
+        value.user ? user = value.user : user = value.value.auth_friends
 
         // データのセット
         let data = [{
@@ -170,7 +170,7 @@ function UserShow(props) {
             await dispatch(fetchGetInfoMessages(resultReg))
         }
     }
-
+    console.log(selectedUser)
     return (
         <>
             {
@@ -203,7 +203,7 @@ function UserShow(props) {
                                 </Tooltip>
                             : 
                                 messageHistory[0].user_id ? 
-                                    selectedUser.user !== undefined ? 
+                                    selectedUser.user.auth_friends !== undefined ? 
                                         messageHistory.find(element => element.user_id == selectedUser.user.id) ? 
                                             ''
                                         :
@@ -219,8 +219,8 @@ function UserShow(props) {
                                                 />
                                             </IconButton>
                                     :
-                                        selectedUser.value !== undefined ? 
-                                            messageHistory.find(element => element.user_id == selectedUser.value.id) ? 
+                                        selectedUser.value.auth_friends !== undefined ? 
+                                            messageHistory.find(element => element.user_id == selectedUser.value.auth_friends.id) ? 
                                                 ''
                                             :
                                                 // ログインユーザ以外でメッセージの履歴がないユーザには"リプライ"ボタンを表示
@@ -229,8 +229,8 @@ function UserShow(props) {
                                                 >
                                                     <ReplyIcon
                                                         edge="end"
-                                                        onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.id : '')}
-                                                        inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.id : '' }}
+                                                        onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.auth_friends.id : '')}
+                                                        inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.auth_friends.id : '' }}
                                                         className={classes.addIcon}
                                                     />
                                                 </IconButton>
@@ -255,8 +255,8 @@ function UserShow(props) {
                     <Grid item xs={12} sm={12} md={6}>
                         <CardMedia
                             className={classes.cover}
-                            image={selectedUser.value != undefined ? selectedUser.value.users_photo_path : (selectedUser.user != undefined ? selectedUser.user.users_photo_path : '')}
-                            title={selectedUser.value != undefined ? selectedUser.value.users_photo_name : (selectedUser.user != undefined ? selectedUser.user.users_photo_name : '')}
+                            image={selectedUser.value != undefined ? selectedUser.value.auth_friends.users_photo_path : (selectedUser.user != undefined ? selectedUser.user.users_photo_path : '')}
+                            title={selectedUser.value != undefined ? selectedUser.value.auth_friends.users_photo_name : (selectedUser.user != undefined ? selectedUser.user.users_photo_name : '')}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} md={6}>
@@ -270,7 +270,7 @@ function UserShow(props) {
                                             <EmojiEmotionsIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="ニックネーム" secondary={selectedUser.value != undefined ? selectedUser.value.name : (selectedUser.user != undefined ? selectedUser.user.name : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="ニックネーム" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.name : (selectedUser.user != undefined ? selectedUser.user.name : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -279,7 +279,7 @@ function UserShow(props) {
                                             <RoomIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="都道府県" secondary={selectedUser.value != undefined ? selectedUser.value.prefecture : (selectedUser.user != undefined ? selectedUser.user.prefecture : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="都道府県" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.prefecture : (selectedUser.user != undefined ? selectedUser.user.prefecture : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -288,7 +288,7 @@ function UserShow(props) {
                                             <EventIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="生年月日" secondary={selectedUser.value != undefined ? selectedUser.value.birthday : (selectedUser.user != undefined ? selectedUser.user.birthday : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="生年月日" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.birthday : (selectedUser.user != undefined ? selectedUser.user.birthday : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -297,7 +297,7 @@ function UserShow(props) {
                                             <SupervisorAccountIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="性別" secondary={selectedUser.value != undefined ? (selectedUser.value.gender == 1 ? '男性' : '女性') : (selectedUser.user != undefined ? (selectedUser.user.gender == 1 ? '男性' : '女性') : '') } classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="性別" secondary={selectedUser.value != undefined ? (selectedUser.value.auth_friends.gender == 1 ? '男性' : '女性') : (selectedUser.user != undefined ? (selectedUser.user.gender == 1 ? '男性' : '女性') : '') } classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -306,7 +306,7 @@ function UserShow(props) {
                                             <CommentIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="自己紹介" secondary={selectedUser.value != undefined ? selectedUser.value.comment : (selectedUser.user != undefined ? selectedUser.user.comment : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="自己紹介" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.comment : (selectedUser.user != undefined ? selectedUser.user.comment : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     </List>
                                 </div>

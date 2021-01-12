@@ -101,16 +101,11 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
                                ->select('id', 'user_id_target as target_id', 'status', 'updated_at')
                                ->union($subQueryChild)
                                ->latest('updated_at');
-
-        // 本クエリ(フレンド履歴とユーザ情報をリレーション)
-        // $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'myfriends.*')
-        //                      ->fromSub($subQueryParent, 'myfriends')
-        //                      ->leftJoin('users', 'myfriends.target_id', '=', 'users.id');
         
         // 本クエリ(フレンド履歴とユーザ情報をリレーション)
         $query = $this->model->fromSub($subQueryParent, 'myfriends')
                              ->select('*')
-                             ->with('auth_friends:id,name,prefecture,gender,users_photo_name,users_photo_path');
+                             ->with('auth_friends:id,name,prefecture,birthday,gender,users_photo_name,users_photo_path');
 
         if($approval == 1) {
             // 友達申請が申請中の値のみに絞る
@@ -127,7 +122,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
 
         return $query;
 
-        // 完成形のSQL(ユーザIDが1の場合)
+        // 参考SQL(ユーザIDが1の場合)
         // SELECT users.name, users.prefecture, users.gender, users.users_photo_name, users.users_photo_path, myfriends.*
         // FROM ((SELECT id, `user_id_target` AS target_id, `status`, `updated_at` FROM `friends` WHERE `user_id` = 1 AND `delete_flg` = 0)
         // UNION (SELECT id, `user_id` AS target_id, `status`, `updated_at` FROM `friends` WHERE `user_id_target` = 1 AND `delete_flg` = 0)) AS myfriends
