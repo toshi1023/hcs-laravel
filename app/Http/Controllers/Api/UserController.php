@@ -107,7 +107,7 @@ class UserController extends Controller
         $user = $this->database->getShow($conditions);
         
         if ($user->status === 2 || $user->status === 4) {
-          throw new Exception('ユーザが退会済みかもしくはアカウントを停止されています');
+          throw new Exception('unsubscribed the user or suspended the account');
         }
  
         return response()->json([

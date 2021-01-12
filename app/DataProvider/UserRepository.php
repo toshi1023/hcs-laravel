@@ -21,7 +21,7 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
      * usersページの一覧データを取得
      */
     public function getBaseData($conditions=null) {
-        return $this->getQuery('users', $conditions, [], true);
+        return $this->getQuery('users', $conditions, true);
     }
 
     /**
@@ -136,12 +136,16 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
      */
     public function getFriendsApplyQuery($conditions) {
         // サブクエリ
-        $subQuery = $this->getQuery('friends', $conditions)->orderBy('updated_at', 'desc');
+        $subQuery = $this->getQuery('friends', $conditions)->latest('updated_at');
 
-        $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'applyfriends.*')
-                             ->fromSub($subQuery, 'applyfriends')
-                             ->leftJoin('users', 'applyfriends.user_id', '=', 'users.id');
-
+        // $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'applyfriends.*')
+        //                      ->fromSub($subQuery, 'applyfriends')
+        //                      ->leftJoin('users', 'applyfriends.user_id', '=', 'users.id');
+        
+        $query = $this->model->fromSub($subQuery, 'applyfriends')
+                             ->select('*')
+                             ->with('users:id,name,prefecture,gender,users_photo_name,users_photo_path');
+        
         return $query;
     }
 

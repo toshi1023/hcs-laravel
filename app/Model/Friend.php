@@ -29,7 +29,7 @@ class Friend extends BaseModel
      */
     public function users()
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Model\User', 'user_id', 'id');
     }
 
     /**

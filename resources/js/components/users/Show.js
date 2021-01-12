@@ -203,7 +203,7 @@ function UserShow(props) {
                                 </Tooltip>
                             : 
                                 messageHistory[0].user_id ? 
-                                    selectedUser.user.auth_friends !== undefined ? 
+                                    selectedUser.user !== undefined ? 
                                         messageHistory.find(element => element.user_id == selectedUser.user.id) ? 
                                             ''
                                         :
@@ -219,7 +219,7 @@ function UserShow(props) {
                                                 />
                                             </IconButton>
                                     :
-                                        selectedUser.value.auth_friends !== undefined ? 
+                                        selectedUser.value !== undefined ? 
                                             messageHistory.find(element => element.user_id == selectedUser.value.auth_friends.id) ? 
                                                 ''
                                             :
