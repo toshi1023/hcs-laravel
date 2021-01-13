@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FriendList from '../parts/userParts/friendList';
 import FriendCard from '../parts/userParts/friendCard';
-import { fetchAsyncGetProf, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus, selectSelectedUser, selectUser } from "./userSlice";
+import { fetchAsyncGetShow, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus, selectSelectedUser, selectUser } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, fetchGetErrorMessages } from '../app/appSlice';
 // import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -105,18 +105,20 @@ function Profile(props) {
             // Loading開始
             await dispatch(fetchCredStart())
             // ログイン情報を取得
-            const resultReg = await dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
+            const resultReg = await dispatch(fetchAsyncGetShow(localStorage.getItem('loginId')))
             // ログイン情報の取得に失敗した場合
             resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
             
             // 申請中の友達一覧を取得
             const resultFriends = await dispatch(fetchAsyncGetFriendsApply(localStorage.getItem('loginId')))
             
-            if (fetchAsyncGetProf.fulfilled.match(resultReg) && fetchAsyncGetFriendsApply.fulfilled.match(resultFriends)) {
+            if (fetchAsyncGetShow.fulfilled.match(resultReg) && fetchAsyncGetFriendsApply.fulfilled.match(resultFriends)) {
+                console.log('Hi')
                 // ログインユーザのプロフィール情報をローカルstateに管理
                 setProfile({
                     profile: selectedUser.user
                 })
+                
                 // ロード終了
                 await dispatch(fetchCredEnd());
             }
@@ -180,7 +182,12 @@ function Profile(props) {
                     <Grid container className={classes.gridContainer} justify="center">
                         <Grid item xs={11} hidden={userPage}>
                             <Grid container justify="center">
-                                <FriendCard />
+                                {
+                                    selectedUser.user != undefined ? 
+                                        <FriendCard />
+                                    :
+                                        ''
+                                }
                             </Grid>
                         </Grid>
                         <Grid item xs={11} hidden={userListPage}>
@@ -203,7 +210,12 @@ function Profile(props) {
                     <Grid item sm={8}>
                         <Grid container justify="center">
                             <Grid item sm={10}>
-                                <FriendCard />
+                                {
+                                    selectedUser.user != undefined ? 
+                                        <FriendCard />
+                                    :
+                                        ''
+                                }
                             </Grid>
                         </Grid>
                     </Grid>

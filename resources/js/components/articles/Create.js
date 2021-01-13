@@ -19,12 +19,12 @@ import CommentIcon from '@material-ui/icons/Comment';
 import styles from './myArticle.module.css';
 
 // MapのURL
-// const URL = 'http://localhost/map/location'
-const URL = 'https://hcs-laravel/map/location'
+const URL = 'http://localhost/map/location'
+// const URL = 'https://hcs-laravel/map/location'
 
 // ホスト名
-// const HOST = 'http://localhost'
-const HOST = 'https://hcs-laravel'
+const HOST = 'http://localhost'
+// const HOST = 'https://hcs-laravel'
 
 const useStyles = makeStyles((theme) => ({
     searchField: {

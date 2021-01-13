@@ -170,7 +170,7 @@ function FriendCard(props) {
             await dispatch(fetchGetInfoMessages(resultReg))
         }
     }
-    
+    console.log(selectedUser)
     return (
         <>
             {

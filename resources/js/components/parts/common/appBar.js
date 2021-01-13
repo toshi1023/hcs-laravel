@@ -11,7 +11,6 @@ import MenuDrawer from "./drawer";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {  fetchAsyncGetProf } from "../../users/userSlice";
 import {
     fetchCredStart,
     fetchCredEnd,
@@ -127,7 +126,6 @@ function HcsAppBar() {
      * アカウントメニューをクローズ
      */
     const handleProfileClose = () => {
-        dispatch(fetchAsyncGetProf(localStorage.getItem('loginId')))
         history.push('/users/mypage');
         setAnchorEl(null);
         handleMobileMenuClose();

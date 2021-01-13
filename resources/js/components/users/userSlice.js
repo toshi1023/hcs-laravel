@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// const loginUrl = 'http://localhost/api/login'
-// const apiUrl = 'http://localhost/api/api_users'
-const loginUrl = 'http://hcs-laravel/api/login'
-const apiUrl = 'http://hcs-laravel/api/api_users'
+const loginUrl = 'http://localhost/api/login'
+const apiUrl = 'http://localhost/api/api_users'
+// const loginUrl = 'http://hcs-laravel/api/login'
+// const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
@@ -19,23 +19,6 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
                 'Content-Type': 'application/json',
             },
         })
-        // Apiからの返り値
-        return res.data
-    } catch (err) {
-        if (!err.response) {
-            throw err
-        }
-        return err.response.data
-    }
-})
-
-/**
- * Loginユーザの取得用非同期関数
- */
-export const fetchAsyncGetProf = createAsyncThunk('prof/get', async(id) =>{
-    try {
-        // axios: 引数1: URL, 引数2: メタ情報
-        const res = await axios.get(`${apiUrl}/${id}?query=${id}`, {})
         // Apiからの返り値
         return res.data
     } catch (err) {
@@ -336,12 +319,6 @@ const userSlice = createSlice({
             // 認証に失敗した場合はリターン
             if (action.payload.status == 401) {
                 return;
-            }
-        })
-        builder.addCase(fetchAsyncGetProf.fulfilled, (state, action) => {
-            return {
-                ...state,
-                selectedUser: action.payload,
             }
         })
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {

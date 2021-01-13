@@ -169,7 +169,7 @@ function UserCard(props) {
             await dispatch(fetchGetInfoMessages(resultReg))
         }
     }
-    console.log(selectedUser)
+    
     return (
         <>
             {

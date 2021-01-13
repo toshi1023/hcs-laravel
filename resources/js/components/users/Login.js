@@ -18,7 +18,7 @@ import {
 } from '../app/appSlice';
 import {
     fetchAsyncLogin,
-    fetchAsyncGetProf,
+    fetchAsyncGetShow,
 } from './userSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -114,7 +114,7 @@ export default function Login() {
                                 // ログインに成功した場合
                                 if (fetchAsyncLogin.fulfilled.match(login)) {
                                     // ログインユーザのプロフィールを取得
-                                    await dispatch(fetchAsyncGetProf(login.payload.id));
+                                    await dispatch(fetchAsyncGetShow(localStorage.getItem('loginId')));
                                     // infoメッセージの表示
                                     login.payload.info_message ? dispatch(fetchGetInfoMessages(login)) : ''
                                     // Topページに遷移
