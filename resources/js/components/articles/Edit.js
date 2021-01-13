@@ -9,17 +9,9 @@ import SnackMessages from '../parts/common/snackMessages';
 import { Form, Formik } from "formik"; // 入力フォームのバリデーション設定に利用
 import * as Yup from "yup"; // 入力フォームのバリデーション設定に利用
 import _ from 'lodash';
-import { Grid, Button, TextField, FormControl, FormLabel, FormControlLabel, Paper, Radio, RadioGroup, Modal, Backdrop, Fade } from '@material-ui/core';
+import { Grid, Button, TextField, FormControl, FormLabel, Paper, Modal, Backdrop, Fade } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
-
-// MapのURL
-const URL = 'http://localhost/map/location'
-// const URL = 'https://hcs-laravel/map/location'
-
-// ホスト名
-const HOST = 'http://localhost'
-// const HOST = 'http://hcs-laravel'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -70,56 +62,12 @@ const useStyles = makeStyles((theme) => ({
         content: editedArticle.content,
         type: editedArticle.type,
     });
-    // ラジオボタン用のstate
-    const [value, setValue] = React.useState('current');
-    const handleChangeRadio = (event) => {
-        setValue(event.target.value);
-    };
-
-    /**
-     * DBに保存しているデータをセット
-     */
-    const handleSetDB = () => {
-        setState({
-            ...state,
-            latitude: editedArticle.latitude,
-            longitude: editedArticle.longitude,
-        })
-    }
-    
-    /**
-     * 位置情報の取得用Mapを別タブで表示
-     */
-    const handleOpenMap = () => {
-        // 新規タブを開いてページを遷移
-        window.open(URL, "Get Location")
-    }
-
-    /**
-     * 新規タブから設定された緯度経度をstateにセット
-     * @param {*} event 
-     */
-    const receiveMessage = (event) => {
-        if (event.origin !== HOST) {
-            // 指定ドメイン以外は受け付けない
-            return;
-        }
-        
-        setState({ 
-            ...state,
-            latitude: JSON.parse(event.data).lat,
-            longitude: JSON.parse(event.data).lng,
-        })
-        return;
-    }
     
     useEffect(() => {
         // 非同期の関数を定義
         const fetchPrefectures = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
-            // 新規タブから送信された位置情報を取得
-            window.addEventListener("message", receiveMessage, false)
             // ユーザの登録している都道府県が選択されている状態でセット
             document.getElementById("modalFormPrefecture").value = editedArticle.prefecture
             // ロード終了
@@ -274,10 +222,7 @@ const useStyles = makeStyles((theme) => ({
                                                 </div>
                                                 <div className={classes.margin}>
                                                     <FormLabel style={{ fontSize: 13 }}>位置情報</FormLabel>
-                                                    <RadioGroup aria-label="location" name="location" value={value} onChange={handleChangeRadio}>
-                                                        <FormControlLabel value="current" control={<Radio onClick={handleSetDB} />} label={<span className={classes.latlng}>位置情報は更新しない</span>} />
-                                                        <FormControlLabel value="map" control={<Radio onClick={handleOpenMap} />} label={<span className={classes.latlng}>Mapから取得</span>} />
-                                                    </RadioGroup>
+                                                    <br />
                                                     <span className={classes.latlng}>緯度：{editedArticle.latitude}</span>
                                                     <span className={classes.latlng}>経度：{editedArticle.longitude}</span>
                                                 </div>

@@ -18,7 +18,7 @@ import Login from './components/users/Login';
 import Home from './components/articles/home/Home';
 import Map from './components/articles/map/Map';
 import Article from './components/articles/Index';
-import MyArticle from './components/articles/MyArticle';
+import ArticleCreate from './components/articles/Create';
 import User from './components/users/Index';
 import LocationMap from './components/parts/articleParts/getLocationMap';
 import UserEdit from './components/users/Edit';
@@ -74,7 +74,7 @@ function App() {
               <Route exact path="/map" render={props => <Map {...props} />} />
               <Route exact path="/map/location" render={props => <LocationMap {...props} />} />
               <Route exact path="/articles" render={props => <Article {...props} />} />
-              <Route exact path="/articles/mypage" render={props => <MyArticle {...props} />} />
+              <Route exact path="/articles/create" render={props => <ArticleCreate {...props} />} />
               <Route exact path="/users" render={props => <User {...props} />} />
               <Route exact path="/users/create" render={props => <UserCreate {...props} />} />
               <Route exact path="/users/mypage" render={props => <Profile {...props} />} />

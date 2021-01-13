@@ -10,7 +10,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import GroupIcon from '@material-ui/icons/Group';
 import { makeStyles } from '@material-ui/core/styles';
-import UserShow from './Show';
+import UserCard from '../parts/userParts/UserCard';
 import MessageCard from '../parts/common/messageCard';
 import SnackMessages from '../parts/common/snackMessages';
 
@@ -228,7 +228,7 @@ export default function User() {
                                     localStorage.getItem('loginId') ? 
                                         <Grid item xs={12}>
                                             <div className={classes.userShow}>
-                                                <UserShow />
+                                                <UserCard />
                                             </div>
                                         </Grid>
                                     : 
@@ -287,7 +287,7 @@ export default function User() {
                                 localStorage.getItem('localToken') ? 
                                     <Grid item sm={10}>
                                         <div className={classes.userShow}>
-                                            <UserShow />
+                                            <UserCard />
                                         </div>
                                     </Grid>
                                 : 

@@ -204,7 +204,7 @@ function ArticleDropzone(props, ref) {
         </Grid>
         {
           // 記事の新規作成の時は表示しない
-          location.pathname == '/articles/mypage' 
+          props.create 
           ? ''
           : <Button variant="contained" color="primary" className={classes.update} onClick={handleDelete}>更新</Button>
         }

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FriendList from '../parts/userParts/friendList';
-import UserShow from './Show';
+import FriendCard from '../parts/userParts/friendCard';
 import { fetchAsyncGetProf, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus, selectSelectedUser, selectUser } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, fetchGetErrorMessages } from '../app/appSlice';
 // import styles from '../parts/userParts/userParts.module.css';
@@ -180,7 +180,7 @@ function Profile(props) {
                     <Grid container className={classes.gridContainer} justify="center">
                         <Grid item xs={11} hidden={userPage}>
                             <Grid container justify="center">
-                                <UserShow />
+                                <FriendCard />
                             </Grid>
                         </Grid>
                         <Grid item xs={11} hidden={userListPage}>
@@ -203,7 +203,7 @@ function Profile(props) {
                     <Grid item sm={8}>
                         <Grid container justify="center">
                             <Grid item sm={10}>
-                                <UserShow />
+                                <FriendCard />
                             </Grid>
                         </Grid>
                     </Grid>

@@ -145,7 +145,7 @@ function HcsAppBar() {
      * 記事作成アイコンクリック
      */
     const handleCreateArticle = () => {
-        history.push("/articles/mypage");
+        history.push("/articles/create");
         handleMobileMenuClose();
     };
 
