@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import UserEdit from '../../users/Edit'; 
-import { selectSelectedUser, editUser, selectFriendStatus, 
+import { selectSelectedFriend, selectSelectedUser, editUser, selectFriendStatus, 
          fetchAsyncUpdateFriends, fetchAsyncGetFriendsApply,
          selectMessageHistory, selectEditedUser
 } from "../../users/userSlice";
@@ -99,8 +99,9 @@ function FriendCard(props) {
     const dispatch = useDispatch();
     const [checked, setChecked] = React.useState([1]);
     const [reply, setReply] = React.useState([1]);
-    // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUsers定数に格納
+    // stateで管理するユーザ詳細データを使用できるようにローカルのselectedUser定数に格納
     const selectedUser = useSelector(selectSelectedUser)
+    const selectedFriend = useSelector(selectSelectedFriend)
     const editedUser = useSelector(selectEditedUser)
     const friendStatus = useSelector(selectFriendStatus)
     const messageHistory = useSelector(selectMessageHistory)
@@ -170,7 +171,13 @@ function FriendCard(props) {
             await dispatch(fetchGetInfoMessages(resultReg))
         }
     }
-    console.log(selectedUser)
+    
+    /**
+     * ▼jsx概要
+     * ログインユーザの詳細情報 or ログインユーザのフレンドの詳細情報
+     * フレンドが選択されていなければログインユーザの情報表示を優先
+     * フレンドが選択されればフレンドの情報表示を優先
+     */
     return (
         <>
             {
@@ -195,9 +202,10 @@ function FriendCard(props) {
                     <Grid item xs={12} sm={12}>
                         {
                             // ログインユーザに一致する場合のみ"編集"ボタンを表示
-                            selectedUser.user !== undefined && localStorage.getItem('loginId') == selectedUser.user.id ? 
+                            // selectedUser.user !== undefined && localStorage.getItem('loginId') == selectedUser.user.id ? 
+                            selectedFriend.value == undefined ? 
                                 <Tooltip title="編集" classes={{tooltip: classes.tooltip}}>
-                                    <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedUser.value ? selectedUser.value : selectedUser.user)}>
+                                    <Fab color="primary" aria-label="add" className={classes.button} onClick={() => handleEditUser(selectedFriend.value ? selectedFriend.value : selectedUser.user)}>
                                         <EditIcon />
                                     </Fab>
                                 </Tooltip>
@@ -219,8 +227,8 @@ function FriendCard(props) {
                                                 />
                                             </IconButton>
                                     :
-                                        selectedUser.value !== undefined ? 
-                                            messageHistory.find(element => element.user_id == selectedUser.value.auth_friends.id) ? 
+                                        selectedFriend.value !== undefined ? 
+                                            messageHistory.find(element => element.user_id == selectedFriend.value.auth_friends.id) ? 
                                                 ''
                                             :
                                                 // ログインユーザ以外でメッセージの履歴がないユーザには"リプライ"ボタンを表示
@@ -229,8 +237,8 @@ function FriendCard(props) {
                                                 >
                                                     <ReplyIcon
                                                         edge="end"
-                                                        onChange={handleToggleReply(selectedUser.value != undefined ? selectedUser.value.auth_friends.id : '')}
-                                                        inputProps={{ 'aria-labelledby': selectedUser.value != undefined ? selectedUser.value.auth_friends.id : '' }}
+                                                        onChange={handleToggleReply(selectedFriend.value != undefined ? selectedFriend.value.auth_friends.id : '')}
+                                                        inputProps={{ 'aria-labelledby': selectedFriend.value != undefined ? selectedFriend.value.auth_friends.id : '' }}
                                                         className={classes.addIcon}
                                                     />
                                                 </IconButton>
@@ -241,10 +249,10 @@ function FriendCard(props) {
                         }
                         {
                             // 友達リクエストが来ているユーザを表示した場合
-                            friendStatus != undefined && selectedUser.value != undefined ? 
-                                selectedUser.value.target_id ? 
-                                    friendStatus.find(element => element.user_id === selectedUser.value.target_id) ? 
-                                        <Button variant="contained" color="primary" className={classes.applyButton} onClick={() => handleApproval(friendStatus.find(element => element.user_id === selectedUser.value.target_id))}>
+                            friendStatus != undefined && selectedFriend.value != undefined ? 
+                                selectedFriend.value.target_id ? 
+                                    friendStatus.find(element => element.user_id === selectedFriend.value.target_id) ? 
+                                        <Button variant="contained" color="primary" className={classes.applyButton} onClick={() => handleApproval(friendStatus.find(element => element.user_id === selectedFriend.value.target_id))}>
                                             承認する
                                         </Button>
                                     : ''
@@ -255,8 +263,8 @@ function FriendCard(props) {
                     <Grid item xs={12} sm={12} md={6}>
                         <CardMedia
                             className={classes.cover}
-                            image={selectedUser.value != undefined ? selectedUser.value.auth_friends.users_photo_path : (selectedUser.user != undefined ? selectedUser.user.users_photo_path : '')}
-                            title={selectedUser.value != undefined ? selectedUser.value.auth_friends.users_photo_name : (selectedUser.user != undefined ? selectedUser.user.users_photo_name : '')}
+                            image={selectedFriend.value != undefined ? selectedFriend.value.auth_friends.users_photo_path : (selectedUser.user != undefined ? selectedUser.user.users_photo_path : '')}
+                            title={selectedFriend.value != undefined ? selectedFriend.value.auth_friends.users_photo_name : (selectedUser.user != undefined ? selectedUser.user.users_photo_name : '')}
                         />
                     </Grid>
                     <Grid item xs={12} sm={12} md={6}>
@@ -270,7 +278,7 @@ function FriendCard(props) {
                                             <EmojiEmotionsIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="ニックネーム" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.name : (selectedUser.user != undefined ? selectedUser.user.name : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="ニックネーム" secondary={selectedFriend.value != undefined ? selectedFriend.value.auth_friends.name : (selectedUser.user != undefined ? selectedUser.user.name : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -279,7 +287,7 @@ function FriendCard(props) {
                                             <RoomIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="都道府県" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.prefecture : (selectedUser.user != undefined ? selectedUser.user.prefecture : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="都道府県" secondary={selectedFriend.value != undefined ? selectedFriend.value.auth_friends.prefecture : (selectedUser.user != undefined ? selectedUser.user.prefecture : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -288,7 +296,7 @@ function FriendCard(props) {
                                             <EventIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="生年月日" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.birthday : (selectedUser.user != undefined ? selectedUser.user.birthday : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="生年月日" secondary={selectedFriend.value != undefined ? selectedFriend.value.auth_friends.birthday : (selectedUser.user != undefined ? selectedUser.user.birthday : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -297,7 +305,7 @@ function FriendCard(props) {
                                             <SupervisorAccountIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="性別" secondary={selectedUser.value != undefined ? (selectedUser.value.auth_friends.gender == 1 ? '男性' : '女性') : (selectedUser.user != undefined ? (selectedUser.user.gender == 1 ? '男性' : '女性') : '') } classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="性別" secondary={selectedFriend.value != undefined ? (selectedFriend.value.auth_friends.gender == 1 ? '男性' : '女性') : (selectedUser.user != undefined ? (selectedUser.user.gender == 1 ? '男性' : '女性') : '') } classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     <Divider variant="inset" component="li" />
                                     <ListItem>
@@ -306,7 +314,7 @@ function FriendCard(props) {
                                             <CommentIcon />
                                         </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText primary="自己紹介" secondary={selectedUser.value != undefined ? selectedUser.value.auth_friends.comment : (selectedUser.user != undefined ? selectedUser.user.comment : '')} classes={{secondary:classes.listItemText}} />
+                                        <ListItemText primary="自己紹介" secondary={selectedFriend.value != undefined ? selectedFriend.value.auth_friends.comment : (selectedUser.user != undefined ? selectedUser.user.comment : '')} classes={{secondary:classes.listItemText}} />
                                     </ListItem>
                                     </List>
                                 </div>

@@ -274,6 +274,12 @@ const userSlice = createSlice({
             created_at: '',             // 記事の作成日
             updated_at: '',             // 記事の更新日
         },
+        friends: {
+            id: ''
+        },
+        selectedFriend: {
+            id: ''
+        },
         friendStatus: [{
             id: '',                     // ID
             name: '',                   // ユーザ名
@@ -301,6 +307,9 @@ const userSlice = createSlice({
         selectUser(state, action) {
             state.selectedUser = action.payload
         },
+        selectFriend(state, action) {
+            state.selectedFriend = action.payload
+        }
     },
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {
@@ -367,14 +376,14 @@ const userSlice = createSlice({
         builder.addCase(fetchAsyncGetFriendsApply.fulfilled, (state, action) => {
             return {
                 ...state,
-                users: action.payload.friends,
+                friends: action.payload.friends,
                 friendStatus: action.payload.friendStatus
             }
         })
         builder.addCase(fetchAsyncGetFriends.fulfilled, (state, action) => {
             return {
                 ...state,
-                users: action.payload.friends,
+                friends: action.payload.friends,
             }
         })
         builder.addCase(fetchAsyncUpdateFriends.fulfilled, (state, action) => {
@@ -392,7 +401,7 @@ const userSlice = createSlice({
     },
 })
 
-export const { editUsername, editPassword, editUser, selectUser } = userSlice.actions
+export const { editUsername, editPassword, editUser, selectUser, selectFriend } = userSlice.actions
 
 export const selectAuthen = (state) => state.user.authen
 export const selectPrefectures = (state) => state.user.prefectures
@@ -400,6 +409,8 @@ export const selectSelectedUser = (state) => state.user.selectedUser
 export const selectLoggedInUser = (state) => state.user.loggedInUser
 export const selectEditedUser = (state) => state.user.editedUser
 export const selectUsers = (state) => state.user.users
+export const selectFriends = (state) => state.user.friends
+export const selectSelectedFriend = (state) => state.user.selectedFriend
 export const selectFriendStatus = (state) => state.user.friendStatus
 export const selectMessageHistory = (state) => state.user.messageHistory
 export const selectValidation = (state) => state.user.validation

@@ -1,6 +1,6 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { selectUser, fetchAsyncUpdateFriends, selectFriendStatus } from "../../users/userSlice";
+import { useDispatch } from "react-redux";
+import { selectFriend } from "../../users/userSlice";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -11,10 +11,8 @@ import {
     Avatar,
     IconButton
 } from "@material-ui/core";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
-import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 import _ from "lodash";
 
 const useStyles = makeStyles(theme => ({
@@ -71,9 +69,9 @@ export default function FriendList(props) {
      * @param {*} value 
      */
     const handleSetUser = value => {
-        // selectedUserのstateを更新するReducerにdispatch
+        // selectedFriendのstateを更新するReducerにdispatch
         dispatch(
-            selectUser({ value })
+            selectFriend({ value })
         );
         // ページ最上部に戻る
         window.scrollTo(0, 0)

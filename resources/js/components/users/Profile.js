@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FriendList from '../parts/userParts/friendList';
 import FriendCard from '../parts/userParts/friendCard';
-import { fetchAsyncGetShow, fetchAsyncGetFriendsApply, selectUsers, selectFriendStatus, selectSelectedUser, selectUser } from "./userSlice";
+import { fetchAsyncGetShow, fetchAsyncGetFriendsApply, selectFriends, selectFriendStatus, selectSelectedUser, selectFriend } from "./userSlice";
 import { fetchCredStart, fetchCredEnd, fetchGetErrorMessages } from '../app/appSlice';
 // import styles from '../parts/userParts/userParts.module.css';
 import _ from "lodash";
@@ -92,13 +92,11 @@ function Profile(props) {
     const [userListPage, setUserListPage] = React.useState(true);
     // stateで管理するユーザ情報を取得
     const selectedUser = useSelector(selectSelectedUser)
-    const friends = useSelector(selectUsers)
+    const friends = useSelector(selectFriends)
     const friendStatus = useSelector(selectFriendStatus)
     const dispatch = useDispatch()
     const history = useHistory();
-    // プロフィールをローカルstateで管理
-    const [profile, setProfile] = React.useState('');
-    
+
     useEffect(() => {
         // 非同期の関数を定義
         const fetchUserProf = async () => {
@@ -108,17 +106,11 @@ function Profile(props) {
             const resultReg = await dispatch(fetchAsyncGetShow(localStorage.getItem('loginId')))
             // ログイン情報の取得に失敗した場合
             resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
-            
+            console.log('Hi')
             // 申請中の友達一覧を取得
             const resultFriends = await dispatch(fetchAsyncGetFriendsApply(localStorage.getItem('loginId')))
             
             if (fetchAsyncGetShow.fulfilled.match(resultReg) && fetchAsyncGetFriendsApply.fulfilled.match(resultFriends)) {
-                console.log('Hi')
-                // ログインユーザのプロフィール情報をローカルstateに管理
-                setProfile({
-                    profile: selectedUser.user
-                })
-                
                 // ロード終了
                 await dispatch(fetchCredEnd());
             }
@@ -156,9 +148,8 @@ function Profile(props) {
      * ログインユーザのプロフィールを再表示
      */
     const handleGetProfile = () => {
-        console.log(profile)
-        console.log(selectedUser)
-        dispatch(selectUser(profile))
+        // ログインユーザを表示するために選択したフレンド情報をリセット
+        dispatch(selectFriend(''))
     }
     
     return (
@@ -210,12 +201,9 @@ function Profile(props) {
                     <Grid item sm={8}>
                         <Grid container justify="center">
                             <Grid item sm={10}>
-                                {
-                                    selectedUser.user != undefined ? 
+                                
                                         <FriendCard />
-                                    :
-                                        ''
-                                }
+                                    
                             </Grid>
                         </Grid>
                     </Grid>

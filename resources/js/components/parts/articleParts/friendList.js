@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
 import { fetchAsyncGet, searchUser } from '../../articles/articleSlice';
-import { selectUsers, fetchAsyncGetFriends } from '../../users/userSlice';
-import UserList from './userList';
+import { selectFriends, fetchAsyncGetFriends } from '../../users/userSlice';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -34,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function FriendList(props) {
     const classes = useStyles();
-    const friends = useSelector(selectUsers)
+    const friends = useSelector(selectFriends)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -64,28 +63,35 @@ export default function FriendList(props) {
                     return (
                         <>
                             {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-                            <ListItem
-                                key={value.target_id}
-                                button
-                                onClick={() => props.handleFriendArticles(value.target_id)}
-                            >
-                                <ListItemAvatar>
-                                    <Avatar
-                                        alt={`Avatar n°${value.target_id}`}
-                                        src={`${value.users_photo_path}`}
-                                        className={classes.avatar}
-                                    />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    id={value.target_id}
-                                    primary={`${value.name}`}
-                                    classes={{ primary: classes.list }}
-                                    style={{
-                                        color: value.gender == 1 ? "blue" : "red"
-                                    }}
-                                />
-                            </ListItem>
-                            <hr />
+                            {
+                                value.auth_friends !== undefined ? 
+                                    <>
+                                        <ListItem
+                                            key={value.target_id}
+                                            button
+                                            onClick={() => props.handleFriendArticles(value.target_id)}
+                                        >
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    alt={`Avatar n°${value.target_id}`}
+                                                    src={`${value.auth_friends.users_photo_path}`}
+                                                    className={classes.avatar}
+                                                />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                id={value.target_id}
+                                                primary={`${value.auth_friends.name}`}
+                                                classes={{ primary: classes.list }}
+                                                style={{
+                                                    color: value.auth_friends.gender == 1 ? "blue" : "red"
+                                                }}
+                                            />
+                                        </ListItem>
+                                        <hr />
+                                    </>
+                                :
+                                    ''
+                            }
                         </>
                     );
                 })

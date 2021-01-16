@@ -36,7 +36,7 @@ class UserController extends Controller
   
         // 全ユーザデータとフレンド情報を更新日時順にソートして取得
         $data = $this->database->getIndex(null, $conditions);
-  
+        
         return response()->json([
           'users' => $data['users'], 
           'friends' => $data['friends'],

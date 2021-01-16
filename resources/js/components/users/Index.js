@@ -272,7 +272,7 @@ export default function User() {
                                     </Button>
                                 </div>
                             </form>
-                            <UserList user={users} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} />
+                            {/* <UserList user={users} friendStatus={friendStatus} handleChange={handleChange} handleTabUser={handleTabUser} /> */}
                         </Grid>
                     </Grid>
                 </div>
