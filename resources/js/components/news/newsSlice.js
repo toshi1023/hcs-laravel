@@ -12,8 +12,9 @@ const token = localStorage.localToken
 export const fetchAsyncGet = createAsyncThunk('news/index', async(conditions) => {
     try {
         const res = await axios.get(`${apiUrl}?query=${conditions}`, {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
         return res.data
     } catch (err) {
@@ -30,8 +31,9 @@ export const fetchAsyncGet = createAsyncThunk('news/index', async(conditions) =>
 export const fetchAsyncGetShow = createAsyncThunk('news/initShow', async(conditions) => {
     try {
         const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
         return res.data
     } catch (err) {

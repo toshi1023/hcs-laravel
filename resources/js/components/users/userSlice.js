@@ -35,8 +35,9 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
 export const fetchAsyncGet = createAsyncThunk('users/index', async(conditions) => {
     try {
         const res = await axios.get(`${apiUrl}?query=${conditions.user_name}&queryId=${conditions.user_id}`, {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         })
         return res.data
     } catch (err) {
@@ -53,8 +54,9 @@ export const fetchAsyncGet = createAsyncThunk('users/index', async(conditions) =
 export const fetchAsyncGetShow = createAsyncThunk('users/initShow', async(conditions) => {
     try {
         const res = await axios.get(`${apiUrl}/show?query=${conditions}`, {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         })
         return res.data
     } catch (err) {
@@ -93,7 +95,7 @@ export const fetchAsyncUpdate = createAsyncThunk('users/edit', async(user) => {
         const res = await axios.put(`${apiUrl}/${user.id}`, user, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -113,7 +115,7 @@ export const fetchAsyncImage = createAsyncThunk('users/image', async(data) => {
             headers: {
                 'X-HTTP-Method-Override': 'PUT',
                 'Content-Type': 'multipart/form-data',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -134,7 +136,7 @@ export const fetchAsyncDelete = createAsyncThunk('users/delete', async(id) => {
         await axios.delete(`${apiUrl}/${id}/`, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return id
@@ -151,7 +153,11 @@ export const fetchAsyncDelete = createAsyncThunk('users/delete', async(id) => {
  */
 export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(conditions) => {
     try {
-        const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`)
+        const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         return res.data
     } catch (err) {
         if (!err.response) {
@@ -165,7 +171,11 @@ export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(cond
  */
 export const fetchAsyncGetFriendsApply = createAsyncThunk('friends/apply', async(conditions) => {
     try {
-        const res = await axios.get(`${apiUrl}/${conditions}/friends/apply?query=${conditions}`)
+        const res = await axios.get(`${apiUrl}/${conditions}/friends/apply?query=${conditions}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         return res.data
     } catch (err) {
         if (!err.response) {
@@ -182,7 +192,7 @@ export const fetchAsyncUpdateFriends = createAsyncThunk('friends/update', async(
         const res = await axios.post(`${apiUrl}/${user.user_id}/friends/update`, user, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data

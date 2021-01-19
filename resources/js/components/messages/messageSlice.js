@@ -32,8 +32,9 @@ export const fetchAsyncGet = createAsyncThunk('messages/index', async(conditions
 export const fetchAsyncGetShow = createAsyncThunk('messages/show', async(conditions) => {
     try {
         const res = await axios.get(`${apiUrl}/show?queryUserId=${conditions.user_id}&queryUserIdTarget=${conditions.user_id_target}`, {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         })
         return res.data
     } catch (err) {

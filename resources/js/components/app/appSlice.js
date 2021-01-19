@@ -9,7 +9,7 @@ const prefectureUrl = 'http://localhost/api/api_prefectures'
 export const fetchAsyncGetPrefectures = createAsyncThunk('prefectures/get', async() =>{
     try {
         // axios: 引数1:  引数2: メタ情報
-        const res = await axios.get(prefectureUrl, {})
+        const res = await axios.get(prefectureUrl)
         // Apiからの返り値
         return res.data
     } catch (err) {

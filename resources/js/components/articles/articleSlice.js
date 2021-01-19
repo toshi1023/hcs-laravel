@@ -48,7 +48,7 @@ export const fetchAsyncCreate = createAsyncThunk('articles/create', async(articl
         const res = await axios.post(apiUrl, article, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -69,7 +69,7 @@ export const fetchAsyncUpdate = createAsyncThunk('articles/edit', async(article)
         const res = await axios.put(`${apiUrl}/${id}`, article, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `JWT ${token}`,
+                Authorization: `JWT ${token}`,
             },
         })
         return res.data
@@ -90,7 +90,7 @@ export const fetchAsyncImage = createAsyncThunk('articles/image', async(data) =>
             headers: {
                 'X-HTTP-Method-Override': 'PUT',
                 'Content-Type': 'multipart/form-data',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -111,7 +111,7 @@ export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) =>
         const res = await axios.delete(`${apiUrl}/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `JWT ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -129,7 +129,12 @@ export const fetchAsyncDelete = createAsyncThunk('articles/delete', async(id) =>
 export const fetchAsyncGetLikes = createAsyncThunk('articles/likes/index', async(conditions) => {
     try {
         // いいねの取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
-        const res = await axios.get(`${apiUrl}/likes?query=${conditions.user_id}`)
+        const res = await axios.get(`${apiUrl}/likes?query=${conditions.user_id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
         
         return res.data
     } catch (err) {
@@ -148,7 +153,7 @@ export const fetchAsyncUpdateLikes = createAsyncThunk('articles/likes/update', a
         const res = await axios.post(`${apiUrl}/likes`, conditions, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `JWT ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
     
@@ -167,7 +172,12 @@ export const fetchAsyncUpdateLikes = createAsyncThunk('articles/likes/update', a
 export const fetchAsyncGetComments = createAsyncThunk('articles/comments/index', async() => {
     try {
         // コメントの取得
-        const res = await axios.get(`${apiUrl}/comments`)
+        const res = await axios.get(`${apiUrl}/comments`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
         
         return res.data
     } catch (err) {
@@ -186,7 +196,7 @@ export const fetchAsyncUpdateComments = createAsyncThunk('articles/comments/upda
         const res = await axios.post(`${apiUrl}/comments`, conditions, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `JWT ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
     
