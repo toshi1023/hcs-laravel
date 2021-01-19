@@ -6,6 +6,7 @@ use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
 use App\Model\Article;
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Storage;
 
 class ArticleRepository extends BaseRepository implements ArticleDatabaseInterface
@@ -49,23 +50,6 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             $query = $this->getWhereQuery(null, $conditions, $query);
         }
         
-        return $query;
-    }
-
-    /**
-     * 記事のいいね数を取得
-     * 
-     */
-    private function getLikesCountQuery() {
-        $query = $this->model()->query();
-
-        $query->from('articles')
-              ->leftjoin('likes', 'articles.id', '=', 'likes.article_id')
-              ->selectRaw('count(likes.user_id) as likes_counts')
-              ->addSelect('likes.article_id')
-              ->groupByRaw('likes.article_id')
-              ->where('likes.delete_flg', '=', 0);
-
         return $query;
     }
 
@@ -155,18 +139,41 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     }
 
     /**
+     * 記事のいいね数を取得
+     * 
+     */
+    private function getLikesCountQuery() 
+    {
+        $query = $this->getQuery('likes')
+                      ->select(DB::raw('count(user_id) as likes_counts'), 'article_id')
+                      ->groupByRaw('article_id');
+
+        return $query;
+    }
+
+    /**
+     * 記事のいいねデータを取得(管理画面用)
+     * 引数：記事ID
+     */
+    public function getLikesAdminPage($conditions=null)
+    {
+        $query = $this->getQuery('likes', $conditions)
+                      ->with('users:id,name,users_photo_path');
+
+        return $query;
+    }
+
+    /**
      * 記事のいいねデータを取得
      * 引数：ユーザID
      */
     public function getLikes($user_id)
     {
+        // 記事ごとにいいね数をカウント
+        $subQueryA = $this->getLikesCountQuery();
+        
         // Likeモデルをインスタンス化
         $model = $this->getModel('likes');
-
-        // 記事ごとにいいね数をカウント
-        $subQueryA = $model->selectRaw('count(article_id) as likes_counts, article_id')
-                           ->where('delete_flg', '=', 0)
-                           ->groupByRaw('article_id');
         
         // ログインユーザのいいね有無を確認
         $subQueryB = $model->select('user_id', 'article_id as likes_user_article_id')
@@ -228,30 +235,24 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
      */
     public function getCommentsCounts()
     {
-        // Commentモデルをインスタンス化
-        $model = $this->getModel('comments');
-
         // 記事ごとのコメント数をカウント
-        $query = $model->selectRaw('count(id) as comments_counts, article_id')
-                          ->where('delete_flg', '=', 0)
-                          ->groupByRaw('article_id');
+        $query = $this->getQuery('comments')
+                      ->select(DB::raw('count(id) as comments_counts'), 'article_id')
+                      ->groupByRaw('article_id');
 
         return $query;
     }
 
     /**
      * 記事のコメントデータを取得
+     * 引数：記事ID
      */
-    public function getComments()
+    public function getComments($conditions=null)
     {
-        // Commentモデルをインスタンス化
-        $model = $this->getModel('comments');
-        
         // 記事ごとのコメントとユーザ情報を取得
-        $query = $model->select('comments.id', 'comments.comment', 'comments.user_id', 'comments.article_id', 'users.users_photo_path', 'users.name as user_name')
-                          ->from('comments')
-                          ->leftJoin('users', 'comments.user_id', '=', 'users.id')
-                          ->where('comments.delete_flg', '=', 0);
+        $query = $this->getQuery('comments', $conditions)
+                      ->select('id', 'comment', 'user_id', 'article_id', 'updated_at')
+                      ->with('users:id,name as user_name,users_photo_path');
 
         return $query;
     }

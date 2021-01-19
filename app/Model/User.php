@@ -79,7 +79,17 @@ class User extends Authenticatable
         if ($this->status == config('const.app_account_stop'))   return config('const.app_account_stop_name');
     }
 
-    // Articleテーブルと1対多のリレーション構築(1側の設定)
+    /**
+     * Userテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Model\Comment');
+    }
+
+    /**
+     * Articleテーブルと1対多のリレーション構築(1側の設定)
+     */
     public function articles()
     {
         return $this->hasMany('App\Model\Article');

@@ -46,7 +46,7 @@ class ArticleController extends Controller
 
       // 全管理ユーザデータを更新日時順にソートして取得
       $articles = $this->database->getIndex(null, $conditions);
-
+      // dd($articles->first());
       return Datatables::eloquent($articles)->make(true);
 
     }

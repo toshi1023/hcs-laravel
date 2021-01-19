@@ -32,4 +32,16 @@ class Article extends BaseModel
   {
     return $this->hasMany('App\Model\ArticleImage');
   }
+
+  // commentsテーブルと1対多のリレーション構築(1側の設定)
+  public function comments()
+  {
+    return $this->hasMany('App\Model\Comment');
+  }
+
+  // likesテーブルと1対多のリレーション構築(1側の設定)
+  public function likes()
+  {
+    return $this->hasMany('App\Model\Like');
+  }
 }

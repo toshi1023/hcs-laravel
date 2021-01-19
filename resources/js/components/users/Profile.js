@@ -150,6 +150,10 @@ function Profile(props) {
     const handleGetProfile = () => {
         // ログインユーザを表示するために選択したフレンド情報をリセット
         dispatch(selectFriend(''))
+        // ユーザ詳細ページを表示
+        handleTabUser()
+        // タブ切り替え
+        handleChange(null, 0)
     }
     
     return (
@@ -175,7 +179,9 @@ function Profile(props) {
                             <Grid container justify="center">
                                 {
                                     selectedUser.user != undefined ? 
-                                        <FriendCard />
+                                        <Grid item xs={12}>
+                                            <FriendCard />
+                                        </Grid>
                                     :
                                         ''
                                 }
@@ -201,9 +207,7 @@ function Profile(props) {
                     <Grid item sm={8}>
                         <Grid container justify="center">
                             <Grid item sm={10}>
-                                
-                                        <FriendCard />
-                                    
+                                <FriendCard />
                             </Grid>
                         </Grid>
                     </Grid>

@@ -121,7 +121,7 @@ function settingLikeTables() {
                     
                     return `
                         <a href="" data-toggle="modal" data-target="#like_modal${p.user_id}">
-                            <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
+                            <img src="${p.users.users_photo_path}" id="location_image" height="45" width="65">
                         </a>
 
                         <div class="modal" id="like_modal${p.user_id}" tabindex="-1"
@@ -135,7 +135,7 @@ function settingLikeTables() {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
+                                    <img src="${p.users.users_photo_path}" id="image_modal_user" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" id="user_image_close" data-id="${p.user_id}">Close</button>
@@ -146,7 +146,7 @@ function settingLikeTables() {
                     `;
                 }
             },
-            {data: 'name'},
+            {data: 'users.name'},
             {
                 data: function(p) {
                     // 日付フォーマットの形式を調整
@@ -199,7 +199,7 @@ function settingCommentTables() {
                     
                     return `
                         <a href="" data-toggle="modal" data-target="#like_modal${p.user_id}">
-                            <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
+                            <img src="${p.users.users_photo_path}" id="location_image" height="45" width="65">
                         </a>
 
                         <div class="modal" id="like_modal${p.user_id}" tabindex="-1"
@@ -213,7 +213,7 @@ function settingCommentTables() {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.users_photo_path}" id="image_modal_user" height="350" width="450">
+                                    <img src="${p.users.users_photo_path}" id="image_modal_user" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" id="user_image_close" data-id="${p.user_id}">Close</button>
@@ -224,7 +224,7 @@ function settingCommentTables() {
                     `;
                 }
             },
-            {data: 'name'},
+            {data: 'users.user_name'},
             {data: 'comment'},
             {
                 data: function(p) {

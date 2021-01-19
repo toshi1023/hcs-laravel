@@ -200,7 +200,7 @@ function setDetailView(data, button) {
                             
                             return `
                                 <a href="" data-toggle="modal" data-target="#friend_modal${p.id}">
-                                    <img src="${p.users_photo_path}" id="location_image" height="45" width="65">
+                                    <img src="${p.auth_friends.users_photo_path}" id="location_image" height="45" width="65">
                                 </a>
         
                                 <div class="modal" id="friend_modal${p.id}" tabindex="-1"
@@ -214,7 +214,7 @@ function setDetailView(data, button) {
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                            <img src="${p.users_photo_path}" id="image_modal_user" height="250" width="300">
+                                            <img src="${p.auth_friends.users_photo_path}" id="image_modal_user" height="250" width="300">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" id="friend_image_close" data-id="${p.id}">Close</button>
@@ -225,8 +225,8 @@ function setDetailView(data, button) {
                             `;
                         }
                     },
-                    {data: 'name'},
-                    {data: 'prefecture'},
+                    {data: 'auth_friends.name'},
+                    {data: 'auth_friends.prefecture'},
                     {
                         data: function (p) {
                             // statusを分岐

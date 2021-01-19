@@ -33,7 +33,7 @@ class UserController extends Controller
         $conditions = [];
         if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
         if ($request->input('queryId')) { $conditions['users.id@not'] = $request->input('queryId'); } // ユーザ一覧に自分を表示しないようにするため
-  
+        
         // 全ユーザデータとフレンド情報を更新日時順にソートして取得
         $data = $this->database->getIndex(null, $conditions);
         

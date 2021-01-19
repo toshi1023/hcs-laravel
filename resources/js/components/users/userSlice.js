@@ -34,7 +34,10 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
  */
 export const fetchAsyncGet = createAsyncThunk('users/index', async(conditions) => {
     try {
-        const res = await axios.get(`${apiUrl}?query=${conditions.user_name}&queryId=${conditions.user_id}`)
+        const res = await axios.get(`${apiUrl}?query=${conditions.user_name}&queryId=${conditions.user_id}`, {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        })
         return res.data
     } catch (err) {
         if (!err.response) {
