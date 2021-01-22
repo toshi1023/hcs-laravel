@@ -111,14 +111,17 @@ export default function ArticleCard(props) {
     const fetchArticleEnv = async () => {
       // Loading開始
       await dispatch(fetchCredStart())
-      // いいね一覧を取得
-      const resultReg = await dispatch(fetchAsyncGetLikes({user_id: localStorage.getItem('loginId')}))
-      // コメント一覧を取得
-      const resultCommnets = await dispatch(fetchAsyncGetComments())
-      
-      if (fetchAsyncGetLikes.fulfilled.match(resultReg) && fetchAsyncGetComments.fulfilled.match(resultCommnets)) {
-        // ロード終了
-        await dispatch(fetchCredEnd());       
+      // ログインチェック
+      if(localStorage.getItem('localToken')) {
+        // いいね一覧を取得
+        const resultReg = await dispatch(fetchAsyncGetLikes({user_id: localStorage.getItem('loginId')}))
+        // コメント一覧を取得
+        const resultCommnets = await dispatch(fetchAsyncGetComments())
+        
+        if (fetchAsyncGetLikes.fulfilled.match(resultReg) && fetchAsyncGetComments.fulfilled.match(resultCommnets)) {
+          // ロード終了
+          await dispatch(fetchCredEnd());       
+        }
       }
       // ロード終了
       await dispatch(fetchCredEnd());  

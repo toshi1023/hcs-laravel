@@ -29,6 +29,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
       try {
+        \Auth::logout();
         // 検索条件のセット
         $conditions = [];
         if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }

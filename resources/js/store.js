@@ -5,6 +5,7 @@ import articleReducer from './components/articles/articleSlice';
 import userReducer from './components/users/userSlice';
 import messageReducer from './components/messages/messageSlice';
 import newsReducer from './components/news/newsSlice';
+import SessionCheck from './components/middleware/sessionCheck';
 
 /**
  * Reducerを結合
@@ -26,5 +27,5 @@ export default configureStore({
       getDefaultMiddleware({
         // 'serializableCheck'を削除(※formDataでのデータ登録に警告を出さないようにするため)
         serializableCheck: false,
-      }), 
+      }).concat(SessionCheck), 
 });

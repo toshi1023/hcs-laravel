@@ -67,6 +67,7 @@ export default function Message() {
             await dispatch(fetchCredStart())
             // ログインユーザのIDを検索条件にメッセージ一覧を取得
             const resultReg = await dispatch(fetchAsyncGet(localStorage.getItem('loginId')))
+            
             if (fetchAsyncGet.fulfilled.match(resultReg)) {
                 // 新規ユーザへのメッセージの場合はメッセージ詳細タブをデフォルトに表示
                 if(showMessages[0].target_id) {
