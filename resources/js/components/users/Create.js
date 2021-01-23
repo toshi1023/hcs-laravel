@@ -86,7 +86,7 @@ export default function UserCreate() {
     const editedUser = useSelector(selectEditedUser)
     // バリデーション結果を定数に格納
     const validation = useSelector(selectValidation)
-    console.log(validation)
+    
     // stateの初期設定
     const [state, setState] = React.useState({
         // 保存対象の値
@@ -227,7 +227,8 @@ export default function UserCreate() {
                                              .min(6, '6文字以上を入れてください'),
                                 name: Yup.string()
                                 　　　　　.required("ニックネームはの入力は必須です")
-                                         .max(15, 'ニックネームは15文字以内で入力してください'),
+                                         .matches(/^[0-9a-zA-Z]+$/, '半額英数字で入力してください')
+                                         .max(15, '15文字以内で入力してください'),
                             })}
                         >
                         {({
@@ -264,7 +265,7 @@ export default function UserCreate() {
                                                 {touched.email && errors.email ? (
                                                     <div className={classes.error}>{errors.email}</div>
                                                 ) : null}
-                                                {validation.email_error ? (
+                                                {validation.email_error !== undefined ? (
                                                     <div className={classes.error}>{validation.email_error}</div>
                                                 ) : null}
                                             </div>
@@ -308,7 +309,7 @@ export default function UserCreate() {
                                                 {touched.name && errors.name ? (
                                                     <div className={classes.error}>{errors.name}</div>
                                                 ) : null}
-                                                {validation.name_error ? (
+                                                {validation.name_error !== undefined ? (
                                                     <div className={classes.error}>{validation.name_error}</div>
                                                 ) : null}
                                             </div>
@@ -366,7 +367,13 @@ export default function UserCreate() {
                                                     variant="contained" 
                                                     color="primary" 
                                                     className={classes.button} 
-                                                    disabled={!isValid || state.birthdayCheck || state.prefectureCheck || validation} 
+                                                    disabled={
+                                                        !isValid || 
+                                                        state.birthdayCheck || 
+                                                        state.prefectureCheck || 
+                                                        validation.email_error.trim() ||
+                                                        validation.name_error.trim()
+                                                    } 
                                                     type="submit"
                                                 >
                                                     作成する

@@ -171,7 +171,7 @@ class UserService
       $this->UserService->getExist('users', ['email' => $data->input('email')]) ? 
         $check['email_error'] = config('const.email_error')
       :
-        ''
+        $check['email_error'] = ''
       ;
     }
     // ユーザ名の重複チェック
@@ -179,7 +179,7 @@ class UserService
       $this->UserService->getExist('users', ['name' => $data->input('name')]) ? 
         $check['name_error'] = config('const.name_error')
       :
-        ''
+        $check['name_error'] = ''
       ;
     }
     // パスワードのチェック

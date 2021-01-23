@@ -302,7 +302,10 @@ const userSlice = createSlice({
         messageHistory: [{
             user_id: ''                 // ユーザID
         }],
-        validation: {}                  // バリデーション結果
+        validation: {
+            email_error: '',            // メールアドレスのバリデーション
+            name_error: '',             // ニックネームのバリデーション
+        }
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -406,9 +409,23 @@ const userSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncValidate.fulfilled, (state, action) => {
-            return {
-                ...state,
-                validation: action.payload.validation,
+            if(action.payload.validation.email_error !== undefined) {
+                return {
+                    ...state,
+                    validation: {
+                        email_error: action.payload.validation.email_error,
+                        name_error: state.validation.name_error,
+                    }   
+                }
+            }
+            if(action.payload.validation.name_error !== undefined) {
+                return {
+                    ...state,
+                    validation: {
+                        email_error: state.validation.email_error,
+                        name_error: action.payload.validation.name_error,
+                    }   
+                }
             }
         })
     },
