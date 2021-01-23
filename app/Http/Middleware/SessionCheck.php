@@ -16,9 +16,12 @@ class SessionCheck
      */
     public function handle($request, Closure $next)
     {
+        // ログインユーザの確認
         if(Auth::user()) {
+            // 次の処理を実行
             return $next($request);
         }
+        // ログインユーザが見つからない場合
         return response()->json([
             'error_message' => 'セッションが切れました。再度ログインしてください',
             'status'        => -1,

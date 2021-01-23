@@ -7,7 +7,6 @@ import MailIcon from '@material-ui/icons/Mail';
 import GroupIcon from '@material-ui/icons/Group';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import UserSearch from '../parts/userParts/userSearch';
 import SnackMessages from '../parts/common/snackMessages';
 import { fetchCredStart, fetchCredEnd, selectError } from '../app/appSlice';
 import { selectMessages, selectShowMessages, fetchAsyncGet, reduceShowMessages, reduceMessages, reduceNewMessages } from './messageSlice';
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         zIndex: 1,
     },
     mobileMainContent: {
-        paddingTop: theme.spacing(2),
+        paddingTop: theme.spacing(3),
         zIndex: 0,
     },
     sectionDesktop: {
@@ -45,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     },
     messageBordField: {
         paddingTop: theme.spacing(3),
+    },
+    messageList: {
+        paddingTop: theme.spacing(6),
     },
 }));
 
@@ -176,7 +178,6 @@ export default function Message() {
                         <MessageBord />
                     </Grid>
                     <Grid item xs={11} className={classes.mobileMainContent} hidden={messageListPage}>
-                        <UserSearch />
                         <MessageList message={messages} handleChange={handleChange} handleTabMessage={handleTabMessage} />
                     </Grid>
                 </Grid>
@@ -191,8 +192,7 @@ export default function Message() {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item sm={4}>
-                        <UserSearch />
+                    <Grid item sm={4} className={classes.messageList}>
                         <MessageList message={messages} handleChange={handleChange} handleTabMessage={handleTabMessage} />
                     </Grid>
                 </Grid>
