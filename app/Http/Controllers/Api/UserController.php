@@ -29,7 +29,6 @@ class UserController extends Controller
     public function index(Request $request)
     {
       try {
-        \Auth::logout();
         // 検索条件のセット
         $conditions = [];
         if ($request->input('query')) { $conditions['users.name@like'] = $request->input('query'); }
@@ -138,7 +137,6 @@ class UserController extends Controller
         
         // 登録データを配列化
         $data = $request->input();
-        // $data['user_id'] = \Auth::user()->id;
 
         // パスワードのハッシュ処理
         if(key_exists('password', $data)) {

@@ -10,6 +10,8 @@ const SessionCheck = store => next => (action) => {
             localStorage.removeItem("loginId");
             localStorage.removeItem("localToken");
             localStorage.removeItem("loginPhoto");
+            // セッション切れのアラートを表示
+            window.alert(action.payload.error_message)
             // ログインページへ遷移
             window.location.href = '/login'
         }
