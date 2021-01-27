@@ -49,7 +49,7 @@ class ArticleService
   {
     if(is_null($table)) {
       // 記事を全て取得(Userモデルのテーブルも結合して取得)
-      return $this->ArticleService->getBaseData($conditions)->get();
+      return $this->ArticleService->getBaseData($conditions)->latest('updated_at')->get();
     }
     // 指定したテーブルのデータをソートして取得
     return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');

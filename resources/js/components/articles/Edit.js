@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     // stateの初期設定
     const [state, setState] = React.useState({
         // 保存対象の値
+        id: editedArticle.id,
         prefecture: editedArticle.prefecture,
         latitude: editedArticle.latitude,
         longitude: editedArticle.longitude,
@@ -134,12 +135,16 @@ const useStyles = makeStyles((theme) => ({
         
         // 画像の保存
         doAction(values).then(async (value) => {
+            console.log(value.getAll('id'))
+            console.log(value.getAll('prefecture'))
+            console.log(value.getAll('content'))
             const result = await dispatch(fetchAsyncUpdate(value))
-            if (fetchAsyncCreate.fulfilled.match(result)) {
+            if (fetchAsyncUpdate.fulfilled.match(result)) {
+                console.log(result)
                 // infoメッセージの表示
                 result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-                // 記事の再読み込み
-                await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
+                // // 記事の再読み込み
+                // await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
                 // ロード終了
                 await dispatch(fetchCredEnd()); 
                 return;
@@ -184,9 +189,9 @@ const useStyles = makeStyles((theme) => ({
                                             modalContent: editedArticle.content,
                                         }}
                                         onSubmit={async (values) => {
-                                            console.log(values)
                                             // ユーザ登録処理
                                             let formData = new FormData(document.forms.form);
+                                            formData.append('id', state.id)
                                             formData.append('prefecture', document.getElementById("modalFormPrefecture").value)
                                             formData.append('title', values.modalTitle)
                                             formData.append('content', values.modalContent)
@@ -274,7 +279,7 @@ const useStyles = makeStyles((theme) => ({
                                                     />
                                                 </div>
                                                 <div className={classes.margin}>
-                                                    <ArticleDropzone ref={childRef} />
+                                                    <ArticleDropzone ref={childRef} edit={true} />
                                                 </div>
                                                 <div className={classes.margin}>
                                                     <Button 

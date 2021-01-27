@@ -126,7 +126,7 @@ class ArticleController extends Controller
 
       DB::commit();
       return response()->json([
-        'info_message' => '記事を投稿しました', 
+        'info_message' => '記事を更新しました', 
         'article'      => $article,
       ],200, [], JSON_UNESCAPED_UNICODE);
       
@@ -135,7 +135,7 @@ class ArticleController extends Controller
       \Log::error('Article update Error:'.$e->getMessage());
       // 作成失敗時はエラーメッセージを返す
       return new JsonResponse([
-        'error_message' => '記事の投稿に失敗しました',
+        'error_message' => '記事の更新に失敗しました',
         'status'        => 500,
       ], 500);
     }

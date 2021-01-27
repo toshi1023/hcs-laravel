@@ -175,18 +175,20 @@ function ArticleDropzone(props, ref) {
      * @param {*} values 
      */
     async onSubmitArticleImage(values) {
-      // let formData = new FormData();
       acceptedFiles.map(file => {
         // 保存するイメージファイルをセット
         values.append('upload_image', file, file.name)
       })
+      
       // 画像の保存処理
-      // await dispatch(fetchAsyncImage(formData))
+      if(values.get('upload_image')) {
+        await dispatch(fetchAsyncImage(values))
+      }
 
       return values;
     }
   }))
-
+  
   return (
       <>
         <Grid container>
@@ -204,9 +206,9 @@ function ArticleDropzone(props, ref) {
         </Grid>
         {
           // 記事の新規作成の時は表示しない
-          props.create 
-          ? ''
-          : <Button variant="contained" color="primary" className={classes.update} onClick={handleDelete}>更新</Button>
+          props.edit 
+          ? <Button variant="contained" color="primary" className={classes.update} onClick={handleDelete}>更新</Button>
+          : ''
         }
           <Button variant="contained" color="secondary" className={classes.delete} onClick={handleDelete}>削除</Button>
         <Grid container>
