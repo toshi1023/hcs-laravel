@@ -172,8 +172,8 @@ function ProfileDropzone(props, ref) {
     async onSubmit(id) {
       let formData = new FormData();
       acceptedFiles.map(file => {
-        // 保存するイメージファイルをセット
-        formData.append('upload_image', file, file.name)
+        // 保存するイメージファイルをFormDataにセット(ファイルがdropzoneにセットされた場合のみ)
+        files[0] ? formData.append('upload_image', file, file.name) : ''
       })
       // 編集用ユーザIDをセット
       formData.append('id', id)
