@@ -113,7 +113,7 @@ class ArticleController extends Controller
       DB::beginTransaction();
 
       // ファイル名の生成
-      $filename = null;
+      $filename = $request->input('articles_photo_name') ? $request->input('articles_photo_name') : null;
       if ($request->file('upload_image')){
         $filename = $this->getFilename($request->file('upload_image'));
       }

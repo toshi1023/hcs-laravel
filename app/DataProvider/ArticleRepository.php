@@ -88,6 +88,12 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                 $model = $this->getFind($model, $data['image_id']);
             }
 
+            // データ更新時にファイル名が変更されていない場合
+            if($model->image_id && $model->articles_photo_name === $filename) {
+                // 処理を終了
+                return $articleData;
+            }
+
             // ファイル名が設定されていなければ統一名を代入
             if (is_null($filename)) {
                 $filename = 'NoImage';
@@ -103,7 +109,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             $model->article_id = $data['id'];
             $model->user_id = $data['user_id'];
             $model->save();
-            
+
             return $articleData;
 
         } catch (\Exception $e) {

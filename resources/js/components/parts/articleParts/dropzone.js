@@ -176,8 +176,8 @@ function ArticleDropzone(props, ref) {
      */
     async onSubmitArticleImage(values) {
       acceptedFiles.map(file => {
-        // 保存するイメージファイルをセット
-        values.append('upload_image', file, file.name)
+        // 保存するイメージファイルをFormDataにセット(ファイルがdropzoneにセットされた場合のみ)
+        files[0] ? values.append('upload_image', file, file.name) : ''
       })
       
       // 画像の保存処理

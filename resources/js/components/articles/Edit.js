@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCredStart, fetchCredEnd, selectModal, fetchOpenModal } from '../app/appSlice';
+import { 
+    fetchCredStart, fetchCredEnd, selectModal, fetchOpenModal, 
+    selectInfo, fetchGetInfoMessages, fetchGetErrorMessages 
+} from '../app/appSlice';
 import { fetchAsyncUpdate, selectEditedArticle } from './articleSlice';
 import ArticleDropzone from '../parts/articleParts/dropzone';
 import SwitchType from '../parts/common/switch';
@@ -50,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
     const classes = useStyles();
     const editedArticle = useSelector(selectEditedArticle)
     const open = useSelector(selectModal)
+    const infoMessages = useSelector(selectInfo)
     const dispatch = useDispatch();
     const childRef = useRef();
     // stateの初期設定
@@ -62,6 +66,8 @@ const useStyles = makeStyles((theme) => ({
         title: editedArticle.title,
         content: editedArticle.content,
         type: editedArticle.type,
+        articles_photo_name: editedArticle.articles_photo_name,
+        image_id: editedArticle.image_id,
     });
     
     useEffect(() => {
@@ -135,16 +141,10 @@ const useStyles = makeStyles((theme) => ({
         
         // 画像の保存
         doAction(values).then(async (value) => {
-            console.log(value.getAll('id'))
-            console.log(value.getAll('prefecture'))
-            console.log(value.getAll('content'))
             const result = await dispatch(fetchAsyncUpdate(value))
             if (fetchAsyncUpdate.fulfilled.match(result)) {
-                console.log(result)
                 // infoメッセージの表示
                 result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-                // // 記事の再読み込み
-                // await dispatch(fetchAsyncGet({prefecture: '', user_id: localStorage.getItem('loginId')}))
                 // ロード終了
                 await dispatch(fetchCredEnd()); 
                 return;
@@ -158,6 +158,13 @@ const useStyles = makeStyles((theme) => ({
 
     return (
         <>
+            {
+                // メッセージ表示
+                infoMessages ? 
+                    <SnackMessages infoOpen={true} />
+                :
+                    <SnackMessages errorOpen={true} />
+            }
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -192,10 +199,12 @@ const useStyles = makeStyles((theme) => ({
                                             // ユーザ登録処理
                                             let formData = new FormData(document.forms.form);
                                             formData.append('id', state.id)
-                                            formData.append('prefecture', document.getElementById("modalFormPrefecture").value)
+                                            formData.append('prefecture', state.prefecture)
                                             formData.append('title', values.modalTitle)
                                             formData.append('content', values.modalContent)
-                                            formData.append('type', document.getElementById("modalTypeSwitch").checked)
+                                            formData.append('type', state.type)
+                                            formData.append('image_id', state.image_id)
+                                            formData.append('articles_photo_name', state.articles_photo_name)
 
                                             // 記事の登録処理
                                             updateClicked(formData)
@@ -204,7 +213,7 @@ const useStyles = makeStyles((theme) => ({
                                             modalTitle: Yup.string()
                                                             .required("タイトルの入力は必須です"),
                                             modalContent: Yup.string()
-                                                                .required("内容の入力は必須です"),
+                                                             .required("内容の入力は必須です"),
                                         })}
                                     >
                                     {({

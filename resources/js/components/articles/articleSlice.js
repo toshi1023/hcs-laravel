@@ -342,7 +342,7 @@ const articleSlice = createSlice({
                 ...state,
                 // 現在のarticles一覧の要素をaというテンポラリの変数に格納して、選択したidに一致するidには変更したデータを格納
                 articles: state.articles.map((a) => 
-                    a.id === action.payload.id ? action.payload : a
+                    a.id === action.payload.article.id ? action.payload.article : a
                 ),
                 // 選択されている詳細articleにも更新したデータを格納
                 selectedArticle: action.payload,
