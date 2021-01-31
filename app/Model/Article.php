@@ -24,7 +24,7 @@ class Article extends BaseModel
   // usersテーブルと1対多のリレーション構築(多側の設定)
   public function users()
   {
-    return $this->belongsTo('App\Model\User');
+    return $this->belongsTo('App\Model\User', 'user_id', 'id');
   }
 
   // article_imagesテーブルと1対多のリレーション構築(1側の設定)
@@ -43,5 +43,10 @@ class Article extends BaseModel
   public function likes()
   {
     return $this->hasMany('App\Model\Like');
+  }
+  // likesテーブルと1対多のリレーション構築(1側の設定)
+  public function likes_counts()
+  {
+    return $this->hasOne('App\Model\Like');
   }
 }

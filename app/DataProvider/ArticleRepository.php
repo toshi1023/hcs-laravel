@@ -17,7 +17,10 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     /* モデルのインスタンス化 */
     public function __construct(Article $article)
     {
+        // Articleモデルをインスタンス化
         $this->model = $article;
+        // AWSのバケット名を設定
+        $this->folder = 'articles';
     }
 
     /**
@@ -25,30 +28,18 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
      */
     public function getBaseData($conditions=null)
     {
-        // 各記事のいいね数を取得
-        $likes = $this->getLikesCountQuery();
-        
-        // usersテーブルの値も結合して取得
-        $query = $this->model->from('articles')
-                             ->leftjoin('users', 'articles.user_id', '=', 'users.id')
-                             ->leftjoin('article_images', 'articles.id', '=', 'article_images.article_id')
-                             ->leftJoinSub($likes, 'likes_counts', 'articles.id', '=', 'likes_counts.article_id')
-                             ->select(
-                                 'articles.*', 
-                                 'users.name', 
-                                 'users.gender', 
-                                 'users.users_photo_path', 
-                                 'article_images.id as image_id',
-                                 'article_images.articles_photo_name',
-                                 'article_images.articles_photo_path',
-                                 'likes_counts.likes_counts',
-                             )
-                             ->where('articles.delete_flg', '=', 0);
-                             
-        // 検索条件が設定されている場合は検索を実行
-        if(!is_null($conditions)) {
-            $query = $this->getWhereQuery(null, $conditions, $query);
-        }
+        // users,article_images,likesテーブルの値も結合して取得
+        $query = $this->getQuery($this->folder, $conditions)
+                      ->select('*')
+                      ->with([
+                          'users:id,name,gender,users_photo_path',
+                          'article_images:id as image_id,articles_photo_name,articles_photo_path,article_id',
+                          'likes_counts' => function ($query) {
+                            // 各記事のいいね数を取得
+                            $query->select(DB::raw('count(user_id) as likes_counts'), 'article_id')
+                                  ->groupByRaw('article_id');
+                          },
+                        ]);
         
         return $query;
     }
@@ -89,11 +80,10 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             }
 
             // データ更新時にファイル名が変更されていない場合
-            if($model->image_id && $model->articles_photo_name === $filename) {
+            if($model->id && $model->articles_photo_name === $filename) {
                 // 処理を終了
                 return $articleData;
             }
-
             // ファイル名が設定されていなければ統一名を代入
             if (is_null($filename)) {
                 $filename = 'NoImage';
@@ -115,32 +105,6 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         } catch (\Exception $e) {
             \Log::error('article save error:'.$e->getmessage());
             return false;
-        }
-    }
-
-    /**
-     * ファイルアップロード用メソッド
-     * 第一引数:ファイル, 第二引数:フォルダ名に使用するための値, 第三引数：ファイル名
-     */
-    public function fileSave($file, $foldername, $filename)
-    {
-        if ($file){
-            try {
-                //s3アップロード開始
-                // バケットの`aws-hcs-image/User/{ニックネーム名}`フォルダへアップロード
-                $path = Storage::disk('s3')->putFileAs(config('const.aws_article_bucket').'/'.$foldername, $file, $filename, 'public');
-                // アップロードしたファイルのURLを取得し、DBにセット
-                $photo_path = Storage::disk('s3')->url($path);
-
-                return [true, $photo_path];
-
-            } catch (\Exception $e) {
-                \Log::error('article image file save error:'.$e->getmessage());
-                return [false, null];
-            }
-        } else {
-            // アップロードファイルがなければデフォルトの画像を設定
-            return [true, env('AWS_NOIMAGE')];
         }
     }
 

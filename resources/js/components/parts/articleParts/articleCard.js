@@ -136,14 +136,15 @@ export default function ArticleCard(props) {
    * @param {*} value 
    */
   const nickNameDesign = (value) => {
-    if(value.gender === 1) {
+    // 記事の投稿者が男性の場合
+    if(value.users != undefined ? value.users.gender === 1 : false) {
       return (
         <div>
           <div className={classes.sectionDesktop}>
-            <Typography className={classes.headerTitleName}>{value.name}</Typography>
+            <Typography className={classes.headerTitleName}>{value.users != undefined ? value.users.name : ''}</Typography>
           </div>
           <div className={classes.sectionMobile}>
-            <Typography className={classes.mobileHeaderTitleName}>{value.name}</Typography>
+            <Typography className={classes.mobileHeaderTitleName}>{value.users != undefined ? value.users.name : ''}</Typography>
           </div>
         </div>
       )
@@ -151,10 +152,10 @@ export default function ArticleCard(props) {
     return (
       <div>
         <div className={classes.sectionDesktop}>
-          <Typography className={classes.headerTitleNameWoman}>{value.name}</Typography>
+          <Typography className={classes.headerTitleNameWoman}>{value.users != undefined ? value.users.name : ''}</Typography>
         </div>
         <div className={classes.sectionMobile}>
-          <Typography className={classes.mobileHeaderTitleNameWoman}>{value.name}</Typography>
+          <Typography className={classes.mobileHeaderTitleNameWoman}>{value.users != undefined ? value.users.name : ''}</Typography>
         </div>
       </div>
     )
@@ -250,7 +251,7 @@ export default function ArticleCard(props) {
   }
   
   return (
-    _.map(props.article != undefined ? props.article : '', article => (
+    _.map(props.article, article => (
       <>
         {
           // メッセージ表示
@@ -273,7 +274,7 @@ export default function ArticleCard(props) {
                         aria-label="article" 
                         className={classes.large} 
                         style={{ fontSize: 15 }}
-                        src={article.users_photo_path}
+                        src={article.users != undefined ? article.users.users_photo_path : ''}
                       />
                     }
                     action={
@@ -287,7 +288,7 @@ export default function ArticleCard(props) {
                   />
                   <CardMedia
                     className={classes.media}
-                    image={article.articles_photo_path}
+                    image={article.article_images != undefined ? article.article_images[0].articles_photo_path : ''}
                     title={article.title}
                   />
                   <CardContent>
@@ -304,7 +305,7 @@ export default function ArticleCard(props) {
                   {/* 拡張のデザイン */}
                   <ArticleCardExpand 
                     article={article} 
-                    likes={likes.data != undefined ? likes.data : ''} 
+                    likes={article.likes_counts != undefined ? article.likes_counts : ''} 
                     likesUpdate={likesUpdate}
                     comments={comments} 
                     commentsCounts={commentsCounts}
@@ -324,7 +325,7 @@ export default function ArticleCard(props) {
                       aria-label="article" 
                       className={classes.large} 
                       style={{ fontSize: 15 }}
-                      src={article.users_photo_path}
+                      src={article.users != undefined ? article.users.users_photo_path : ''}
                     />
                   }
                   action={
@@ -338,7 +339,7 @@ export default function ArticleCard(props) {
                 />
                 <CardMedia
                   className={classes.media}
-                  image={article.articles_photo_path}
+                  image={article.article_images != undefined ? article.article_images[0].articles_photo_path : ''}
                   title={article.title}
                 />
                 <CardContent>
@@ -355,7 +356,7 @@ export default function ArticleCard(props) {
                 {/* 拡張のデザイン */}
                 <ArticleCardExpand 
                   article={article} 
-                  likes={likes.data != undefined ? likes.data : ''} 
+                  likes={article.likes_counts != undefined ? article.likes_counts : ''} 
                   likesUpdate={likesUpdate}
                   comments={comments} 
                   commentsCounts={commentsCounts}
@@ -379,7 +380,7 @@ export default function ArticleCard(props) {
                         aria-label="article" 
                         className={classes.large} 
                         style={{ fontSize: 15 }}
-                        src={article.users_photo_path}
+                        src={article.users != undefined ? article.users.users_photo_path : ''}
                       />
                     }
                     action={
@@ -393,7 +394,7 @@ export default function ArticleCard(props) {
                   />
                   <CardMedia
                     className={classes.media}
-                    image={article.articles_photo_path}
+                    image={article.article_images != undefined ? article.article_images[0].articles_photo_path : ''}
                     title={article.title}
                   />
                   <CardContent>
@@ -410,7 +411,7 @@ export default function ArticleCard(props) {
                   {/* 拡張のデザイン */}
                   <ArticleCardExpand 
                     article={article} 
-                    likes={likes.data != undefined ? likes.data : ''} 
+                    likes={article.likes_counts != undefined ? article.likes_counts : ''} 
                     likesUpdate={likesUpdate} 
                     comments={comments} 
                     commentsCounts={commentsCounts} 
@@ -430,7 +431,7 @@ export default function ArticleCard(props) {
                       aria-label="article" 
                       className={classes.large} 
                       style={{ fontSize: 15 }}
-                      src={article.users_photo_path}
+                      src={article.users != undefined ? article.users.users_photo_path : ''}
                     />
                   }
                   action={
@@ -444,7 +445,7 @@ export default function ArticleCard(props) {
                 />
                 <CardMedia
                   className={classes.media}
-                  image={article.articles_photo_path}
+                  image={article.article_images != undefined ? article.article_images[0].articles_photo_path : ''}
                   title={article.title}
                 />
                 <CardContent>
@@ -461,7 +462,7 @@ export default function ArticleCard(props) {
                 {/* 拡張のデザイン */}
                 <ArticleCardExpand 
                   article={article} 
-                  likes={likes.data != undefined ? likes.data : ''} 
+                  likes={article.likes_counts != undefined ? article.likes_counts : ''} 
                   likesUpdate={likesUpdate} 
                   comments={comments} 
                   commentsCounts={commentsCounts} 

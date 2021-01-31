@@ -15,6 +15,8 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
     {
         // Userモデルをインスタンス化
         $this->model = $user;
+        // AWSのバケット名を設定
+        $this->folder = 'users';
     }
 
     /**
@@ -62,33 +64,6 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
             return false;
         }
     } 
-    
-    /**
-     * ファイルアップロード用メソッド 
-     * 第一引数:ファイル, 第二引数:フォルダ名に使用するための値, 第三引数：ファイル名
-     */
-    public function fileSave($file, $foldername, $filename)
-    {
-        if ($file){
-            try {
-                //s3アップロード開始
-                // バケットの'aws-hcs-image/User/{ニックネーム名}'フォルダへアップロード
-                $path = Storage::disk('s3')->putFileAs(config('const.aws_user_bucket').'/'.$foldername, $file, $filename, 'public');
-                // アップロードしたファイルのURLを取得し、DBにセット
-                $photo_path = Storage::disk('s3')->url($path);
-
-                // 画像のパスと一緒にリターン
-                return [true, $photo_path];
-
-            } catch (\Exception $e) {
-                \Log::error('user image file save error:'.$e->getmessage());
-                return [false, null];
-            }
-        } else {
-            // アップロードファイルがなければデフォルトの画像を設定
-            return [true, env('AWS_NOIMAGE')];
-        }
-    }
 
     /**
      * usersページのフレンド一覧データを取得

@@ -26,12 +26,12 @@ class ArticleService
   public function getHome($table=null, $conditions=null)
   {
     if(is_null($table)) {
-      // 記事を全て取得(Userモデルのテーブルも結合して取得)
-      $articles = $this->ArticleService->getBaseData($conditions)->limit(5)->orderBy('likes_counts', 'desc')->get();
-
+      // 記事をいいね！が多い順に5件だけ取得
+      $articles = $this->ArticleService->getBaseData($conditions)->get()->sortByDesc('likes_counts')->take(5);
       // 会員限定公開をされていない記事のみ取得
-      $free_articles = $this->ArticleService->getBaseData($conditions)->where('type', '=', 0)->limit(5)->orderBy('likes_counts', 'desc')->get();
-
+      $conditions['type'] = 0;
+      $free_articles = $this->ArticleService->getBaseData($conditions)->get()->sortByDesc('likes_counts')->take(5);
+      
       return [
         'articles' => $articles, 
         'free_articles' => $free_articles,

@@ -2,13 +2,14 @@
 
 namespace App\DataProvider;
 
-use Carbon\Carbon;
-
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use Storage;
 
 class BaseRepository
 {
     protected $model;
+    protected $folder;
 
     protected function model()
     {
@@ -206,6 +207,32 @@ class BaseRepository
             \Log::error('database save error:'.$e->getMessage());
             if ($transaction) \DB::rollBack();
             throw new \Exception($e);
+        }
+    }
+
+    /**
+     * ファイルアップロード用メソッド
+     * 第一引数:ファイル, 第二引数:フォルダ名に使用するための値, 第三引数：ファイル名
+     */
+    public function fileSave($file, $foldername, $filename)
+    {
+        if ($file){
+            try {
+                //s3アップロード開始
+                // バケットの`aws-hcs-image/{テーブル名}/{ニックネーム名}`フォルダへアップロード
+                $path = Storage::disk('s3')->putFileAs(config('const.aws_'.$this->folder.'_bucket').'/'.$foldername, $file, $filename, 'public');
+                // アップロードしたファイルのURLを取得し、DBにセット
+                $photo_path = Storage::disk('s3')->url($path);
+
+                return [true, $photo_path];
+
+            } catch (\Exception $e) {
+                \Log::error($this->folder.' image file save error:'.$e->getmessage());
+                return [false, null];
+            }
+        } else {
+            // アップロードファイルがなければデフォルトの画像を設定
+            return [true, env('AWS_NOIMAGE')];
         }
     }
 

@@ -162,16 +162,22 @@ function setDetailView(data, button) {
 
         // 性別によって文字色を変更
         if(data.user.gender == 0) {
-            $('#detail_gender').css('color','red');
+            $('#detail_name').css('color','red');
         }
         if(data.user.gender == 1) {
-            $('#detail_gender').css('color','blue');
+            $('#detail_name').css('color','blue');
         }
         // アカウントステータスによって文字色を変更
-        if(data.user.status == 0) {
+        if(data.user.status == 1) {
             $('#detail_status').css('color','blue');
         }
-        if(data.user.status == 1) {
+        if(data.user.status == 2) {
+            $('#detail_status').css('color','red');
+        }
+        if(data.user.status == 3) {
+            $('#detail_status').css('color','green');
+        }
+        if(data.user.status == 4) {
             $('#detail_status').css('color','red');
         }
 

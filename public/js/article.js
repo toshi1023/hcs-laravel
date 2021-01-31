@@ -53,24 +53,26 @@ function setDetailView(data, button) {
         // ロケーション情報を埋め込んだGoogle MapのURLを変数に代入
         let url = `https://www.google.com/maps?q=${data.article.latitude},${data.article.longitude}`;
 
-        // いいね数を変数に代入
-        let likes_counts = data.article.likes_counts;
+        // いいね数の変数を宣言
+        let likes_counts;
         
         $('#detail_title').html(data.article.title);
-        $('#detail_name').html(data.article.name);
+        $('#detail_name').html(data.article.users.name);
         $('#detail_prefecture').html(data.article.prefecture);
         $('#detail_type').html(data.article.type_name);
         $('#detail_updated_at').html(update_time);
         $('#detail_content').html(data.article.content);
-        $('#detail_photo').attr('src', data.article.articles_photo_path);
+        $('#detail_photo').attr('src', data.article.article_images[0].articles_photo_path);
         $('#detail_location').append(getListLink('map', data.article.id, url, 'list-button'));
         $('#detail_comment').html(data.comments_count);
 
         $('#article_id').data('id', data.article.id);              // 各タグで共有
-
+        
         // いいね数の表示制御
         if(data.article.likes_counts == null) {
             likes_counts = 0;
+        } else {
+            likes_counts = data.article.likes_counts.likes_counts;
         }
 
         // いいねのボタン制御
@@ -78,6 +80,14 @@ function setDetailView(data, button) {
             $('#detail_like').append(`<button class="btn btn-danger btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${likes_counts}</span>`);
         } else {
             $('#detail_like').append(`<button class="btn btn-secondary btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${likes_counts}</span>`);
+        }
+
+        // 性別によって文字色を変更
+        if(data.article.users.gender == 0) {
+            $('#detail_name').css('color','red');
+        }
+        if(data.article.users.gender == 1) {
+            $('#detail_name').css('color','blue');
         }
         
         $('#detail_modal').modal('show');
@@ -146,7 +156,15 @@ function settingLikeTables() {
                     `;
                 }
             },
-            {data: 'users.name'},
+            {
+                data: function(p) {
+                    // 性別ごとにユーザ名の色を区別
+                    if (p.users.gender === 1) {
+                        return  `<sapn style="color: blue">${p.users.name}</sapn>`
+                    }
+                    return `<sapn style="color: red">${p.users.name}</sapn>`
+                }, name: 'users.name'
+            },
             {
                 data: function(p) {
                     // 日付フォーマットの形式を調整
@@ -307,7 +325,7 @@ function initList(search) {
                 data: function (p) {
                     return `
                         <a href="" data-toggle="modal" data-target="#modal${p.id}">
-                            <img src="${p.articles_photo_path}" height="45" width="65">
+                            <img src="${p.article_images[0].articles_photo_path}" height="45" width="65">
                         </a>
 
                         <div class="modal" id="modal${p.id}" tabindex="-1"
@@ -321,7 +339,7 @@ function initList(search) {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                    <img src="${p.articles_photo_path}" id="image_modal" height="350" width="450">
+                                    <img src="${p.article_images[0].articles_photo_path}" id="image_modal" height="350" width="450">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -335,7 +353,15 @@ function initList(search) {
             {data: 'prefecture'},
             {data: 'title'},
             {data: 'type_name', name: 'type'},
-            {data: 'name'},
+            {
+                data: function(p) {
+                    // 性別ごとにユーザ名の色を区別
+                    if (p.users.gender === 1) {
+                        return  `<sapn style="color: blue">${p.users.name}</sapn>`
+                    }
+                    return `<sapn style="color: red">${p.users.name}</sapn>`
+                }, name: 'users.name'
+            },
             {
                 data: function(p) {
                     // 日付フォーマットの形式を調整

@@ -48,8 +48,8 @@ class ImageDelete extends Command
             $article_images = [];
             foreach($users as $value) {
                 // ユーザ名をキーにして、画像名を2次元配列で取得
-                $user_images[$value->name] = Storage::disk('s3')->files(config('const.aws_user_bucket').'/'.$value->name.'/');
-                $article_images[$value->name] = Storage::disk('s3')->files(config('const.aws_article_bucket').'/'.$value->name.'/');
+                $user_images[$value->name] = Storage::disk('s3')->files(config('const.aws_users_bucket').'/'.$value->name.'/');
+                $article_images[$value->name] = Storage::disk('s3')->files(config('const.aws_articles_bucket').'/'.$value->name.'/');
             }
             
             // プロフィール画像用配列をユーザ名と画像名で分別
@@ -58,12 +58,12 @@ class ImageDelete extends Command
                 foreach ($value as $image) {
                     if (!DB::table('users')->where('users_photo_name', basename($image))->exists()) {
                         // 存在しない場合は画像を削除する
-                        Storage::disk('s3')->delete(config('const.aws_user_bucket').'/'.$key.'/'.basename($image));
+                        Storage::disk('s3')->delete(config('const.aws_users_bucket').'/'.$key.'/'.basename($image));
                     }
                 }
                 // 画像が1件も存在しない場合はフォルダを削除する
                 if(!$value) {
-                    Storage::disk('s3')->deleteDirectory(config('const.aws_user_bucket').'/'.$key.'/');
+                    Storage::disk('s3')->deleteDirectory(config('const.aws_users_bucket').'/'.$key.'/');
                 }
             }
             // 記事の画像用配列をユーザ名と画像名で分別
@@ -72,12 +72,12 @@ class ImageDelete extends Command
                 foreach ($value as $image) {
                     if (!DB::table('article_images')->where('articles_photo_name', basename($image))->exists()) {
                         // 存在しない場合は画像を削除する
-                        Storage::disk('s3')->delete(config('const.aws_article_bucket').'/'.$key.'/'.basename($image));
+                        Storage::disk('s3')->delete(config('const.aws_articles_bucket').'/'.$key.'/'.basename($image));
                     }
                 }
                 // 画像が1件も存在しない場合はフォルダを削除する
                 if(!$value) {
-                    Storage::disk('s3')->deleteDirectory(config('const.aws_article_bucket').'/'.$key.'/');
+                    Storage::disk('s3')->deleteDirectory(config('const.aws_articles_bucket').'/'.$key.'/');
                 }
             }
             // Logにメッセージを出力

@@ -39,8 +39,8 @@ function Home() {
             await dispatch(fetchCredStart())
             // 記事一覧を取得
             const resultReg = await dispatch(fetchAsyncGetHome())
-    
             if (fetchAsyncGetHome.fulfilled.match(resultReg)) {
+                console.log(articles)
                 // ロード終了
                 await dispatch(fetchCredEnd());
             }
@@ -51,7 +51,7 @@ function Home() {
         fetchArticle()
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
-
+    
     /**
      * 記事一覧を生成
      */
