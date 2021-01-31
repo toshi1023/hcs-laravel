@@ -169,10 +169,31 @@ export const fetchAsyncUpdateLikes = createAsyncThunk('articles/likes/update', a
 /**
  * コメント一覧データの取得
  */
-export const fetchAsyncGetComments = createAsyncThunk('articles/comments/index', async() => {
+export const fetchAsyncGetComments = createAsyncThunk('articles/comments/index', async(conditions) => {
     try {
         // コメントの取得
-        const res = await axios.get(`${apiUrl}/comments`, {
+        const res = await axios.get(`${apiUrl}/comments?query=${conditions.article_id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+/**
+ * コメント数の取得
+ */
+export const fetchAsyncGetCommentsCounts = createAsyncThunk('articles/comments/counts', async(conditions) => {
+    try {
+        // コメントの取得
+        const res = await axios.get(`${apiUrl}/comments/counts?query=${conditions.user_id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
@@ -371,7 +392,26 @@ const articleSlice = createSlice({
             return {
                 ...state,
                 comments: action.payload.comments, //apiから取得したコメントの情報をstateのcommentsに格納
+            }
+        })
+        builder.addCase(fetchAsyncGetCommentsCounts.fulfilled, (state, action) => {
+            return {
+                ...state,
                 commentsCounts: action.payload.comments_counts, //apiから取得したコメント数の情報をstateのcommentsに格納
+            }
+        })
+        builder.addCase(fetchAsyncUpdateComments.fulfilled, (state, action) => {
+            // エラーが返ってきた場合はstateを更新しない
+            if(action.payload.error_message) {
+                return;
+            }
+
+            return {
+                ...state,
+                articles: state.articles.map((a) => 
+                    a.id === action.payload.article.id ? action.payload.article : a
+                ),
+                commentsCounts: action.payload.comments_counts,
             }
         })
     },

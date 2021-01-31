@@ -4,6 +4,7 @@ namespace App\Service\Web;
 
 use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\DataProvider\DatabaseInterface\ArticleDatabaseInterface;
 use Storage;
 
@@ -27,15 +28,8 @@ class ArticleService
   {
     if(is_null($table)) {
       // 記事をいいね！が多い順に5件だけ取得
-      $articles = $this->ArticleService->getBaseData($conditions)->get()->sortByDesc('likes_counts')->take(5);
-      // 会員限定公開をされていない記事のみ取得
-      $conditions['type'] = 0;
-      $free_articles = $this->ArticleService->getBaseData($conditions)->get()->sortByDesc('likes_counts')->take(5);
-      
-      return [
-        'articles' => $articles, 
-        'free_articles' => $free_articles,
-      ];
+      $user_id = Auth::user() ? Auth::user()->id : 0 ;
+      return $this->ArticleService->getBaseData($conditions, $user_id)->get()->sortByDesc('likes_counts')->take(5);
     }
     // 指定したテーブルのデータをソートして取得
     return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
@@ -48,8 +42,9 @@ class ArticleService
   public function getIndex($table=null, $conditions=null)
   {
     if(is_null($table)) {
-      // 記事を全て取得(Userモデルのテーブルも結合して取得)
-      return $this->ArticleService->getBaseData($conditions)->latest('updated_at')->get();
+      // 記事を全て取得
+      $user_id = Auth::user() ? Auth::user()->id : 0 ;
+      return $this->ArticleService->getBaseData($conditions, $user_id)->latest('updated_at')->get();
     }
     // 指定したテーブルのデータをソートして取得
     return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
@@ -153,19 +148,21 @@ class ArticleService
    */
   public function getComments($conditions=null)
   { 
-    if($conditions) {
-      return $this->ArticleService->getQuery('comments', $conditions)->orderBy('updated_at', 'desc')->first();
-    }
+    // if($conditions) {
+    //   $data = $this->ArticleService->getQuery('comments', $conditions)->orderBy('updated_at', 'desc')->first();
+    // }
     // 記事のコメント情報を取得
-    $data = $this->ArticleService->getComments()->get();
+    return $this->ArticleService->getComments($conditions)->orderBy('updated_at', 'asc')->get();
+  }
 
+  /**
+   * 記事のコメント数を取得するメソッド
+   * 引数：検索条件
+   */
+  public function getCommentsCounts($conditions=null)
+  { 
     // 記事のコメント数を取得
-    $counts = $this->ArticleService->getCommentsCounts()->get();
-
-    return [
-      'data'    => $data,
-      'counts'  => $counts
-    ];
+    return $this->ArticleService->getCommentsCounts($conditions)->get();
   }
 
   /* *
@@ -175,7 +172,9 @@ class ArticleService
   public function getCommentsUpdate($data)
   {
     // コメントテーブルにデータを保存
-    return $this->ArticleService->getSave($data, 'comments');
+    $comment = $this->ArticleService->getSave($data, 'comments');
+    // コメントを作成した記事データを取得して返す
+    return $this->ArticleService->getBaseData(['id' => $comment->article_id], $comment->user_id)->first();
   }
 
 }

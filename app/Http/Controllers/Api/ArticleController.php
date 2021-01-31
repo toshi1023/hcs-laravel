@@ -34,8 +34,7 @@ class ArticleController extends Controller
       $articles = $this->database->getHome(null, $conditions);
 
       return response()->json([
-        'articles' => $articles['articles'], 
-        // 'free_articles' => $articles['free_articles'],
+        'articles' => $articles, 
       ],200, [], JSON_UNESCAPED_UNICODE);
     } catch (\Exception $e) {
       \Log::error('Article get Error:'.$e->getMessage());
@@ -225,12 +224,37 @@ class ArticleController extends Controller
   public function comments(Request $request)
   {
     try {
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->input('query')) { $conditions['article_id'] = $request->input('query'); }
       // 記事のコメントを取得
-      $data = $this->database->getComments();
-  
+      $data = $this->database->getComments($conditions);
+      
       return response()->json([
-        'comments'          => $data['data'],
-        'comments_counts'   => $data['counts']
+        'comments'          => $data
+      ], 200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Exception $e) {
+      \Log::error('Comment get Error:'.$e->getMessage());
+      return response()->json([
+        'error_message' => 'コメントの取得に失敗しました!'
+      ], 500, [], JSON_UNESCAPED_UNICODE);
+    }
+  }
+
+  /**
+   * 記事のコメント数を取得
+   */
+  public function commentsCounts(Request $request)
+  {
+    try {
+      // 検索条件のセット
+      $conditions = [];
+      if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }
+      // 記事のコメント数を取得
+      $counts = $this->database->getCommentsCounts($conditions);
+      
+      return response()->json([
+        'comments_counts'   => $counts
       ], 200, [], JSON_UNESCAPED_UNICODE);
     } catch (\Exception $e) {
       \Log::error('Comment get Error:'.$e->getMessage());
@@ -260,19 +284,19 @@ class ArticleController extends Controller
       $data = $request->all();
       
       // 記事のコメントを保存
-      $comment = $this->database->getCommentsUpdate($data);
-      if($comment) {
-        // コメントデータの取得
-        $comment = $this->database->getComments(['id' => $comment->id]);
+      $article = $this->database->getCommentsUpdate($data);
+      // 記事のコメント数を取得
+      $counts = $this->database->getCommentsCounts(['article_id' => $article->id]);
         
-        DB::commit();
-        return response()->json([
-          'comment'       => $comment,
-          'info_message'  => 'コメントを投稿しました'
-        ], 200, [], JSON_UNESCAPED_UNICODE);
-      }
+      DB::commit();
+      return response()->json([
+        'article'         => $article,
+        'comments_counts' => $counts,
+        'info_message'  => 'コメントを投稿しました'
+      ], 200, [], JSON_UNESCAPED_UNICODE);
     } catch (\Exception $e) {
       DB::rollback();
+      \Log::error('Comment update Error:'.$e->getMessage());
       return response()->json([
         'error_message'  => 'コメントの投稿に失敗しました',
         'status'         => 500,

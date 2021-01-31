@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import ArticleCardExpand from './articleCardExpand';
 import { fetchCredStart, fetchCredEnd, fetchGetInfoMessages, fetchGetErrorMessages, fetchOpenModal, selectInfo } from '../../app/appSlice';
 import { 
-  selectLikes, fetchAsyncGetLikes, fetchAsyncUpdateLikes, selectComments, selectCommentsCounts, 
-  fetchAsyncGetComments, fetchAsyncUpdateComments, editArticle, fetchAsyncDelete
+  selectLikes, fetchAsyncUpdateLikes, selectCommentsCounts, 
+  fetchAsyncGetCommentsCounts, fetchAsyncUpdateComments, editArticle, fetchAsyncDelete
 } from '../../articles/articleSlice';
 import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ArticleCard(props) {
   const classes = useStyles();
   const likes = useSelector(selectLikes)
-  const comments = useSelector(selectComments)
+  // const comments = useSelector(selectComments)
   const commentsCounts = useSelector(selectCommentsCounts)
   const infoMessages = useSelector(selectInfo)
   const dispatch = useDispatch()
@@ -113,12 +113,10 @@ export default function ArticleCard(props) {
       await dispatch(fetchCredStart())
       // ログインチェック
       if(localStorage.getItem('localToken')) {
-        // いいね一覧を取得
-        const resultReg = await dispatch(fetchAsyncGetLikes({user_id: localStorage.getItem('loginId')}))
         // コメント一覧を取得
-        const resultCommnets = await dispatch(fetchAsyncGetComments())
+        const resultReg = await dispatch(fetchAsyncGetCommentsCounts({user_id: ''}))
         
-        if (fetchAsyncGetLikes.fulfilled.match(resultReg) && fetchAsyncGetComments.fulfilled.match(resultCommnets)) {
+        if (fetchAsyncGetCommentsCounts.fulfilled.match(resultReg)) {
           // ロード終了
           await dispatch(fetchCredEnd());       
         }
@@ -220,7 +218,7 @@ export default function ArticleCard(props) {
     
     if (fetchAsyncUpdateLikes.fulfilled.match(resultReg)) {
       // いいねを再取得
-      await dispatch(fetchAsyncGetLikes({user_id: localStorage.getItem('loginId')}))
+      // await dispatch(fetchAsyncGetLikes({user_id: localStorage.getItem('loginId')}))
       // ロード終了
       await dispatch(fetchCredEnd());       
     }
@@ -239,8 +237,7 @@ export default function ArticleCard(props) {
     if (fetchAsyncUpdateComments.fulfilled.match(result)) {
         // infoメッセージの表示
         result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-        // コメントを再取得
-        await dispatch(fetchAsyncGetComments())
+
         // ロード終了
         await dispatch(fetchCredEnd()); 
         return;
@@ -305,9 +302,10 @@ export default function ArticleCard(props) {
                   {/* 拡張のデザイン */}
                   <ArticleCardExpand 
                     article={article} 
-                    likes={article.likes_counts != undefined ? article.likes_counts : ''} 
+                    likesCounts={article.likes_counts != undefined ? article.likes_counts : ''} 
+                    likes={article.likes != undefined ? article.likes : ''} 
                     likesUpdate={likesUpdate}
-                    comments={comments} 
+                    comments={article.comments != undefined ? article.comments : ''}
                     commentsCounts={commentsCounts}
                     commentsUpdate={commentsUpdate} 
                   />
@@ -356,9 +354,10 @@ export default function ArticleCard(props) {
                 {/* 拡張のデザイン */}
                 <ArticleCardExpand 
                   article={article} 
-                  likes={article.likes_counts != undefined ? article.likes_counts : ''} 
+                  likesCounts={article.likes_counts != undefined ? article.likes_counts : ''} 
+                  likes={article.likes != undefined ? article.likes : ''} 
                   likesUpdate={likesUpdate}
-                  comments={comments} 
+                  comments={article.comments != undefined ? article.comments : ''}
                   commentsCounts={commentsCounts}
                   commentsUpdate={commentsUpdate} 
                 />
@@ -411,9 +410,10 @@ export default function ArticleCard(props) {
                   {/* 拡張のデザイン */}
                   <ArticleCardExpand 
                     article={article} 
-                    likes={article.likes_counts != undefined ? article.likes_counts : ''} 
-                    likesUpdate={likesUpdate} 
-                    comments={comments} 
+                    likesCounts={article.likes_counts != undefined ? article.likes_counts : ''} 
+                    likes={article.likes != undefined ? article.likes : ''} 
+                    likesUpdate={likesUpdate}
+                    comments={article.comments != undefined ? article.comments : ''}
                     commentsCounts={commentsCounts} 
                     commentsUpdate={commentsUpdate} 
                   />
@@ -462,9 +462,10 @@ export default function ArticleCard(props) {
                 {/* 拡張のデザイン */}
                 <ArticleCardExpand 
                   article={article} 
-                  likes={article.likes_counts != undefined ? article.likes_counts : ''} 
+                  likesCounts={article.likes_counts != undefined ? article.likes_counts : ''} 
+                  likes={article.likes != undefined ? article.likes : ''} 
                   likesUpdate={likesUpdate} 
-                  comments={comments} 
+                  comments={article.comments != undefined ? article.comments : ''}
                   commentsCounts={commentsCounts} 
                   commentsUpdate={commentsUpdate} 
                 />

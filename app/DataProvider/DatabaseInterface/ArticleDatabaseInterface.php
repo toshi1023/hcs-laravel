@@ -6,7 +6,7 @@ namespace App\DataProvider\DatabaseInterface;
 interface ArticleDatabaseInterface {
 
     // 一覧に表示するデータの取得処理を記述
-    public function getBaseData($conditions);
+    public function getBaseData($conditions, $user_id);
 
     // ファイルをアップロードする処理を記述
     public function fileSave($file, $foldername, $filename);

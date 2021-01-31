@@ -22,34 +22,32 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CommentList(props) {
   const classes = useStyles();
-    
+  
   return (
-    <List className={classes.root}>
+    <List className={classes.root} onClick={() => reloadComment(props.articleId)} key={props.articleId}>
         {_.map(props.comments, comment => {
+          if (comment != undefined && comment.article_id === props.articleId) {
             return (
-                <div>
-                    {
-                        comment.article_id === props.articleId 
-                        ?
-                            <div>
-                                <ListItem alignItems="flex-start" key={comment.id}>
-                                    <ListItemAvatar key={comment.id}>
-                                      <Tooltip title={comment.users.user_name} classes={{tooltip: classes.tooltip}} key={comment.id}>
-                                        <Avatar alt={comment.users.user_name} src={comment.users.users_photo_path} key={comment.id} />
-                                      </Tooltip>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={comment.comment}
-                                        classes={{ primary: classes.list }}
-                                    />
-                                </ListItem>
-                                <Divider variant="inset" component="li" />
-                            </div>
-                        :
-                            ''
-                    }
-                </div>
+              <div>
+                  {
+                    <div>
+                        <ListItem alignItems="flex-start" key={comment.id}>
+                            <ListItemAvatar key={comment.id}>
+                              <Tooltip title={comment.users.name} classes={{tooltip: classes.tooltip}} key={comment.id}>
+                                <Avatar alt={comment.users.name} src={comment.users.users_photo_path} key={comment.id} />
+                              </Tooltip>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={comment.comment}
+                                classes={{ primary: classes.list }}
+                            />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                    </div>
+                  }
+              </div>
             )
+          }
         })}
     </List>
   );

@@ -40,7 +40,6 @@ function Home() {
             // 記事一覧を取得
             const resultReg = await dispatch(fetchAsyncGetHome())
             if (fetchAsyncGetHome.fulfilled.match(resultReg)) {
-                console.log(articles)
                 // ロード終了
                 await dispatch(fetchCredEnd());
             }

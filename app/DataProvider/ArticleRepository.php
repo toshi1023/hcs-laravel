@@ -25,8 +25,9 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
     /**
      * articlesページの一覧データを取得
+     * 引数1：検索条件, 引数2：ユーザID
      */
-    public function getBaseData($conditions=null)
+    public function getBaseData($conditions=null, $user_id=0)
     {
         // users,article_images,likesテーブルの値も結合して取得
         $query = $this->getQuery($this->folder, $conditions)
@@ -39,6 +40,12 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                             $query->select(DB::raw('count(user_id) as likes_counts'), 'article_id')
                                   ->groupByRaw('article_id');
                           },
+                          'likes' => function ($query) use ($user_id) {
+                            $query->select('article_id','user_id')
+                                  ->where('user_id', '=', $user_id);
+                          },
+                          'comments:id,article_id,user_id,comment',
+                          'comments.users:id,name,users_photo_path'  // commentsテーブルのリレーション先であるusersテーブルの情報を取得
                         ]);
         
         return $query;
@@ -202,11 +209,12 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
     /**
      * 記事のコメント数を取得
+     * 引数：検索条件
      */
-    public function getCommentsCounts()
+    public function getCommentsCounts($conditions=null)
     {
         // 記事ごとのコメント数をカウント
-        $query = $this->getQuery('comments')
+        $query = $this->getQuery('comments', $conditions)
                       ->select(DB::raw('count(id) as comments_counts'), 'article_id')
                       ->groupByRaw('article_id');
 
@@ -215,7 +223,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
     /**
      * 記事のコメントデータを取得
-     * 引数：記事ID
+     * 引数：検索条件
      */
     public function getComments($conditions=null)
     {
