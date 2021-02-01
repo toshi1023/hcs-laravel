@@ -74,7 +74,7 @@ function setDetailView(data, button) {
         } else {
             likes_counts = data.article.likes_counts.likes_counts;
         }
-
+        console.log(data.like_flg)
         // いいねのボタン制御
         if(data.like_flg) {
             $('#detail_like').append(`<button class="btn btn-danger btn-like"><i class="fas fa-fw fa-heart"></i></button><span class="badge badge-light like-badge">${likes_counts}</span>`);
@@ -200,7 +200,7 @@ function settingCommentTables() {
     if ($.fn.DataTable.isDataTable('#article_comment_list')) {
         $('#article_comment_list').DataTable().destroy();
     }
-    // DataTable設定("いいね一覧")
+    // DataTable設定("コメント一覧")
     settingDataTables(
         // 取得
         // tableのID
@@ -242,7 +242,15 @@ function settingCommentTables() {
                     `;
                 }
             },
-            {data: 'users.user_name'},
+            {
+                data: function(p) {
+                    // 性別ごとにユーザ名の色を区別
+                    if (p.users.gender === 1) {
+                        return  `<sapn style="color: blue">${p.users.user_name}</sapn>`
+                    }
+                    return `<sapn style="color: red">${p.users.user_name}</sapn>`
+                }, name: 'users.user_name'
+            },
             {data: 'comment'},
             {
                 data: function(p) {

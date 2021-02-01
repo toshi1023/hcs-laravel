@@ -103,12 +103,18 @@ function Map() {
                                 <Marker key={article.id} position={[article.latitude, article.longitude]}>
                                     <Popup>
                                         {
-                                            article.gender == 0 ? 
-                                                <h2 style={{ color: 'red' }}>{article.name}</h2>
+                                            article.users !== undefined ? 
+                                                article.users.gender == 0 ? 
+                                                    <h2 style={{ color: 'red' }}>{article.users !== undefined ? article.users.name : ''}</h2>
+                                                :
+                                                    <h2 style={{ color: 'blue' }}>{article.users !== undefined ? article.users.name : ''}</h2>
                                             :
-                                                <h2 style={{ color: 'blue' }}>{article.name}</h2>
+                                                ''
                                         }
-                                        <img className={classes.media} src={article.articles_photo_path} />
+                                        <img 
+                                            className={classes.media} 
+                                            src={article.article_images !== undefined ? article.article_images[0].articles_photo_path : ''} 
+                                        />
                                         <span>{article.title}</span>
                                         <br />
                                         <Button variant="contained" color="primary" className={classes.searchMapUserButton} onClick={() => handleSearch(article.user_id)}>

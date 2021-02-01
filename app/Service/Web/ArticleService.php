@@ -29,7 +29,17 @@ class ArticleService
     if(is_null($table)) {
       // 記事をいいね！が多い順に5件だけ取得
       $user_id = Auth::user() ? Auth::user()->id : 0 ;
-      return $this->ArticleService->getBaseData($conditions, $user_id)->get()->sortByDesc('likes_counts')->take(5);
+      
+      // ログインユーザ向けにデータをリターン
+      if ($user_id) {
+        return $this->ArticleService->getBaseData($conditions, $user_id)->orderBy('likes_counts', 'desc')->limit(5)->get();
+      }
+      // 非ログインユーザ向けにデータをリターン
+      return $this->ArticleService->getBaseData($conditions, $user_id)
+                                  ->where('type', '=', config('const.public'))
+                                  ->orderBy('likes_counts', 'desc')
+                                  ->limit(5)
+                                  ->get();
     }
     // 指定したテーブルのデータをソートして取得
     return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
@@ -130,16 +140,8 @@ class ArticleService
       $this->ArticleService->likeSave($data);
     }
 
-    // フラグをリターン
-    $like_flg = $this->ArticleService->getExist('likes', ['article_id' => $data['article_id'], 'user_id' => $data['user_id'], 'delete_flg' => 0]);
-    // 記事のいいね件数をDBから取得
-    $data = $this->ArticleService->getQuery('likes', ['article_id' => $data['article_id']])->count();
-
-    // 結果をリターン
-    return $response = [
-      'like_flg' => $like_flg,
-      'data'     => $data,
-    ];
+    // 記事データを再取得してリターン
+    return $this->ArticleService->getBaseData(['id' => $data['article_id']])->first();
   }
 
   /**

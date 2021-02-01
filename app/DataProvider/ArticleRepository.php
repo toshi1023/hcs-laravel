@@ -32,17 +32,20 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         // users,article_images,likesテーブルの値も結合して取得
         $query = $this->getQuery($this->folder, $conditions)
                       ->select('*')
+                      ->leftJoinSub($this->getLikesCountQuery(), 'likes_counts', 'articles.id', '=', 'likes_counts.article_id')
                       ->with([
                           'users:id,name,gender,users_photo_path',
                           'article_images:id as image_id,articles_photo_name,articles_photo_path,article_id',
                           'likes_counts' => function ($query) {
                             // 各記事のいいね数を取得
                             $query->select(DB::raw('count(user_id) as likes_counts'), 'article_id')
-                                  ->groupByRaw('article_id');
+                                  ->groupByRaw('article_id')
+                                  ->where('delete_flg', '=', 0);
                           },
                           'likes' => function ($query) use ($user_id) {
                             $query->select('article_id','user_id')
-                                  ->where('user_id', '=', $user_id);
+                                  ->where('user_id', '=', $user_id)
+                                  ->where('delete_flg', '=', 0);
                           },
                           'comments:id,article_id,user_id,comment',
                           'comments.users:id,name,users_photo_path'  // commentsテーブルのリレーション先であるusersテーブルの情報を取得
@@ -135,7 +138,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
     public function getLikesAdminPage($conditions=null)
     {
         $query = $this->getQuery('likes', $conditions)
-                      ->with('users:id,name,users_photo_path');
+                      ->with('users:id,name,gender,users_photo_path');
 
         return $query;
     }
@@ -230,7 +233,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
         // 記事ごとのコメントとユーザ情報を取得
         $query = $this->getQuery('comments', $conditions)
                       ->select('id', 'comment', 'user_id', 'article_id', 'updated_at')
-                      ->with('users:id,name as user_name,users_photo_path');
+                      ->with('users:id,name as user_name,gender,users_photo_path');
 
         return $query;
     }

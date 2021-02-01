@@ -13,10 +13,10 @@ return [
     'man_name'      => '男性',
 
     // 公開フラグ
-    'private'        => 0,
-    'public'         => 1,
-    'private_name'   => '非公開',
+    'public'         => 0,
+    'private'        => 1,
     'public_name'    => '公開',
+    'private_name'   => '非公開',
 
     // アカウントステータス
     'app_member'            => 1,               // (一般)会員ユーザー

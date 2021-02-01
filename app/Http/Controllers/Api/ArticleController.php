@@ -32,7 +32,7 @@ class ArticleController extends Controller
       $conditions = [];
     
       $articles = $this->database->getHome(null, $conditions);
-
+      
       return response()->json([
         'articles' => $articles, 
       ],200, [], JSON_UNESCAPED_UNICODE);
@@ -56,7 +56,7 @@ class ArticleController extends Controller
       if ($request->input('queryId')) { $conditions['articles.user_id'] = $request->input('queryId'); }
     
       $articles = $this->database->getIndex(null, $conditions);
-
+      
       return response()->json([
         'articles' => $articles, 
       ],200, [], JSON_UNESCAPED_UNICODE);
@@ -202,17 +202,16 @@ class ArticleController extends Controller
       if ($request->input('article_id')) { $conditions['article_id'] = $request->input('article_id'); }
       if ($request->input('user_id')) { $conditions['user_id'] = $request->input('user_id'); }
       // 更新処理を実行
-      $likes = $this->database->getLikesUpdate($conditions);
+      $article = $this->database->getLikesUpdate($conditions);
+      
       // 更新に成功したとき
       return response()->json([
-        'likes_flg'       => $likes['like_flg'],
-        'likes_counts'    => $likes['data'],
-        'article_id'      => $request->input('article_id'),
+        'article'         => $article,
       ], 200, [], JSON_UNESCAPED_UNICODE);
     } catch (\Exception $e) {
       // 更新に失敗したとき
       return response()->json([
-        'error_message' => $likes['like_flg'],
+        'error_message' => 'いいね！の更新に失敗しました',
         'status'        => 500,
       ], 500, [], JSON_UNESCAPED_UNICODE);
     }

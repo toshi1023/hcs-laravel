@@ -85,8 +85,8 @@ function ArticleCardExpand (props) {
             props.likes ? 
                 props.likes[0] != undefined ? 
                     props.likes[0].user_id 
-                : '' 
-            : ''
+                : false
+            : false
     })
     
     /**
@@ -122,6 +122,19 @@ function ArticleCardExpand (props) {
     }
 
     /**
+     * いいね！の更新
+     */
+    const likesUpdate = (article_id) => {
+        // ハートのアクティブ・非アクティブ化
+        setState({
+            ...state,
+            likesFlg: !state.likesFlg
+        })
+        // いいね！の保存処理
+        props.likesUpdate(article_id)
+    }
+
+    /**
      * コメントの保存処理実行
      */
     const onSubmit = () => {
@@ -144,7 +157,7 @@ function ArticleCardExpand (props) {
                     localStorage.getItem('localToken') ? 
                     <div>
                         {/* 'いいね'ボタンのデザイン */}
-                        <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
+                        <IconButton aria-label="add to favorites" onClick={() => likesUpdate(props.article.id)}>
                             {
                                 // いいねボタンのアクティブフラグ
                                 state.likesFlg ? 
@@ -243,7 +256,7 @@ function ArticleCardExpand (props) {
                     <div>
                         {/* 'いいね'ボタンのデザイン */}
                         <Tooltip title="いいね！" classes={{tooltip: classes.tooltip}}>
-                            <IconButton aria-label="add to favorites" onClick={() => props.likesUpdate(props.article.id)}>
+                            <IconButton aria-label="add to favorites" onClick={() => likesUpdate(props.article.id)}>
                                 {
                                     // いいねボタンのアクティブフラグ
                                     state.likesFlg ? 

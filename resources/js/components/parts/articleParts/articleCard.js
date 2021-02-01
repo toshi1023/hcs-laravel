@@ -217,8 +217,6 @@ export default function ArticleCard(props) {
     const resultReg = await dispatch(fetchAsyncUpdateLikes({article_id: article_id, user_id: localStorage.getItem('loginId')}))
     
     if (fetchAsyncUpdateLikes.fulfilled.match(resultReg)) {
-      // いいねを再取得
-      // await dispatch(fetchAsyncGetLikes({user_id: localStorage.getItem('loginId')}))
       // ロード終了
       await dispatch(fetchCredEnd());       
     }

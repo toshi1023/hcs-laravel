@@ -331,7 +331,8 @@ const articleSlice = createSlice({
             state.editedModal = action.payload
         },
         selectLike(state, action) {
-            state.selectedLike = action.payload
+            console.log(action.payload)
+            state.likes = action.payload
         },
         searchUser(state, action) {
             state.searchedUser.user_id = action.payload
@@ -365,8 +366,6 @@ const articleSlice = createSlice({
                 articles: state.articles.map((a) => 
                     a.id === action.payload.article.id ? action.payload.article : a
                 ),
-                // 選択されている詳細articleにも更新したデータを格納
-                selectedArticle: action.payload,
             }
         })
         builder.addCase(fetchAsyncDelete.fulfilled, (state, action) => {
@@ -385,7 +384,9 @@ const articleSlice = createSlice({
         builder.addCase(fetchAsyncUpdateLikes.fulfilled, (state, action) => {
             return {
                 ...state,
-                selectedLike: action.payload, //apiから取得した更新後のいいねの情報をstateのselectedLikeに格納
+                articles: state.articles.map((a) => 
+                    a.id === action.payload.article.id ? action.payload.article : a
+                ),
             }
         })
         builder.addCase(fetchAsyncGetComments.fulfilled, (state, action) => {
@@ -405,13 +406,15 @@ const articleSlice = createSlice({
             if(action.payload.error_message) {
                 return;
             }
-
+            
             return {
                 ...state,
                 articles: state.articles.map((a) => 
                     a.id === action.payload.article.id ? action.payload.article : a
                 ),
-                commentsCounts: action.payload.comments_counts,
+                commentsCounts: state.commentsCounts.map((c) => 
+                    c.article_id === action.payload.comments_counts[0].article_id ? action.payload.comments_counts[0] : c
+                ),
             }
         })
     },
