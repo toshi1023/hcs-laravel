@@ -80,6 +80,13 @@ class User extends Authenticatable
     }
 
     /**
+     * OauthAccessTokenとリレーション構築(1側の設定)
+     */
+    public function AauthAcessToken(){
+        return $this->hasMany('\App\Model\OauthAccessToken');
+    }
+
+    /**
      * Userテーブルと1対多のリレーション構築(1側の設定)
      */
     public function comments()

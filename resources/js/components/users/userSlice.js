@@ -2,9 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const loginUrl = 'http://localhost/api/login'
+const logoutUrl = 'http://localhost/api/logout'
 const apiUrl = 'http://localhost/api/api_users'
-// const loginUrl = 'http://hcs-laravel/api/login'
-// const apiUrl = 'http://hcs-laravel/api/api_users'
 const token = localStorage.localToken
 
 /**
@@ -17,6 +16,29 @@ export const fetchAsyncLogin = createAsyncThunk('login/post', async(auth) =>{
         const res = await axios.post(loginUrl, auth, {
             headers: {
                 'Content-Type': 'application/json',
+            },
+        })
+        // Apiからの返り値
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
+ * Logout処理の非同期関数
+ */
+// auth: 認証に関わる情報(authen)を渡す引数
+export const fetchAsyncLogout = createAsyncThunk('logout/post', async() =>{
+    // axios: 引数1: URL, 引数2: 渡すデータ, 引数3: メタ情報
+    try {
+        const res = await axios.post(logoutUrl, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
         })
         // Apiからの返り値
@@ -339,6 +361,17 @@ const userSlice = createSlice({
             localStorage.setItem("localToken", action.payload.token)
             localStorage.setItem("loginId", action.payload.id)
             localStorage.setItem("loginPhoto", action.payload.login_user_photo)
+        })
+        // Apiが成功したときの処理を記載
+        builder.addCase(fetchAsyncLogout.fulfilled, (state, action) => {
+            // 認証に失敗した場合はリターン
+            if (action.payload.status == 401) {
+                return;
+            }
+            // localStorageのTokenとID、Photoを削除(ログアウト処理)
+            localStorage.removeItem("loginId");
+            localStorage.removeItem("localToken");
+            localStorage.removeItem("loginPhoto");
         })
         builder.addCase(fetchAsyncImage.fulfilled, (state, action) => {
             // 認証に失敗した場合はリターン

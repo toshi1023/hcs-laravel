@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\Api\LoginRequest;
+use Exception;
 
 class LoginController extends Controller
 {
@@ -45,5 +45,27 @@ class LoginController extends Controller
             'status'        => 401,
         ], 401);
        
+    }
+
+    /**
+     * Api通信でのログアウト処理を実行
+     */
+    public function logout(Request $request)
+    {
+        try {
+            // Tokenの削除
+            if (Auth::check()) {
+                Auth::user()->AauthAcessToken()->delete();
+            }
+            return new JsonResponse([
+                'info_message' => 'ログアウトしました'
+            ], 200);
+        } catch(Exception $e) {
+            \Log::error('Logout Error:'.$e->getMessage());
+            return new JsonResponse([
+                'error_message' => 'ログアウトに失敗しました',
+                'status'        => 401,
+            ], 401);
+        }
     }
 }

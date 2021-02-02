@@ -8,6 +8,7 @@ use App\Consts\Consts;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Storage;
+use Exception;
 
 class ArticleRepository extends BaseRepository implements ArticleDatabaseInterface
 {
@@ -112,7 +113,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
 
             return $articleData;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('article save error:'.$e->getmessage());
             return false;
         }
@@ -203,7 +204,7 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
             // リターン
             return true;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('database save error:'.$e->getMessage());
             \DB::rollBack();
             return false;

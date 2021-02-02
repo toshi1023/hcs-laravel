@@ -11,9 +11,12 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import InfoIcon from '@material-ui/icons/Info';
 import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import { useDispatch } from 'react-redux';
+import { fetchAsyncLogout } from '../../users/userSlice';
 import {
     fetchCredStart,
     fetchCredEnd,
+    fetchGetInfoMessages,
+    fetchGetErrorMessages
 } from '../../app/appSlice';
 
 const useStyles = makeStyles({
@@ -77,10 +80,16 @@ const MenuDrawer = (props) => {
         // ロード開始
         await dispatch(fetchCredStart());
         
+        // ログアウト処理
+        const resultReg = await dispatch(fetchAsyncLogout())
+
+        if (fetchAsyncLogout.fulfilled.match(resultReg)) {
+            // メッセージをdispatch
+            resultReg.payload.info_message ? dispatch(fetchGetInfoMessages(resultReg)) : dispatch(fetchGetErrorMessages(resultReg))     
+        }
+
         history.push('/login');
-        // localStorageのTokenとIDを削除(ログアウト処理)
-        localStorage.removeItem("loginId");
-        localStorage.removeItem("localToken");
+        
         // ロード終了
         if(!localStorage.getItem('localToken')) {
             await dispatch(fetchCredEnd());

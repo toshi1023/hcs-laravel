@@ -5,6 +5,7 @@ namespace App\DataProvider;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Storage;
+use Exception;
 
 class BaseRepository
 {
@@ -203,10 +204,10 @@ class BaseRepository
             
             // リターン
             return $model;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('database save error:'.$e->getMessage());
             if ($transaction) \DB::rollBack();
-            throw new \Exception($e);
+            throw new Exception($e);
         }
     }
 
@@ -226,7 +227,7 @@ class BaseRepository
 
                 return [true, $photo_path];
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 \Log::error($this->folder.' image file save error:'.$e->getmessage());
                 return [false, null];
             }
@@ -266,7 +267,7 @@ class BaseRepository
 
             if ($transaction) \DB::commit();
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($transaction) \DB::rollBack();
             \Log::error($table.' destroy error:'.$e->getmessage());
             return false; 
@@ -284,7 +285,7 @@ class BaseRepository
             $file = Storage::disk('s3');
             $file->delete($path);
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('image file delete error:'.$e->getmessage());
             \Log::error('image file at '.$path);
             return false;     

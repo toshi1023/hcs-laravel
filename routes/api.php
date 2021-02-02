@@ -33,6 +33,9 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
  *  API(認証必須)
  *************************************************/
 Route::group(['middleware' => ['auth:api'], 'middleware' => 'session.check'], function() {
+    
+    /********** 認証管理(logout) **********/
+    Route::post('/logout', 'Api\LoginController@logout');
 
     /********** 記事管理(articles) **********/
     Route::resource('api_articles' ,            'Api\ArticleController', ['except' => ['index', 'create', 'edit', 'show']])->middleware('dataFilter');

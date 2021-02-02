@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Service\Web\ArticleService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
+use Exception;
 
 class ArticleController extends Controller
 {
@@ -36,7 +37,7 @@ class ArticleController extends Controller
       return response()->json([
         'articles' => $articles, 
       ],200, [], JSON_UNESCAPED_UNICODE);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       \Log::error('Article get Error:'.$e->getMessage());
       return response()->json([
         'error_message' => '記事の取得に失敗しました!'
@@ -60,7 +61,7 @@ class ArticleController extends Controller
       return response()->json([
         'articles' => $articles, 
       ],200, [], JSON_UNESCAPED_UNICODE);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       \Log::error('Article get Error:'.$e->getMessage());
       return response()->json([
         'error_message' => '記事の取得に失敗しました!'
@@ -94,7 +95,7 @@ class ArticleController extends Controller
         'article'      => $article,
       ],200, [], JSON_UNESCAPED_UNICODE);
       
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       DB::rollBack();
       \Log::error('Article save Error:'.$e->getMessage());
       // 作成失敗時はエラーメッセージを返す
@@ -129,7 +130,7 @@ class ArticleController extends Controller
         'article'      => $article,
       ],200, [], JSON_UNESCAPED_UNICODE);
       
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       DB::rollBack();
       \Log::error('Article update Error:'.$e->getMessage());
       // 作成失敗時はエラーメッセージを返す
@@ -155,7 +156,7 @@ class ArticleController extends Controller
         'id'           => $article
       ],200, [], JSON_UNESCAPED_UNICODE);
 
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       DB::rollBack();
       \Log::error('Article delete Error:'.$e->getMessage());
       // 削除失敗時はエラーメッセージを返す
@@ -182,7 +183,7 @@ class ArticleController extends Controller
       return response()->json([
         'likes' => $data
       ], 200, [], JSON_UNESCAPED_UNICODE);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       \Log::error('Like get Error:'.$e->getMessage());
       return response()->json([
         'error_message' => 'いいねの取得に失敗しました!'
@@ -208,7 +209,7 @@ class ArticleController extends Controller
       return response()->json([
         'article'         => $article,
       ], 200, [], JSON_UNESCAPED_UNICODE);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       // 更新に失敗したとき
       return response()->json([
         'error_message' => 'いいね！の更新に失敗しました',
@@ -232,7 +233,7 @@ class ArticleController extends Controller
       return response()->json([
         'comments'          => $data
       ], 200, [], JSON_UNESCAPED_UNICODE);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       \Log::error('Comment get Error:'.$e->getMessage());
       return response()->json([
         'error_message' => 'コメントの取得に失敗しました!'
@@ -255,7 +256,7 @@ class ArticleController extends Controller
       return response()->json([
         'comments_counts'   => $counts
       ], 200, [], JSON_UNESCAPED_UNICODE);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       \Log::error('Comment get Error:'.$e->getMessage());
       return response()->json([
         'error_message' => 'コメントの取得に失敗しました!'
@@ -293,7 +294,7 @@ class ArticleController extends Controller
         'comments_counts' => $counts,
         'info_message'  => 'コメントを投稿しました'
       ], 200, [], JSON_UNESCAPED_UNICODE);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       DB::rollback();
       \Log::error('Comment update Error:'.$e->getMessage());
       return response()->json([
