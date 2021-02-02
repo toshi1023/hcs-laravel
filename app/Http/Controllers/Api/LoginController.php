@@ -56,6 +56,7 @@ class LoginController extends Controller
             // Tokenの削除
             if (Auth::check()) {
                 Auth::user()->AauthAcessToken()->delete();
+                Auth::logout();
             }
             return new JsonResponse([
                 'info_message' => 'ログアウトしました'
