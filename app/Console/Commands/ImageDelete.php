@@ -50,15 +50,24 @@ class ImageDelete extends Command
                 // ユーザ名をキーにして、画像名を2次元配列で取得
                 $user_images[$value->name] = Storage::disk('s3')->files(config('const.aws_users_bucket').'/'.$value->name.'/');
                 $article_images[$value->name] = Storage::disk('s3')->files(config('const.aws_articles_bucket').'/'.$value->name.'/');
+                // Usersディレクトリ内のディレクトリ名を取得
+                $directory = Storage::disk('s3')->directories(config('const.aws_users_bucket').'/');
+                $all_user_name = $value->name;
             }
-            
+
+            // DBに存在しないユーザのディレクトリを削除
+            foreach ($directory as $key => $directory_name) {
+                if (!DB::table('users')->where('name', substr($directory_name, 6))->exists()) {
+                    Storage::disk('s3')->deleteDirectory($directory_name);
+                }
+            }
             // プロフィール画像用配列をユーザ名と画像名で分別
             foreach ($user_images as $key => $value) {
                 // S3のストレージに保存されている画像名がDBに存在するか確認
                 foreach ($value as $image) {
                     if (!DB::table('users')->where('users_photo_name', basename($image))->exists()) {
                         // 存在しない場合は画像を削除する
-                        Storage::disk('s3')->delete(config('const.aws_users_bucket').'/'.$key.'/'.basename($image));
+                        Storage::disk('s3')->delete($image);
                     }
                 }
                 // 画像が1件も存在しない場合はフォルダを削除する

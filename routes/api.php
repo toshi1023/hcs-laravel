@@ -16,7 +16,7 @@ Route::group(['middleware' => ['api'], 'prefix'], function() {
     Route::get('api_articles/home' ,      'Api\ArticleController@home')->name('api_articles.home');
     
     /********** ユーザ管理(users) **********/
-    Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show']]);
+    Route::resource('api_users' ,           'Api\UserController', ['only' => ['index', 'show', 'create', 'store', 'update']]);
     Route::post('api_users/validation',   'Api\UserController@validation')->name('api_users.validation');
     
     /********** 都道府県管理(prefectures) **********/
@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth:api'], 'middleware' => 'session.check'], fu
     Route::post('api_articles/comments' ,       'Api\ArticleController@commentsUpdate')->name('api_articles.comments.update');
 
     /********** ユーザ管理(users) **********/
-    Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show']]);
+    Route::resource('api_users' , 'Api\UserController', ['except' => ['index', 'show', 'create', 'store', 'update']]);
     Route::get('api_users/{api_user}/friends',          'Api\UserController@friendsIndex')->name('api_users.friends');
     Route::get('api_users/{api_user}/friends/apply',    'Api\UserController@friendsApply')->name('api_users.friends.apply');
     Route::post('api_users/{api_user}/friends/update',   'Api\UserController@friendsUpdate')->name('api_users.friends.update');
