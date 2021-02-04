@@ -114,7 +114,6 @@ export default function Message() {
     const receiveMessage = (data) => {
         // メッセージリストにあるユーザからのメッセージかどうか確認
         let flg = false
-        console.log(messages)
         messages.map((m) => 
             m.user_id === data.message.message.user_id_sender ? flg = true : ''
         )
