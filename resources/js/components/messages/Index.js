@@ -84,7 +84,11 @@ export default function Message() {
         }
         // 上で定義した非同期の関数を実行
         fetchMessages()
-        
+    
+        // dispatchをuseEffectの第2引数に定義する必要がある
+    }, [dispatch])
+
+    useEffect(() => {
         /**
          * メッセージのリアルタイム取得
          */
@@ -97,35 +101,49 @@ export default function Message() {
         });
         var channel = window.Echo.channel('message');
         channel.listen('.my-event', function(data) {
-            // メッセージリストにあるユーザからのメッセージかどうか確認
-            let flg = false
-            messages.map((m) => 
-                m.user_id === data.message.message.user_id_sender ? flg = true : ''
-            )
-            // 受信したメッセージデータを表示(受信者側のみ)
-            flg ? 
-                data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+            if(messages[0].id) {
+                receiveMessage(data)
+            }
+        })
+    }, [messages])
+
+    /**
+     * メッセージのリアルタイム受信処理
+     * @param {*} data 
+     */
+    const receiveMessage = (data) => {
+        // メッセージリストにあるユーザからのメッセージかどうか確認
+        let flg = false
+        console.log(messages)
+        messages.map((m) => 
+            m.user_id === data.message.message.user_id_sender ? flg = true : ''
+        )
+        // 受信したメッセージデータを表示(受信者側のみ)
+        flg ? 
+            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                // メッセージボードに送信先が設定されている場合の処理を実行
+                showMessages[0].id ? 
                     dispatch(reduceShowMessages(data.message.message))
                 :
                     ''
             :
                 ''
-            // メッセージリストの更新
-            flg ? 
-                data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
-                    // 受信したメッセージデータを表示
-                    dispatch(reduceMessages(data.message.realtime_message_list))
-                :
-                    ''
+        :
+            ''
+        // メッセージリストの更新
+        flg ? 
+            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                // 受信したメッセージデータを表示
+                dispatch(reduceMessages(data.message.realtime_message_list))
             :
-                data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
-                    // 受信したメッセージデータを表示
-                    dispatch(reduceNewMessages(data.message.realtime_message_list))
-                :
-                    ''
-        })
-        // dispatchをuseEffectの第2引数に定義する必要がある
-    }, [dispatch])
+                ''
+        :
+            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                // 受信したメッセージデータを表示
+                dispatch(reduceNewMessages(data.message.realtime_message_list))
+            :
+                ''
+    }
     
     /**
      * タブ切り替え処理

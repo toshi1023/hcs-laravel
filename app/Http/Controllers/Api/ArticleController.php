@@ -109,6 +109,8 @@ class ArticleController extends Controller
   // 記事の変更を反映
   public function update(Request $request, $article)
   {
+    // dump($request->input());
+    // dd($request->file('upload_image'));
     try {
       DB::beginTransaction();
 

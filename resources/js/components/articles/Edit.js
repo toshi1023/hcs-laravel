@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
         content: editedArticle.content,
         type: editedArticle.type,
         articles_photo_name: editedArticle.articles_photo_name,
-        image_id: editedArticle.image_id,
+        image_id: editedArticle.article_images[0].image_id,
     });
     
     useEffect(() => {

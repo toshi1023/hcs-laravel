@@ -1,10 +1,9 @@
 import React, {useMemo, useEffect, useState, forwardRef, useImperativeHandle} from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {useDropzone} from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { fetchAsyncImage } from '../../articles/articleSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -179,11 +178,6 @@ function ArticleDropzone(props, ref) {
         // 保存するイメージファイルをFormDataにセット(ファイルがdropzoneにセットされた場合のみ)
         files[0] ? values.append('upload_image', file, file.name) : ''
       })
-      
-      // 画像の保存処理
-      if(values.get('upload_image')) {
-        await dispatch(fetchAsyncImage(values))
-      }
 
       return values;
     }
