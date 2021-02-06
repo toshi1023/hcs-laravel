@@ -56,6 +56,10 @@ export default function Message() {
     const [tab, setTab] = React.useState(1);
     const [messagePage, setMessagePage] = React.useState(true);
     const [messageListPage, setMessageListPage] = React.useState(false);
+    // messages定数の値をuseEffectに反映させるためのフラグ
+    const [messageFlg, setMessageFlg] = React.useState(false);
+    // showMessages定数の値を更新するためのフラグ
+    const [showMessageFlg, setShowMessageFlg] = React.useState(false);
     // メッセージデータの取得
     const messages = useSelector(selectMessages)
     const showMessages = useSelector(selectShowMessages)
@@ -76,21 +80,19 @@ export default function Message() {
                     handleTabMessage()
                     handleChange(null, 0)
                 }
+                // messages定数の値をuseEffectに反映させるためのフラグ
+                setMessageFlg(true)
                 // ロード終了
-                await dispatch(fetchCredEnd());       
+                await dispatch(fetchCredEnd()); 
             }
             // ロード終了
             await dispatch(fetchCredEnd());  
         }
         // 上で定義した非同期の関数を実行
         fetchMessages()
-    
-        // dispatchをuseEffectの第2引数に定義する必要がある
-    }, [dispatch])
 
-    useEffect(() => {
         /**
-         * メッセージのリアルタイム取得
+         * Pusherの設定
          */
         window.Echo = new Echo({
             broadcaster: 'pusher',
@@ -99,51 +101,54 @@ export default function Message() {
             cluster: process.env.MIX_PUSHER_APP_CLUSTER,
             forceTLS: true
         });
+    
+        // dispatchをuseEffectの第2引数に定義する必要がある
+    }, [dispatch])
+
+    useEffect(() => {
+        /**
+         * メッセージ一覧のリアルタイム更新
+         */
         var channel = window.Echo.channel('message');
         channel.listen('.my-event', function(data) {
             if(messages[0].id) {
-                receiveMessage(data)
+                // メッセージリストにあるユーザからのメッセージかどうか確認
+                let flg = false
+                messages.map((m) => 
+                    m.user_id === data.message.message.user_id_sender ? flg = true : ''
+                )
+                // メッセージリストの更新
+                flg ? 
+                    data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                        // 受信したメッセージデータを表示
+                        dispatch(reduceMessages(data.message.realtime_message_list))
+                    :
+                        ''
+                :
+                    data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
+                        // 受信したメッセージデータを表示
+                        dispatch(reduceNewMessages(data.message.realtime_message_list))
+                    :
+                        ''
             }
         })
-    }, [messages])
+    }, [messageFlg])
 
-    /**
-     * メッセージのリアルタイム受信処理
-     * @param {*} data 
-     */
-    const receiveMessage = (data) => {
-        // メッセージリストにあるユーザからのメッセージかどうか確認
-        let flg = false
-        messages.map((m) => 
-            m.user_id === data.message.message.user_id_sender ? flg = true : ''
-        )
-        // 受信したメッセージデータを表示(受信者側のみ)
-        flg ? 
-            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
-                // メッセージボードに送信先が設定されている場合の処理を実行
-                showMessages[0].id ? 
+    useEffect(() => {
+        /**
+         * メッセージ詳細のリアルタイム更新
+         */
+        var channel = window.Echo.channel('message');
+        channel.listen('.my-event', function(data) {
+            if(showMessageFlg) {
+                data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
                     dispatch(reduceShowMessages(data.message.message))
                 :
                     ''
-            :
-                ''
-        :
-            ''
-        // メッセージリストの更新
-        flg ? 
-            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
-                // 受信したメッセージデータを表示
-                dispatch(reduceMessages(data.message.realtime_message_list))
-            :
-                ''
-        :
-            data.message.message.user_id_receiver == localStorage.getItem('loginId') ? 
-                // 受信したメッセージデータを表示
-                dispatch(reduceNewMessages(data.message.realtime_message_list))
-            :
-                ''
-    }
-    
+            }
+        })
+    }, [showMessageFlg])
+
     /**
      * タブ切り替え処理
      * @param {*} event 
@@ -165,6 +170,12 @@ export default function Message() {
     const handleTabMessage = () => {
         setMessagePage(false)
         setMessageListPage(true)
+    }
+    /**
+     * メッセージ詳細ボードにメッセージを表示
+     */
+    const handleShowMessage = () => {
+        setShowMessageFlg(true)
     }
    
     return (
@@ -195,7 +206,12 @@ export default function Message() {
                         <MessageBord />
                     </Grid>
                     <Grid item xs={11} className={classes.mobileMainContent} hidden={messageListPage}>
-                        <MessageList message={messages} handleChange={handleChange} handleTabMessage={handleTabMessage} />
+                        <MessageList 
+                            message={messages} 
+                            handleShowMessage={handleShowMessage} 
+                            handleChange={handleChange} 
+                            handleTabMessage={handleTabMessage} 
+                        />
                     </Grid>
                 </Grid>
             </div>
@@ -210,7 +226,12 @@ export default function Message() {
                         </Grid>
                     </Grid>
                     <Grid item sm={4} className={classes.messageList}>
-                        <MessageList message={messages} handleChange={handleChange} handleTabMessage={handleTabMessage} />
+                        <MessageList 
+                            message={messages} 
+                            handleShowMessage={handleShowMessage} 
+                            handleChange={handleChange} 
+                            handleTabMessage={handleTabMessage} 
+                        />
                     </Grid>
                 </Grid>
             </div>

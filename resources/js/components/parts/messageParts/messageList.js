@@ -96,6 +96,8 @@ export default function MessageList(props) {
               props.handleChange(null, 0)
               props.handleTabMessage()
           }
+          // メッセージ詳細フラグを有効化
+          props.handleShowMessage()
         
         // ロード終了
         await dispatch(fetchCredEnd());       
