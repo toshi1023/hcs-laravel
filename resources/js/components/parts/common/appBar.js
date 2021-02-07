@@ -170,17 +170,14 @@ function HcsAppBar() {
             // ログアウト処理
             const resultReg = await dispatch(fetchAsyncLogout())
 
-            if (fetchAsyncLogout.fulfilled.match(resultReg)) {
-                // メッセージをdispatch
-                resultReg.payload.info_message ? dispatch(fetchGetInfoMessages(resultReg)) : dispatch(fetchGetErrorMessages(resultReg))     
+            if (fetchAsyncLogout.fulfilled.match(resultReg)) {   
+                // メニューを閉じた後にページ遷移
+                setAnchorEl(null);
+                handleMobileMenuClose();
+    
+                // loginページへリダイレクト
+                window.location.href = '/login';
             }
-
-            // メニューを閉じた後にページ遷移
-            setAnchorEl(null);
-            handleMobileMenuClose();
-
-            // ログインページへリダイレクト
-            history.push('/login');
             
             // ロード終了
             if(!localStorage.getItem('localToken')) {

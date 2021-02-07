@@ -106,7 +106,7 @@ function Profile(props) {
             const resultReg = await dispatch(fetchAsyncGetShow(localStorage.getItem('loginId')))
             // ログイン情報の取得に失敗した場合
             resultReg.payload.error_message ? dispatch(fetchGetErrorMessages(resultReg)) : ''
-            console.log('Hi')
+
             // 申請中の友達一覧を取得
             const resultFriends = await dispatch(fetchAsyncGetFriendsApply(localStorage.getItem('loginId')))
             

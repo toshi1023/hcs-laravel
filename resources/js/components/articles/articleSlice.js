@@ -331,7 +331,6 @@ const articleSlice = createSlice({
             state.editedModal = action.payload
         },
         selectLike(state, action) {
-            console.log(action.payload)
             state.likes = action.payload
         },
         searchUser(state, action) {

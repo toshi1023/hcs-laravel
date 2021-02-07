@@ -84,11 +84,10 @@ const MenuDrawer = (props) => {
         const resultReg = await dispatch(fetchAsyncLogout())
 
         if (fetchAsyncLogout.fulfilled.match(resultReg)) {
-            // メッセージをdispatch
-            resultReg.payload.info_message ? dispatch(fetchGetInfoMessages(resultReg)) : dispatch(fetchGetErrorMessages(resultReg))     
+            // loginページへリダイレクト
+            window.location.href = '/login';
         }
 
-        history.push('/login');
         
         // ロード終了
         if(!localStorage.getItem('localToken')) {

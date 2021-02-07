@@ -79,9 +79,6 @@ const useStyles = makeStyles((theme) => ({
             document.getElementById("modalFormPrefecture").value = editedArticle.prefecture
             // ロード終了
             await dispatch(fetchCredEnd());
-
-            // 新規タブからの位置情報取得処理を終了
-            return () => window.removeEventListener("message", receiveMessage)
         }
         // 上で定義した非同期の関数を実行
         fetchPrefectures()
