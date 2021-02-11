@@ -15,8 +15,6 @@ import { fetchAsyncLogout } from '../../users/userSlice';
 import {
     fetchCredStart,
     fetchCredEnd,
-    fetchGetInfoMessages,
-    fetchGetErrorMessages
 } from '../../app/appSlice';
 
 const useStyles = makeStyles({
@@ -87,7 +85,6 @@ const MenuDrawer = (props) => {
             // loginページへリダイレクト
             window.location.href = '/login';
         }
-
         
         // ロード終了
         if(!localStorage.getItem('localToken')) {
