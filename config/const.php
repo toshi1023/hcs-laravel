@@ -61,7 +61,7 @@ return [
     'aws_articles_bucket'    => 'Articles',
     'aws_users_bucket'       => 'Users',
 
-
+    
     
     /**
      * メッセージリスト

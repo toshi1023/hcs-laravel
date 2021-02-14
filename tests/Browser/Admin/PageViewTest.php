@@ -1,22 +1,23 @@
 <?php
 
-namespace Tests\Browser;
+namespace Tests\Browser\Admin;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
-class ExampleTest extends DuskTestCase
+class PageViewTest extends DuskTestCase
 {
+
     /**
-     * A basic browser test example.
+     * ページ遷移の確認
      *
      * @return void
      */
-    public function testBasicExample()
+    public function testAllPageView()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('login')
+            $browser->visit('/')
                     ->assertSee('HitcHike Community Space');
         });
     }
