@@ -246,6 +246,7 @@ class UserController extends Controller
         ],200, [], JSON_UNESCAPED_UNICODE);
 
       } catch (Exception $e) {
+        \Log::error('Friend update Error:'.$e->getMessage());
         DB::rollBack();
         // 取得失敗時はエラーメッセージを返す
         return response()->json([

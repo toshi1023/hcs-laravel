@@ -195,7 +195,6 @@ class UserController extends Controller
       if ($request->file('upload_image')){
         $filename = $this->getFilename($request->file('upload_image'));
       }
-      // $filename = $_FILES['upload_image']['name'];
 
       if ($this->database->save($request, $filename)) {
         DB::commit();

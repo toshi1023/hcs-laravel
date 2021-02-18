@@ -150,9 +150,6 @@ class ArticleService
    */
   public function getComments($conditions=null)
   { 
-    // if($conditions) {
-    //   $data = $this->ArticleService->getQuery('comments', $conditions)->orderBy('updated_at', 'desc')->first();
-    // }
     // 記事のコメント情報を取得
     return $this->ArticleService->getComments($conditions)->orderBy('updated_at', 'asc')->get();
   }

@@ -113,10 +113,6 @@ class UserRepository extends BaseRepository implements UserDatabaseInterface
         // サブクエリ
         $subQuery = $this->getQuery('friends', $conditions)->latest('updated_at');
 
-        // $query = $this->model->select('users.name', 'users.prefecture', 'users.gender', 'users.users_photo_name', 'users.users_photo_path', 'applyfriends.*')
-        //                      ->fromSub($subQuery, 'applyfriends')
-        //                      ->leftJoin('users', 'applyfriends.user_id', '=', 'users.id');
-        
         $query = $this->model->fromSub($subQuery, 'applyfriends')
                              ->select('*')
                              ->with('users:id,name,prefecture,gender,users_photo_name,users_photo_path');

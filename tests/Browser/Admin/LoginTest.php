@@ -31,11 +31,10 @@ class LoginTest extends DuskTestCase
             //         ->assertPathIs(config('test_const.login_url'));
 
             $browser->visit(config('test_const.login_url'))
-                    ->resize(1920, 1080)
                     ->assertSee('ログイン')
                     ->type(config('test_const.email'), 'error@xxx.co.jp')
                     ->type(config('test_const.password'), 'error')
-                    // ->press('@login-button')
+                    ->press('@login-button');
                     // ->assertSee(config('test_const.login_error_message'));
             $browser->screenshot('error');
         });
