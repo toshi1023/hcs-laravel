@@ -35,7 +35,7 @@ class UserController extends Controller
         if ($request->input('queryId')) { $conditions['users.id@not'] = $request->input('queryId'); } // ユーザ一覧に自分を表示しないようにするため
         
         // 全ユーザデータとフレンド情報を更新日時順にソートして取得
-        $data = $this->database->getIndex(null, $conditions);
+        $data = $this->database->getIndex($conditions);
         
         return response()->json([
           'users' => $data['users'], 
@@ -86,8 +86,7 @@ class UserController extends Controller
         DB::rollBack();
         // 作成失敗時はエラーメッセージを返す
         return response()->json([
-          // 'error_message' => 'ユーザの登録に失敗しました',
-          'error_message' => $e->getMessage(),
+          'error_message' => 'ユーザの登録に失敗しました',
           'status'        => 500,
         ], 500, [], JSON_UNESCAPED_UNICODE);
       }

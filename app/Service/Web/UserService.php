@@ -24,11 +24,10 @@ class UserService
 
   /**
    * Indexページ用データを取得するメソッド
-   * 引数1：テーブル名, 引数2：検索条件
+   * 引数：検索条件
    */
-  public function getIndex($table=null, $conditions=null)
+  public function getIndex($conditions=null)
   {
-    if(is_null($table)) {
       // ユーザ情報の取得
       $users = $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
       // フレンド情報取得
@@ -39,7 +38,7 @@ class UserService
       // メッセージ履歴の取得(メッセージ相手のIDのみ取得)
       $messages = '';
       if(\Auth::user()) {
-        $messages = $this->MessageService->getIndexQuery(['user_id' => \Auth::user()->id])->select('messangers.user_id')->get();
+        $messages = $this->MessageService->getMessageListsQuery(\Auth::user()->id)->select('messangers.user_id')->get();
       }
 
       return [
@@ -47,10 +46,6 @@ class UserService
         'friends' => $friends,
         'messages' => $messages
       ];
-    }
-    // 指定したテーブルのデータをソートして取得
-    return $this->UserService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
-
   }
 
   /* *

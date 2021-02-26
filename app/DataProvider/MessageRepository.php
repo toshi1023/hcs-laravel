@@ -8,53 +8,41 @@ use App\Consts\Consts;
 
 class MessageRepository extends BaseRepository implements MessageDatabaseInterface
 {
+    protected $table;
+
     public function __construct (Message $message)
     {
         // Messageモデルをインスタンス化
         $this->model = $message;
+
+        // messagesテーブルを変数に代入
+        $this->table = 'messages';
     }
 
     /**
-     * messagesページのメッセージ履歴データを取得
+     * messagesテーブルのデータを取得
      */
     public function getBaseData($conditions=null) {
-        // usersテーブルの値も結合して取得
-        $query = $this->model->leftjoin('users as senders', 'messages.user_id_sender', '=', 'senders.id')
-                             ->leftjoin('users as receivers', 'messages.user_id_receiver', '=', 'receivers.id')
-                             ->select(
-                                 'messages.*', 
-                                 'senders.name as sender_name',
-                                 'receivers.name as receiver_name', 
-                                 'senders.users_photo_path as sender_photo',
-                                 'receivers.users_photo_path as receiver_photo',
-                                 'senders.gender as sender_gender', 
-                             )
-                             ->where('messages.delete_flg', '=', 0)
-                             ->where(function($query) use($conditions){
-                                $query->orWhere('messages.user_id_sender', '=', $conditions['messages.user_id'])
-                                      ->orWhere('messages.user_id_receiver', '=', $conditions['messages.user_id']);
-                            });
+        $query = $this->getQuery($this->table, $conditions, true);
                             
         return $query;
     }
 
     /**
      * 特定ユーザとのメッセージ履歴をすべて取得
+     * 引数1: ユーザID(自身), 引数2: ユーザID(相手側), 引数3: メッセージID
      */
-    public function getMessageQuery($conditions=null, $id=null) {
+    public function getMessageQuery($user_id, $user_id_target, $id=null) {
         // messagesテーブルの値をUnion結合して取得
-        $subQuery = $this->model->select('*', 'user_id_sender as target_id')
-                              ->where('user_id_receiver', '=', $conditions['user_id'])
-                              ->where('user_id_sender', '=', $conditions['user_id_target'])
-                              ->where('delete_flg', '=', 0);
+        $subQuery = $this->getQuery($this->table, ['user_id_receiver' => $user_id, 'user_id_sender' => $user_id_target])
+                         ->select('*', 'user_id_sender as target_id');
 
-        $subQuery = $this->model->select('*', 'user_id_receiver as target_id')
-                             ->where('user_id_sender', '=', $conditions['user_id'])
-                             ->where('user_id_receiver', '=', $conditions['user_id_target'])
-                             ->where('delete_flg', '=', 0)
-                             ->union($subQuery)
-                             ->orderBy('updated_at', 'desc');
+        $subQuery = $this->getQuery($this->table, ['user_id_receiver' => $user_id_target, 'user_id_sender' => $user_id])
+                         ->select('*', 'user_id_receiver as target_id')
+                         ->union($subQuery)
+                         ->orderBy('updated_at', 'desc');
 
+        // 本クエリ
         $query = $this->model->select('messages.*', 'users.users_photo_path', 'users.name', 'users.gender')
                              ->fromSub($subQuery, 'messages')
                              ->leftJoin('users', 'users.id', '=', 'messages.target_id');
@@ -77,18 +65,17 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
 
     /**
      * messagesページの一覧表示データを取得
+     * 引数1: ユーザID(自身), 引数2: メッセージID
      */
-    public function getIndexQuery($conditions=null, $id=null) {
+    public function getMessageListsQuery($user_id, $id=null) {
         // messagesテーブルの値をUnion結合して取得
-        $subQuery = $this->model->select('*', 'user_id_sender as user_id')
-                              ->where('user_id_receiver', '=', $conditions['user_id'])
-                              ->where('delete_flg', '=', 0);
+        $subQuery = $this->getQuery($this->table, ['user_id_receiver' => $user_id])
+                         ->select('*', 'user_id_sender as user_id');
 
-        $subQuery = $this->model->select('*', 'user_id_receiver as user_id')
-                             ->where('user_id_sender', '=', $conditions['user_id'])
-                             ->where('delete_flg', '=', 0)
-                             ->union($subQuery)
-                             ->orderBy('updated_at', 'desc');
+        $subQuery = $this->getQuery($this->table, ['user_id_sender' => $user_id])
+                         ->select('*', 'user_id_receiver as user_id')
+                         ->union($subQuery)
+                         ->orderBy('updated_at', 'desc');
         
         // usersテーブルの値も結合して取得
         $query = $this->model->selectRaw('distinct(messangers.user_id)')
@@ -102,6 +89,7 @@ class MessageRepository extends BaseRepository implements MessageDatabaseInterfa
         $query = $this->model->select('*')
                              ->rightJoinSub($query, 'messangers', 'messages.id', '=', 'messangers.messangers_id');
 
+        // messageデータを更新時に更新後のデータを取得
         if($id) {
             $query = $query->where('messages.id', '=', $id);
         }

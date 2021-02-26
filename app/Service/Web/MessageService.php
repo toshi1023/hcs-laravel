@@ -20,30 +20,22 @@ class MessageService
 
   /**
    * Indexページ用データ取得メソッド
-   * 引数1：テーブル名, 引数2：検索条件
+   * 引数：検索条件
    */
-  public function getIndex($table=null, $conditions=null)
+  public function getMessageLists($conditions=null)
   {
-    if(is_null($table)) {
-      // ログインユーザのメッセージを全て取得
-      return $this->MessageService->getIndexQuery($conditions)->get();
-    }
-    // 指定したテーブルのデータをソートして取得
-    return $this->MessageService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
+    // ログインユーザのメッセージを全て取得
+    return $this->MessageService->getMessageListsQuery($conditions)->get();
   }
 
   /* *
    * Showページ用データを取得するメソッド
-   * 引数1：テーブル名, 引数2：検索条件
+   * 引数1：ユーザID(自身), 引数2: ユーザID(相手側)
    * */
-  public function getShow($table=null, $conditions=null)
+  public function getShow($user_id, $user_id_target)
   {
-    if(is_null($table)) {
-      // 特定ユーザとのメッセージ履歴を全て取得
-      return $this->MessageService->getMessageQuery($conditions)->orderBy('messages.created_at', 'asc')->get();
-    }
-    // 指定したテーブルのデータをソートして取得
-    return $this->MessageService->getQuery($table, $conditions)->latest($table.'.updated_at')->get();
+    // 特定ユーザとのメッセージ履歴を全て取得
+    return $this->MessageService->getMessageQuery($user_id, $user_id_target)->orderBy('messages.created_at', 'asc')->get();
   }
 
   /**
@@ -55,19 +47,13 @@ class MessageService
     // メッセージの保存処理
     $message = $this->MessageService->getSave($data, 'messages');
 
-    // 検索条件
-    $conditions = [
-      'user_id' => $message->user_id_sender,
-    ];
-
     // メッセージリストのデータも更新
-    $message_list = $this->MessageService->getIndexQuery($conditions, $message->id)->first();
-
-    // 検索条件を追加
-    $conditions['user_id_target'] = $message->user_id_receiver;
+    $message_list = $this->MessageService->getMessageListsQuery($message->user_id_sender, $message->id)->first();
 
     // 作成したデータを取得
-    $message = $this->MessageService->getMessageQuery($conditions, $message->id)->orderBy('messages.created_at', 'asc')->first();
+    $message = $this->MessageService->getMessageQuery($message->user_id_sender, $message->user_id_receiver, $message->id)
+                    ->orderBy('messages.created_at', 'asc')
+                    ->first();
     
     return [
       'message'  => $message,
@@ -84,21 +70,15 @@ class MessageService
     // メッセージの保存処理
     $message = $this->MessageService->getSave($data, 'messages');
 
-    // 検索条件
-    $conditions = [
-      'user_id' => $message->user_id_sender,
-    ];
-
     // メッセージリストのデータも更新
-    $message_list = $this->MessageService->getIndexQuery($conditions, $message->id)->first();
+    $message_list = $this->MessageService->getMessageListsQuery($message->user_id_sender, $message->id)->first();
     // リアルタイム通信用のメッセージリストのデータを更新
-    $realtime_message_list = $this->MessageService->getIndexQuery(['user_id' => $message->user_id_receiver], $message->id)->first();
-
-    // 検索条件を追加
-    $conditions['user_id_target'] = $message->user_id_receiver;
+    $realtime_message_list = $this->MessageService->getMessageListsQuery($message->user_id_receiver, $message->id)->first();
 
     // 作成したデータを取得
-    $message = $this->MessageService->getMessageQuery($conditions, $message->id)->orderBy('messages.created_at', 'asc')->first();
+    $message = $this->MessageService->getMessageQuery($message->user_id_sender, $message->user_id_receiver, $message->id)
+                                    ->orderBy('messages.created_at', 'asc')
+                                    ->first();
     
     return [
       'message'  => $message,

@@ -69,7 +69,7 @@ class UserController extends Controller
     public function store(UserRegisterRequest $request)
     {
       DB::beginTransaction();
-
+      
       // パスワードのハッシュ処理
       $request['password'] = Hash::make($request['password']);
 

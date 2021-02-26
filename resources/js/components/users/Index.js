@@ -140,7 +140,7 @@ export default function User() {
         // ユーザの再取得
         document.getElementById('search').click()
     }
-
+    
     /**
      * 検索条件をもとにユーザの絞り込み
      */

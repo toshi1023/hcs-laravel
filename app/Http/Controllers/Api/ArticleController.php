@@ -32,7 +32,7 @@ class ArticleController extends Controller
       // 検索条件のセット
       $conditions = [];
     
-      $articles = $this->database->getHome(null, $conditions);
+      $articles = $this->database->getHome($conditions);
       
       return response()->json([
         'articles' => $articles, 
@@ -56,7 +56,7 @@ class ArticleController extends Controller
       if ($request->input('queryPrefecture')) { $conditions['articles.prefecture@like'] = $request->input('queryPrefecture'); }
       if ($request->input('queryId')) { $conditions['articles.user_id'] = $request->input('queryId'); }
     
-      $articles = $this->database->getIndex(null, $conditions);
+      $articles = $this->database->getIndex($conditions);
       
       return response()->json([
         'articles' => $articles, 

@@ -30,7 +30,7 @@ class MessageController extends Controller
             $conditions = [];
             if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }
             
-            $messages = $this->database->getIndex(null, $conditions);
+            $messages = $this->database->getMessageLists($conditions);
 
             return response()->json([
                 'message_lists' => $messages,
@@ -49,13 +49,8 @@ class MessageController extends Controller
     public function show(Request $request)
     {   
         try {
-            // 検索条件のセット
-            $conditions = [];
-            if ($request->input('queryUserId')) { $conditions['user_id'] = $request->input('queryUserId'); }
-            if ($request->input('queryUserIdTarget')) { $conditions['user_id_target'] = $request->input('queryUserIdTarget'); }
-
             // メッセージの取得
-            $messages = $this->database->getShow(null, $conditions);
+            $messages = $this->database->getShow($request->input('queryUserId'), $request->input('queryUserIdTarget'));
     
             return response()->json([
                 'messages' => $messages,

@@ -22,42 +22,34 @@ class ArticleService
   /**
    * Homeページ用データ取得メソッド
    * ※5件のみ取得して返す
-   * 引数1：テーブル名, 引数2：検索条件
+   * 引数：検索条件
    */
-  public function getHome($table=null, $conditions=null)
+  public function getHome($conditions=null)
   {
-    if(is_null($table)) {
-      // 記事をいいね！が多い順に5件だけ取得
-      $user_id = Auth::user() ? Auth::user()->id : 0 ;
-      
-      // ログインユーザ向けにデータをリターン
-      if ($user_id) {
-        return $this->ArticleService->getBaseData($conditions, $user_id)->orderBy('likes_counts', 'desc')->limit(5)->get();
-      }
-      // 非ログインユーザ向けにデータをリターン
-      return $this->ArticleService->getBaseData($conditions, $user_id)
-                                  ->where('type', '=', config('const.public'))
-                                  ->orderBy('likes_counts', 'desc')
-                                  ->limit(5)
-                                  ->get();
+    // 記事をいいね！が多い順に5件だけ取得
+    $user_id = Auth::user() ? Auth::user()->id : 0 ;
+    
+    // ログインユーザ向けにデータをリターン
+    if ($user_id) {
+      return $this->ArticleService->getBaseData($conditions, $user_id)->orderBy('likes_counts', 'desc')->limit(5)->get();
     }
-    // 指定したテーブルのデータをソートして取得
-    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
+    // 非ログインユーザ向けにデータをリターン
+    return $this->ArticleService->getBaseData($conditions, $user_id)
+                                ->where('type', '=', config('const.public'))
+                                ->orderBy('likes_counts', 'desc')
+                                ->limit(5)
+                                ->get();
   }
 
   /**
    * Indexページ用データ取得メソッド
-   * 引数1：テーブル名, 引数2：検索条件
+   * 引数：検索条件
    */
-  public function getIndex($table=null, $conditions=null)
+  public function getIndex($conditions=null)
   {
-    if(is_null($table)) {
-      // 記事を全て取得
-      $user_id = Auth::user() ? Auth::user()->id : 0 ;
-      return $this->ArticleService->getBaseData($conditions, $user_id)->latest('updated_at')->get();
-    }
-    // 指定したテーブルのデータをソートして取得
-    return $this->ArticleService->getQuery($table, $conditions)->latest($table.'.updated_at');
+    // 記事を全て取得
+    $user_id = Auth::user() ? Auth::user()->id : 0 ;
+    return $this->ArticleService->getBaseData($conditions, $user_id)->latest('updated_at')->get();
   }
 
   /**
@@ -74,13 +66,13 @@ class ArticleService
   }
 
   /**
-    * 記事削除用メソッド
-    * 引数:記事ID
-    * */
-    public function articleDestroy($id)
-    {
-      return $this->ArticleService->getDestroy($id, 'articles');
-    }
+  * 記事削除用メソッド
+  * 引数:記事ID
+  * */
+  public function articleDestroy($id)
+  {
+    return $this->ArticleService->getDestroy($id, 'articles');
+  }
 
   /**
    * ファイル削除用メソッド

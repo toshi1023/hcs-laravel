@@ -47,7 +47,6 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-      // dd(\Session::get('admins'));
       return view('admin.auth.login');
     }
 
