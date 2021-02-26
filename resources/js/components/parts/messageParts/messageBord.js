@@ -180,6 +180,7 @@ export default function MessageBord() {
                             variant="outlined"
                             style={{marginLeft: 10, minWidth: 290, backgroundColor: 'white'}}
                             onChange={(e) => handleSetMessage(e.target.value)}
+                            value={state.content}
                             multiline
                         />
                     </FormControl>
@@ -248,6 +249,7 @@ export default function MessageBord() {
                                         variant="outlined"
                                         style={{ marginLeft: 10, minWidth: 500, backgroundColor: 'white' }}
                                         onChange={(e) => handleSetMessage(e.target.value)}
+                                        value={state.content}
                                         multiline
                                     />
                                 </Grid>

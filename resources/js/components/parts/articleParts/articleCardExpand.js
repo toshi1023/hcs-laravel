@@ -236,6 +236,7 @@ function ArticleCardExpand (props) {
                                             variant="outlined"
                                             style={{minWidth: 250, backgroundColor: 'white'}}
                                             onChange={(e) => handleSetComment(e.target.value)}
+                                            value={state.comment}
                                             multiline
                                         />
                                     </Grid>
@@ -344,6 +345,7 @@ function ArticleCardExpand (props) {
                                         variant="outlined"
                                         style = {{marginLeft: 10, minWidth: 400, backgroundColor: 'white'}}
                                         onChange={(e) => handleSetComment(e.target.value)}
+                                        value={state.comment}
                                         multiline
                                     />
                                 </Grid>

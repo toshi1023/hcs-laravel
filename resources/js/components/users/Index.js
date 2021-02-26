@@ -266,6 +266,7 @@ export default function User() {
                                             style: {fontSize: 15}
                                         }}
                                         onChange={handleChangeName}
+                                        value={state.userName}
                                     />
                                     <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleDeleteName} >
                                         クリア
@@ -325,6 +326,7 @@ export default function User() {
                                         style: {fontSize: 15}
                                     }}
                                     onChange={handleChangeName}
+                                    value={state.userName}
                                 />
                                 <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleDeleteName} >
                                     クリア
