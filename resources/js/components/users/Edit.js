@@ -127,9 +127,10 @@ function UserEdit(props) {
             : 
                 document.getElementById("genderSwitch").checked = false
             console.log(document.getElementById("genderSwitch").checked)
+            console.log(editedUser)
             // ユーザの登録している生年月日が選択されている状態でセット
             setBirthday(true)
-
+            
             console.log(document.getElementById("modalFormPrefecture").value)
             console.log(document.getElementById("selectYear").value)
             console.log(document.getElementById("selectMonth").value)

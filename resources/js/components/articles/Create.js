@@ -200,40 +200,7 @@ function ArticleCreate() {
             type: document.getElementById("typeSwitch").checked
         })
     }
-    
-    /**
-     * 画像の保存処理(ArticleDropzoneコンポーネントで実施)
-     * @param {*} values 
-     */
-    const doAction = (values) => {
-        return childRef.current.onSubmitArticleImage(values)
-    }
-  
-    /**
-     * 記事の作成(stateの値をApiで送信)
-     * @param {*} values 
-     */
-    async function createClicked(values) {
-        // ロード開始
-        await dispatch(fetchCredStart())
-        
-        // 画像の保存
-        doAction(values).then(async (value) => {
-            const result = await dispatch(fetchAsyncCreate(value))
-            if (fetchAsyncCreate.fulfilled.match(result)) {
-                // infoメッセージの表示
-                result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
-                // ロード終了
-                await dispatch(fetchCredEnd()); 
-                return;
-            }
-        })
 
-        // ロード終了
-        await dispatch(fetchCredEnd()); 
-        return;
-    }
-    
     useEffect(() => {
         // 非同期の関数を定義
         const fetchArticleProf = async () => {
@@ -277,7 +244,61 @@ function ArticleCreate() {
         fetchArticleProf()
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
+    
+    /**
+     * 画像の保存処理(ArticleDropzoneコンポーネントで実施)
+     * @param {*} values 
+     */
+    const doAction = (values) => {
+        return childRef.current.onSubmitArticleImage(values)
+    }
+  
+    /**
+     * 記事の作成(stateの値をApiで送信)
+     * @param {*} values 
+     */
+    async function createClicked(values) {
+        // ロード開始
+        await dispatch(fetchCredStart())
+        
+        // 画像の保存
+        doAction(values).then(async (value) => {
+            const result = await dispatch(fetchAsyncCreate(value))
+            if (fetchAsyncCreate.fulfilled.match(result)) {
+                // infoメッセージの表示
+                result.payload.info_message ? dispatch(fetchGetInfoMessages(result)) : dispatch(fetchGetErrorMessages(result))
+                // 入力フォームのクリア
+                result.payload.info_message && clearForm() 
+                // ロード終了
+                await dispatch(fetchCredEnd());
+                return result.payload.info_message ? true : false;
+            }
+        })
 
+        // ロード終了
+        await dispatch(fetchCredEnd()); 
+        return false;
+    }
+
+    /**
+     * 入力フォームのリセット
+     */
+    const clearForm = () => {
+        // スマホ版のフォームをリセット
+        document.getElementById('mobileFormPrefecture').value = '全都道府県'
+        document.getElementById('mobileTitle').value = ''
+        document.getElementById('mobileContent').value = ''
+        // PC版の入力フォームをリセット
+        document.getElementById('formPrefecture').value = '全都道府県'
+        document.getElementById('title').value = ''
+        document.getElementById('content').value = ''
+        // 位置情報のラジオボタンを初期化
+        setValue('current')
+        // 位置情報を現在地に再設定
+        handleSetMap()
+        // 公開フラグを初期化
+        setState({...state, type: false})
+    }
 
     /**
      * 都道府県の検索条件をもとに記事の絞り込み
@@ -444,7 +465,13 @@ function ArticleCreate() {
                                             formData.append('longitude', state.longitude)
                                             
                                             // 記事の登録処理
-                                            createClicked(formData)
+                                            const result = createClicked(formData)
+
+                                            // valuesの値をリセット
+                                            if(result) {
+                                                values.mobileTitle = ''
+                                                values.mobileContent = ''
+                                            }
                                         }}
                                         validationSchema={Yup.object().shape({
                                             mobileTitle: Yup.string()
@@ -521,7 +548,7 @@ function ArticleCreate() {
                                                         initialState={false}
                                                         labelPlacement='bottom'
                                                         checked={state.type}
-                                                        value={values.type}
+                                                        value={state.type}
                                                     />
                                                 </div>
                                                 <div className={classes.margin}>
@@ -581,7 +608,13 @@ function ArticleCreate() {
                                                 formData.append('longitude', state.longitude)
                                                 
                                                 // 記事の登録処理
-                                                createClicked(formData)
+                                                const result = createClicked(formData)
+
+                                                // valuesの値をリセット
+                                                if(result) {
+                                                    values.title = ''
+                                                    values.content = ''
+                                                }
                                             }}
                                             validationSchema={Yup.object().shape({
                                                 title: Yup.string()
@@ -660,7 +693,7 @@ function ArticleCreate() {
                                                             initialState={false}
                                                             labelPlacement='bottom'
                                                             checked={state.type}
-                                                            value={values.type}
+                                                            value={state.type}
                                                         />
                                                     </div>
                                                     <div className={classes.margin}>

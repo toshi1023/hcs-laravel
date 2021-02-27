@@ -267,6 +267,14 @@ export default function User() {
                                         }}
                                         onChange={handleChangeName}
                                         value={state.userName}
+                                        onKeyDown={e => {
+                                            if (e.keyCode === 13) {
+                                              // エンターキー押下時の処理
+                                              getSearchUser()
+                                              // submitの無効(ページ再レンダーを無効化)
+                                              e.preventDefault()
+                                            }
+                                        }}
                                     />
                                     <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleDeleteName} >
                                         クリア
@@ -327,6 +335,14 @@ export default function User() {
                                     }}
                                     onChange={handleChangeName}
                                     value={state.userName}
+                                    onKeyDown={e => {
+                                        if (e.keyCode === 13) {
+                                          // エンターキー押下時の処理
+                                          getSearchUser()
+                                          // submitの無効(ページ再レンダーを無効化)
+                                          e.preventDefault()
+                                        }
+                                    }}
                                 />
                                 <Button variant="contained" color="primary" className={classes.clearButton} onClick={handleDeleteName} >
                                     クリア
