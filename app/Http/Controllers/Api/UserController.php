@@ -38,9 +38,9 @@ class UserController extends Controller
         $data = $this->database->getIndex($conditions);
         
         return response()->json([
-          'users' => $data['users'], 
-          'friends' => $data['friends'],
-          'messages' => $data['messages']
+          'users'     => $data['users'],
+          'friends'   => $data['friends'],
+          'messages'  => $data['messages']
         ],200, [], JSON_UNESCAPED_UNICODE);
       } catch (Exception $e) {
         \Log::error('User get Error:'.$e->getMessage());
@@ -186,7 +186,7 @@ class UserController extends Controller
         $friends = $this->database->getFriendsQuery($request->input('query'), config('const.approval'));
         
         return response()->json([
-          'friends' => $friends, 
+          'friends'   => $friends, 
         ],200, [], JSON_UNESCAPED_UNICODE);
       }  catch (Exception $e) {
         \Log::error('Friend get Error:'.$e->getMessage());

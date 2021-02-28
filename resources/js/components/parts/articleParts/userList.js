@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
-import { fetchAsyncGet, selectUsers } from '../../users/userSlice';
+import { fetchAsyncGet, selectUsers, fetchAsyncGetPagination } from '../../users/userSlice';
+import BasicPagination from '../common/pagenation';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -38,7 +39,6 @@ export default function UserList(props) {
     useEffect(() => {
         // 非同期の関数を定義
         const fetchUser = async () => {
-            // console.log(users)
             // Loading開始
             await dispatch(fetchCredStart())
             // ユーザ一覧とログイン情報を取得
@@ -54,41 +54,61 @@ export default function UserList(props) {
         fetchUser()
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
+
+    /**
+     * 選択したページ用のデータを取得
+     */
+    const handleGetData = async (page) => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+
+        const resultReg = await dispatch(fetchAsyncGetPagination(page))
+
+        if (fetchAsyncGetPagination.fulfilled.match(resultReg)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+    }
     
     return (
-        <List dense className={classes.root}>
-            {
-                _.map(users, value => {
-                
-                    return (
-                        <>
-                            {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-                            <ListItem
-                                key={value.target_id}
-                                button
-                                onClick={() => props.handleFriendArticles(value.id)}
-                            >
-                                <ListItemAvatar>
-                                    <Avatar
-                                        alt={`Avatar n°${value.target_id}`}
-                                        src={`${value.users_photo_path}`}
-                                        className={classes.avatar}
+        <>
+            <List dense className={classes.root}>
+                {
+                    _.map(users.data, value => {
+                    
+                        return (
+                            <>
+                                {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
+                                <ListItem
+                                    key={value.target_id}
+                                    button
+                                    onClick={() => props.handleFriendArticles(value.id)}
+                                >
+                                    <ListItemAvatar>
+                                        <Avatar
+                                            alt={`Avatar n°${value.target_id}`}
+                                            src={`${value.users_photo_path}`}
+                                            className={classes.avatar}
+                                        />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        id={value.target_id}
+                                        primary={`${value.name}`}
+                                        classes={{ primary: classes.list }}
+                                        style={{
+                                            color: value.gender == 1 ? "blue" : "red"
+                                        }}
                                     />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    id={value.target_id}
-                                    primary={`${value.name}`}
-                                    classes={{ primary: classes.list }}
-                                    style={{
-                                        color: value.gender == 1 ? "blue" : "red"
-                                    }}
-                                />
-                            </ListItem>
-                            <hr />
-                        </>
-                    );
-                })
-            }
-        </List>
+                                </ListItem>
+                                <hr />
+                            </>
+                        );
+                    })
+                }
+            </List>
+            <BasicPagination count={users.last_page} handleGetData={handleGetData} />
+        </>
     );
 }

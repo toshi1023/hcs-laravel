@@ -29,7 +29,7 @@ class UserService
   public function getIndex($conditions=null)
   {
       // ユーザ情報の取得
-      $users = $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
+      $users = $this->UserService->getBaseData($conditions)->orderBy('updated_at', 'desc')->paginate(config('const.user_list_counts'));
       // フレンド情報取得
       $friends = '';
       if(request()->input('queryId')) {
@@ -40,7 +40,7 @@ class UserService
       if(\Auth::user()) {
         $messages = $this->MessageService->getMessageListsQuery(\Auth::user()->id)->select('messangers.user_id')->get();
       }
-
+      
       return [
         'users'   => $users,
         'friends' => $friends,
@@ -121,7 +121,7 @@ class UserService
   public function getFriendsQuery($user_id, $approve=null)
   {
     // 友達申請が承認された値のみ取得
-    return $this->UserService->getFriendsQuery($user_id, $approve)->get();
+    return $this->UserService->getFriendsQuery($user_id, $approve)->paginate(config('const.user_list_counts'));
   }
 
   /**

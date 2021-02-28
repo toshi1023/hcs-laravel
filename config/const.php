@@ -54,6 +54,12 @@ return [
     'no_image_path'  => '',
     'out_image_path' => '',
 
+    // ユーザ一覧の表示件数(フロント側)
+    'user_list_counts'      => 10,
+    
+    // 記事一覧の表示件数(フロント側)
+    'article_list_counts'   => 10,
+
     // BingMapのURL
     'bing_url'              => 'https://www.bing.com/maps',
 

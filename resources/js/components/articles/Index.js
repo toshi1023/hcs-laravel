@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, selectInfo, selectModal } from '../app/appSlice';
-import { selectArticles, fetchAsyncGet, selectLikes, selectSearchUser, searchUser } from './articleSlice';
+import { selectArticles, fetchAsyncGet, selectLikes, selectSearchUser, searchUser, selectArticlesLastPage } from './articleSlice';
 import ArticleEdit from './Edit';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
@@ -69,6 +69,7 @@ function Article() {
     })
     // stateで管理するデータを使用できるように定数に格納
     const articles = useSelector(selectArticles)
+    const lastPage = useSelector(selectArticlesLastPage)
     const searchedUser = useSelector(selectSearchUser)
     const infoMessages = useSelector(selectInfo)
     const open = useSelector(selectModal)
@@ -237,7 +238,7 @@ function Article() {
         return (
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={12} sm={6}>
-                    <ArticleCard article={articles} />
+                    <ArticleCard article={articles} lastPage={lastPage} />
                 </Grid>
             </Grid>
         )

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
-import { fetchAsyncGet, searchUser } from '../../articles/articleSlice';
-import { selectFriends, fetchAsyncGetFriends } from '../../users/userSlice';
+import { selectFriends, fetchAsyncGetFriends, fetchAsyncGetFriendsPagination } from '../../users/userSlice';
+import BasicPagination from '../common/pagenation';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -43,7 +43,7 @@ export default function FriendList(props) {
             await dispatch(fetchCredStart())
             // 友達一覧を取得
             const resultReg = await dispatch(fetchAsyncGetFriends(localStorage.getItem('loginId')))
-            if (fetchAsyncGet.fulfilled.match(resultReg)) {
+            if (fetchAsyncGetFriends.fulfilled.match(resultReg)) {
                 // ロード終了
                 await dispatch(fetchCredEnd());
             }
@@ -55,47 +55,67 @@ export default function FriendList(props) {
         // dispatchをuseEffectの第2引数に定義する必要がある
     }, [dispatch])
 
+    /**
+     * 選択したページ用のデータを取得
+     */
+    const handleGetData = async (page) => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+
+        const resultReg = await dispatch(fetchAsyncGetFriendsPagination(page))
+
+        if (fetchAsyncGetFriendsPagination.fulfilled.match(resultReg)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+    }
+
     return (
-        <List dense className={classes.root}>
-            {
-                _.map(friends, value => {
-            
-                    return (
-                        <>
-                            {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-                            {
-                                value.auth_friends !== undefined ? 
-                                    <>
-                                        <ListItem
-                                            key={value.target_id}
-                                            button
-                                            onClick={() => props.handleFriendArticles(value.target_id)}
-                                        >
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    alt={`Avatar n°${value.target_id}`}
-                                                    src={`${value.auth_friends.users_photo_path}`}
-                                                    className={classes.avatar}
+        <>
+            <List dense className={classes.root}>
+                {
+                    _.map(friends.data, value => {
+                
+                        return (
+                            <>
+                                {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
+                                {
+                                    value.auth_friends !== undefined ? 
+                                        <>
+                                            <ListItem
+                                                key={value.target_id}
+                                                button
+                                                onClick={() => props.handleFriendArticles(value.target_id)}
+                                            >
+                                                <ListItemAvatar>
+                                                    <Avatar
+                                                        alt={`Avatar n°${value.target_id}`}
+                                                        src={`${value.auth_friends.users_photo_path}`}
+                                                        className={classes.avatar}
+                                                    />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    id={value.target_id}
+                                                    primary={`${value.auth_friends.name}`}
+                                                    classes={{ primary: classes.list }}
+                                                    style={{
+                                                        color: value.auth_friends.gender == 1 ? "blue" : "red"
+                                                    }}
                                                 />
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                id={value.target_id}
-                                                primary={`${value.auth_friends.name}`}
-                                                classes={{ primary: classes.list }}
-                                                style={{
-                                                    color: value.auth_friends.gender == 1 ? "blue" : "red"
-                                                }}
-                                            />
-                                        </ListItem>
-                                        <hr />
-                                    </>
-                                :
-                                    ''
-                            }
-                        </>
-                    );
-                })
-            }
-        </List>
+                                            </ListItem>
+                                            <hr />
+                                        </>
+                                    :
+                                        ''
+                                }
+                            </>
+                        );
+                    })
+                }
+            </List>
+            <BasicPagination count={friends.last_page} handleGetData={handleGetData} />
+        </>
     );
 }

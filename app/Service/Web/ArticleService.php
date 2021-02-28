@@ -49,7 +49,7 @@ class ArticleService
   {
     // 記事を全て取得
     $user_id = Auth::user() ? Auth::user()->id : 0 ;
-    return $this->ArticleService->getBaseData($conditions, $user_id)->latest('updated_at')->get();
+    return $this->ArticleService->getBaseData($conditions, $user_id)->latest('updated_at')->paginate(config('const.article_list_counts'));
   }
 
   /**

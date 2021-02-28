@@ -177,7 +177,7 @@ export default function Message() {
     const handleShowMessage = () => {
         setShowMessageFlg(true)
     }
-   
+    
     return (
         <>
             {

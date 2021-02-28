@@ -71,6 +71,25 @@ export const fetchAsyncGet = createAsyncThunk('users/index', async(conditions) =
 })
 
 /**
+ * 一覧データの取得(next_page用)
+ */
+export const fetchAsyncGetPagination = createAsyncThunk('users/next', async(conditions) => {
+    try {
+        const res = await axios.get(`${apiUrl}?page=${conditions}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
  * 詳細データ(初期表示用)の取得
  */
 export const fetchAsyncGetShow = createAsyncThunk('users/initShow', async(conditions) => {
@@ -176,6 +195,25 @@ export const fetchAsyncDelete = createAsyncThunk('users/delete', async(id) => {
 export const fetchAsyncGetFriends = createAsyncThunk('friends/index', async(conditions) => {
     try {
         const res = await axios.get(`${apiUrl}/${conditions}/friends?query=${conditions}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
+ * 友達一覧データの取得(next_page用)
+ */
+export const fetchAsyncGetFriendsPagination = createAsyncThunk('friends/next', async(conditions) => {
+    try {
+        const res = await axios.get(`${apiUrl}/${conditions}/friends?page=${conditions}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -382,9 +420,15 @@ const userSlice = createSlice({
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                users: action.payload.users, //apiから取得した記事の情報をstateのusersに格納
+                users: action.payload.users,
                 friendStatus: action.payload.friends,
                 messageHistory: action.payload.messages
+            }
+        })
+        builder.addCase(fetchAsyncGetPagination.fulfilled, (state, action) => {
+            return {
+                ...state,
+                users: action.payload.users,
             }
         })
         builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
@@ -430,6 +474,12 @@ const userSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncGetFriends.fulfilled, (state, action) => {
+            return {
+                ...state,
+                friends: action.payload.friends,
+            }
+        })
+        builder.addCase(fetchAsyncGetFriendsPagination.fulfilled, (state, action) => {
             return {
                 ...state,
                 friends: action.payload.friends,

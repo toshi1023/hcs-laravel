@@ -317,7 +317,9 @@ const articleSlice = createSlice({
         },
         selectedUser: {
             user_id: '',
-        }
+        },
+        // scroll時の記事取得用
+        lastPage: ''
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -349,7 +351,8 @@ const articleSlice = createSlice({
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                articles: action.payload.articles, //apiから取得した記事の情報をstateのarticlesに格納
+                articles: action.payload.articles.data, //apiから取得した記事の情報をstateのarticlesに格納
+                lastPage: action.payload.articles.last_page
             }
         })
         builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
@@ -424,6 +427,7 @@ export const { editArticle, selectArticle, searchUser } = articleSlice.actions
 export const selectSelectedArticle = (state) => state.article.selectedArticle
 export const selectEditedArticle = (state) => state.article.editedArticle
 export const selectArticles = (state) => state.article.articles
+export const selectArticlesLastPage = (state) => state.article.last_page
 export const selectLikes = (state) => state.article.likes
 export const selectSelectedLike = (state) => state.article.selectedLike
 export const selectComments = (state) => state.article.comments
