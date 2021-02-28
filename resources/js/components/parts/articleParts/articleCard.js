@@ -73,7 +73,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20
   },
   content: {
-    fontSize: 17
+    fontSize: 17,
+    whiteSpace: 'pre-line',  // 文字データに改行コードが含まれる場合、改行を実行
   },
   bottomFont: {
     paddingLeft: 10,
@@ -95,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
   },
   mobileContent: {
     fontSize: 15,
+    whiteSpace: 'pre-line',  // 文字データに改行コードが含まれる場合、改行を実行
   },
 }));
 

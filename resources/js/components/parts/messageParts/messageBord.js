@@ -38,10 +38,12 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(7),
     },
     content: {
-        fontSize: 15
+        fontSize: 15,
+        whiteSpace: 'pre-line',  // 文字データに改行コードが含まれる場合、改行を実行
     },
     mobileContent: {
         fontSize: 12,
+        whiteSpace: 'pre-line',  // 文字データに改行コードが含まれる場合、改行を実行
     },
     rightBox: {
         backgroundColor: '#1b2538', 
@@ -79,9 +81,24 @@ export default function MessageBord() {
     })
 
     // スクロール位置を最下部に調整(※実装中)
-    // let target = document.getElementById('scrollInner');
-    // messages != undefined ? target.scrollIntoView(false) : ''
-
+    useEffect(() => {
+        // messageボードの要素の取得
+        let mobileElement = document.getElementById('mobileScrollInner');
+        // let element = document.getElementById('scrollInner');
+        let element = document.documentElement;
+        // 枠の底辺を取得
+        let mobileBottom = mobileElement.scrollHeight;
+        let bottom = element.scrollHeight - element.clientHeight;
+        document.getElementById('mobileScrollInner').scrollTop = 100
+        document.getElementById('scrollInner').scrollTop = 100
+        // console.log(document.getElementById('mobileScrollInner').scrollTop)
+        // console.log(mobileElement.clientHeight)
+        // スクロールの実行
+        // mobileBottom.scroll(0, mobileBottom);
+        // mobileElement.scrollTop = mobileBottom
+        // window.scroll(0, bottom);
+    }, [messages])
+    
     /**
      * メッセージの取得
      */
@@ -132,38 +149,40 @@ export default function MessageBord() {
                             <Chip label={messages[0].name} className={classes.mobileContent} color="secondary" />
                     : ''
                 }
-                <Paper className={classes.mobileMessageBord} id="scrollInner">
-                    {
-                        messages != undefined ?
-                            _.map(messages, value => {
-                                return (
-                                    <div className={classes.messageBox} key={value.id}>
-                                        {
-                                            value.user_id_sender == localStorage.getItem('loginId') ?
-                                                <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.rightBox}>
-                                                    <CardContent>
-                                                        <span key={value.id} className={classes.mobileContent}>{value.content}</span>
-                                                    </CardContent>
-                                                </Box>
-                                            : 
-                                                <div>
-                                                    <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
-                                                        <Avatar
-                                                            src={value.users_photo_path}
-                                                            className={classes.avatar}
-                                                        />
+                <div id="mobileScrollInner">
+                    <Paper className={classes.mobileMessageBord}>
+                        {
+                            messages != undefined ?
+                                _.map(messages, value => {
+                                    return (
+                                        <div className={classes.messageBox} key={value.id}>
+                                            {
+                                                value.user_id_sender == localStorage.getItem('loginId') ?
+                                                    <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.rightBox}>
                                                         <CardContent>
                                                             <span key={value.id} className={classes.mobileContent}>{value.content}</span>
                                                         </CardContent>
                                                     </Box>
-                                                </div>
-                                        }
-                                    </div>
-                                )
-                            })
-                        : ''
-                    }
-                </Paper>
+                                                : 
+                                                    <div>
+                                                        <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
+                                                            <Avatar
+                                                                src={value.users_photo_path}
+                                                                className={classes.avatar}
+                                                            />
+                                                            <CardContent>
+                                                                <span key={value.id} className={classes.mobileContent}>{value.content}</span>
+                                                            </CardContent>
+                                                        </Box>
+                                                    </div>
+                                            }
+                                        </div>
+                                    )
+                                })
+                            : ''
+                        }
+                    </Paper>
+                </div>
                 <div className={classes.messageField}>
                     <FormControl>
                         <IconButton 
@@ -198,38 +217,40 @@ export default function MessageBord() {
                             <Chip label={messages[0].name} className={classes.content} color="secondary" />
                     : ''
                 }
-                <Paper className={classes.messageBord} id="scrollInner">
-                    {
-                        messages != undefined ?
-                            _.map(messages, value => {
-                                return (
-                                    <div className={classes.messageBox} key={value.id}>
-                                        {
-                                            value.user_id_sender == localStorage.getItem('loginId') ?
-                                                <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.rightBox}>
-                                                    <CardContent>
-                                                        <span key={value.id} className={classes.content}>{value.content}</span>
-                                                    </CardContent>
-                                                </Box>
-                                            : 
-                                                <div>
-                                                    <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
-                                                        <Avatar
-                                                            src={value.users_photo_path}
-                                                            className={classes.avatar}
-                                                        />
+                <div id="scrollInner">
+                    <Paper className={classes.messageBord}>
+                        {
+                            messages != undefined ?
+                                _.map(messages, value => {
+                                    return (
+                                        <div className={classes.messageBox} key={value.id}>
+                                            {
+                                                value.user_id_sender == localStorage.getItem('loginId') ?
+                                                    <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.rightBox}>
                                                         <CardContent>
                                                             <span key={value.id} className={classes.content}>{value.content}</span>
                                                         </CardContent>
                                                     </Box>
-                                                </div>
-                                        }
-                                    </div>
-                                )
-                            })
-                        : ''
-                    }
-                </Paper>
+                                                : 
+                                                    <div>
+                                                        <Box component="div" key={value.id} m={1} borderRadius={16} className={classes.leftBox}>
+                                                            <Avatar
+                                                                src={value.users_photo_path}
+                                                                className={classes.avatar}
+                                                            />
+                                                            <CardContent>
+                                                                <span key={value.id} className={classes.content}>{value.content}</span>
+                                                            </CardContent>
+                                                        </Box>
+                                                    </div>
+                                            }
+                                        </div>
+                                    )
+                                })
+                            : ''
+                        }
+                    </Paper>
+                </div>
                 <div className={classes.messageField}>
                     <FormControl>
                         <div style={{display: 'flex'}}>

@@ -10,7 +10,7 @@ $(function(){
     }
 
     // 公開フラグのvalue値設定
-    $('#open_flg').change(function() {
+    $(document).on('change', '#open_flg', function() {
         if($('#open_flg').prop('checked')) {
             $('#type').val(1);
         } else {

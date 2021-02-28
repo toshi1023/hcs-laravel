@@ -54,6 +54,7 @@ const useStyles = makeStyles(theme => ({
     },
     listItemText:{
         fontSize:'12px',
+        whiteSpace: 'pre-line',  // 文字データに改行コードが含まれる場合、改行を実行
     },
     details: {
         display: "flex",

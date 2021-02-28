@@ -26,7 +26,8 @@ class ArrangeDataFilter
         }
         // 送信データにtypeが存在する場合
         if(isset($request->type)) {
-            $request->type === 'true' ? $request['type'] = 1 : $request['type'] = 0;
+            $request->type === 'true' ? $request['type'] = 1 : '';
+            $request->type === 'false' ? $request['type'] = 0 : '';
         }
 
         return $next($request);

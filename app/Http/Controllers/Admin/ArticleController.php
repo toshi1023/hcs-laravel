@@ -71,7 +71,6 @@ class ArticleController extends Controller
   public function store(ArticleRegisterRequest $request)
   {
     DB::beginTransaction();
-    
     // アップロードファイルのファイル名を設定
     $filename = null;
     if ($request->hasFile('upload_image')){
