@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, selectInfo, selectModal } from '../app/appSlice';
-import { selectArticles, fetchAsyncGet, selectLikes, selectSearchUser, searchUser, selectArticlesLastPage } from './articleSlice';
+import { 
+    selectArticles, fetchAsyncGet, selectSearchUser, 
+    searchUser, selectArticlesLastPage, fetchAsyncGetScroll 
+} from './articleSlice';
 import ArticleEdit from './Edit';
 import ArticleCard from '../parts/articleParts/articleCard';
 import PrefectureSelects from '../parts/common/prefectureSearch';
@@ -16,6 +19,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CommentIcon from '@material-ui/icons/Comment';
 import GroupIcon from '@material-ui/icons/Group';
 import styles from '../parts/common/commonParts.module.css';
+import InfiniteScroll  from "react-infinite-scroller";
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -67,6 +71,10 @@ function Article() {
     const [state, setState] = React.useState({
         friends: true,
     })
+    // 再読み込み判定
+    const [hasMore, setHasMore] = React.useState(true);
+    const [isFetching, setIsFetching] = React.useState(false);
+    const [scrollPage, setScrollPage] = React.useState(1);
     // stateで管理するデータを使用できるように定数に格納
     const articles = useSelector(selectArticles)
     const lastPage = useSelector(selectArticlesLastPage)
@@ -80,6 +88,7 @@ function Article() {
         const fetchArticleProf = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
+
             let resultReg = ''
             // Mapページからユーザ検索が実行されているかどうかで分岐
             if(searchedUser.user_id) {
@@ -101,7 +110,6 @@ function Article() {
         fetchArticleProf()
         
     }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
-
     
     /**
      * 都道府県の検索条件をもとに記事の絞り込み
@@ -190,6 +198,52 @@ function Article() {
     }
 
     /**
+     * 次スクロール用の記事データを取得
+     * @param {*} page 
+     */
+    const handleGetData = async (page) => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+
+        const resultReg = await dispatch(fetchAsyncGetScroll(page))
+
+        if (fetchAsyncGetScroll.fulfilled.match(resultReg)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+    }
+
+    /**
+     * 項目を読み込むときのコールバック
+     * @param {*} page 
+     */
+    const loadMore = async (page) => {
+        // loadMoreの実行を停止
+        setIsFetching(true)
+        if(page > 1) {
+            handleGetData(page).then(() => {
+                // ページ数が最後の場合、処理終了
+                if (lastPage === page) {
+                  setHasMore(false)
+                  return;
+                } else {
+                    // loadMoreの実行を再開
+                    setIsFetching(false)
+                }
+            }).catch(() => {
+                // loadMoreの実行を再開
+                setIsFetching(false)
+            })
+        }
+        if(page === 1) {
+            // loadMoreの実行を再開
+            setIsFetching(false)
+        }
+      }
+
+    /**
      * タブ切り替え処理
      * @param {*} event 
      * @param {*} newValue 
@@ -238,7 +292,15 @@ function Article() {
         return (
             <Grid container className={classes.gridContainer} justify="center">
                 <Grid item xs={12} sm={6}>
-                    <ArticleCard article={articles} lastPage={lastPage} />
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={loadMore}    //項目を読み込む際に処理するコールバック関数
+                        initialLoad={false}
+                        hasMore={!isFetching && hasMore}      //読み込みを行うかどうかの判定
+                    >
+                        <ArticleCard article={articles} />
+                        <ArticleCard article={articles[0][0] !== undefined ? articles[0] : ''} />
+                    </InfiniteScroll>
                 </Grid>
             </Grid>
         )

@@ -37,6 +37,7 @@
         "pusher-js": "^7.0.3",
         "react-bootstrap": "^1.3.0",
         "react-dropzone": "^11.0.3",
+        "react-infinite-scroller": "^1.2.4",
         "react-leaflet": "^3.0.5",
         "react-redux": "^7.2.1",
         "react-router-dom": "^5.2.0",

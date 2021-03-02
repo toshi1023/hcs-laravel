@@ -51,6 +51,7 @@ class ArticleController extends Controller
   public function index(Request $request)
   {
     try{
+      // dd($request->page);
       // 検索条件のセット
       $conditions = [];
       if ($request->input('queryPrefecture')) { $conditions['articles.prefecture@like'] = $request->input('queryPrefecture'); }

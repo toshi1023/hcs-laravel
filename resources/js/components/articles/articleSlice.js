@@ -40,6 +40,23 @@ export const fetchAsyncGet = createAsyncThunk('articles/index', async(conditions
 })
 
 /**
+ * 記事一覧データの取得(next_scroll用)
+ */
+export const fetchAsyncGetScroll = createAsyncThunk('articles/next', async(conditions) => {
+    try {
+        // 記事の取得（検索条件が設定されていれば検索条件の沿った内容をリターン）
+        const res = await axios.get(`${apiUrl}?page=${conditions}`)
+        
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
  * 記事データ作成
  */
 export const fetchAsyncCreate = createAsyncThunk('articles/create', async(article) => {
@@ -355,6 +372,12 @@ const articleSlice = createSlice({
                 lastPage: action.payload.articles.last_page
             }
         })
+        builder.addCase(fetchAsyncGetScroll.fulfilled, (state, action) => {
+            return {
+                ...state,
+                articles: [action.payload.articles.data, ...state.articles],
+            }
+        })
         builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
             return {
                 ...state,
@@ -427,7 +450,7 @@ export const { editArticle, selectArticle, searchUser } = articleSlice.actions
 export const selectSelectedArticle = (state) => state.article.selectedArticle
 export const selectEditedArticle = (state) => state.article.editedArticle
 export const selectArticles = (state) => state.article.articles
-export const selectArticlesLastPage = (state) => state.article.last_page
+export const selectArticlesLastPage = (state) => state.article.lastPage
 export const selectLikes = (state) => state.article.likes
 export const selectSelectedLike = (state) => state.article.selectedLike
 export const selectComments = (state) => state.article.comments
