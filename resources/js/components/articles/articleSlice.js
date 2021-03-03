@@ -336,7 +336,13 @@ const articleSlice = createSlice({
             user_id: '',
         },
         // scroll時の記事取得用
-        lastPage: ''
+        lastPage: '',
+        currentPage: '',
+        articlesPage1: '',
+        articlesPage2: '',
+        articlesPage3: '',
+        articlesPage4: '',
+        articlesPage5: '',
     },
     // Reducer (actionの処理を記述)
     reducers: {
@@ -373,9 +379,38 @@ const articleSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncGetScroll.fulfilled, (state, action) => {
+            if(action.payload.articles.current_page % 5 === 0) {
+                return {
+                    ...state,
+                    articlesPage5: action.payload.articles.data,
+                    currentPage: action.payload.articles.current_page
+                }
+            }
+            if(action.payload.articles.current_page % 4 === 0) {
+                return {
+                    ...state,
+                    articlesPage4: action.payload.articles.data,
+                    currentPage: action.payload.articles.current_page
+                }
+            }
+            if(action.payload.articles.current_page % 3 === 0) {
+                return {
+                    ...state,
+                    articlesPage3: action.payload.articles.data,
+                    currentPage: action.payload.articles.current_page
+                }
+            }
+            if(action.payload.articles.current_page % 2 === 0) {
+                return {
+                    ...state,
+                    articlesPage2: action.payload.articles.data,
+                    currentPage: action.payload.articles.current_page
+                }
+            }
             return {
                 ...state,
-                articles: [action.payload.articles.data, ...state.articles],
+                articlesPage5: action.payload.articles.data,
+                currentPage: action.payload.articles.current_pages
             }
         })
         builder.addCase(fetchAsyncCreate.fulfilled, (state, action) => {
@@ -450,7 +485,13 @@ export const { editArticle, selectArticle, searchUser } = articleSlice.actions
 export const selectSelectedArticle = (state) => state.article.selectedArticle
 export const selectEditedArticle = (state) => state.article.editedArticle
 export const selectArticles = (state) => state.article.articles
+export const selectArticlesPage1 = (state) => state.article.articlesPage1
+export const selectArticlesPage2 = (state) => state.article.articlesPage2
+export const selectArticlesPage3 = (state) => state.article.articlesPage3
+export const selectArticlesPage4 = (state) => state.article.articlesPage4
+export const selectArticlesPage5 = (state) => state.article.articlesPage5
 export const selectArticlesLastPage = (state) => state.article.lastPage
+export const selectArticlesCurrentPage = (state) => state.article.currentPage
 export const selectLikes = (state) => state.article.likes
 export const selectSelectedLike = (state) => state.article.selectedLike
 export const selectComments = (state) => state.article.comments

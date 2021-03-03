@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, selectInfo, selectModal } from '../app/appSlice';
 import { 
     selectArticles, fetchAsyncGet, selectSearchUser, 
-    searchUser, selectArticlesLastPage, fetchAsyncGetScroll 
+    searchUser, selectArticlesLastPage, fetchAsyncGetScroll,
+    selectArticlesPage1, selectArticlesPage2, selectArticlesPage3,
+    selectArticlesPage4, selectArticlesPage5, selectArticlesCurrentPage
 } from './articleSlice';
 import ArticleEdit from './Edit';
 import ArticleCard from '../parts/articleParts/articleCard';
@@ -59,6 +61,15 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
         marginLeft: theme.spacing(2),
     },
+    moreButton: {
+        fontSize: 15,
+        width: '100%',
+        backgroundColor: '#1b2538',
+        '&:hover': {
+            backgroundColor: '#96bfe0',
+        },
+        color: 'white'
+    },
   }));
 
 function Article() {
@@ -77,7 +88,13 @@ function Article() {
     const [scrollPage, setScrollPage] = React.useState(1);
     // stateで管理するデータを使用できるように定数に格納
     const articles = useSelector(selectArticles)
+    const articlesPage1 = useSelector(selectArticlesPage1)
+    const articlesPage2 = useSelector(selectArticlesPage2)
+    const articlesPage3 = useSelector(selectArticlesPage3)
+    const articlesPage4 = useSelector(selectArticlesPage4)
+    const articlesPage5 = useSelector(selectArticlesPage5)
     const lastPage = useSelector(selectArticlesLastPage)
+    const currentPage = useSelector(selectArticlesCurrentPage)
     const searchedUser = useSelector(selectSearchUser)
     const infoMessages = useSelector(selectInfo)
     const open = useSelector(selectModal)
@@ -222,16 +239,15 @@ function Article() {
     const loadMore = async (page) => {
         // loadMoreの実行を停止
         setIsFetching(true)
-        if(page > 1) {
+        if(articles.length >= 10 && page > 1) {
             handleGetData(page).then(() => {
                 // ページ数が最後の場合、処理終了
                 if (lastPage === page) {
                   setHasMore(false)
                   return;
-                } else {
-                    // loadMoreの実行を再開
-                    setIsFetching(false)
                 }
+                // loadMoreの実行を再開
+                setIsFetching(false)
             }).catch(() => {
                 // loadMoreの実行を再開
                 setIsFetching(false)
@@ -241,7 +257,11 @@ function Article() {
             // loadMoreの実行を再開
             setIsFetching(false)
         }
-      }
+    }
+    /**
+     * 記事取得中のロード表示
+     */
+    const loader =<div className="loader" style={{fontWeight: 'bold', color: '#1b2538', fontSize: '15px'}} key={0}>Loading ...</div>
 
     /**
      * タブ切り替え処理
@@ -297,9 +317,53 @@ function Article() {
                         loadMore={loadMore}    //項目を読み込む際に処理するコールバック関数
                         initialLoad={false}
                         hasMore={!isFetching && hasMore}      //読み込みを行うかどうかの判定
+                        loader={loader}         // 記事取得中のロード画面
                     >
                         <ArticleCard article={articles} />
-                        <ArticleCard article={articles[0][0] !== undefined ? articles[0] : ''} />
+                        {
+                            // scroll後の記事取得(1~10件)
+                            articlesPage1 ? 
+                                <ArticleCard article={articlesPage1} />
+                            :
+                                ''
+                        }
+                        {
+                            // scroll後の記事取得(11~20件)
+                            articlesPage2 ? 
+                                <ArticleCard article={articlesPage2} />
+                            :
+                                ''
+                        }
+                        {
+                            // scroll後の記事取得(21~30件)
+                            articlesPage3 ? 
+                                <ArticleCard article={articlesPage3} />
+                            :
+                                ''
+                        }
+                        {
+                            // scroll後の記事取得(31~40件)
+                            articlesPage4 ? 
+                                <ArticleCard article={articlesPage4} />
+                            :
+                                ''
+                        }
+                        {
+                            // scroll後の記事取得(41~50件)
+                            articlesPage5 ? 
+                                <ArticleCard article={articlesPage5} />
+                            :
+                                ''
+                        }
+                        {
+                            // 記事が50件表示された場合は表示
+                            isFetching && currentPage && currentPage % 5 === 0 ? 
+                                <Button variant="contained" color="primary" className={classes.moreButton}>
+                                    もっと記事を見る
+                                </Button>
+                            :
+                                ''
+                        }
                     </InfiniteScroll>
                 </Grid>
             </Grid>

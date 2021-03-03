@@ -95,5 +95,16 @@ class ArticlesTableSeeder extends Seeder
             'type'       => 1,
             'user_id'    => 9,
         ]);
+        for($i = 1; $i < 26; $i++) {
+            \App\Model\Article::create([
+                'prefecture' => '福岡県',
+                'latitude'   => 33.588587,
+                'longitude'  => 130.402659,
+                'title'      => 'title'.$i,
+                'content'    => 'content'.$i,
+                'type'       => 1,
+                'user_id'    => 9,
+            ]);
+        };
     }
 }
