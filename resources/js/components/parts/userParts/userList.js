@@ -1,8 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, fetchAsyncUpdateFriends, selectFriendStatus } from "../../users/userSlice";
-import { fetchGetInfoMessages, selectInfo } from '../../app/appSlice';
+import { selectUser, fetchAsyncUpdateFriends, selectFriendStatus, fetchAsyncGetPagination } from "../../users/userSlice";
+import { fetchGetInfoMessages, selectInfo, fetchCredStart, fetchCredEnd } from '../../app/appSlice';
 import SnackMessages from '../common/snackMessages';
+import BasicPagination from '../common/pagenation';
 import { makeStyles } from "@material-ui/core/styles";
 import {
     List,
@@ -70,6 +71,23 @@ export default function UserList(props) {
 
         setChecked(newChecked);
     };
+
+    /**
+     * 選択したページ用のデータを取得
+     */
+    const handleGetData = async (page) => {
+        // Loading開始
+        await dispatch(fetchCredStart())
+
+        const resultReg = await dispatch(fetchAsyncGetPagination(page))
+
+        if (fetchAsyncGetPagination.fulfilled.match(resultReg)) {
+            // ロード終了
+            await dispatch(fetchCredEnd());       
+        }
+        // ロード終了
+        await dispatch(fetchCredEnd());
+    }
     
     /**
      * 友達申請処理
@@ -103,106 +121,109 @@ export default function UserList(props) {
     }
 
     return (
-        <List dense className={classes.root}>
-            {
-                // メッセージ表示
-                infoMessages ? 
-                    <SnackMessages infoOpen={true} />
-                :
-                    <SnackMessages errorOpen={true} />
-            }
-            {_.map(props.user, value => {
-                
-                return (
-                    <>
-                        {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
-                        <ListItem
-                            key={value.id}
-                            button
-                            onClick={() => handleSetUser(value)}
-                        >
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={`Avatar n°${value.id}`}
-                                    src={`${value.users_photo_path}`}
-                                    className={classes.avatar}
+        <>
+            <List dense className={classes.root}>
+                {
+                    // メッセージ表示
+                    infoMessages ? 
+                        <SnackMessages infoOpen={true} />
+                    :
+                        <SnackMessages errorOpen={true} />
+                }
+                {_.map(props.user.data, value => {
+                    
+                    return (
+                        <>
+                            {/* onClickの記載は関数実行を防ぐため、この記述がマスト */}
+                            <ListItem
+                                key={value.id}
+                                button
+                                onClick={() => handleSetUser(value)}
+                            >
+                                <ListItemAvatar>
+                                    <Avatar
+                                        alt={`Avatar n°${value.id}`}
+                                        src={`${value.users_photo_path}`}
+                                        className={classes.avatar}
+                                    />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    id={value.id}
+                                    primary={`${value.name}`}
+                                    classes={{ primary: classes.list }}
+                                    style={{
+                                        color: value.gender == 1 ? "blue" : "red"
+                                    }}
                                 />
-                            </ListItemAvatar>
-                            <ListItemText
-                                id={value.id}
-                                primary={`${value.name}`}
-                                classes={{ primary: classes.list }}
-                                style={{
-                                    color: value.gender == 1 ? "blue" : "red"
-                                }}
-                            />
-                            <ListItemSecondaryAction>
-                                {
-                                    localStorage.getItem('localToken') ? 
-                                        <IconButton
-                                            style={
-                                                props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
-                                                    props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
-                                                        // 承認済み
-                                                        { backgroundColor: "#CCFFCC" } 
+                                <ListItemSecondaryAction>
+                                    {
+                                        localStorage.getItem('localToken') ? 
+                                            <IconButton
+                                                style={
+                                                    props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
+                                                        props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                            // 承認済み
+                                                            { backgroundColor: "#CCFFCC" } 
+                                                        : 
+                                                            // 申請中
+                                                            { backgroundColor: "#f4f5ab" }
+                                                    :
+                                                        // 友達申請
+                                                        { backgroundColor: "#d0ddf5" }
+                                                }
+                                                onClick={
+                                                    () => 
+                                                    props.friendStatus.find(element => element.target_id === value.id) ? 
+                                                        ''
                                                     : 
-                                                        // 申請中
-                                                        { backgroundColor: "#f4f5ab" }
-                                                :
-                                                    // 友達申請
-                                                    { backgroundColor: "#d0ddf5" }
-                                            }
-                                            onClick={
-                                                () => 
-                                                props.friendStatus.find(element => element.target_id === value.id) ? 
-                                                    ''
-                                                : 
-                                                    handleFriendApply(value.id)
-                                            }
-                                        >
-                                            {
-                                                props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
-                                                    props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
-                                                        // 承認済み
-                                                        <HowToRegIcon 
+                                                        handleFriendApply(value.id)
+                                                }
+                                            >
+                                                {
+                                                    props.friendStatus.find(element => element.target_id === value.id) != undefined ? 
+                                                        props.friendStatus.find(element => element.target_id === value.id).status === 2 ? 
+                                                            // 承認済み
+                                                            <HowToRegIcon 
+                                                                edge="end"
+                                                                onChange={handleToggleAdd(value.id)}
+                                                                inputProps={{
+                                                                    "aria-labelledby": value.id
+                                                                }}
+                                                                className={classes.successIcon}
+                                                            /> 
+                                                        : 
+                                                            // 申請中
+                                                            <ContactMailIcon
+                                                                edge="end"
+                                                                onChange={handleToggleAdd(value.id)}
+                                                                inputProps={{
+                                                                    "aria-labelledby": value.id
+                                                                }}
+                                                                className={classes.applyIcon}
+                                                            />
+                                                    :    
+                                                        // 友達追加
+                                                        <PersonAddIcon
                                                             edge="end"
                                                             onChange={handleToggleAdd(value.id)}
                                                             inputProps={{
                                                                 "aria-labelledby": value.id
                                                             }}
-                                                            className={classes.successIcon}
-                                                        /> 
-                                                    : 
-                                                        // 申請中
-                                                        <ContactMailIcon
-                                                            edge="end"
-                                                            onChange={handleToggleAdd(value.id)}
-                                                            inputProps={{
-                                                                "aria-labelledby": value.id
-                                                            }}
-                                                            className={classes.applyIcon}
+                                                            className={classes.addIcon}
                                                         />
-                                                :    
-                                                    // 友達追加
-                                                    <PersonAddIcon
-                                                        edge="end"
-                                                        onChange={handleToggleAdd(value.id)}
-                                                        inputProps={{
-                                                            "aria-labelledby": value.id
-                                                        }}
-                                                        className={classes.addIcon}
-                                                    />
-                                            }
-                                        </IconButton>
-                                    :
-                                        ''
-                                }
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                        <hr />
-                    </>
-                );
-            })}
-        </List>
+                                                }
+                                            </IconButton>
+                                        :
+                                            ''
+                                    }
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <hr />
+                        </>
+                    );
+                })}
+            </List>
+            <BasicPagination count={props.user.last_page} handleGetData={handleGetData} />
+        </>
     );
 }

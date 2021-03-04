@@ -122,6 +122,7 @@ class UserService
   {
     // 友達申請が承認された値のみ取得
     return $this->UserService->getFriendsQuery($user_id, $approve)->paginate(config('const.user_list_counts'));
+    // return $this->UserService->getFriendsQuery($user_id, $approve)->get();
   }
 
   /**

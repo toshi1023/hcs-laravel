@@ -5,7 +5,8 @@ import {
     selectArticles, fetchAsyncGet, selectSearchUser, 
     searchUser, selectArticlesLastPage, fetchAsyncGetScroll,
     selectArticlesPage1, selectArticlesPage2, selectArticlesPage3,
-    selectArticlesPage4, selectArticlesPage5, selectArticlesCurrentPage
+    selectArticlesPage4, selectArticlesPage5, selectArticlesCurrentPage,
+    resetScrollArticle 
 } from './articleSlice';
 import ArticleEdit from './Edit';
 import ArticleCard from '../parts/articleParts/articleCard';
@@ -85,7 +86,7 @@ function Article() {
     // 再読み込み判定
     const [hasMore, setHasMore] = React.useState(true);
     const [isFetching, setIsFetching] = React.useState(false);
-    const [scrollPage, setScrollPage] = React.useState(1);
+    const [scrollPage, setScrollPage] = React.useState(2); // scroll用のcurrent_pageを設定
     // stateで管理するデータを使用できるように定数に格納
     const articles = useSelector(selectArticles)
     const articlesPage1 = useSelector(selectArticlesPage1)
@@ -105,6 +106,9 @@ function Article() {
         const fetchArticleProf = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
+
+            // スクロールで取得した記事をリセット
+            dispatch(resetScrollArticle(''))
 
             let resultReg = ''
             // Mapページからユーザ検索が実行されているかどうかで分岐
@@ -136,6 +140,9 @@ function Article() {
         const fetchArticleSearch = async () => {
             // Loading開始
             await dispatch(fetchCredStart())
+            // スクロールで取得した記事をリセット
+            dispatch(resetScrollArticle(''))
+
             // 都道府県情報をセット
             let prefecture = document.getElementById("prefecture").value
 
@@ -148,6 +155,8 @@ function Article() {
                 // ロード終了
                 await dispatch(fetchCredEnd());       
             }
+            // loadMoreの実行を再開
+            setIsFetching(false)
             // ロード終了
             await dispatch(fetchCredEnd());  
         }
@@ -163,6 +172,9 @@ function Article() {
 
         // Loading開始
         await dispatch(fetchCredStart())
+        // スクロールで取得した記事をリセット
+        dispatch(resetScrollArticle(''))
+
         // 都道府県情報をセット
         let prefecture = document.getElementById("prefecture").value
         if(prefecture == '全都道府県') {
@@ -180,6 +192,9 @@ function Article() {
 
             // 検索中のユーザIDをstoreのstateに格納
             dispatch(searchUser(value))
+
+            // loadMoreの実行を再開
+            setIsFetching(false)
             
             // ロード終了
             await dispatch(fetchCredEnd());
@@ -196,6 +211,9 @@ function Article() {
     const handleSearchClear = async () => {
         // Loading開始
         await dispatch(fetchCredStart())
+        // スクロールで取得した記事をリセット
+        dispatch(resetScrollArticle(''))
+
         // 記事一覧を取得
         const resultSearch = await dispatch(fetchAsyncGet({prefecture: '', user_id: ''}))
         if (fetchAsyncGet.fulfilled.match(resultSearch)) {
@@ -207,6 +225,11 @@ function Article() {
             
             // 検索対象ユーザの値を削除
             dispatch(searchUser(''))
+            // scrollのリセット
+            setScrollPage(2)
+            // loadMoreの実行を再開
+            setIsFetching(false)
+            setHasMore(true)
             // ロード終了
             await dispatch(fetchCredEnd())  
         }
@@ -239,10 +262,11 @@ function Article() {
     const loadMore = async (page) => {
         // loadMoreの実行を停止
         setIsFetching(true)
-        if(articles.length >= 10 && page > 1) {
-            handleGetData(page).then(() => {
+        if(articles.length >= 10 && scrollPage > 1) {
+            handleGetData(scrollPage).then(() => {
+                setScrollPage(scrollPage + 1)
                 // ページ数が最後の場合、処理終了
-                if (lastPage === page) {
+                if (lastPage === scrollPage) {
                   setHasMore(false)
                   return;
                 }
@@ -317,7 +341,7 @@ function Article() {
                         loadMore={loadMore}    //項目を読み込む際に処理するコールバック関数
                         initialLoad={false}
                         hasMore={!isFetching && hasMore}      //読み込みを行うかどうかの判定
-                        loader={loader}         // 記事取得中のロード画面
+                        loader={lastPage === 1 ? '' : loader}         // 記事取得中のロード画面
                     >
                         <ArticleCard article={articles} />
                         {

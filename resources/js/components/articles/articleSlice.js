@@ -361,6 +361,14 @@ const articleSlice = createSlice({
         searchUser(state, action) {
             state.searchedUser.user_id = action.payload
         },
+        resetScrollArticle(state, action) {
+            // スクロールで取得した記事を空にする
+            state.articlesPage1 = action.payload
+            state.articlesPage2 = action.payload
+            state.articlesPage3 = action.payload
+            state.articlesPage4 = action.payload
+            state.articlesPage5 = action.payload
+        }
     },
     // 追加Reducer (Api通信の処理を記述)
     extraReducers: (builder) => {
@@ -480,7 +488,7 @@ const articleSlice = createSlice({
     },
 })
 
-export const { editArticle, selectArticle, searchUser } = articleSlice.actions
+export const { editArticle, selectArticle, searchUser, resetScrollArticle } = articleSlice.actions
 
 export const selectSelectedArticle = (state) => state.article.selectedArticle
 export const selectEditedArticle = (state) => state.article.editedArticle
