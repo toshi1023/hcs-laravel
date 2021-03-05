@@ -16,8 +16,8 @@ class CreateArticlesTable extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id')->comment('ID');
             $table->string('prefecture')->comment('都道府県');
-            $table->string('latitude', 50)->nullable()->comment('緯度');
-            $table->string('longitude', 50)->nullable()->comment('経度');
+            $table->string('latitude', 50)->nullable()->unique()->comment('緯度');
+            $table->string('longitude', 50)->nullable()->unique()->comment('経度');
             $table->string('title', 40)->comment('タイトル');
             $table->text('content')->comment('内容');
             $table->boolean('type')->unsigned()->default(false)->comment('公開タイプ');        // 0: 全員, 1: 会員

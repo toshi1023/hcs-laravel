@@ -71,7 +71,7 @@ class ArticleImagesTableSeeder extends Seeder
             'article_id'         => 10,
             'user_id'            => 10,
         ]);
-        for($i = 11; $i < 36; $i++) {
+        for($i = 11; $i < 56; $i++) {
             \App\Model\ArticleImage::create([
                 'articles_photo_name' => 'NoImage',
                 'articles_photo_path' => env('AWS_NOIMAGE'),

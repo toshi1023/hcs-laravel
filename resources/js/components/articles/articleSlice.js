@@ -387,28 +387,34 @@ const articleSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncGetScroll.fulfilled, (state, action) => {
-            if(action.payload.articles.current_page % 5 === 0) {
+            // 1の位の値を抽出
+            let page = action.payload.articles.current_page
+            page = page.toString().substring(page.length - 1, page.length)
+            // 6以上の場合でも1~5の数値になるように修正
+            page = parseInt(page, 10) > 5 ? parseInt(page, 10) - 5 : parseInt(page, 10)
+            
+            if(page === 5) {
                 return {
                     ...state,
                     articlesPage5: action.payload.articles.data,
                     currentPage: action.payload.articles.current_page
                 }
             }
-            if(action.payload.articles.current_page % 4 === 0) {
+            if(page === 4) {
                 return {
                     ...state,
                     articlesPage4: action.payload.articles.data,
                     currentPage: action.payload.articles.current_page
                 }
             }
-            if(action.payload.articles.current_page % 3 === 0) {
+            if(page === 3) {
                 return {
                     ...state,
                     articlesPage3: action.payload.articles.data,
                     currentPage: action.payload.articles.current_page
                 }
             }
-            if(action.payload.articles.current_page % 2 === 0) {
+            if(page === 2) {
                 return {
                     ...state,
                     articlesPage2: action.payload.articles.data,

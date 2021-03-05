@@ -86,7 +86,8 @@ function Article() {
     // 再読み込み判定
     const [hasMore, setHasMore] = React.useState(true);
     const [isFetching, setIsFetching] = React.useState(false);
-    const [scrollPage, setScrollPage] = React.useState(2); // scroll用のcurrent_pageを設定
+    // scroll用のcurrent_pageを設定
+    const [scrollPage, setScrollPage] = React.useState(localStorage.getItem('scrollPage') ? localStorage.scrollPage : 2);
     // stateで管理するデータを使用できるように定数に格納
     const articles = useSelector(selectArticles)
     const articlesPage1 = useSelector(selectArticlesPage1)
@@ -113,9 +114,15 @@ function Article() {
             let resultReg = ''
             // Mapページからユーザ検索が実行されているかどうかで分岐
             if(searchedUser.user_id) {
-                // 記事一覧を取得
                 resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: searchedUser.user_id}))
             } else {
+                // 記事一覧を取得
+                if(localStorage.scrollPage) {
+                    // "もっと記事を見る"ボタンを押下されていた場合
+                    handleGetData(scrollPage)
+                    localStorage.removeItem('scrollPage')
+                    return;
+                }
                 // 記事一覧を取得
                 resultReg = await dispatch(fetchAsyncGet({prefecture: '', user_id: ''}))
             }
@@ -264,9 +271,9 @@ function Article() {
         setIsFetching(true)
         if(articles.length >= 10 && scrollPage > 1) {
             handleGetData(scrollPage).then(() => {
-                setScrollPage(scrollPage + 1)
                 // ページ数が最後の場合、処理終了
-                if (lastPage === scrollPage) {
+                setScrollPage(scrollPage + 1)
+                if (scrollPage % 5 === 0 || lastPage === scrollPage) {
                   setHasMore(false)
                   return;
                 }
@@ -286,6 +293,16 @@ function Article() {
      * 記事取得中のロード表示
      */
     const loader =<div className="loader" style={{fontWeight: 'bold', color: '#1b2538', fontSize: '15px'}} key={0}>Loading ...</div>
+    /**
+     * 50以上記事を表示した場合にボタン押下で実行
+     * 表示した記事以上の記事データを取得して表示する
+     */
+    const handleGetMoreArticle = () => {
+        // localStorageに現在のページ数を設定
+        localStorage.setItem('scrollPage', scrollPage)
+        // ページを再更新
+        window.location.href = '/articles'
+    }
 
     /**
      * タブ切り替え処理
@@ -340,16 +357,16 @@ function Article() {
                         pageStart={0}
                         loadMore={loadMore}    //項目を読み込む際に処理するコールバック関数
                         initialLoad={false}
+                        threshold={700}
                         hasMore={!isFetching && hasMore}      //読み込みを行うかどうかの判定
                         loader={lastPage === 1 ? '' : loader}         // 記事取得中のロード画面
                     >
-                        <ArticleCard article={articles} />
                         {
                             // scroll後の記事取得(1~10件)
                             articlesPage1 ? 
                                 <ArticleCard article={articlesPage1} />
                             :
-                                ''
+                                <ArticleCard article={articles} />
                         }
                         {
                             // scroll後の記事取得(11~20件)
@@ -382,7 +399,7 @@ function Article() {
                         {
                             // 記事が50件表示された場合は表示
                             isFetching && currentPage && currentPage % 5 === 0 ? 
-                                <Button variant="contained" color="primary" className={classes.moreButton}>
+                                <Button variant="contained" color="primary" className={classes.moreButton} onClick={handleGetMoreArticle}>
                                     もっと記事を見る
                                 </Button>
                             :

@@ -63,8 +63,8 @@ class ArticlesTableSeeder extends Seeder
         ]);
         \App\Model\Article::create([
             'prefecture' => '東京都',
-            'latitude'   => 35.686373,
-            'longitude'  => 139.734560,
+            'latitude'   => 35.686375,
+            'longitude'  => 139.734563,
             'title'      => '東京にいるどなたかー',
             'content'    => '銚子行きの車を希望してます！どなたか乗せていただけると助かります！！',
             'type'       => 1,
@@ -95,11 +95,11 @@ class ArticlesTableSeeder extends Seeder
             'type'       => 1,
             'user_id'    => 9,
         ]);
-        for($i = 1; $i < 26; $i++) {
+        for($i = 1; $i < 46; $i++) {
             \App\Model\Article::create([
                 'prefecture' => '福岡県',
-                'latitude'   => 33.588587,
-                'longitude'  => 130.402659,
+                'latitude'   => 33.58857.$i,
+                'longitude'  => 130.40264.$i,
                 'title'      => 'title'.$i,
                 'content'    => 'content'.$i,
                 'type'       => 1,
