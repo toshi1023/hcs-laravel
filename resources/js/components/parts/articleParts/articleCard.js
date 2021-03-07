@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ArticleCard(props) {
+function ArticleCard(props) {
   const classes = useStyles();
   const likes = useSelector(selectLikes)
   // const comments = useSelector(selectComments)
@@ -223,7 +223,7 @@ export default function ArticleCard(props) {
     await dispatch(fetchCredEnd()); 
     return;
   }
-  
+
   return (
     _.map(props.article, article => (
       <>
@@ -453,3 +453,4 @@ export default function ArticleCard(props) {
     ))
   );
 }
+export default React.memo(ArticleCard)

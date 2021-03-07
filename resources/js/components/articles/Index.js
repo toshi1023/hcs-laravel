@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCredStart, fetchCredEnd, selectInfo, selectModal } from '../app/appSlice';
 import { 
@@ -248,7 +248,7 @@ function Article() {
      * 次スクロール用の記事データを取得
      * @param {*} page 
      */
-    const handleGetData = async (page) => {
+    const handleGetData = useCallback(async (page) => {
         // Loading開始
         await dispatch(fetchCredStart())
 
@@ -260,7 +260,7 @@ function Article() {
         }
         // ロード終了
         await dispatch(fetchCredEnd());
-    }
+    }, [scrollPage])
 
     /**
      * 項目を読み込むときのコールバック
@@ -536,4 +536,4 @@ function Article() {
     );
 }
 
-export default Article;
+export default React.memo(Article);

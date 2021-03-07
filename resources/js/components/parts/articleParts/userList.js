@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
 import { fetchAsyncGet, selectUsers, fetchAsyncGetPagination } from '../../users/userSlice';
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function UserList(props) {
+function UserList(props) {
     const classes = useStyles();
     const users = useSelector(selectUsers)
     const dispatch = useDispatch();
@@ -58,7 +58,7 @@ export default function UserList(props) {
     /**
      * 選択したページ用のデータを取得
      */
-    const handleGetData = async (page) => {
+    const handleGetData = useCallback(async (page) => {
         // Loading開始
         await dispatch(fetchCredStart())
 
@@ -70,7 +70,7 @@ export default function UserList(props) {
         }
         // ロード終了
         await dispatch(fetchCredEnd());
-    }
+    }, [users])
     
     return (
         <>
@@ -112,3 +112,4 @@ export default function UserList(props) {
         </>
     );
 }
+export default React.memo(UserList)

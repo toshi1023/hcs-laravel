@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCredStart, fetchCredEnd, } from '../../app/appSlice';
 import { selectFriends, fetchAsyncGetFriends, fetchAsyncGetFriendsPagination } from '../../users/userSlice';
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function FriendList(props) {
+function FriendList(props) {
     const classes = useStyles();
     const friends = useSelector(selectFriends)
     const dispatch = useDispatch();
@@ -58,7 +58,7 @@ export default function FriendList(props) {
     /**
      * 選択したページ用のデータを取得
      */
-    const handleGetData = async (page) => {
+    const handleGetData = useCallback(async (page) => {
         // Loading開始
         await dispatch(fetchCredStart())
 
@@ -70,7 +70,7 @@ export default function FriendList(props) {
         }
         // ロード終了
         await dispatch(fetchCredEnd());
-    }
+    }, [friends])
 
     return (
         <>
@@ -119,3 +119,4 @@ export default function FriendList(props) {
         </>
     );
 }
+export default React.memo(FriendList)
