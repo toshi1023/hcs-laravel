@@ -23,7 +23,7 @@ class NewsService
    */
   public function getIndex($conditions=null)
   {
-    return $this->NewsService->getBaseData($conditions)->orderBy('updated_at', 'desc')->get();
+    return $this->NewsService->getBaseData($conditions)->orderBy('updated_at', 'desc')->paginate(config('const.news_list_counts'));
   }
 
   /**

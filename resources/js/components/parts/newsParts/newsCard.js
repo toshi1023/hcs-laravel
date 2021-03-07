@@ -15,18 +15,6 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-        display: "block"
-    }
-  },
-  sectionMobile: {
-      display: "block",
-      [theme.breakpoints.up("sm")]: {
-          display: "none"
-      }
-  },
   avatarOfficial: {
     backgroundColor: 'green',
   },
@@ -73,67 +61,33 @@ export default function NewsCard(props) {
 
     return (
       <>
-        <div className={classes.sectionMobile}>
           <Card className={classes.root}>
-          <CardHeader
-              avatar={
-                  typeFlg == 1 ? 
-                      <Avatar aria-label="news" className={classes.avatarOfficial} style={{ fontSize: 15 }}>
-                          公式
-                      </Avatar>
-                  : 
-                      <Avatar aria-label="news" className={classes.avatarWarning} style={{ fontSize: 15 }}>
-                          警告
-                      </Avatar>
-              }
-              title={<Typography className={classes.subHeaderTitle}>{props.news.value != undefined ? props.news.value.title : (selectedNews.news != undefined ? selectedNews.news.title : '')}</Typography>}
-              subheader={<Typography className={classes.subHeaderDate}>{props.news.value != undefined ? DateFormat(props.news.value.updated_at) : (selectedNews.news != undefined ? DateFormat(selectedNews.news.updated_at) : '')}</Typography>}
-          />
-          <CardMedia
-              className={classes.media}
-              image=""
-              title="Paella dish"
-          />
-          <CardContent>
-              <Typography variant="body2" color="textSecondary" component="p">
-                  <span className={classes.content}>
-                      {props.news.value != undefined ? props.news.value.content : (selectedNews.news != undefined ? selectedNews.news.content : '')}
-                  </span>
-              </Typography>
-          </CardContent>
+            <CardHeader
+                avatar={
+                    typeFlg == 1 ? 
+                        <Avatar aria-label="news" className={classes.avatarOfficial} style={{ fontSize: 15 }}>
+                            公式
+                        </Avatar>
+                    : 
+                        <Avatar aria-label="news" className={classes.avatarWarning} style={{ fontSize: 15 }}>
+                            警告
+                        </Avatar>
+                }
+                title={<Typography className={classes.subHeaderTitle}>{props.news.value != undefined ? props.news.value.title : (selectedNews.news != undefined ? selectedNews.news.title : '')}</Typography>}
+                subheader={<Typography className={classes.subHeaderDate}>{props.news.value != undefined ? DateFormat(props.news.value.updated_at) : (selectedNews.news != undefined ? DateFormat(selectedNews.news.updated_at) : '')}</Typography>}
+            />
+            <CardMedia
+                className={classes.media}
+                image=""
+            />
+            <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    <span className={classes.content}>
+                        {props.news.value != undefined ? props.news.value.content : (selectedNews.news != undefined ? selectedNews.news.content : '')}
+                    </span>
+                </Typography>
+            </CardContent>
           </Card>
-        </div>
-        <div className={classes.sectionDesktop}>
-        <div className={classes.topMargin}></div>
-          <Card className={classes.root}>
-          <CardHeader
-              avatar={
-                  typeFlg == 1 ? 
-                      <Avatar aria-label="recipe" className={classes.avatarOfficial} style={{ fontSize: 15 }}>
-                          公式
-                      </Avatar>
-                  : 
-                      <Avatar aria-label="recipe" className={classes.avatarWarning} style={{ fontSize: 15 }}>
-                          警告
-                      </Avatar>
-              }
-              title={<Typography className={classes.subHeaderTitle}>{props.news.value != undefined ? props.news.value.title : (selectedNews.news != undefined ? selectedNews.news.title : '')}</Typography>}
-              subheader={<Typography className={classes.subHeaderDate}>{props.news.value != undefined ? DateFormat(props.news.value.updated_at) : (selectedNews.news != undefined ? DateFormat(selectedNews.news.updated_at) : '')}</Typography>}
-          />
-          <CardMedia
-              className={classes.media}
-              image=""
-              title="Paella dish"
-          />
-          <CardContent>
-              <Typography variant="body2" color="textSecondary" component="p">
-                  <span className={classes.content}>
-                      {props.news.value != undefined ? props.news.value.content : (selectedNews.news != undefined ? selectedNews.news.content : '')}
-                  </span>
-              </Typography>
-          </CardContent>
-          </Card>
-        </div>
       </>
     );
 }

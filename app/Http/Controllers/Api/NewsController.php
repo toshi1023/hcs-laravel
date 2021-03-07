@@ -33,7 +33,7 @@ class NewsController extends Controller
             
             // ニュースデータの取得
             $news = $this->database->getIndex($conditions);
-            
+
             return response()->json([
                 'news' => $news,
             ],200, [], JSON_UNESCAPED_UNICODE);

@@ -60,6 +60,9 @@ return [
     // 記事一覧の表示件数(フロント側)
     'article_list_counts'   => 10,
 
+    // お知らせ一覧の表示件数(フロント側)
+    'news_list_counts'   => 10,
+
     // BingMapのURL
     'bing_url'              => 'https://www.bing.com/maps',
 

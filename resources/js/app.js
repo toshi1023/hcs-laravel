@@ -31,9 +31,8 @@ import LoadItem from './components/parts/common/loadItem';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { Provider } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
-import { selectLoading, fetchCredStart, fetchCredEnd } from "./components/app/appSlice";
-import { selectSelectedUser } from "./components/users/userSlice";
+import { useSelector } from "react-redux";
+import { selectLoading } from "./components/app/appSlice";
 import store from "./store";
 
 
@@ -59,13 +58,11 @@ const AppWrapper = () => {
 
 function App() {
   const classes = useStyles();
-  const dispatch = useDispatch();
   let loading = useSelector(selectLoading);
-  let selectedUsers = useSelector(selectSelectedUser);
   
   return (
     <>
-      <div className={classes.background}>
+      <div id="app-background" className={classes.background}>
         <BrowserRouter>
           <HcsAppBar />
             <Switch>

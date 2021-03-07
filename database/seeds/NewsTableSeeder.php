@@ -59,5 +59,15 @@ class NewsTableSeeder extends Seeder
             'member_flg' => 0,
             'admin_id' => 1,
         ]);
+        for($i = 1; $i < 16; $i++) {
+            \App\Model\News::create([
+                'type'  => 1,
+                'title' => 'title'.$i,
+                'content' => 'content'.$i,
+                'status' => 1,
+                'member_flg' => 0,
+                'admin_id' => 1,
+            ]);
+        };
     }
 }

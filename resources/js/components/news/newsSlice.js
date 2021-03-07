@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const apiUrl = 'http://localhost/api/api_news'
-// const apiUrl = 'http://hcs-laravel/api/api_news'
 const token = localStorage.localToken
 
 
@@ -14,6 +13,25 @@ export const fetchAsyncGet = createAsyncThunk('news/index', async(conditions) =>
         const res = await axios.get(`${apiUrl}?query=${conditions}`, {
             headers: {
                 'Content-Type': 'application/json',
+            },
+        })
+        return res.data
+    } catch (err) {
+        if (!err.response) {
+            throw err
+        }
+        return err.response.data
+    }
+})
+
+/**
+ * 一覧データの取得(next_page用)
+ */
+ export const fetchAsyncGetPagination = createAsyncThunk('news/next', async(conditions) => {
+    try {
+        const res = await axios.get(`${apiUrl}?page=${conditions}&query=undefined`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
             },
         })
         return res.data
@@ -86,13 +104,19 @@ const newsSlice = createSlice({
         builder.addCase(fetchAsyncGet.fulfilled, (state, action) => {
             return {
                 ...state,
-                news: action.payload,
+                news: action.payload.news,
+            }
+        })
+        builder.addCase(fetchAsyncGetPagination.fulfilled, (state, action) => {
+            return {
+                ...state,
+                news: action.payload.news,
             }
         })
         builder.addCase(fetchAsyncGetShow.fulfilled, (state, action) => {
             return {
                 ...state,
-                selectedNews: action.payload,
+                selectedNews: action.payload.news,
             }
         })
     },
