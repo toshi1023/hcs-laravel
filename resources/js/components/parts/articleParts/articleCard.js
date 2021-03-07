@@ -108,29 +108,6 @@ export default function ArticleCard(props) {
   const infoMessages = useSelector(selectInfo)
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    // 非同期の関数を定義
-    const fetchArticleEnv = async () => {
-      // Loading開始
-      await dispatch(fetchCredStart())
-      // ログインチェック
-      if(localStorage.getItem('localToken')) {
-        // コメント一覧を取得
-        const resultReg = await dispatch(fetchAsyncGetCommentsCounts({user_id: ''}))
-        
-        if (fetchAsyncGetCommentsCounts.fulfilled.match(resultReg)) {
-          // ロード終了
-          await dispatch(fetchCredEnd());       
-        }
-      }
-      // ロード終了
-      await dispatch(fetchCredEnd());  
-    }
-    // 上で定義した非同期の関数を実行
-    fetchArticleEnv()
-    
-  }, [dispatch]) // dispatchをuseEffectの第2引数に定義する必要がある
-  
   /**
    * 性別をトリガーにユーザ名の色分け処理を実行
    * @param {*} value 
@@ -306,7 +283,7 @@ export default function ArticleCard(props) {
                     likes={article.likes != undefined ? article.likes : ''} 
                     likesUpdate={likesUpdate}
                     comments={article.comments != undefined ? article.comments : ''}
-                    commentsCounts={commentsCounts}
+                    commentsCounts={article.comments_counts != undefined ? article.comments_counts : ''}
                     commentsUpdate={commentsUpdate} 
                   />
                 </Card>
@@ -358,7 +335,7 @@ export default function ArticleCard(props) {
                   likes={article.likes != undefined ? article.likes : ''} 
                   likesUpdate={likesUpdate}
                   comments={article.comments != undefined ? article.comments : ''}
-                  commentsCounts={commentsCounts}
+                  commentsCounts={article.comments_counts}
                   commentsUpdate={commentsUpdate} 
                 />
               </Card>
@@ -414,7 +391,7 @@ export default function ArticleCard(props) {
                     likes={article.likes != undefined ? article.likes : ''} 
                     likesUpdate={likesUpdate}
                     comments={article.comments != undefined ? article.comments : ''}
-                    commentsCounts={commentsCounts} 
+                    commentsCounts={article.comments_counts} 
                     commentsUpdate={commentsUpdate} 
                   />
                 </Card>
@@ -466,7 +443,7 @@ export default function ArticleCard(props) {
                   likes={article.likes != undefined ? article.likes : ''} 
                   likesUpdate={likesUpdate} 
                   comments={article.comments != undefined ? article.comments : ''}
-                  commentsCounts={commentsCounts} 
+                  commentsCounts={article.comments_counts != undefined ? article.comments_counts : ''} 
                   commentsUpdate={commentsUpdate} 
                 />
               </Card>

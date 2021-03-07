@@ -204,27 +204,7 @@ export const fetchAsyncGetComments = createAsyncThunk('articles/comments/index',
         return err.response.data
     }
 })
-/**
- * コメント数の取得
- */
-export const fetchAsyncGetCommentsCounts = createAsyncThunk('articles/comments/counts', async(conditions) => {
-    try {
-        // コメントの取得
-        const res = await axios.get(`${apiUrl}/comments/counts?query=${conditions.user_id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-        
-        return res.data
-    } catch (err) {
-        if (!err.response) {
-            throw err
-        }
-        return err.response.data
-    }
-})
+
 /**
  * コメントデータの保存
  */
@@ -246,6 +226,74 @@ export const fetchAsyncUpdateComments = createAsyncThunk('articles/comments/upda
         return err.response.data
     }
 })
+
+/**
+ * current_pageのページ数を1桁のみ抽出
+ * @param {*} page 
+ */
+const pageArrange = (page) => {
+    page = page.toString().substring(page.length - 1, page.length)
+    // 6以上の場合でも1~5の数値になるように修正
+    return parseInt(page, 10) > 5 ? parseInt(page, 10) - 5 : parseInt(page, 10)
+}
+
+/**
+ * コメントといいね！の更新処理
+ * @param {*} state 
+ * @param {*} data 
+ * @param {*} page 
+ * @param {*} pageLength 
+ */
+const articleExpandUpdate = (state, data, page, pageLength) => {
+    if(pageLength === 1) {
+        return {
+            ...state,
+            articles: state.articles.map((a) => 
+                a.id === data.id ? data : a
+            ),
+        }
+    }
+    if(page === 5) {
+        return {
+            ...state,
+            articlesPage5: state.articlesPage5.map((a) => 
+                a.id === data.id ? data : a
+            ),
+        }
+    }
+    if(page === 4) {
+        return {
+            ...state,
+            articlesPage4: state.articlesPage4.map((a) => 
+                a.id === data.id ? data : a
+            ),
+        }
+    }
+    if(page === 3) {
+        return {
+            ...state,
+            articlesPage3: state.articlesPage3.map((a) => 
+                a.id === data.id ? data : a
+            ),
+        }
+    }
+    if(page === 2) {
+        return {
+            ...state,
+            articlesPage2: state.articlesPage2.map((a) => 
+                a.id === data.id ? data : a
+            ),
+        }
+    }
+    if(page === 1) {
+        return {
+            ...state,
+            articlesPage1: state.articlesPage1.map((a) => 
+                a.id === data.id ? data : a
+            ),
+        }
+    }
+}
 
 /**
  * Slice(store)の設定
@@ -388,10 +436,7 @@ const articleSlice = createSlice({
         })
         builder.addCase(fetchAsyncGetScroll.fulfilled, (state, action) => {
             // 1の位の値を抽出
-            let page = action.payload.articles.current_page
-            page = page.toString().substring(page.length - 1, page.length)
-            // 6以上の場合でも1~5の数値になるように修正
-            page = parseInt(page, 10) > 5 ? parseInt(page, 10) - 5 : parseInt(page, 10)
+            let page = pageArrange(action.payload.articles.current_page)
             
             if(page === 5) {
                 return {
@@ -423,7 +468,7 @@ const articleSlice = createSlice({
             }
             return {
                 ...state,
-                articlesPage5: action.payload.articles.data,
+                articlesPage1: action.payload.articles.data,
                 currentPage: action.payload.articles.current_pages
             }
         })
@@ -456,12 +501,10 @@ const articleSlice = createSlice({
             }
         })
         builder.addCase(fetchAsyncUpdateLikes.fulfilled, (state, action) => {
-            return {
-                ...state,
-                articles: state.articles.map((a) => 
-                    a.id === action.payload.article.id ? action.payload.article : a
-                ),
-            }
+            // 1の位の値を抽出
+            let page = pageArrange(action.payload.current_page)
+
+            return articleExpandUpdate(state, action.payload.article, page, action.payload.current_page)
         })
         builder.addCase(fetchAsyncGetComments.fulfilled, (state, action) => {
             return {
@@ -469,27 +512,15 @@ const articleSlice = createSlice({
                 comments: action.payload.comments, //apiから取得したコメントの情報をstateのcommentsに格納
             }
         })
-        builder.addCase(fetchAsyncGetCommentsCounts.fulfilled, (state, action) => {
-            return {
-                ...state,
-                commentsCounts: action.payload.comments_counts, //apiから取得したコメント数の情報をstateのcommentsに格納
-            }
-        })
         builder.addCase(fetchAsyncUpdateComments.fulfilled, (state, action) => {
             // エラーが返ってきた場合はstateを更新しない
             if(action.payload.error_message) {
                 return;
             }
-            
-            return {
-                ...state,
-                articles: state.articles.map((a) => 
-                    a.id === action.payload.article.id ? action.payload.article : a
-                ),
-                commentsCounts: state.commentsCounts.map((c) => 
-                    c.article_id === action.payload.comments_counts[0].article_id ? action.payload.comments_counts[0] : c
-                ),
-            }
+            // 1の位の値を抽出
+            let page = pageArrange(action.payload.current_page)
+
+            return articleExpandUpdate(state, action.payload.article, page, action.payload.current_page)
         })
     },
 })

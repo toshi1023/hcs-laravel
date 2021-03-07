@@ -38,13 +38,18 @@ class Article extends BaseModel
   {
     return $this->hasMany('App\Model\Comment');
   }
+  // commentsテーブルと1対1のリレーション構築(1側の設定)
+  public function comments_counts()
+  {
+    return $this->hasOne('App\Model\Comment');
+  }
 
   // likesテーブルと1対多のリレーション構築(1側の設定)
   public function likes()
   {
     return $this->hasMany('App\Model\Like');
   }
-  // likesテーブルと1対多のリレーション構築(1側の設定)
+  // likesテーブルと1対1のリレーション構築(1側の設定)
   public function likes_counts()
   {
     return $this->hasOne('App\Model\Like');

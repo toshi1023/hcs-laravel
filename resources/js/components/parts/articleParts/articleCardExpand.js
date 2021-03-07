@@ -186,13 +186,7 @@ function ArticleCardExpand (props) {
                         <span className={classes.commentCounts}>
                             {
                                 // コメント数の取得・表示
-                                props.commentsCounts != undefined ? 
-                                    props.commentsCounts.find(element => element.article_id === props.article.id) != undefined ? 
-                                        props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts 
-                                    :
-                                        ''
-                                : 
-                                    ''
+                                props.commentsCounts != undefined && props.commentsCounts.comments_counts
                             }
                         </span>
                         {/* シェア'ボタンのデザイン */}
@@ -289,13 +283,7 @@ function ArticleCardExpand (props) {
                         <span className={classes.commentCounts}>
                             {
                                 // コメント数の取得・表示
-                                props.commentsCounts != undefined ? 
-                                    props.commentsCounts.find(element => element.article_id === props.article.id) != undefined ? 
-                                        props.commentsCounts.find(element => element.article_id === props.article.id).comments_counts 
-                                    :
-                                        ''
-                                : 
-                                    ''
+                                props.commentsCounts != undefined && props.commentsCounts.comments_counts
                             }
                         </span>
                         {/* シェア'ボタンのデザイン */}

@@ -29,9 +29,6 @@ class ArrangeDataFilter
             $request->type === 'true' ? $request['type'] = 1 : '';
             $request->type === 'false' ? $request['type'] = 0 : '';
         }
-        if($request->page) {
-            $request->page = (int)$request->page;
-        }
 
         return $next($request);
     }

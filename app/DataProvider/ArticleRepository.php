@@ -48,10 +48,15 @@ class ArticleRepository extends BaseRepository implements ArticleDatabaseInterfa
                                   ->where('user_id', '=', $user_id)
                                   ->where('delete_flg', '=', 0);
                           },
+                          'comments_counts' => function ($query) {
+                            $query->select(DB::raw('count(id) as comments_counts'), 'article_id')
+                                  ->groupByRaw('article_id')
+                                  ->where('delete_flg', '=', 0);
+                          },
                           'comments:id,article_id,user_id,comment',
                           'comments.users:id,name,users_photo_path'  // commentsテーブルのリレーション先であるusersテーブルの情報を取得
                         ]);
-        
+
         return $query;
     }
 

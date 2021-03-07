@@ -51,13 +51,15 @@ class ArticleController extends Controller
   public function index(Request $request)
   {
     try{
-      // dd($request->page);
       // 検索条件のセット
       $conditions = [];
       if ($request->input('queryPrefecture')) { $conditions['articles.prefecture@like'] = $request->input('queryPrefecture'); }
       if ($request->input('queryId')) { $conditions['articles.user_id'] = $request->input('queryId'); }
     
       $articles = $this->database->getIndex($conditions);
+
+      // セッションにcurrent_pageを一時的に保存
+      session()->put('current_page', $articles->currentPage());
       
       return response()->json([
         'articles' => $articles, 
@@ -209,6 +211,7 @@ class ArticleController extends Controller
       // 更新に成功したとき
       return response()->json([
         'article'         => $article,
+        'current_page'    => session()->get('current_page')
       ], 200, [], JSON_UNESCAPED_UNICODE);
     } catch (Exception $e) {
       // 更新に失敗したとき
@@ -243,29 +246,6 @@ class ArticleController extends Controller
   }
 
   /**
-   * 記事のコメント数を取得
-   */
-  public function commentsCounts(Request $request)
-  {
-    try {
-      // 検索条件のセット
-      $conditions = [];
-      if ($request->input('query')) { $conditions['user_id'] = $request->input('query'); }
-      // 記事のコメント数を取得
-      $counts = $this->database->getCommentsCounts($conditions);
-      
-      return response()->json([
-        'comments_counts'   => $counts
-      ], 200, [], JSON_UNESCAPED_UNICODE);
-    } catch (Exception $e) {
-      \Log::error('Comment get Error:'.$e->getMessage());
-      return response()->json([
-        'error_message' => 'コメントの取得に失敗しました!'
-      ], 500, [], JSON_UNESCAPED_UNICODE);
-    }
-  }
-
-  /**
    * 記事のコメントを保存
    */
   public function commentsUpdate(Request $request)
@@ -286,13 +266,11 @@ class ArticleController extends Controller
       
       // 記事のコメントを保存
       $article = $this->database->getCommentsUpdate($data);
-      // 記事のコメント数を取得
-      $counts = $this->database->getCommentsCounts(['article_id' => $article->id]);
         
       DB::commit();
       return response()->json([
         'article'         => $article,
-        'comments_counts' => $counts,
+        'current_page'    => session()->get('current_page'),
         'info_message'  => 'コメントを投稿しました'
       ], 200, [], JSON_UNESCAPED_UNICODE);
     } catch (Exception $e) {

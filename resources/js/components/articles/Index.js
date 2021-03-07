@@ -269,7 +269,7 @@ function Article() {
     const loadMore = async (page) => {
         // loadMoreの実行を停止
         setIsFetching(true)
-        if(articles.length >= 10 && scrollPage > 1) {
+        if(articles.length >= 10 && scrollPage <= lastPage) {
             handleGetData(scrollPage).then(() => {
                 // ページ数が最後の場合、処理終了
                 setScrollPage(scrollPage + 1)
@@ -284,7 +284,7 @@ function Article() {
                 setIsFetching(false)
             })
         }
-        if(page === 1) {
+        if(lastPage !== 1 && page === 1) {
             // loadMoreの実行を再開
             setIsFetching(false)
         }
@@ -362,35 +362,36 @@ function Article() {
                         loader={lastPage === 1 ? '' : loader}         // 記事取得中のロード画面
                     >
                         {
-                            // scroll後の記事取得(1~10件)
                             articlesPage1 ? 
+                                // scroll後の記事表示(1~10件)
                                 <ArticleCard article={articlesPage1} />
                             :
+                                // 初期表示用の記事を表示
                                 <ArticleCard article={articles} />
                         }
                         {
-                            // scroll後の記事取得(11~20件)
+                            // scroll後の記事表示(11~20件)
                             articlesPage2 ? 
                                 <ArticleCard article={articlesPage2} />
                             :
                                 ''
                         }
                         {
-                            // scroll後の記事取得(21~30件)
+                            // scroll後の記事表示(21~30件)
                             articlesPage3 ? 
                                 <ArticleCard article={articlesPage3} />
                             :
                                 ''
                         }
                         {
-                            // scroll後の記事取得(31~40件)
+                            // scroll後の記事表示(31~40件)
                             articlesPage4 ? 
                                 <ArticleCard article={articlesPage4} />
                             :
                                 ''
                         }
                         {
-                            // scroll後の記事取得(41~50件)
+                            // scroll後の記事表示(41~50件)
                             articlesPage5 ? 
                                 <ArticleCard article={articlesPage5} />
                             :
